@@ -199,8 +199,6 @@
       <button class="tab-button" onclick="openTab(event, 'howto-tab')">How to Use</button>
     </div>
 
-
-
     <div id="app-tab" class="tab-content active">
       <form id="form">
         <label for="language">Language / భాష:</label>
@@ -271,20 +269,16 @@
         <button id="undoBtn" type="button" title="Undo">Undo</button>
         <button id="redoBtn" type="button" title="Redo">Redo</button>
       </form>
-
       <div id="preview" aria-live="polite" tabindex="0"></div>
-
       <div class="actions">
         <button id="downloadBtn" style="display:none;">Download Image</button>
         <button id="shareBtn" style="display:none;">Share on WhatsApp</button>
         <button id="editBtn" style="display:none;">Edit</button>
         <button id="deleteBtn" style="display:none;">Delete</button>
       </div>
-
       <img id="generatedImage" alt="" style="display:none;" />
       <button id="goTopBtn" title="Go to top" aria-label="Scroll to top">↑</button>
     </div>
-
 
     <div id="howto-tab" class="tab-content">
       <h3>How to Use AksharaChitra - Simple Steps</h3>
@@ -322,7 +316,6 @@
           <div class="step-description">Once generated, you can download the image or share it directly on WhatsApp.</div>
         </li>
       </ol>
-
       <h4>Tips:</h4>
       <ul style="margin-top: 20px; padding-left: 20px;">
         <li>Use the Undo/Redo buttons to revert changes</li>
@@ -331,7 +324,6 @@
         <li>Keep titles short for better appearance</li>
       </ul>
     </div>
-
   </div>
 
   <!-- Cropper Modal -->
@@ -358,56 +350,66 @@
   </div>
 
   <script src="image.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  let deferredPrompt;
-  const installBtn = document.getElementById('installBtn');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let deferredPrompt;
+      const installBtn = document.getElementById('installBtn');
 
-  // Utility to check if app is installed or running standalone
-  function isAppInstalled() {
-    return window.matchMedia('(display-mode: standalone)').matches 
-      || window.navigator.standalone === true; // iOS
-  }
+      function isAppInstalled() {
+        return window.matchMedia('(display-mode: standalone)').matches
+            || window.navigator.standalone === true; // iOS standalone detection
+      }
 
-  // On page load, hide install button if app already installed
-  if (isAppInstalled()) {
-    installBtn.style.display = 'none';
-  } else {
-    installBtn.style.display = 'none'; // hide by default; will show if install prompt fires
-  }
+      if (isAppInstalled()) {
+        installBtn.style.display = 'none';
+      } else {
+        installBtn.style.display = 'none'; // hide initially, show on prompt
+      }
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-
-    if (!isAppInstalled()) {
-      installBtn.style.display = 'inline-block';
-    }
-  });
-
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none';
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => {
-        deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (!isAppInstalled()) {
+          installBtn.style.display = 'inline-block';
+        }
       });
-    }
-  });
 
+      installBtn.addEventListener('click', () => {
+        installBtn.style.display = 'none';
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(() => {
+            deferredPrompt = null;
+          });
+        }
+      });
+  
   window.addEventListener('appinstalled', () => {
-    installBtn.style.display = 'none';
+    alert('AksharaChitra PWA was installed');
+    installBtn.style.setProperty('display', 'none', 'important');
     console.log('AksharaChitra PWA was installed');
   });
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(() => console.log('Service Worker registered'))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      }
+    });
 
-  // Service worker registration
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(() => console.log('Service Worker registered'))
-      .catch(err => console.error('Service Worker registration failed:', err));
-  }
-});
-</script>
-
+    function openTab(evt, tabName) {
+      var i, tabcontent, tabbuttons;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+      tabbuttons = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabbuttons.length; i++) {
+        tabbuttons[i].classList.remove("active");
+      }
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+      document.getElementById("header").style.display = "flex";
+    }
+  </script>
 </body>
 </html>
