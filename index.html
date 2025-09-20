@@ -128,7 +128,7 @@
       color: white;
       border-radius: 5px;
       cursor: pointer;
-      display: none; /* Hidden by default */
+      
       z-index: 1000;
     }
     /* Responsive adjustments */
@@ -361,9 +361,9 @@
       }
 
       if (isAppInstalled()) {
-        installBtn.style.display = 'none';
+        installBtn.style.setProperty('display', 'none', 'important');
       } else {
-        installBtn.style.display = 'none'; // hide initially, show on prompt
+         installBtn.style.setProperty('display', 'none', 'important');
       }
 
       window.addEventListener('beforeinstallprompt', (e) => {
@@ -375,7 +375,7 @@
       });
 
       installBtn.addEventListener('click', () => {
-        installBtn.style.display = 'none';
+          installBtn.style.setProperty('display', 'none', 'important');
         if (deferredPrompt) {
           deferredPrompt.prompt();
           deferredPrompt.userChoice.then(() => {
