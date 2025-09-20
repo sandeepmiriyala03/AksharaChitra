@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AksharaChitra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet" />
+  <link href="Image.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
+</head>
+<body>
+<div style="display:flex; align-items:center; margin-bottom:1rem;">
+  <img src="Logo.png" alt="Logo" style="width:60px; height:auto; margin-right:10px;">
+  <h2 style="margin: 0;">AksharaChitra</h2>
+</div>
+  <!-- Install Button fixed top-right -->
+ <!--  <button id="installBtn" title="Install App" aria-label="Install Progressive Web App">Install App</button -->
+
+  <form id="form">
+    <label for="language">Language / భాష:</label>
+    <select id="language" aria-label="Language select">
+      <option value="english">English</option>
+      <option value="telugu">తెలుగు</option>
+    </select>
+
+    <label for="dateTime">Date and Time:</label>
+    <input type="datetime-local" id="dateTime" aria-label="Date and time input" />
+
+    <label for="backgroundColor">Background Color:</label>
+    <input type="color" id="backgroundColor" aria-label="Background color picker" value="#ffffff" />
+
+    <label for="imageUpload">Upload Image:</label>
+    <input type="file" id="imageUpload" accept="image/*" aria-label="Upload Image" />
+
+    <label for="imagePosition">Image Position:</label>
+    <select id="imagePosition" aria-label="Image position">
+      <option value="left">Left</option>
+      <option value="right">Right</option>
+      <option value="top">Top</option>
+      <option value="bottom">Bottom</option>
+    </select>
+
+    <label for="mainTitle">Main Title:</label>
+    <input type="text" id="mainTitle" maxlength="80" placeholder="Enter main title" />
+
+    <label for="subTitle">Subtitle:</label>
+    <input type="text" id="subTitle" maxlength="100" placeholder="Enter subtitle" />
+
+    <label for="footerText">Footer (optional):</label>
+    <input type="text" id="footerText" maxlength="100" placeholder="Enter footer text" />
+
+    <label for="textContent">Main Content:</label>
+    <textarea id="textContent" rows="6" placeholder="Type your content here..."></textarea>
+
+    <div class="toolbar" aria-label="Text formatting">
+      <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>B</b></button>
+      <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>I</i></button>
+
+      <label for="fontSize">Font Size:</label>
+      <select id="fontSize" aria-label="Select font size">
+        <option value="16">16px</option>
+        <option value="20" selected>20px</option>
+        <option value="24">24px</option>
+        <option value="30">30px</option>
+      </select>
+
+      <label for="fontFamily">Font Family:</label>
+      <select id="fontFamily" aria-label="Font family select">
+        <option value="Arial, sans-serif">Arial (English)</option>
+        <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu (Telugu)</option>
+      </select>
+
+      <label for="fontColor">Font Color:</label>
+      <input type="color" id="fontColor" aria-label="Font color picker" value="#000000" />
+
+      <label for="textAlign">Text Align:</label>
+      <select id="textAlign" aria-label="Text alignment select">
+        <option value="left">Left</option>
+        <option value="center" selected>Center</option>
+        <option value="right">Right</option>
+      </select>
+    </div>
+
+    <button id="generateBtn" type="button">Generate Image</button>
+    <button id="undoBtn" type="button" title="Undo">Undo</button>
+    <button id="redoBtn" type="button" title="Redo">Redo</button>
+  </form>
+
+  <div id="preview" aria-live="polite" tabindex="0"></div>
+
+  <div class="actions">
+    <button id="downloadBtn" style="display:none;">Download Image</button>
+    <button id="shareBtn" style="display:none;">Share on WhatsApp</button>
+    <button id="editBtn" style="display:none;">Edit</button>
+    <button id="deleteBtn" style="display:none;">Delete</button>
+  </div>
+
+  <img id="generatedImage" alt="" style="display:none;" />
+  <button id="goTopBtn" title="Go to top" aria-label="Scroll to top">↑</button>
+
+  <!-- Cropper Modal -->
+  <div id="cropModal" style="display:none; position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:10000;">
+    <div style="background:#fff;padding:20px;border-radius:8px;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <img id="cropImage" alt="Crop Image" style="max-width:100%;max-height:60vh;" />
+      <div style="width:100%;display:flex;justify-content:flex-end;gap:10px;">
+        <button id="cancelCropBtn" class="button">Cancel</button>
+        <button id="cropConfirmBtn" class="button">Crop</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="image.js"></script>
+</body>
+</html>
