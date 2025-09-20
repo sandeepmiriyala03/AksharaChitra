@@ -10,17 +10,16 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
   <style>
+    /* Your existing CSS styles from the original code */
     /* Tab styles */
     .tab-container {
       margin: 20px 0;
     }
-    
     .tab-buttons {
       display: flex;
       border-bottom: 2px solid #ddd;
       margin-bottom: 20px;
     }
-    
     .tab-button {
       background: none;
       border: none;
@@ -30,18 +29,15 @@
       border-bottom: 3px solid transparent;
       transition: all 0.3s ease;
     }
-    
     .tab-button.active {
       background-color: #f0f8ff;
       border-bottom-color: #007bff;
       color: #007bff;
       font-weight: bold;
     }
-    
     .tab-button:hover {
       background-color: #f8f9fa;
     }
-    
     .tab-content {
       display: none;
       padding: 20px;
@@ -49,17 +45,14 @@
       border-radius: 5px;
       background-color: #f9f9f9;
     }
-    
     .tab-content.active {
       display: block;
     }
-    
     .steps-list {
       list-style: none;
       padding: 0;
       counter-reset: step-counter;
     }
-    
     .steps-list li {
       counter-increment: step-counter;
       margin: 15px 0;
@@ -70,7 +63,6 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       position: relative;
     }
-    
     .steps-list li::before {
       content: counter(step-counter);
       position: absolute;
@@ -86,18 +78,15 @@
       justify-content: center;
       font-weight: bold;
     }
-    
     .step-title {
       font-weight: bold;
       color: #333;
       margin-bottom: 5px;
     }
-    
     .step-description {
       color: #666;
       line-height: 1.4;
     }
-    
     /* Footer styles */
     .footer {
       margin-top: 40px;
@@ -107,225 +96,268 @@
       text-align: center;
       border-radius: 10px;
     }
-    
     .footer-content {
       max-width: 600px;
       margin: 0 auto;
     }
-    
     .developer-info {
       font-size: 16px;
       color: #495057;
       margin-bottom: 10px;
     }
-    
     .developer-name {
       font-weight: bold;
       color: #007bff;
       font-size: 18px;
     }
-    
     .footer-subtitle {
       font-size: 14px;
       color: #6c757d;
       font-style: italic;
     }
+    /* Install button style */
+    #installBtn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 8px 12px;
+      font-size: 14px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none; /* Hidden by default */
+      z-index: 1000;
+    }
   </style>
+  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-<div style="display:flex; align-items:center; margin-bottom:1rem;">
-<img src="Logo.png" alt="Logo" style="width:60px; height:auto; margin-right:10px;">
-   <h2 style="margin: 0;">AksharaChitra</h2>
-</div>
-
-<!-- Tab container -->
-<div class="tab-container">
-  <div class="tab-buttons">
-    <button class="tab-button active" onclick="openTab(event, 'app-tab')">Create Image</button>
-    <button class="tab-button" onclick="openTab(event, 'howto-tab')">How to Use</button>
+  <div style="display:flex; align-items:center; margin-bottom:1rem;">
+    <img src="Logo.png" alt="Logo" style="width:60px; height:auto; margin-right:10px;" />
+    <h2 style="margin: 0;">AksharaChitra</h2>
   </div>
-  
-  <!-- App Tab Content -->
-  <div id="app-tab" class="tab-content active">
-    <!-- Install Button fixed top-right -->
-    <!--  <button id="installBtn" title="Install App" aria-label="Install Progressive Web App">Install App</button -->
 
-    <form id="form">
-      <label for="language">Language / భాష:</label>
-      <select id="language" aria-label="Language select">
-        <option value="english">English</option>
-        <option value="telugu">తెలుగు</option>
-      </select>
+  <!-- Tab container -->
+  <div class="tab-container">
+    <div class="tab-buttons">
+      <button class="tab-button active" onclick="openTab(event, 'app-tab')">Create Image</button>
+      <button class="tab-button" onclick="openTab(event, 'howto-tab')">How to Use</button>
+    </div>
 
-      <label for="dateTime">Date and Time:</label>
-      <input type="datetime-local" id="dateTime" aria-label="Date and time input" />
+    <!-- App Tab Content -->
+    <div id="app-tab" class="tab-content active">
+      <!-- Install Button fixed top-right -->
+      <button id="installBtn" title="Install App" aria-label="Install Progressive Web App">Install App</button>
 
-      <label for="backgroundColor">Background Color:</label>
-      <input type="color" id="backgroundColor" aria-label="Background color picker" value="#ffffff" />
-
-      <label for="imageUpload">Upload Image:</label>
-      <input type="file" id="imageUpload" accept="image/*" aria-label="Upload Image" />
-
-      <label for="imagePosition">Image Position:</label>
-      <select id="imagePosition" aria-label="Image position">
-        <option value="left">Left</option>
-        <option value="right">Right</option>
-        <option value="top">Top</option>
-        <option value="bottom">Bottom</option>
-      </select>
-
-      <label for="mainTitle">Main Title:</label>
-      <input type="text" id="mainTitle" maxlength="80" placeholder="Enter main title" />
-
-      <label for="subTitle">Subtitle:</label>
-      <input type="text" id="subTitle" maxlength="100" placeholder="Enter subtitle" />
-
-      <label for="footerText">Footer (optional):</label>
-      <input type="text" id="footerText" maxlength="100" placeholder="Enter footer text" />
-
-      <label for="textContent">Main Content:</label>
-      <textarea id="textContent" rows="6" placeholder="Type your content here..."></textarea>
-
-      <div class="toolbar" aria-label="Text formatting">
-        <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>B</b></button>
-        <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>I</i></button>
-
-        <label for="fontSize">Font Size:</label>
-        <select id="fontSize" aria-label="Select font size">
-          <option value="16">16px</option>
-          <option value="20" selected>20px</option>
-          <option value="24">24px</option>
-          <option value="30">30px</option>
+      <form id="form">
+        <!-- Your existing form inputs as provided -->
+        <label for="language">Language / భాష:</label>
+        <select id="language" aria-label="Language select">
+          <option value="english">English</option>
+          <option value="telugu">తెలుగు</option>
         </select>
 
-        <label for="fontFamily">Font Family:</label>
-        <select id="fontFamily" aria-label="Font family select">
-          <option value="Arial, sans-serif">Arial (English)</option>
-          <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu (Telugu)</option>
-        </select>
+        <label for="dateTime">Date and Time:</label>
+        <input type="datetime-local" id="dateTime" aria-label="Date and time input" />
 
-        <label for="fontColor">Font Color:</label>
-        <input type="color" id="fontColor" aria-label="Font color picker" value="#000000" />
+        <label for="backgroundColor">Background Color:</label>
+        <input type="color" id="backgroundColor" aria-label="Background color picker" value="#ffffff" />
 
-        <label for="textAlign">Text Align:</label>
-        <select id="textAlign" aria-label="Text alignment select">
+        <label for="imageUpload">Upload Image:</label>
+        <input type="file" id="imageUpload" accept="image/*" aria-label="Upload Image" />
+
+        <label for="imagePosition">Image Position:</label>
+        <select id="imagePosition" aria-label="Image position">
           <option value="left">Left</option>
-          <option value="center" selected>Center</option>
           <option value="right">Right</option>
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
         </select>
+
+        <label for="mainTitle">Main Title:</label>
+        <input type="text" id="mainTitle" maxlength="80" placeholder="Enter main title" />
+
+        <label for="subTitle">Subtitle:</label>
+        <input type="text" id="subTitle" maxlength="100" placeholder="Enter subtitle" />
+
+        <label for="footerText">Footer (optional):</label>
+        <input type="text" id="footerText" maxlength="100" placeholder="Enter footer text" />
+
+        <label for="textContent">Main Content:</label>
+        <textarea id="textContent" rows="6" placeholder="Type your content here..."></textarea>
+
+        <div class="toolbar" aria-label="Text formatting">
+          <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>B</b></button>
+          <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>I</i></button>
+
+          <label for="fontSize">Font Size:</label>
+          <select id="fontSize" aria-label="Select font size">
+            <option value="16">16px</option>
+            <option value="20" selected>20px</option>
+            <option value="24">24px</option>
+            <option value="30">30px</option>
+          </select>
+
+          <label for="fontFamily">Font Family:</label>
+          <select id="fontFamily" aria-label="Font family select">
+            <option value="Arial, sans-serif">Arial (English)</option>
+            <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu (Telugu)</option>
+          </select>
+
+          <label for="fontColor">Font Color:</label>
+          <input type="color" id="fontColor" aria-label="Font color picker" value="#000000" />
+
+          <label for="textAlign">Text Align:</label>
+          <select id="textAlign" aria-label="Text alignment select">
+            <option value="left">Left</option>
+            <option value="center" selected>Center</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+
+        <button id="generateBtn" type="button">Generate Image</button>
+        <button id="undoBtn" type="button" title="Undo">Undo</button>
+        <button id="redoBtn" type="button" title="Redo">Redo</button>
+      </form>
+
+      <div id="preview" aria-live="polite" tabindex="0"></div>
+
+      <div class="actions">
+        <button id="downloadBtn" style="display:none;">Download Image</button>
+        <button id="shareBtn" style="display:none;">Share on WhatsApp</button>
+        <button id="editBtn" style="display:none;">Edit</button>
+        <button id="deleteBtn" style="display:none;">Delete</button>
       </div>
 
-      <button id="generateBtn" type="button">Generate Image</button>
-      <button id="undoBtn" type="button" title="Undo">Undo</button>
-      <button id="redoBtn" type="button" title="Redo">Redo</button>
-    </form>
-
-    <div id="preview" aria-live="polite" tabindex="0"></div>
-
-    <div class="actions">
-      <button id="downloadBtn" style="display:none;">Download Image</button>
-      <button id="shareBtn" style="display:none;">Share on WhatsApp</button>
-      <button id="editBtn" style="display:none;">Edit</button>
-      <button id="deleteBtn" style="display:none;">Delete</button>
+      <img id="generatedImage" alt="" style="display:none;" />
+      <button id="goTopBtn" title="Go to top" aria-label="Scroll to top">↑</button>
     </div>
 
-    <img id="generatedImage" alt="" style="display:none;" />
-    <button id="goTopBtn" title="Go to top" aria-label="Scroll to top">↑</button>
-  </div>
-  
-  <!-- How to Use Tab Content -->
-  <div id="howto-tab" class="tab-content">
-    <h3>How to Use AksharaChitra - Simple Steps</h3>
-    <ol class="steps-list">
-      <li>
-        <div class="step-title">Select Language</div>
-        <div class="step-description">Choose your preferred language from the dropdown - English or Telugu (తెలుగు).</div>
-      </li>
-      <li>
-        <div class="step-title">Set Date and Time (Optional)</div>
-        <div class="step-description">Pick a date and time if you want to include it in your image.</div>
-      </li>
-      <li>
-        <div class="step-title">Choose Background Color</div>
-        <div class="step-description">Click the color picker to select your desired background color.</div>
-      </li>
-      <li>
-        <div class="step-title">Upload an Image (Optional)</div>
-        <div class="step-description">Click "Choose File" to upload an image and select its position (left, right, top, or bottom).</div>
-      </li>
-      <li>
-        <div class="step-title">Enter Your Text</div>
-        <div class="step-description">Fill in the main title, subtitle, footer text, and main content as needed.</div>
-      </li>
-      <li>
-        <div class="step-title">Format Your Text</div>
-        <div class="step-description">Use the toolbar to make text bold, italic, change font size, font family, color, and alignment.</div>
-      </li>
-      <li>
-        <div class="step-title">Generate Image</div>
-        <div class="step-description">Click the "Generate Image" button to create your custom image.</div>
-      </li>
-      <li>
-        <div class="step-title">Download or Share</div>
-        <div class="step-description">Once generated, you can download the image or share it directly on WhatsApp.</div>
-      </li>
-    </ol>
-    
-    <h4>Tips:</h4>
-    <ul style="margin-top: 20px; padding-left: 20px;">
-      <li>Use the Undo/Redo buttons to revert changes</li>
-      <li>The preview updates in real-time as you make changes</li>
-      <li>For Telugu text, select "Noto Sans Telugu" font for better display</li>
-      <li>Keep titles short for better appearance</li>
-    </ul>
-  </div>
-</div>
+    <!-- How to Use Tab Content -->
+    <div id="howto-tab" class="tab-content">
+      <h3>How to Use AksharaChitra - Simple Steps</h3>
+      <ol class="steps-list">
+        <li>
+          <div class="step-title">Select Language</div>
+          <div class="step-description">Choose your preferred language from the dropdown - English or Telugu (తెలుగు).</div>
+        </li>
+        <li>
+          <div class="step-title">Set Date and Time (Optional)</div>
+          <div class="step-description">Pick a date and time if you want to include it in your image.</div>
+        </li>
+        <li>
+          <div class="step-title">Choose Background Color</div>
+          <div class="step-description">Click the color picker to select your desired background color.</div>
+        </li>
+        <li>
+          <div class="step-title">Upload an Image (Optional)</div>
+          <div class="step-description">Click "Choose File" to upload an image and select its position (left, right, top, or bottom).</div>
+        </li>
+        <li>
+          <div class="step-title">Enter Your Text</div>
+          <div class="step-description">Fill in the main title, subtitle, footer text, and main content as needed.</div>
+        </li>
+        <li>
+          <div class="step-title">Format Your Text</div>
+          <div class="step-description">Use the toolbar to make text bold, italic, change font size, font family, color, and alignment.</div>
+        </li>
+        <li>
+          <div class="step-title">Generate Image</div>
+          <div class="step-description">Click the "Generate Image" button to create your custom image.</div>
+        </li>
+        <li>
+          <div class="step-title">Download or Share</div>
+          <div class="step-description">Once generated, you can download the image or share it directly on WhatsApp.</div>
+        </li>
+      </ol>
 
-<!-- Cropper Modal -->
-<div id="cropModal" style="display:none; position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:10000;">
-  <div style="background:#fff;padding:20px;border-radius:8px;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:10px;">
-    <img id="cropImage" alt="Crop Image" style="max-width:100%;max-height:60vh;" />
-    <div style="width:100%;display:flex;justify-content:flex-end;gap:10px;">
-      <button id="cancelCropBtn" class="button">Cancel</button>
-      <button id="cropConfirmBtn" class="button">Crop</button>
+      <h4>Tips:</h4>
+      <ul style="margin-top: 20px; padding-left: 20px;">
+        <li>Use the Undo/Redo buttons to revert changes</li>
+        <li>The preview updates in real-time as you make changes</li>
+        <li>For Telugu text, select "Noto Sans Telugu" font for better display</li>
+        <li>Keep titles short for better appearance</li>
+      </ul>
     </div>
   </div>
-</div>
 
-<!-- Footer -->
-<div class="footer">
-  <div class="footer-content">
-    <div class="developer-info">
-      Developed by <span class="developer-name">Sandeep Miriyala</span>
-    </div>
-    <div class="footer-subtitle">
-      Creating beautiful images with Telugu and English text
+  <!-- Cropper Modal -->
+  <div id="cropModal" style="display:none; position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:10000;">
+    <div style="background:#fff;padding:20px;border-radius:8px;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <img id="cropImage" alt="Crop Image" style="max-width:100%;max-height:60vh;" />
+      <div style="width:100%;display:flex;justify-content:flex-end;gap:10px;">
+        <button id="cancelCropBtn" class="button">Cancel</button>
+        <button id="cropConfirmBtn" class="button">Crop</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="image.js"></script>
-<script>
-// Tab functionality
-function openTab(evt, tabName) {
-  var i, tabcontent, tabbuttons;
-  
-  // Hide all tab content
-  tabcontent = document.getElementsByClassName("tab-content");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].classList.remove("active");
-  }
-  
-  // Remove active class from all tab buttons
-  tabbuttons = document.getElementsByClassName("tab-button");
-  for (i = 0; i < tabbuttons.length; i++) {
-    tabbuttons[i].classList.remove("active");
-  }
-  
-  // Show the selected tab content and mark button as active
-  document.getElementById(tabName).classList.add("active");
-  evt.currentTarget.classList.add("active");
-}
-</script>
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-content">
+      <div class="developer-info">
+        Developed by <span class="developer-name">Sandeep Miriyala</span>
+      </div>
+      <div class="footer-subtitle">
+        Creating beautiful images with Telugu and English text
+      </div>
+    </div>
+  </div>
+
+  <script src="image.js"></script>
+  <script>
+    // Tab functionality
+    function openTab(evt, tabName) {
+      var i, tabcontent, tabbuttons;
+      
+      // Hide all tab content
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+      
+      // Remove active class from all tab buttons
+      tabbuttons = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabbuttons.length; i++) {
+        tabbuttons[i].classList.remove("active");
+      }
+      
+      // Show the selected tab content and mark button as active
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    // PWA Install prompt handling
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', () => {
+      installBtn.style.display = 'none';
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+        });
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('AksharaChitra PWA was installed');
+    });
+
+    // Service worker registration
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
 </body>
 </html>
