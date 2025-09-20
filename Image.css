@@ -328,7 +328,7 @@ textarea:focus, input[type="text"]:focus, select:focus, input[type="color"]:focu
   box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
   z-index: 1100;
   user-select: none;
-  display: none; /* Show when PWA install prompt available */
+ 
   transition: background-color 0.3s ease;
 }
 #installBtn:hover,
