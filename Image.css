@@ -3,7 +3,7 @@ body {
   font-family: Arial, sans-serif;
   max-width: 720px;
   margin: 2rem auto;
-  padding: 1rem 1rem;
+  padding: 1rem;
   background: #f6f8fa;
   color: #222;
   user-select: none;
@@ -60,8 +60,8 @@ textarea:focus, input[type="text"]:focus, select:focus, input[type="color"]:focu
 .toolbar {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(80px,1fr)); /* smaller min-width */
-  gap: 8px; /* tighter gap */
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
   align-items: center;
 }
 
@@ -70,22 +70,22 @@ textarea:focus, input[type="text"]:focus, select:focus, input[type="color"]:focu
 .actions button,
 #installBtn,
 #goTopBtn {
-  padding-left: 18px; /* tight space for icon */
+  padding-left: 18px;
   position: relative;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 0.85rem; /* smaller font */
+  font-size: 0.85rem;
   line-height: 1.1;
   transition: all 0.25s ease;
   user-select: none;
   background-repeat: no-repeat;
   background-position: 6px center;
   background-size: 14px 14px;
-  min-height: 30px; /* compact height */
-  min-width: 70px; /* smaller min width since text max 7 chars */
+  min-height: 30px;
+  min-width: 70px;
   justify-content: center;
   padding-right: 12px;
 }
@@ -133,7 +133,7 @@ textarea:focus, input[type="text"]:focus, select:focus, input[type="color"]:focu
   gap: 0.5rem;
   justify-content: center;
   user-select: none;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
 }
 .actions button {
   background-color: #3949ab;
@@ -145,7 +145,7 @@ textarea:focus, input[type="text"]:focus, select:focus, input[type="color"]:focu
   box-shadow: 0 4px 8px rgba(57, 57, 123, 0.3);
   margin: 0;
   border-radius: 6px;
-  min-width: 70px; /* smaller for short text */
+  min-width: 70px;
   text-align: center;
 }
 .actions button:hover,
@@ -222,20 +222,33 @@ textarea:focus, input[type="text"]:focus, select:focus, input[type="color"]:focu
   line-height: 1.5;
   text-align: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 6px 15px rgba(57,57,123,0.2);
+  box-shadow: 0 6px 15px rgba(57, 57, 123, 0.2);
   position: relative;
   user-select: text;
   white-space: pre-wrap;
   overflow-wrap: break-word;
 }
+
 #preview img {
-  max-width: 40%;
+  display: block; /* Ensures image is on its own line */
+  max-width: 100%; /* Prevents images from overflowing their container */
+  height: auto; /* Maintains the aspect ratio */
   max-height: 220px;
   border-radius: 10px;
-  margin: 0 1rem 1rem 0;
-  box-shadow: 0 6px 12px rgba(57,57,123,0.2);
-  object-fit: contain;
-  vertical-align: top;
+  margin: 1rem auto; /* Centers the image */
+  box-shadow: 0 6px 12px rgba(57, 57, 123, 0.2);
+  object-fit: contain; /* Ensures the whole image is visible without distortion */
+}
+
+#preview figure {
+  margin: 0;
+}
+
+#preview figcaption {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
 /* Responsive Adjustments */
@@ -243,11 +256,7 @@ textarea:focus, input[type="text"]:focus, select:focus, input[type="color"]:focu
   body {
     max-width: 96%;
     margin: 1rem auto;
-    padding: 1rem 1rem;
-  }
-  #preview img {
-    max-width: 100%;
-    margin-bottom: 1rem;
+    padding: 1rem;
   }
   .actions {
     flex-direction: column;
