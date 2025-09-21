@@ -4,7 +4,7 @@ const urlsToCache = [
   '/index.html',
   '/Image.css',
   '/image.js',
-  '/logo.png'
+  '/Logo.png'
 ];
 
 // Install event - cache app shell
