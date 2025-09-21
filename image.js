@@ -32,25 +32,21 @@ const cropImage = document.getElementById('cropImage'); // <img> element inside 
 const cancelCropBtn = document.getElementById('cancelCropBtn');
 const cropConfirmBtn = document.getElementById('cropConfirmBtn');
 
+const imageCountBtn = document.getElementById('imageCountBtn');
+
 let uploadedImageUrl = ''; // Data URL for uploaded and cropped image
 let undoStack = []; // Stack to hold previous preview states to support Undo
 let redoStack = []; // Stack to hold states for Redo
 let cropperInstance = null; // Cropper.js instance for image cropping
 
-
-let imagesGeneratedCount = 0;
-const imageCountBtn = document.getElementById('imageCountBtn');
-
 function getFontFamily(lang) {
   return lang === 'telugu' ? "'Noto Sans Telugu', 'Gautami', serif" : "'Arial', sans-serif";
 }
 
-// Format user selected datetime string or return empty string
 function getFormattedDateTime() {
   if (!dateTimeInput.value) return '';
   const dt = new Date(dateTimeInput.value);
-  if (isNaN(dt)) return '';
-  return dt.toLocaleString();
+  return isNaN(dt) ? '' : dt.toLocaleString();
 }
 
 function updatePreview() {
@@ -79,7 +75,7 @@ function updatePreview() {
 
   const mainTitle = mainTitleInput.value.trim();
   const subTitle = subTitleInput.value.trim();
- 
+
   const content = contentInput.value.trim().replace(/\n/g, '<br>');
   const formattedDateTime = getFormattedDateTime();
 
@@ -88,32 +84,28 @@ function updatePreview() {
     imageHtml = `<img src="${uploadedImageUrl}" alt="Uploaded Image" style="max-width:30%; max-height:220px; border-radius:14px; margin:8px 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.18);">`;
   }
 
-  let contentHtml = `<div style="${style} padding: 10px 14px; background-color: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: inset 0 0 8px rgba(0,0,0,0.05);">${content}</div>`;
+  const contentHtml = `<div style="${style} padding: 10px 14px; background-color: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: inset 0 0 8px rgba(0,0,0,0.05);">${content}</div>`;
 
   const mainTitleHtml = `<h1 style="font-family:${fontFamily}; text-align:center; font-size: 2.8rem; margin-bottom: 6px; letter-spacing: 0.04em; font-weight: 700; color: #222;">${mainTitle}</h1>`;
 
   const subTitleHtml = `<h3 style="font-family:${fontFamily}; text-align:center; font-weight:normal; font-size: 1.25rem; color:#666; margin-top: 0; margin-bottom: 20px;">${subTitle}</h3>`;
 
   let middleHtml = '';
-  if (imagePositionSelect.value === 'left') {
-    middleHtml = `
-      <div style="display: flex; justify-content: center; align-items: flex-start; gap: 16px;">
-        ${imageHtml}<div style="flex:1;">${contentHtml}</div>
-      </div>`;
-  } else if (imagePositionSelect.value === 'right') {
-    middleHtml = `
-      <div style="display: flex; justify-content: center; align-items: flex-start; gap: 16px;">
-        <div style="flex:1;">${contentHtml}</div>${imageHtml}
-      </div>`;
-  } else if (imagePositionSelect.value === 'top') {
-    middleHtml = `<div style="text-align: center; margin-bottom: 16px;">${imageHtml}</div>${contentHtml}`;
-  } else {
-    middleHtml = `${contentHtml}<div style="text-align: center; margin-top: 16px;">${imageHtml}</div>`;
+  switch (imagePositionSelect.value) {
+    case 'left':
+      middleHtml = `<div style="display: flex; justify-content: center; align-items: flex-start; gap: 16px;">${imageHtml}<div style="flex:1;">${contentHtml}</div></div>`;
+      break;
+    case 'right':
+      middleHtml = `<div style="display: flex; justify-content: center; align-items: flex-start; gap: 16px;"><div style="flex:1;">${contentHtml}</div>${imageHtml}</div>`;
+      break;
+    case 'top':
+      middleHtml = `<div style="text-align: center; margin-bottom: 16px;">${imageHtml}</div>${contentHtml}`;
+      break;
+    default:
+      middleHtml = `${contentHtml}<div style="text-align: center; margin-top: 16px;">${imageHtml}</div>`;
   }
 
-  
-
-  preview.innerHTML = mainTitleHtml + subTitleHtml + middleHtml ;
+  preview.innerHTML = mainTitleHtml + subTitleHtml + middleHtml;
 }
 
 function pushUndoState() {
@@ -133,11 +125,7 @@ function redo() {
   preview.innerHTML = redoStack.pop();
 }
 
-const controls = [
-  boldBtn, italicBtn, fontSizeSelect, fontColorInput,
-  languageSelect, mainTitleInput, subTitleInput,
-  contentInput, imagePositionSelect
-];
+const controls = [boldBtn, italicBtn, fontSizeSelect, fontColorInput, languageSelect, mainTitleInput, subTitleInput, contentInput, imagePositionSelect];
 
 controls.forEach(control => {
   if (control === boldBtn || control === italicBtn) {
@@ -216,6 +204,7 @@ cropConfirmBtn.addEventListener('click', () => {
 undoBtn.addEventListener('click', undo);
 redoBtn.addEventListener('click', redo);
 
+// Updated generate button click with count increment
 generateBtn.addEventListener('click', () => {
   if (generateBtn.disabled) return;
 
@@ -245,22 +234,6 @@ generateBtn.addEventListener('click', () => {
   const imgs = container.querySelectorAll('img');
   let loadedCount = 0;
 
-  if (imgs.length === 0) {
-    captureCanvas(container);
-  } else {
-    imgs.forEach(img => {
-      if (img.complete) {
-        loadedCount++;
-        if (loadedCount === imgs.length) captureCanvas(container);
-      } else {
-        img.onload = img.onerror = () => {
-          loadedCount++;
-          if (loadedCount === imgs.length) captureCanvas(container);
-        };
-      }
-    });
-  }
-
   function captureCanvas(node) {
     html2canvas(node, {
       scale: 2,
@@ -285,13 +258,31 @@ generateBtn.addEventListener('click', () => {
       generateBtn.disabled = false;
 
       generatedImageContainer.generatedImageDataUrl = canvas.toDataURL();
-      // Increment global count on success
-          incrementGlobalImageCount();
+
+      // Increment global image count only after successful image generation
+      incrementGlobalImageCount();
+
     }).catch(error => {
       console.error('html2canvas error:', error);
       alert('Failed to generate image. Please try again.');
       container.remove();
       generateBtn.disabled = false;
+    });
+  }
+
+  if (imgs.length === 0) {
+    captureCanvas(container);
+  } else {
+    imgs.forEach(img => {
+      if (img.complete) {
+        loadedCount++;
+        if (loadedCount === imgs.length) captureCanvas(container);
+      } else {
+        img.onload = img.onerror = () => {
+          loadedCount++;
+          if (loadedCount === imgs.length) captureCanvas(container);
+        };
+      }
     });
   }
 });
@@ -404,8 +395,9 @@ window.addEventListener('load', () => {
   shareBtn.style.display = 'none';
   editBtn.style.display = 'none';
   deleteBtn.style.display = 'none';
-  // Fetch and display initial image count
-  incrementGlobalImageCount();
+
+  // Fetch and display initial global image count
+  fetchGlobalImageCount();
 });
 
 const goTopBtn = document.getElementById('goTopBtn');
@@ -417,6 +409,7 @@ goTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+// Capture and download preview image
 function captureAndDownloadPreview() {
   const container = preview.cloneNode(true);
   container.style.position = 'absolute';
@@ -454,6 +447,7 @@ function captureAndDownloadPreview() {
   });
 }
 
+// Capture and share preview image
 function captureAndSharePreview() {
   if (!navigator.share) {
     alert('Web Share API not supported on this device/browser.');
@@ -500,30 +494,44 @@ function captureAndSharePreview() {
     document.body.removeChild(container);
     alert('Failed to share image.');
   });
-
 }
 
-async function incrementGlobalImageCount() {
+// Fetch global image count from server
+async function fetchGlobalImageCount() {
   try {
     const response = await fetch('/.netlify/functions/incrementCount', { method: 'GET' });
-
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Server error: ${errorText}`);
     }
-
-    // Safely parse JSON only if body is not empty
     const text = await response.text();
     const data = text ? JSON.parse(text) : {};
-
-    imagesGeneratedCount = data.count || 0;
+    const count = data.count || 0; // Adjust property if your API returns differently
 
     if (imageCountBtn) {
-      imageCountBtn.textContent = `Images Generated: ${imagesGeneratedCount}`;
+      imageCountBtn.textContent = `Images Generated: ${count}`;
     }
   } catch (error) {
     console.error('Error fetching global image count:', error);
   }
 }
 
+// Increment global image count on server
+async function incrementGlobalImageCount() {
+  try {
+    const response = await fetch('/.netlify/functions/incrementCount', { method: 'POST' });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Server error: ${errorText}`);
+    }
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+    const count = data.count || 0;
 
+    if (imageCountBtn) {
+      imageCountBtn.textContent = `Images Generated: ${count}`;
+    }
+  } catch (error) {
+    console.error('Error incrementing global image count:', error);
+  }
+}

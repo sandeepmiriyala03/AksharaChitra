@@ -1,54 +1,59 @@
-import { getStore } from '@netlify/blobs';
+import { createClient } from '@supabase/supabase-js';
 
-let localCount = 0; // In-memory fallback counter for local development/testing
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const handler = async (event) => {
   try {
-    // Allow only GET and POST methods
-    if (!['GET', 'POST'].includes(event.httpMethod)) {
+    if (event.httpMethod === 'GET') {
+      // Fetch current count
+      const { data, error } = await supabase
+        .from('global_image_count')
+        .select('count')
+        .eq('id', 1)
+        .single();
+
+      if (error) throw error;
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ count: data.count }),
+        headers: { 'Content-Type': 'application/json' },
+      };
+
+    } else if (event.httpMethod === 'POST') {
+      // Increment count atomically using stored procedure
+      const { error } = await supabase.rpc('increment_global_count');
+      if (error) throw error;
+
+      // Fetch updated count after increment
+      const { data, error: fetchError } = await supabase
+        .from('global_image_count')
+        .select('count')
+        .eq('id', 1)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ count: data.count }),
+        headers: { 'Content-Type': 'application/json' },
+      };
+    } else {
       return {
         statusCode: 405,
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Method Not Allowed' }),
+        headers: { 'Content-Type': 'application/json' },
       };
     }
-
-    const siteID = process.env.SITE_ID;
-    const token = process.env.NETLIFY_TOKEN;
-
-    let count;
-
-    if (!siteID || !token) {
-      // Local fallback: use in-memory count; increment if POST
-      if (event.httpMethod === 'POST') {
-        localCount++;
-      }
-      count = localCount;
-    } else {
-      // Production: use Netlify Blobs with siteID and token
-      const store = getStore('imageCountStore', { siteID, token });
-      const key = 'totalImageCount';
-
-      count = await store.get(key, { type: 'json' }) || 0;
-
-      if (event.httpMethod === 'POST') {
-        count++;
-        await store.setJSON(key, count);
-      }
-    }
-
-    // Return the current count as JSON
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ count }),
-    };
   } catch (error) {
-    console.error('Function error:', error);
+    console.error('Error:', error);
     return {
       statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: error.message || 'Internal Server Error' }),
+      headers: { 'Content-Type': 'application/json' },
     };
   }
 };
