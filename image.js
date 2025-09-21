@@ -37,6 +37,10 @@ let undoStack = []; // Stack to hold previous preview states to support Undo
 let redoStack = []; // Stack to hold states for Redo
 let cropperInstance = null; // Cropper.js instance for image cropping
 
+
+let imagesGeneratedCount = 0;
+const imageCountBtn = document.getElementById('imageCountBtn');
+
 function getFontFamily(lang) {
   return lang === 'telugu' ? "'Noto Sans Telugu', 'Gautami', serif" : "'Arial', sans-serif";
 }
@@ -281,7 +285,8 @@ generateBtn.addEventListener('click', () => {
       generateBtn.disabled = false;
 
       generatedImageContainer.generatedImageDataUrl = canvas.toDataURL();
-
+      // Increment global count on success
+          incrementGlobalImageCount();
     }).catch(error => {
       console.error('html2canvas error:', error);
       alert('Failed to generate image. Please try again.');
@@ -399,6 +404,8 @@ window.addEventListener('load', () => {
   shareBtn.style.display = 'none';
   editBtn.style.display = 'none';
   deleteBtn.style.display = 'none';
+  // Fetch and display initial image count
+  incrementGlobalImageCount();
 });
 
 const goTopBtn = document.getElementById('goTopBtn');
@@ -493,4 +500,21 @@ function captureAndSharePreview() {
     document.body.removeChild(container);
     alert('Failed to share image.');
   });
+
 }
+
+async function incrementGlobalImageCount() {
+  try {
+    const response = await fetch('/netlify/functions/incrementCount', {
+      method: 'POST',
+    });
+    const data = await response.json();
+    imagesGeneratedCount = data.count;
+    if (imageCountBtn) {
+      imageCountBtn.textContent = `Images Generated: ${imagesGeneratedCount}`;
+    }
+  } catch (error) {
+    console.error('Error updating global image count:', error);
+  }
+}
+
