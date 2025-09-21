@@ -42,7 +42,11 @@
         <input type="color" id="backgroundColor" aria-label="Background color picker" value="#ffffff" />
 
         <label for="imageUpload">Upload Image:</label>
-        <input type="file" id="imageUpload" accept="image/*" aria-label="Upload Image" />
+      <div class="image-upload-wrapper">
+  <input type="file" id="imageUpload" accept="image/*" aria-label="Upload Image" />
+  <label for="imageUpload" class="custom-file-label">Choose Image</label>
+</div>
+
 
         <label for="imagePosition">Image Position:</label>
         <select id="imagePosition" aria-label="Image position">
