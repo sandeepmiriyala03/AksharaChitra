@@ -496,7 +496,7 @@ function captureAndSharePreview() {
   });
 }
 
-// Fetch global image count from server
+/* // Fetch global image count from server
 async function fetchGlobalImageCount() {
   try {
     const response = await fetch('/.netlify/functions/incrementCount', { method: 'GET' });
@@ -535,3 +535,4 @@ async function incrementGlobalImageCount() {
     console.error('Error incrementing global image count:', error);
   }
 }
+ */
