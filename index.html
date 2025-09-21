@@ -6,184 +6,12 @@
   <title>AksharaChitra</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet" />
   <link href="Image.css" rel="stylesheet" />
+ 
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
-  <style>
-    /* Tab styles */
-    .tab-container {
-      margin: 20px 0;
-    }
-    .tab-buttons {
-      display: flex;
-      border-bottom: 2px solid #ddd;
-      margin-bottom: 20px;
-      flex-wrap: nowrap;
-    }
-    .tab-button {
-      background: none;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      border-bottom: 3px solid transparent;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-    .tab-button.active {
-      background-color: #f0f8ff;
-      border-bottom-color: #007bff;
-      color: #007bff;
-      font-weight: bold;
-    }
-    .tab-button:hover {
-      background-color: #f8f9fa;
-    }
-    .tab-content {
-      display: none;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    .steps-list {
-      list-style: none;
-      padding: 0;
-      counter-reset: step-counter;
-    }
-    .steps-list li {
-      counter-increment: step-counter;
-      margin: 15px 0;
-      padding: 15px;
-      background: #fff;
-      border-left: 4px solid #007bff;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: relative;
-    }
-    .steps-list li::before {
-      content: counter(step-counter);
-      position: absolute;
-      left: -15px;
-      top: 15px;
-      background: #007bff;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    .step-title {
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 5px;
-    }
-    .step-description {
-      color: #666;
-      line-height: 1.4;
-    }
-    /* Footer styles */
-    .footer {
-      margin-top: 40px;
-      padding: 20px;
-      background-color: #f8f9fa;
-      border-top: 2px solid #dee2e6;
-      text-align: center;
-      border-radius: 10px;
-    }
-    .footer-content {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .developer-info {
-      font-size: 16px;
-      color: #495057;
-      margin-bottom: 10px;
-    }
-    .developer-name {
-      font-weight: bold;
-      color: #007bff;
-      font-size: 18px;
-    }
-    .footer-subtitle {
-      font-size: 14px;
-      color: #6c757d;
-      font-style: italic;
-    }
-    /* Install button style */
-    #installBtn {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      padding: 8px 12px;
-      font-size: 14px;
-      background-color: #007bff;
-      border: none;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      
-      z-index: 1000;
-    }
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      .tab-buttons {
-        flex-wrap: wrap;
-      }
-      .tab-button {
-        flex-grow: 1;
-        text-align: center;
-        padding: 10px 5px;
-        font-size: 14px;
-        white-space: normal;
-      }
-      form#form label,
-      form#form select,
-      form#form input,
-      form#form textarea,
-      form#form button {
-        width: 100%;
-        box-sizing: border-box;
-        margin-bottom: 10px;
-      }
-      #header {
-        justify-content: center;
-      }
-    }
-    form#form label {
-      display: block;
-      margin-top: 10px;
-      font-weight: 600;
-    }
-    form#form input,
-    form#form select,
-    form#form textarea {
-      padding: 6px 8px;
-      font-size: 16px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-    form#form button {
-      margin-top: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    form#form button:hover {
-      background-color: #0056b3;
-    }
-  </style>
   <link rel="manifest" href="manifest.json" />
+
 </head>
 <body>
   <header id="header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
@@ -230,58 +58,77 @@
         <label for="subTitle">Subtitle:</label>
         <input type="text" id="subTitle" maxlength="100" placeholder="Enter subtitle" />
 
-        <label for="footerText">Footer (optional):</label>
-        <input type="text" id="footerText" maxlength="100" placeholder="Enter footer text" />
+    
 
         <label for="textContent">Main Content:</label>
         <textarea id="textContent" rows="6" placeholder="Type your content here..."></textarea>
 
-        <div class="toolbar" aria-label="Text formatting">
-          <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>Bold</b></button>
-          <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>Italic</i></button>
-
-          <label for="fontSize">Font Size:</label>
-          <select id="fontSize" aria-label="Select font size">
-             <option value="8">8px</option>
-              <option value="10">10px</option>
-
-               <option value="12">12px</option>
-             <option value="14">14px</option>
-            <option value="16">16px</option>
-            <option value="20" selected>20px</option>
-            <option value="24">24px</option>
-            <option value="30">30px</option>
-          </select>
-
-          <label for="fontFamily">Font Family:</label>
-          <select id="fontFamily" aria-label="Font family select">
-            <option value="Arial, sans-serif">Arial (English)</option>
-            <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu (Telugu)</option>
-          </select>
-
-          <label for="fontColor">Font Color:</label>
-          <input type="color" id="fontColor" aria-label="Font color picker" value="#000000" />
-
-          <label for="textAlign">Text Align:</label>
-          <select id="textAlign" aria-label="Text alignment select">
-            <option value="left">Left</option>
-            <option value="center" selected>Center</option>
-            <option value="right">Right</option>
-          </select>
+        <div class="format-buttons" aria-label="Text formatting buttons">
+          <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>B</b></button>
+          <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>I</i></button>
         </div>
 
-        <button id="generateBtn" type="button">Generate Image</button>
-        <button id="undoBtn" type="button" title="Undo">Undo</button>
-        <button id="redoBtn" type="button" title="Redo">Redo</button>
+        <div class="font-size-family">
+          <label for="fontSize">Font Size:
+            <select id="fontSize" aria-label="Select font size">
+              <option value="8">8px</option>
+              <option value="10">10px</option>
+              <option value="12">12px</option>
+              <option value="14">14px</option>
+              <option value="16">16px</option>
+              <option value="20" selected>20px</option>
+              <option value="24">24px</option>
+              <option value="30">30px</option>
+            </select>
+          </label>
+
+          <label for="fontFamily">Font Family:
+            <select id="fontFamily" aria-label="Font family select">
+              <option value="Arial, sans-serif">Arial (English)</option>
+              <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu (Telugu)</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="font-color-align">
+          <label for="fontColor">Font Color:
+            <input type="color" id="fontColor" aria-label="Font color picker" value="#000000" />
+          </label>
+
+          <label for="textAlign">Text Align:
+            <select id="textAlign" aria-label="Text alignment select">
+              <option value="left">Left</option>
+              <option value="center" selected>Center</option>
+              <option value="right">Right</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-buttons">
+         
+<button id="generateBtn">Generate Image</button>
+<span id="generateSpinner" style="display:none; margin-left:8px;">⏳ Generating...</span>
+          <button id="undoBtn" type="button" title="Undo">Undo</button>
+          <button id="redoBtn" type="button" title="Redo">Redo</button>
+          <button id="clearBtn" type="reset">Clear All</button>
+        </div>
       </form>
+
       <div id="preview" aria-live="polite" tabindex="0"></div>
+<div style="height:16px;"></div>
       <div class="actions">
         <button id="downloadBtn" style="display:none;">Download Image</button>
         <button id="shareBtn" style="display:none;">Share on WhatsApp</button>
         <button id="editBtn" style="display:none;">Edit</button>
         <button id="deleteBtn" style="display:none;">Delete</button>
       </div>
-      <img id="generatedImage" alt="" style="display:none;" />
+      <div style="height:16px;"></div>
+ <div id="generatedImageContainer"> 
+  <div style="height:16px;"></div>
+  <img id="generatedImage" alt="Generated Image" />
+</div> 
+
+
       <button id="goTopBtn" title="Go to top" aria-label="Scroll to top">↑</button>
     </div>
 
@@ -355,66 +202,6 @@
   </div>
 
   <script src="image.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      let deferredPrompt;
-      const installBtn = document.getElementById('installBtn');
-
-      function isAppInstalled() {
-        return window.matchMedia('(display-mode: standalone)').matches
-            || window.navigator.standalone === true; // iOS standalone detection
-      }
-
-      if (isAppInstalled()) {
-        installBtn.style.setProperty('display', 'none', 'important');
-      } else {
-         installBtn.style.setProperty('display', 'none', 'important');
-      }
-
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (!isAppInstalled()) {
-          installBtn.style.display = 'inline-block';
-        }
-      });
-
-      installBtn.addEventListener('click', () => {
-          installBtn.style.setProperty('display', 'none', 'important');
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then(() => {
-            deferredPrompt = null;
-          });
-        }
-      });
-  
-  window.addEventListener('appinstalled', () => {
-    
-    installBtn.style.setProperty('display', 'none', 'important');
-    console.log('AksharaChitra PWA was installed');
-  });
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(() => console.log('Service Worker registered'))
-          .catch(err => console.error('Service Worker registration failed:', err));
-      }
-    });
-
-    function openTab(evt, tabName) {
-      var i, tabcontent, tabbuttons;
-      tabcontent = document.getElementsByClassName("tab-content");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].classList.remove("active");
-      }
-      tabbuttons = document.getElementsByClassName("tab-button");
-      for (i = 0; i < tabbuttons.length; i++) {
-        tabbuttons[i].classList.remove("active");
-      }
-      document.getElementById(tabName).classList.add("active");
-      evt.currentTarget.classList.add("active");
-      document.getElementById("header").style.display = "flex";
-    }
-  </script>
+  <script src="pwa.js"></script>
 </body>
 </html>
