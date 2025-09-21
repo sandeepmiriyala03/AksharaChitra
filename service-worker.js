@@ -2,17 +2,19 @@ const CACHE_NAME = 'aksharachitra-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/image.css',     // Confirm these filenames exist or update accordingly
-  '/image.js',      // Confirm these filenames exist or update accordingly
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  '/image.css',
+  '/image.js',
+  '/logo.png'
 ];
 
 // Install event - cache app shell
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then(cache => {
+        console.log('Caching files:', urlsToCache);
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
@@ -24,6 +26,7 @@ self.addEventListener('activate', event => {
       Promise.all(
         cacheNames.map(cacheName => {
           if (!cacheWhitelist.includes(cacheName)) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -32,12 +35,12 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event - respond from cache, or fetch from network
+// Fetch event - respond from cache, then network, fallback to cached index.html
 self.addEventListener('fetch', event => {
+  console.log('Fetching:', event.request.url);
   event.respondWith(
     caches.match(event.request)
-      .then(response => {
-        return response || fetch(event.request);
-      })
+      .then(response => response || fetch(event.request))
+      .catch(() => caches.match('/index.html'))
   );
 });

@@ -505,16 +505,25 @@ function captureAndSharePreview() {
 
 async function incrementGlobalImageCount() {
   try {
-    const response = await fetch('/netlify/functions/incrementCount', {
-      method: 'POST',
-    });
-    const data = await response.json();
-    imagesGeneratedCount = data.count;
+    const response = await fetch('/.netlify/functions/incrementCount', { method: 'GET' });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Server error: ${errorText}`);
+    }
+
+    // Safely parse JSON only if body is not empty
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+
+    imagesGeneratedCount = data.count || 0;
+
     if (imageCountBtn) {
       imageCountBtn.textContent = `Images Generated: ${imagesGeneratedCount}`;
     }
   } catch (error) {
-    console.error('Error updating global image count:', error);
+    console.error('Error fetching global image count:', error);
   }
 }
+
 
