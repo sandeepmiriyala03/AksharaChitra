@@ -1,0 +1,8 @@
+[build]
+  publish = "public"         # folder where your built or static files are located
+  functions = "netlify/functions"  # folder where your Netlify serverless functions are stored
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

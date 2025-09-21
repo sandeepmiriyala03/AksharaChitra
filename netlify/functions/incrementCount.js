@@ -1,21 +1,14 @@
-const fs = require('fs');
-const path = require('path');
+import { getStore } from '@netlify/blobs';
 
-// Path to simple count file (for demo; in prod use DB or Netlify Blob)
-const countFile = path.resolve(__dirname, 'count.txt');
+export const handler = async (event) => {
+  const store = getStore('imageCountStore');
+  const key = 'totalImageCount';
 
-exports.handler = async function(event, context) {
-  let count = 0;
-
-  try {
-    count = parseInt(fs.readFileSync(countFile, 'utf-8'));
-  } catch (err) {
-    // file might not exist initially
-  }
+  let count = await store.get(key, { type: 'json' }) || 0;
 
   if (event.httpMethod === 'POST') {
     count++;
-    fs.writeFileSync(countFile, count.toString(), 'utf-8');
+    await store.setJSON(key, count);
   }
 
   return {
