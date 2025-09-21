@@ -260,7 +260,7 @@ generateBtn.addEventListener('click', () => {
       generatedImageContainer.generatedImageDataUrl = canvas.toDataURL();
 
       // Increment global image count only after successful image generation
-      incrementGlobalImageCount();
+    //  incrementGlobalImageCount();
 
     }).catch(error => {
       console.error('html2canvas error:', error);
@@ -397,7 +397,7 @@ window.addEventListener('load', () => {
   deleteBtn.style.display = 'none';
 
   // Fetch and display initial global image count
-  fetchGlobalImageCount();
+  //fetchGlobalImageCount();
 });
 
 const goTopBtn = document.getElementById('goTopBtn');
