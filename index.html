@@ -57,36 +57,42 @@
 
         <label for="subTitle">Subtitle:</label>
         <input type="text" id="subTitle" maxlength="100" placeholder="Enter subtitle" />
-
-    
-
         <label for="textContent">Main Content:</label>
         <textarea id="textContent" rows="6" placeholder="Type your content here..."></textarea>
-
         <div class="format-buttons" aria-label="Text formatting buttons">
-          <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>B</b></button>
-          <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>I</i></button>
+          <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>Bold</b></button>
+          <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>Italic</i></button>
         </div>
-
         <div class="font-size-family">
           <label for="fontSize">Font Size:
             <select id="fontSize" aria-label="Select font size">
-              <option value="8">8px</option>
-              <option value="10">10px</option>
+    
               <option value="12">12px</option>
-              <option value="14">14px</option>
-              <option value="16">16px</option>
-              <option value="20" selected>20px</option>
+              <option value="14" selected>14px</option>
+              <option value="16" >16px</option>
+              <option value="18" >18px</option>
+              <option value="20" >20px</option>
               <option value="24">24px</option>
               <option value="30">30px</option>
             </select>
           </label>
 
           <label for="fontFamily">Font Family:
-            <select id="fontFamily" aria-label="Font family select">
-              <option value="Arial, sans-serif">Arial (English)</option>
-              <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu (Telugu)</option>
-            </select>
+          <select id="fontFamily" aria-label="Font family select">
+  <option value="Arial, sans-serif">Arial (English)</option>
+  <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+  <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
+  <option value="'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica Neue</option>
+  <option value="'Times New Roman', Times, serif">Times New Roman</option>
+  <option value="Georgia, serif">Georgia</option>
+  <option value="'Noto Sans', sans-serif">Noto Sans (Multi-language)</option>
+  <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu</option>
+  <option value="'Roboto', sans-serif">Roboto</option>
+  <option value="'Open Sans', sans-serif">Open Sans</option>
+  <option value="'Lato', sans-serif">Lato</option>
+  <option value="'Montserrat', sans-serif">Montserrat</option>
+</select>
+
           </label>
         </div>
 
@@ -113,8 +119,14 @@
           <button id="clearBtn" type="reset">Clear All</button>
         </div>
       </form>
+<div style="margin-bottom: 16px; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; font-size: 1.4rem; color: #3a3f51; letter-spacing: 0.05em; text-transform: uppercase; user-select: none;">
+  Preview Image
 
-      <div id="preview" aria-live="polite" tabindex="0"></div>
+  <div id="preview" aria-live="polite" tabindex="0"></div>
+</div>
+
+
+
 <div style="height:16px;"></div>
       <div class="actions">
         <button id="downloadBtn" style="display:none;">Download Image</button>
