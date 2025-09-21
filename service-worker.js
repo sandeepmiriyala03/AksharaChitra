@@ -2,7 +2,7 @@ const CACHE_NAME = 'aksharachitra-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/image.css',
+  '/Image.css',
   '/image.js',
   '/logo.png'
 ];
