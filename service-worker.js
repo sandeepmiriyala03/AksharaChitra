@@ -1,46 +1,33 @@
-const CACHE_NAME = 'aksharachitra-cache-v1';
-const urlsToCache = [
+const CACHE = 'aksharachitra-v4';
+const FILES = [
   '/',
   '/index.html',
-  '/Image.css',
-  '/image.js',
-  '/Logo.png'
+  '/style.css',
+  '/main.js',
+  '/pwa.js',
+  '/manifest.json',
+  '/logo.png',
+  
+  'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+  'https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js'
 ];
 
-// Install event - cache app shell
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Caching files:', urlsToCache);
-        return cache.addAll(urlsToCache);
-      })
-  );
+self.addEventListener('install', evt => {
+  evt.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));
+  self.skipWaiting();
 });
 
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames =>
-      Promise.all(
-        cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      )
-    )
-  );
+self.addEventListener('activate', evt => {
+  evt.waitUntil(clients.claim());
 });
 
-// Fetch event - respond from cache, then network, fallback to cached index.html
-self.addEventListener('fetch', event => {
-  console.log('Fetching:', event.request.url);
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
-      .catch(() => caches.match('/index.html'))
+self.addEventListener('fetch', evt => {
+  evt.respondWith(
+    caches.match(evt.request).then(res => {
+      return res || fetch(evt.request).then(fetchRes => {
+        // cache fetched resources (optional)
+        return fetchRes;
+      });
+    }).catch(()=> caches.match('/index.html'))
   );
 });

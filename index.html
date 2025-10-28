@@ -1,228 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AksharaChitra</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet" />
-  <link href="Image.css" rel="stylesheet" />
- 
-  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
-  <link rel="manifest" href="manifest.json" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AksharaChitra — Text → Image (Offline)</title>
 
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
+
+  <!-- Cropper CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet" />
 </head>
 <body>
-  <header id="header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-    <img src="Logo.png" alt="Logo" style="width: 60px; height: auto;" />
-    <h2 style="margin: 0;">AksharaChitra</h2>
+  <header class="topbar">
+    <div class="left">
+      <img src="assets/logo.png" alt="AksharaChitra" class="logo" onerror="this.style.display='none'">
+      <span class="app-title">AksharaChitra</span>
+    </div>
+
+    <nav class="nav">
+      <button class="tab-btn active" data-tab="home">🏠 Home</button>
+      <button class="tab-btn" data-tab="create">🎨 Create</button>
+      <button class="tab-btn" data-tab="ai">🧠 Akshara AI</button>
+      <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
+      <button class="tab-btn" data-tab="help">📘 Help</button>
+    </nav>
+
+    <div class="right-controls">
+      <button id="themeToggle" title="Toggle theme">🌙</button>
+      <button id="installBtn" class="hidden" title="Install app">📲</button>
+    </div>
   </header>
 
-  <button id="installBtn" title="Install App" aria-label="Install Progressive Web App">Install App</button>
+  <main class="content">
+    <!-- HOME -->
+    <section id="home" class="tab-content active">
+      <h1>Welcome to AksharaChitra</h1>
+      <p>Create text-based images (posters, business cards, invites, news) — works offline. Choose 'Create' to begin.</p>
+      <div id="welcomeSamples" class="sample-row"></div>
+      <div style="margin-top:12px;"><button class="btn primary" data-open="create">Start Creating</button></div>
+    </section>
 
-  <div class="tab-container">
-    <div class="tab-buttons">
-      <button class="tab-button active" onclick="openTab(event, 'app-tab')">Create Image</button>
-      <button class="tab-button" onclick="openTab(event, 'howto-tab')">How to Use</button>
-    </div>
+    <!-- CREATE -->
+    <section id="create" class="tab-content">
+      <div class="editor">
+        <div class="panel left-panel">
+          <label>Language</label>
+          <select id="language">
+            <option value="english">English</option>
+            <option value="telugu">తెలుగు</option>
+            <option value="hindi">हिंदी</option>
+            <option value="tamil">தமிழ்</option>
+            <option value="kannada">ಕನ್ನಡ</option>
+            <option value="malayalam">മലയാളം</option>
+            <option value="odia">ଓଡ଼ିଆ</option>
+          </select>
 
-    <div id="app-tab" class="tab-content active">
-      <form id="form">
-        <label for="language">Language / భాష:</label>
-        <select id="language" aria-label="Language select">
-          <option value="english">English</option>
-          <option value="telugu">తెలుగు</option>
-        </select>
+          <label>Template</label>
+          <select id="templateSelect">
+            <option value="">— choose —</option>
+            <option value="news">News</option>
+            <option value="birthday">Birthday</option>
+            <option value="devotional">Devotional</option>
+            <option value="business">Business Card</option>
+            <option value="invitation">Invitation</option>
+            <option value="quote">Quote</option>
+          </select>
 
-        <label for="dateTime">Date and Time:</label>
-        <input type="datetime-local" id="dateTime" aria-label="Date and time input" />
+          <label>Title</label>
+          <input id="title" type="text" placeholder="Title (eg. Happy Birthday)" />
 
-        <label for="backgroundColor">Background Color:</label>
-        <input type="color" id="backgroundColor" aria-label="Background color picker" value="#ffffff" />
+          <label>Subtitle</label>
+          <input id="subtitle" type="text" placeholder="Subtitle (optional)" />
 
-        <label for="imageUpload">Upload Image:</label>
-      <div class="image-upload-wrapper">
-  <input type="file" id="imageUpload" accept="image/*" aria-label="Upload Image" />
-  <label for="imageUpload" class="custom-file-label">Choose Image</label>
-</div>
+          <label>Message</label>
+          <textarea id="message" rows="5" placeholder="Write your message..."></textarea>
 
+          <div class="row">
+            <div>
+              <label>Font</label>
+              <select id="fontFamily">
+                <option value="Montserrat, sans-serif">Montserrat</option>
+                <option value="'Noto Sans Telugu', serif">Noto Sans Telugu</option>
+              </select>
+            </div>
+            <div>
+              <label>Size</label>
+              <input id="fontSize" type="number" min="12" max="72" value="20" />
+            </div>
+          </div>
 
-        <label for="imagePosition">Image Position:</label>
-        <select id="imagePosition" aria-label="Image position">
-          <option value="left">Left</option>
-          <option value="right">Right</option>
-          <option value="top">Top</option>
-          <option value="bottom">Bottom</option>
-        </select>
+          <div class="row">
+            <div>
+              <label>Text Color</label>
+              <input id="textColor" type="color" value="#111111" />
+            </div>
+            <div>
+              <label>Background</label>
+              <input id="bgColor" type="color" value="#ffffff" />
+            </div>
+          </div>
 
-        <label for="mainTitle">Main Title:</label>
-        <input type="text" id="mainTitle" maxlength="80" placeholder="Enter main title" />
+          <label>Upload Image (crop available)</label>
+          <input id="imageUpload" type="file" accept="image/*" />
 
-        <label for="subTitle">Subtitle:</label>
-        <input type="text" id="subTitle" maxlength="100" placeholder="Enter subtitle" />
-        <label for="textContent">Main Content:</label>
-        <textarea id="textContent" rows="6" placeholder="Type your content here..."></textarea>
-        <div class="format-buttons" aria-label="Text formatting buttons">
-          <button type="button" id="boldBtn" aria-pressed="false" title="Bold"><b>Bold</b></button>
-          <button type="button" id="italicBtn" aria-pressed="false" title="Italic"><i>Italic</i></button>
-        </div>
-        <div class="font-size-family">
-          <label for="fontSize">Font Size:
-            <select id="fontSize" aria-label="Select font size">
-    
-              <option value="12">12px</option>
-              <option value="14" selected>14px</option>
-              <option value="16" >16px</option>
-              <option value="18" >18px</option>
-              <option value="20" >20px</option>
-              <option value="24">24px</option>
-              <option value="30">30px</option>
-            </select>
-          </label>
+          <label>QR / Link (optional)</label>
+          <input id="qrText" type="text" placeholder="https:// or phone/email" />
 
-          <label for="fontFamily">Font Family:
-          <select id="fontFamily" aria-label="Font family select">
-  <option value="Arial, sans-serif">Arial (English)</option>
-  <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
-  <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
-  <option value="'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica Neue</option>
-  <option value="'Times New Roman', Times, serif">Times New Roman</option>
-  <option value="Georgia, serif">Georgia</option>
-  <option value="'Noto Sans', sans-serif">Noto Sans (Multi-language)</option>
-  <option value="'Noto Sans Telugu', 'Gautami', serif">Noto Sans Telugu</option>
-  <option value="'Roboto', sans-serif">Roboto</option>
-  <option value="'Open Sans', sans-serif">Open Sans</option>
-  <option value="'Lato', sans-serif">Lato</option>
-  <option value="'Montserrat', sans-serif">Montserrat</option>
-</select>
+          <div class="row">
+            <button id="clearBtn" class="btn ghost">Clear</button>
+            <button id="saveBtn" class="btn">💾 Save</button>
+            <button id="speechBtn" class="btn ghost">🎤 Speak</button>
+          </div>
 
-          </label>
-        </div>
+          <div class="row" style="margin-top:8px">
+            <button id="generateBtn" class="btn primary">🖼 Generate</button>
+            <button id="downloadBtn" class="btn">⬇ Download</button>
+            <button id="shareBtn" class="btn ghost">📤 Share</button>
+          </div>
 
-        <div class="font-color-align">
-          <label for="fontColor">Font Color:
-            <input type="color" id="fontColor" aria-label="Font color picker" value="#000000" />
-          </label>
-
-          <label for="textAlign">Text Align:
-            <select id="textAlign" aria-label="Text alignment select">
-              <option value="left">Left</option>
-              <option value="center" selected>Center</option>
-              <option value="right">Right</option>
-            </select>
-          </label>
+          <div style="margin-top:12px">
+            <small class="muted">Tip: changes reflect instantly in the live preview (right).</small>
+          </div>
         </div>
 
-        <div class="form-buttons">
-         
-<button id="generateBtn">Generate Image</button>
-<span id="generateSpinner" style="display:none; margin-left:8px;">⏳ Generating...</span>
-          <button id="undoBtn" type="button" title="Undo">Undo</button>
-          <button id="redoBtn" type="button" title="Redo">Redo</button>
-          <button id="clearBtn" type="reset">Clear All</button>
+        <div class="panel right-panel">
+          <h3>Live Preview</h3>
+          <div id="previewCard" class="card">
+            <div id="pTitle" class="p-title"></div>
+            <div id="pSubtitle" class="p-subtitle"></div>
+            <div id="pBody" class="p-body">
+              <div id="pMessage"></div>
+            </div>
+            <div id="pImage" class="p-image"></div>
+            <div id="pQR" class="p-qr"></div>
+            <div class="watermark">aksharachitra.netlify.app</div>
+          </div>
+
+          <h4 style="margin-top:14px">My Creations</h4>
+          <div id="galleryGrid" class="gallery-grid"></div>
         </div>
-      </form>
-<div style="margin-bottom: 16px; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; font-size: 1.4rem; color: #3a3f51; letter-spacing: 0.05em; text-transform: uppercase; user-select: none;">
-  Preview Image
-
-  <div id="preview" aria-live="polite" tabindex="0"></div>
-</div>
-
-
-
-<div style="height:16px;"></div>
-      <div class="actions">
-        <button id="downloadBtn" style="display:none;">Download Image</button>
-        <button id="shareBtn" style="display:none;">Share on WhatsApp</button>
-        <button id="editBtn" style="display:none;">Edit</button>
-        <button id="deleteBtn" style="display:none;">Delete</button>
       </div>
-      <div style="height:16px;"></div>
- <div id="generatedImageContainer"> 
-  <div style="height:16px;"></div>
-  <img id="generatedImage" alt="Generated Image" />
-</div> 
+    </section>
 
-<!-- <div style="margin: 12px 0; text-align: center;">
-  <button id="imageCountBtn" style="background:#3949ab; color:#fff; border:none; border-radius:6px; padding:8px 18px; font-weight:600; cursor:default; user-select:none; min-width: 150px;">
-    Images Generated: 0
-  </button>
-</div> -->
+    <!-- AI -->
+    <section id="ai" class="tab-content">
+      <h2>Akshara AI (Offline helpers)</h2>
+      <div class="panel">
+        <label>Tone</label>
+        <select id="aiTone"><option value="warm">Warm</option><option value="formal">Formal</option><option value="poetic">Poetic</option></select>
+        <div class="row" style="margin-top:8px">
+          <button id="aiSuggest" class="btn">Suggest</button>
+          <button id="aiTranslate" class="btn ghost">Translate ENG→TELU</button>
+          <button id="aiSansk" class="btn ghost">Sanskritize</button>
+        </div>
+        <label style="margin-top:8px">AI Output</label>
+        <textarea id="aiOutput" rows="3"></textarea>
+        <div class="row">
+          <button id="aiUse" class="btn">Use in Message</button>
+          <button id="aiStyle" class="btn ghost">Apply Style</button>
+        </div>
+      </div>
+    </section>
 
+    <!-- GALLERY -->
+    <section id="gallery" class="tab-content">
+      <h2>My Creations</h2>
+      <div class="panel">
+        <div id="galleryGridPanel" class="gallery-grid-panel"></div>
+        <div style="margin-top:10px" class="muted">Saved images are stored only in your browser (offline).</div>
+        <div style="margin-top:8px" class="row">
+          <button id="clearAllBtn" class="btn ghost">Clear All Data</button>
+        </div>
+      </div>
+    </section>
 
-      <button id="goTopBtn" title="Go to top" aria-label="Scroll to top">↑</button>
-    </div>
-
-    <div id="howto-tab" class="tab-content">
-      <h3>How to Use AksharaChitra - Simple Steps</h3>
-      <ol class="steps-list">
-        <li>
-          <div class="step-title">Select Language</div>
-          <div class="step-description">Choose your preferred language from the dropdown - English or Telugu (తెలుగు).</div>
-        </li>
-        <li>
-          <div class="step-title">Set Date and Time (Optional)</div>
-          <div class="step-description">Pick a date and time if you want to include it in your image.</div>
-        </li>
-        <li>
-          <div class="step-title">Choose Background Color</div>
-          <div class="step-description">Click the color picker to select your desired background color.</div>
-        </li>
-        <li>
-          <div class="step-title">Upload an Image (Optional)</div>
-          <div class="step-description">Click "Choose File" to upload an image and select its position (left, right, top, or bottom).</div>
-        </li>
-        <li>
-          <div class="step-title">Enter Your Text</div>
-          <div class="step-description">Fill in the main title, subtitle, footer text, and main content as needed.</div>
-        </li>
-        <li>
-          <div class="step-title">Format Your Text</div>
-          <div class="step-description">Use the toolbar to make text bold, italic, change font size, font family, color, and alignment.</div>
-        </li>
-        <li>
-          <div class="step-title">Generate Image</div>
-          <div class="step-description">Click the "Generate Image" button to create your custom image.</div>
-        </li>
-        <li>
-          <div class="step-title">Download or Share</div>
-          <div class="step-description">Once generated, you can download the image or share it directly on WhatsApp.</div>
-        </li>
-      </ol>
-      <h4>Tips:</h4>
-      <ul style="margin-top: 20px; padding-left: 20px;">
-        <li>Use the Undo/Redo buttons to revert changes</li>
-        <li>The preview updates in real-time as you make changes</li>
-        <li>For Telugu text, select "Noto Sans Telugu" font for better display</li>
-        <li>Keep titles short for better appearance</li>
-      </ul>
-    </div>
-  </div>
+    <!-- HELP -->
+    <section id="help" class="tab-content">
+      <div class="panel">
+        <h2>How to use AksharaChitra</h2>
+        <ol>
+          <li>Go to <b>Create</b>. Type your title, subtitle, and message — the preview updates live.</li>
+          <li>Upload an image, crop, then it will appear in preview.</li>
+          <li>Use Generate to create a final image with a watermark; Download to save; Share to share.</li>
+          <li>Save designs to My Creations for offline reuse.</li>
+          <li>Install the app (Install button) to use it like an Android app offline.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
 
   <!-- Cropper Modal -->
-  <div id="cropModal" style="display:none; position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:10000;">
-    <div style="background:#fff;padding:20px;border-radius:8px;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:10px;">
-      <img id="cropImage" alt="Crop Image" style="max-width:100%;max-height:60vh;" />
-      <div style="width:100%;display:flex;justify-content:flex-end;gap:10px;">
-        <button id="cancelCropBtn" class="button">Cancel</button>
-        <button id="cropConfirmBtn" class="button">Crop</button>
+  <div id="cropModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h3>Crop Image</h3>
+      <div class="crop-container"><img id="cropImage" alt="Crop preview" /></div>
+      <div class="modal-actions">
+        <button id="cancelCropBtn" class="btn ghost">Cancel</button>
+        <button id="applyCropBtn" class="btn primary">Apply</button>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <div class="footer">
-    <div class="footer-content">
-      <div class="developer-info">
-        Developed by <span class="developer-name">Sandeep Miriyala</span>
-      </div>
-      <div class="footer-subtitle">
-        Creating beautiful images with Telugu and English text
-      </div>
-    </div>
-  </div>
-  <script src="image.js"></script>
-  <script src="pwa.js"></script>
+  <!-- Scripts: Cropper + html2canvas -->
+  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- App scripts -->
+  <script src="main.js" defer></script>
+  <script src="pwa.js" defer></script>
 </body>
 </html>
