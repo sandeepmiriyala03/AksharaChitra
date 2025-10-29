@@ -1,5 +1,5 @@
 /* ===================================================
-   🌸 AksharaChitra v2.0 — Final UI/UX CSS
+   🌸 AksharaChitra v2.1 — Final UI/UX CSS (Glow/Shadow Enhanced)
    =================================================== */
 
 :root {
@@ -122,12 +122,8 @@ body {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.tab-content {
-  display: none;
-}
-.tab-content.active {
-  display: block;
-}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 /* ===== PANELS ===== */
 .editor {
@@ -191,8 +187,31 @@ textarea {
   gap: 8px;
   margin-top: 10px;
 }
-.row > * {
-  flex: 1;
+.row > * { flex: 1; }
+
+/* ===== GLOW / SHADOW SECTION ===== */
+h4 {
+  margin-top: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+#shadowColor, #shadowBlur {
+  margin-top: 6px;
+}
+#shadowBlur {
+  accent-color: var(--primary);
+}
+input[type="color"] {
+  height: 36px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+input[type="range"] {
+  width: 100%;
+  cursor: pointer;
 }
 
 /* ===== BUTTONS ===== */
@@ -268,9 +287,7 @@ textarea {
 .align-center { justify-content: center; align-items: center; }
 
 /* ===== QR CODE ===== */
-.p-qr {
-  margin-top: 10px;
-}
+.p-qr { margin-top: 10px; }
 
 /* ===== WATERMARK ===== */
 .watermark {
@@ -313,9 +330,7 @@ textarea {
   background: rgba(0, 0, 0, 0.6);
   z-index: 9999;
 }
-.modal.hidden {
-  display: none;
-}
+.modal.hidden { display: none; }
 .modal-content {
   background: #fff;
   padding: 16px;
@@ -341,9 +356,7 @@ body.dark {
   background: #0b1220;
   color: #e6eef8;
 }
-body.dark .panel {
-  background: #0f1724;
-}
+body.dark .panel { background: #0f1724; }
 body.dark input,
 body.dark select,
 body.dark textarea {
@@ -351,9 +364,7 @@ body.dark textarea {
   color: #dce7ff;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-body.dark .card {
-  background: #0c1a3a;
-}
+body.dark .card { background: #0c1a3a; }
 body.dark .topbar {
   background: #0f1724;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
@@ -368,6 +379,13 @@ body.dark .btn.ghost {
 }
 body.dark .card:hover {
   box-shadow: 0 0 14px rgba(100, 149, 237, 0.4);
+}
+body.dark input[type="color"] {
+  background: #07102a;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+body.dark input[type="range"]::-webkit-slider-thumb {
+  background: var(--primary);
 }
 
 /* ===== MOBILE RESPONSIVE ===== */

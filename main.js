@@ -1,9 +1,9 @@
-/* main.js — AksharaChitra v7.0 (Enhanced UX & Layout Control) */
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const id = (x) => document.getElementById(x);
 
-  // Elements
+  // --- Core Elements ---
   const titleEl = id("title"),
     subtitleEl = id("subtitle"),
     messageEl = id("message"),
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearBtn = id("clearBtn"),
     themeToggle = id("themeToggle");
 
-  // New Controls
+  // --- Font & Alignment Controls ---
   const titleSize = id("titleSize"),
     subtitleSize = id("subtitleSize"),
     messageSize = id("messageSize"),
@@ -35,24 +35,33 @@ document.addEventListener("DOMContentLoaded", () => {
     subtitleAlign = id("subtitleAlign"),
     contentAlign = id("contentAlign");
 
-  // === Theme Toggle ===
+  // --- Text Shadow (Glow) Controls ---
+  let shadowColor = "#000000";
+  let shadowBlur = 0;
+  const shadowColorInput = id("shadowColor");
+  const shadowBlurInput = id("shadowBlur");
+
+  // --- Theme Toggle ---
   themeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
     localStorage.setItem("ak_theme_dark", document.body.classList.contains("dark"));
   });
-  if (localStorage.getItem("ak_theme_dark") === "true") document.body.classList.add("dark");
+  if (localStorage.getItem("ak_theme_dark") === "true")
+    document.body.classList.add("dark");
 
-  // === Tabs ===
+  // --- Tab Navigation ---
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
       document.querySelectorAll(".tab-content").forEach((sec) => sec.classList.remove("active"));
-      id(btn.dataset.tab).classList.add("active");
+      btn.classList.add("active");
+      const targetTab = btn.getAttribute("data-tab");
+      const section = document.getElementById(targetTab);
+      if (section) section.classList.add("active");
     });
   });
 
-  // === Templates ===
+  // --- Templates ---
   const TEMPLATES = {
     news: { title: "📰 Breaking News", msg: "Your news here", bg: "#ffffff", color: "#111111" },
     birthday: { title: "🎂 Happy Birthday!", msg: "Wishing you joy!", bg: "#fff0f7", color: "#5b2a86" },
@@ -72,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPreview();
   });
 
-  // === Image Upload + Crop ===
+  // --- Image Upload + Crop ---
   let uploadedDataUrl = "";
   let cropper = null;
 
@@ -113,27 +122,31 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPreview();
   });
 
-  // === Live Preview ===
+  // --- Render Preview ---
   function renderPreview() {
-    // Font & color settings
     previewCard.style.background = bgColor.value;
     previewCard.style.color = textColor.value;
     previewCard.style.fontFamily = fontFamily.value;
 
+    const shadow = shadowBlur > 0 ? `0 0 ${shadowBlur}px ${shadowColor}` : "none";
+
     // Title
     pTitle.textContent = titleEl.value || "";
     pTitle.style.fontSize = titleSize.value + "px";
-    pTitle.className = "p-title text-" + titleAlign.value;
+    pTitle.style.textAlign = titleAlign.value;
+    pTitle.style.textShadow = shadow;
 
     // Subtitle
     pSubtitle.textContent = subtitleEl.value || "";
     pSubtitle.style.fontSize = subtitleSize.value + "px";
-    pSubtitle.className = "p-subtitle text-" + subtitleAlign.value;
+    pSubtitle.style.textAlign = subtitleAlign.value;
+    pSubtitle.style.textShadow = shadow;
 
     // Message
     pMessage.innerHTML = (messageEl.value || "").replace(/\n/g, "<br>");
     pMessage.style.fontSize = messageSize.value + "px";
-    pMessage.className = "p-body text-" + contentAlign.value;
+    pMessage.style.textAlign = contentAlign.value;
+    pMessage.style.textShadow = shadow;
 
     // Image
     const pos = imagePosition.value || "center";
@@ -156,25 +169,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Bind all input changes to live preview
+  // --- Live Input Binding ---
   [
-    titleEl,
-    subtitleEl,
-    messageEl,
-    fontFamily,
-    textColor,
-    bgColor,
-    qrText,
-    imagePosition,
-    titleSize,
-    subtitleSize,
-    messageSize,
-    titleAlign,
-    subtitleAlign,
-    contentAlign,
-  ].forEach((el) => el.addEventListener("input", renderPreview));
+    titleEl, subtitleEl, messageEl, fontFamily, textColor, bgColor, qrText,
+    imagePosition, titleSize, subtitleSize, messageSize, titleAlign,
+    subtitleAlign, contentAlign
+  ].forEach((el) => el?.addEventListener("input", renderPreview));
 
-  // === Generate + Download ===
+  if (shadowColorInput && shadowBlurInput) {
+    shadowColorInput.addEventListener("input", (e) => {
+      shadowColor = e.target.value;
+      renderPreview();
+    });
+    shadowBlurInput.addEventListener("input", (e) => {
+      shadowBlur = parseInt(e.target.value);
+      renderPreview();
+    });
+  }
+
+  // --- Generate / Download ---
   async function generateImage() {
     try {
       const canvas = await html2canvas(previewCard, { scale: 2 });
@@ -191,14 +204,14 @@ document.addEventListener("DOMContentLoaded", () => {
       a.download = filename + ".png";
       a.click();
     } catch (err) {
-      alert("Failed to generate image.");
+      alert("⚠️ Failed to generate image.");
     }
   }
 
   generateBtn.addEventListener("click", generateImage);
   downloadBtn.addEventListener("click", generateImage);
 
-  // === Share (Web Share API) ===
+  // --- Share API ---
   shareBtn.addEventListener("click", async () => {
     const canvas = await html2canvas(previewCard, { scale: 2 });
     const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
@@ -210,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // === Save Offline ===
+  // --- Save Offline ---
   saveBtn.addEventListener("click", async () => {
     const canvas = await html2canvas(previewCard, { scale: 1 });
     const data = canvas.toDataURL("image/png");
@@ -218,51 +231,43 @@ document.addEventListener("DOMContentLoaded", () => {
     list.unshift({ title: titleEl.value || "Untitled", ts: Date.now(), data });
     while (list.length > 50) list.pop();
     localStorage.setItem("ak_gallery_v7", JSON.stringify(list));
-    alert("Saved to My Creations (Offline).");
+    alert("💾 Saved to My Creations (Offline).");
   });
 
-  // === Clear Fields ===
+  // --- Clear Fields ---
   clearBtn.addEventListener("click", () => {
     if (!confirm("Clear all fields?")) return;
     [titleEl, subtitleEl, messageEl, qrText].forEach((e) => (e.value = ""));
     uploadedDataUrl = "";
     imageUpload.value = "";
+    shadowBlur = 0;
+    shadowColor = "#000000";
     renderPreview();
   });
 
-  // === Auto Save (LocalStorage) ===
+  // --- Auto Save ---
   setInterval(() => {
     const s = {
-      title: titleEl.value,
-      subtitle: subtitleEl.value,
-      message: messageEl.value,
-      fontFamily: fontFamily.value,
-      textColor: textColor.value,
-      bgColor: bgColor.value,
-      qrText: qrText.value,
-      imagePos: imagePosition.value,
-      titleSize: titleSize.value,
-      subtitleSize: subtitleSize.value,
-      messageSize: messageSize.value,
-      titleAlign: titleAlign.value,
-      subtitleAlign: subtitleAlign.value,
-      contentAlign: contentAlign.value,
+      title: titleEl.value, subtitle: subtitleEl.value, message: messageEl.value,
+      fontFamily: fontFamily.value, textColor: textColor.value, bgColor: bgColor.value,
+      qrText: qrText.value, imagePos: imagePosition.value, titleSize: titleSize.value,
+      subtitleSize: subtitleSize.value, messageSize: messageSize.value, titleAlign: titleAlign.value,
+      subtitleAlign: subtitleAlign.value, contentAlign: contentAlign.value,
+      shadowBlur, shadowColor
     };
     localStorage.setItem("ak_autosave_v7", JSON.stringify(s));
   }, 3000);
 
-  // Load saved data
+  // --- Load Saved ---
   const saved = JSON.parse(localStorage.getItem("ak_autosave_v7") || "null");
   if (saved) {
     Object.keys(saved).forEach((k) => {
       if (id(k)) id(k).value = saved[k];
     });
+    shadowBlur = saved.shadowBlur || 0;
+    shadowColor = saved.shadowColor || "#000000";
     renderPreview();
   }
 
-  // Initial render
   renderPreview();
 });
-
-
-
