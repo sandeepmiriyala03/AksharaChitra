@@ -325,3 +325,59 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
   });
 });
+// === Gallery Rendering ===
+function loadGallery() {
+  const grid = document.getElementById("galleryGrid");
+  const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
+
+  grid.innerHTML = ""; // clear old
+
+  if (list.length === 0) {
+    grid.innerHTML = `<p class="muted">No saved creations yet. Save your designs to view them here!</p>`;
+    return;
+  }
+
+  list.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "gallery-item";
+    div.innerHTML = `
+      <img src="${item.data}" alt="${item.title}" title="${item.title}" />
+      <div class="gallery-meta">
+        <span>${item.title}</span>
+        <button class="btn delete-btn" data-index="${index}" title="Delete this design">🗑️</button>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+
+  // Handle click to open preview
+  grid.querySelectorAll("img").forEach((img) => {
+    img.addEventListener("click", () => {
+      const w = window.open();
+      w.document.write(`<img src="${img.src}" style="max-width:100%;display:block;margin:auto;">`);
+    });
+  });
+
+  // Handle delete button
+  grid.querySelectorAll(".delete-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const index = parseInt(btn.dataset.index);
+      const confirmDelete = confirm("Delete this saved creation?");
+      if (confirmDelete) {
+        list.splice(index, 1);
+        localStorage.setItem("ak_gallery_v7", JSON.stringify(list));
+        loadGallery(); // refresh grid
+      }
+    });
+  });
+}
+
+// Load when My Creations tab clicked
+const galleryTabBtn = document.querySelector('button[data-tab="gallery"]');
+if (galleryTabBtn) {
+  galleryTabBtn.addEventListener("click", loadGallery);
+}
+// Initial load if already on gallery tab
+if (document.getElementById("gallery").classList.contains("active")) {
+  loadGallery();
+}
