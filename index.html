@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AksharaChitra — Text → Image (Offline)</title>
+  <title>AksharaChitra — Create Beautiful Posters Offline 🎨</title>
 
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
@@ -13,7 +13,9 @@
   <!-- Cropper CSS -->
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet" />
 </head>
+
 <body>
+  <!-- HEADER -->
   <header class="topbar">
     <div class="left">
       <img src="Logo.png" alt="AksharaChitra" class="logo" onerror="this.style.display='none'">
@@ -33,17 +35,94 @@
     </div>
   </header>
 
+  <!-- MAIN -->
   <main class="content">
-    <!-- HOME -->
+
+    <!-- 🏠 HOME PAGE -->
     <section id="home" class="tab-content active">
-      <h1>Welcome to AksharaChitra</h1>
-      <p>Create beautiful text-based images (posters, wishes, invites, news) — works fully offline!</p>
-      <div style="margin-top:12px;">
-        <button class="btn primary" data-open="create">Start Creating</button>
+      <div class="hero">
+        <img src="Logo.png" alt="AksharaChitra Logo" class="hero-logo" onerror="this.style.display='none'">
+        <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
+        <p class="lead">Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.</p>
+        <button class="btn primary large" data-open="create">🚀 Start Creating Now</button>
       </div>
+
+      <div class="section why">
+        <h2>🌸 Why AksharaChitra?</h2>
+        <p>
+          AksharaChitra was built to make <strong>designing easy, fast, and available offline</strong>.
+          No heavy software, no design skills required — just your words, and we turn them into art.
+        </p>
+        <ul class="features">
+          <li>✅ Works fully offline (PWA enabled)</li>
+          <li>🎨 Supports multiple languages — English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ</li>
+          <li>🖼️ Add your own images, adjust positions, and preview instantly</li>
+          <li>💾 Save, Download, or Share posters directly</li>
+          <li>✨ Comes with built-in templates for birthdays, quotes, invites & more</li>
+        </ul>
+      </div>
+
+      <div class="section how">
+        <h2>🪄 How to Use</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="icon">1️⃣</span>
+            <p>Choose your language & template</p>
+          </div>
+          <div class="step">
+            <span class="icon">2️⃣</span>
+            <p>Type your text & upload an image</p>
+          </div>
+          <div class="step">
+            <span class="icon">3️⃣</span>
+            <p>Customize colors, font, glow & layout</p>
+          </div>
+          <div class="step">
+            <span class="icon">4️⃣</span>
+            <p>Preview instantly and generate your poster</p>
+          </div>
+        </div>
+      </div>
+    <!-- Feedback block (put inside Home or Footer where appropriate) -->
+<div class="feedback" id="feedbackBlock" aria-live="polite">
+  <div class="left">
+    <img src="Logo.png" alt="AksharaChitra Logo" class="hero-logo" onerror="this.style.display='none'">
+    <div>
+      <p>💌 Help us improve AksharaChitra</p>
+      <div class="muted">Share suggestions, bugs or ideas — it only takes 1 minute.</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center">
+    <!-- Opens embedded modal (preferred) -->
+    <button id="openFeedbackModal" class="btn primary" aria-haspopup="dialog" aria-controls="feedbackModal">📝 Give Feedback</button>
+
+    <!-- Fallback opens in new tab -->
+    <a id="feedbackNewTab" class="btn secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open in new tab</a>
+  </div>
+</div>
+
+<!-- Feedback Modal (hidden by default) -->
+<div id="feedbackModal" class="modal hidden feedback-modal" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+  <div class="modal-content" style="max-width:1000px; width:92%; padding:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <h3 id="feedbackTitle" style="margin:0">📝 AksharaChitra — Feedback</h3>
+      <div>
+        <a id="openInTabFromModal" class="btn ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open in tab</a>
+        <button id="closeFeedbackModal" class="btn ghost" aria-label="Close feedback dialog">Close ✕</button>
+      </div>
+    </div>
+
+    <div style="margin-top:10px;">
+      <!-- iframe embed — Google Forms sometimes blocks embedding; fallback handled in JS -->
+      <iframe id="feedbackIframe" class="modal-iframe" src="about:blank" title="AksharaChitra Feedback Form"></iframe>
+    </div>
+  </div>
+</div>
+
     </section>
 
-    <!-- CREATE -->
+    <!-- 🎨 CREATE PAGE -->
     <section id="create" class="tab-content">
       <div class="editor">
         <!-- Left Panel -->
@@ -65,9 +144,8 @@
             <option value="quote">Quote</option>
           </select>
 
-          <hr style="margin:10px 0; opacity:0.4;">
+          <hr class="divider">
 
-          <!-- Title Controls -->
           <h4>🖋️ Title</h4>
           <input id="title" type="text" placeholder="Enter title..." />
           <div class="row">
@@ -85,7 +163,6 @@
             </div>
           </div>
 
-          <!-- Subtitle Controls -->
           <h4>🪶 Subtitle</h4>
           <input id="subtitle" type="text" placeholder="Enter subtitle..." />
           <div class="row">
@@ -103,7 +180,6 @@
             </div>
           </div>
 
-          <!-- Message Controls -->
           <h4>💬 Message</h4>
           <textarea id="message" rows="4" placeholder="Type your main message..."></textarea>
           <div class="row">
@@ -121,7 +197,7 @@
             </div>
           </div>
 
-          <hr style="margin:10px 0; opacity:0.4;">
+          <hr class="divider">
 
           <label>Font Family</label>
           <select id="fontFamily">
@@ -134,17 +210,10 @@
             <div><label>Background</label><input id="bgColor" type="color" value="#ffffff" /></div>
           </div>
 
-          <!-- ✨ Glow / Shadow Controls -->
           <h4>✨ Glow / Shadow</h4>
           <div class="row">
-            <div>
-              <label>Color</label>
-              <input type="color" id="shadowColor" value="#000000" />
-            </div>
-            <div>
-              <label>Blur</label>
-              <input type="range" id="shadowBlur" min="0" max="30" value="0" />
-            </div>
+            <div><label>Color</label><input type="color" id="shadowColor" value="#000000" /></div>
+            <div><label>Blur</label><input type="range" id="shadowBlur" min="0" max="30" value="0" /></div>
           </div>
 
           <label>Upload Image (Crop Supported)</label>
@@ -162,18 +231,18 @@
           <label>QR / Link (optional)</label>
           <input id="qrText" type="text" placeholder="https:// or phone/email" />
 
-          <div class="row" style="margin-top:12px">
+          <div class="row actions">
             <button id="clearBtn" class="btn ghost">Clear</button>
             <button id="saveBtn" class="btn">💾 Save</button>
             <button id="generateBtn" class="btn primary">🖼 Generate</button>
           </div>
 
-          <div class="row" style="margin-top:8px">
+          <div class="row">
             <button id="downloadBtn" class="btn">⬇ Download</button>
             <button id="shareBtn" class="btn ghost">📤 Share</button>
           </div>
 
-          <small class="muted">🎯 Tips: All changes reflect instantly in the live preview →</small>
+          <small class="muted">🎯 Tip: Changes reflect instantly in the live preview →</small>
         </div>
 
         <!-- Right Panel -->
@@ -194,16 +263,19 @@
       </div>
     </section>
 
-    <!-- HELP -->
+    <!-- 📘 HELP PAGE -->
     <section id="help" class="tab-content">
       <div class="panel">
-        <h2>Help</h2>
-        <ol>
-          <li>Set your title, subtitle, and message text with font sizes and alignment.</li>
-          <li>Upload an image and choose where it appears (Top, Bottom, Left, Right, Center).</li>
-          <li>Adjust colors and glow, then generate and download your poster instantly.</li>
-          <li>Works offline and can be installed as an app (📲 button in the header).</li>
-        </ol>
+        <h2>📘 Help & Tips</h2>
+        <p>Follow these quick steps to make the most of AksharaChitra:</p>
+        <ul class="help-list">
+          <li>🖋️ Type your text, set font sizes, and alignments.</li>
+          <li>🖼️ Upload an image, crop if needed, and choose its position.</li>
+          <li>🎨 Adjust colors and glow for beautiful contrast.</li>
+          <li>📤 Generate and share instantly — even offline.</li>
+          <li>💾 Save designs to view later under <b>My Creations</b>.</li>
+        </ul>
+        <p class="muted">Need more help? Contact us via feedback form on the Home page.</p>
       </div>
     </section>
   </main>
@@ -220,7 +292,7 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="main.js" defer></script>

@@ -271,3 +271,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderPreview();
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const openBtn = document.getElementById('openFeedbackModal');
+  const modal = document.getElementById('feedbackModal');
+  const iframe = document.getElementById('feedbackIframe');
+  const closeBtn = document.getElementById('closeFeedbackModal');
+  const feedbackUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor';
+  const fallbackLink = document.getElementById('feedbackNewTab');
+  const openInTabFromModal = document.getElementById('openInTabFromModal');
+
+  // set link targets
+  fallbackLink.href = feedbackUrl;
+  openInTabFromModal.href = feedbackUrl;
+
+  function openModal() {
+    // try to embed the form first
+    iframe.src = feedbackUrl;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    // detect whether iframe loaded successfully (embedding allowed)
+    // if browser blocks, 'load' still fires, but contentWindow may be inaccessible; we'll attempt a safe check after a short timeout
+    setTimeout(() => {
+      try {
+        // try reading iframe location — may throw if cross-origin blocked
+        const href = iframe.contentWindow && iframe.contentWindow.location && iframe.contentWindow.location.href;
+        // if it's not accessible, we assume embed is blocked and fallback
+        if (!href) throw new Error('iframe inaccessible');
+      } catch (e) {
+        // fallback: open new tab instead and close modal
+        window.open(feedbackUrl, '_blank', 'noopener');
+        closeModal();
+      }
+    }, 700);
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+    // clear iframe src to release resources
+    iframe.src = 'about:blank';
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  // close when clicking outside modal content
+  modal.addEventListener('click', (ev) => {
+    if (ev.target === modal) closeModal();
+  });
+
+  // keyboard: Esc closes modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+  });
+});
