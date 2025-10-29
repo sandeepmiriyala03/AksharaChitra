@@ -15,9 +15,8 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="left">
-      <img src="Logo.png" alt="AksharaChitra" class="logo" onerror="this.style.display='none'">
-      <span class="app-title">AksharaChitra</span>
+  <div class="left">
+ 
     </div>
 
     <nav class="nav">
@@ -38,14 +37,16 @@
     <!-- HOME -->
     <section id="home" class="tab-content active">
       <h1>Welcome to AksharaChitra</h1>
-      <p>Create text-based images (posters, invites, business cards, news) — fully offline!</p>
-      <div id="welcomeSamples" class="sample-row"></div>
-      <div style="margin-top:12px;"><button class="btn primary" data-open="create">Start Creating</button></div>
+      <p>Create beautiful text-based images (posters, wishes, invites, news) — works fully offline!</p>
+      <div style="margin-top:12px;">
+        <button class="btn primary" data-open="create">Start Creating</button>
+      </div>
     </section>
 
     <!-- CREATE -->
     <section id="create" class="tab-content">
       <div class="editor">
+        <!-- Left Panel -->
         <div class="panel left-panel">
           <label>Language</label>
           <select id="language">
@@ -64,29 +65,76 @@
             <option value="quote">Quote</option>
           </select>
 
-          <label>Title</label>
-          <input id="title" type="text" placeholder="Title" />
-          <label>Subtitle</label>
-          <input id="subtitle" type="text" placeholder="Subtitle" />
-          <label>Message</label>
-          <textarea id="message" rows="4" placeholder="Write your message..."></textarea>
+          <hr style="margin:10px 0; opacity:0.4;">
 
+          <!-- Title Controls -->
+          <h4>🖋️ Title</h4>
+          <input id="title" type="text" placeholder="Enter title..." />
           <div class="row">
-            <div><label>Font</label>
-              <select id="fontFamily">
-                <option value="Montserrat, sans-serif">Montserrat</option>
-                <option value="'Noto Sans Telugu', serif">Noto Sans Telugu</option>
+            <div>
+              <label>Font Size</label>
+              <input id="titleSize" type="number" min="10" max="80" value="28" />
+            </div>
+            <div>
+              <label>Position</label>
+              <select id="titleAlign">
+                <option value="center" selected>Center</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
               </select>
             </div>
-            <div><label>Size</label><input id="fontSize" type="number" min="12" max="72" value="20" /></div>
           </div>
+
+          <!-- Subtitle Controls -->
+          <h4>🪶 Subtitle</h4>
+          <input id="subtitle" type="text" placeholder="Enter subtitle..." />
+          <div class="row">
+            <div>
+              <label>Font Size</label>
+              <input id="subtitleSize" type="number" min="10" max="60" value="20" />
+            </div>
+            <div>
+              <label>Position</label>
+              <select id="subtitleAlign">
+                <option value="center" selected>Center</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Message Controls -->
+          <h4>💬 Message</h4>
+          <textarea id="message" rows="4" placeholder="Type your main message..."></textarea>
+          <div class="row">
+            <div>
+              <label>Font Size</label>
+              <input id="messageSize" type="number" min="10" max="48" value="18" />
+            </div>
+            <div>
+              <label>Alignment</label>
+              <select id="contentAlign">
+                <option value="center" selected>Center</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+
+          <hr style="margin:10px 0; opacity:0.4;">
+
+          <label>Font Family</label>
+          <select id="fontFamily">
+            <option value="Montserrat, sans-serif">Montserrat</option>
+            <option value="'Noto Sans Telugu', serif">Noto Sans Telugu</option>
+          </select>
 
           <div class="row">
             <div><label>Text Color</label><input id="textColor" type="color" value="#111111" /></div>
             <div><label>Background</label><input id="bgColor" type="color" value="#ffffff" /></div>
           </div>
 
-          <label>Upload Image (crop available)</label>
+          <label>Upload Image (Crop Supported)</label>
           <input id="imageUpload" type="file" accept="image/*" />
 
           <label>Image Position</label>
@@ -101,21 +149,21 @@
           <label>QR / Link (optional)</label>
           <input id="qrText" type="text" placeholder="https:// or phone/email" />
 
-          <div class="row">
+          <div class="row" style="margin-top:12px">
             <button id="clearBtn" class="btn ghost">Clear</button>
             <button id="saveBtn" class="btn">💾 Save</button>
-            <button id="speechBtn" class="btn ghost">🎤 Speak</button>
+            <button id="generateBtn" class="btn primary">🖼 Generate</button>
           </div>
 
           <div class="row" style="margin-top:8px">
-            <button id="generateBtn" class="btn primary">🖼 Generate</button>
             <button id="downloadBtn" class="btn">⬇ Download</button>
             <button id="shareBtn" class="btn ghost">📤 Share</button>
           </div>
 
-          <small class="muted">Changes reflect instantly in preview →</small>
+          <small class="muted">🎯 Tips: All changes reflect instantly in the live preview →</small>
         </div>
 
+        <!-- Right Panel -->
         <div class="panel right-panel">
           <h3>Live Preview</h3>
           <div id="previewCard" class="card">
@@ -138,10 +186,10 @@
       <div class="panel">
         <h2>Help</h2>
         <ol>
-          <li>Fill in your title, message, and upload an image.</li>
-          <li>Choose where the image appears (Top/Bottom/Left/Right/Center).</li>
-          <li>Click Generate → Download → Share.</li>
-          <li>All works offline and installable as PWA.</li>
+          <li>Set your title, subtitle, and message text with font sizes and alignment.</li>
+          <li>Upload an image and choose where it appears (Top, Bottom, Left, Right, Center).</li>
+          <li>Adjust colors, generate, and download your poster instantly.</li>
+          <li>Works offline and can be installed as an app.</li>
         </ol>
       </div>
     </section>

@@ -1,52 +1,313 @@
-:root{
-  --accent:#3949ab;--primary:#1e88e5;--muted:#666;--card:#fff;--bg:#f6f7fb;
+:root {
+  --accent: #3949ab;
+  --primary: #1e88e5;
+  --muted: #666;
+  --card: #fff;
+  --bg: #f6f7fb;
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:Montserrat,"Noto Sans Telugu",sans-serif;background:var(--bg);color:#111}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
-.nav{display:flex;gap:6px}
-.tab-btn{border:none;background:transparent;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600}
-.tab-btn.active{background:var(--accent);color:#fff}
-.content{padding:14px}
-.tab-content{display:none}.tab-content.active{display:block}
-.editor{display:flex;gap:14px;flex-wrap:wrap}
-.panel{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(20,20,40,0.04)}
-.left-panel{width:360px;min-width:280px}
-.right-panel{flex:1;min-width:320px}
-label{display:block;margin-top:8px;font-size:0.9rem;color:var(--muted)}
-input,select,textarea{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #e6e6ee;font-size:0.95rem}
-textarea{min-height:80px;resize:vertical}
-.row{display:flex;gap:8px}.row>*{flex:1}
-.btn{padding:8px 10px;border-radius:8px;border:none;cursor:pointer;background:var(--accent);color:#fff;font-weight:700}
-.btn.ghost{background:transparent;color:var(--accent);border:1px solid #e6e6ee}
-.btn.primary{background:var(--primary)}
-.card{padding:16px;border-radius:10px;background:var(--card);box-shadow:0 8px 24px rgba(10,10,30,0.04);position:relative;min-height:220px}
-.p-title{font-size:1.6rem;font-weight:700;margin-bottom:4px}
-.p-subtitle{color:var(--muted);margin-bottom:8px}
-.p-body{margin-top:8px}
-.watermark{position:absolute;right:12px;bottom:8px;font-size:12px;color:rgba(0,0,0,0.2)}
-.gallery-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.gallery-grid img{width:120px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent}
-.gallery-grid img:hover{border-color:var(--accent)}
-.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:9999}
-.modal.hidden{display:none}
-.modal-content{background:#fff;padding:12px;border-radius:10px;max-width:96vw;max-height:90vh;overflow:auto}
-.crop-container img{max-width:100%;max-height:60vh}
-.muted{color:var(--muted);font-size:0.9rem}
 
-/* Image alignment */
-.p-image{display:flex;flex-wrap:wrap;margin:8px 0}
-.p-image img{max-width:100%;border-radius:8px}
-.align-left{justify-content:flex-start}
-.align-right{justify-content:flex-end}
-.align-top{flex-direction:column;order:-1}
-.align-bottom{flex-direction:column;order:1}
-.align-center{justify-content:center;align-items:center}
+* {
+  box-sizing: border-box;
+}
 
-/* Dark mode */
-body.dark{background:#0b1220;color:#e6eef8}
-body.dark .panel{background:#0f1724}
-body.dark input,body.dark select,body.dark textarea{background:#0b1220;color:#dce7ff;border:1px solid rgba(255,255,255,0.1)}
-body.dark .card{background:#071027}
-body.dark .btn.ghost{color:#cfe0ff;border-color:rgba(255,255,255,0.2)}
-body.dark .topbar{background:#0f1724;box-shadow:0 2px 6px rgba(0,0,0,0.5)}
+body {
+  margin: 0;
+  font-family: Montserrat, "Noto Sans Telugu", sans-serif;
+  background: var(--bg);
+  color: #111;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav {
+  display: flex;
+  gap: 6px;
+}
+
+.tab-btn {
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ===== Layout ===== */
+.content {
+  padding: 14px;
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+.editor {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.panel {
+  background: var(--card);
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(20, 20, 40, 0.04);
+}
+
+.left-panel {
+  width: 360px;
+  min-width: 280px;
+}
+.right-panel {
+  flex: 1;
+  min-width: 320px;
+}
+
+/* ===== Inputs & Buttons ===== */
+label {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #e6e6ee;
+  font-size: 0.95rem;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+.row > * {
+  flex: 1;
+}
+
+.btn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid #e6e6ee;
+}
+.btn.primary {
+  background: var(--primary);
+}
+
+/* ===== Card / Preview ===== */
+.card {
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--card);
+  box-shadow: 0 8px 24px rgba(10, 10, 30, 0.04);
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.p-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  transition: 0.3s;
+}
+.p-subtitle {
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+  transition: 0.3s;
+}
+.p-body {
+  margin-top: 8px;
+  text-align: center;
+  line-height: 1.6;
+  transition: 0.3s;
+}
+
+.p-image {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 8px 0;
+  width: 100%;
+}
+.p-image img {
+  max-width: 100%;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+/* ===== Text Alignment ===== */
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+/* ===== Image Alignment ===== */
+.align-left { justify-content: flex-start; }
+.align-right { justify-content: flex-end; }
+.align-top { flex-direction: column; order: -1; }
+.align-bottom { flex-direction: column; order: 1; }
+.align-center { justify-content: center; align-items: center; }
+
+/* ===== Adaptive layout (text beside image) ===== */
+@media (min-width: 700px) {
+  .p-image.align-left img,
+  .p-image.align-right img {
+    max-width: 45%;
+  }
+  .p-image.align-left,
+  .p-image.align-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .p-body {
+    flex: 1;
+  }
+}
+
+/* ===== Utility ===== */
+.watermark {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.gallery-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.gallery-grid img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.gallery-grid img:hover {
+  border-color: var(--accent);
+}
+
+/* ===== Modal ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+}
+.modal.hidden {
+  display: none;
+}
+.modal-content {
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  max-width: 96vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+.crop-container img {
+  max-width: 100%;
+  max-height: 60vh;
+}
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ===== Dark Mode ===== */
+body.dark {
+  background: #0b1220;
+  color: #e6eef8;
+}
+body.dark .panel {
+  background: #0f1724;
+}
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #0b1220;
+  color: #dce7ff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.dark .card {
+  background: #071027;
+}
+body.dark .btn.ghost {
+  color: #cfe0ff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+body.dark .topbar {
+  background: #0f1724;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .editor {
+    flex-direction: column;
+  }
+  .left-panel {
+    width: 100%;
+  }
+  .p-title {
+    font-size: 1.5rem;
+  }
+}

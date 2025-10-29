@@ -1,7 +1,6 @@
-/* main.js — AksharaChitra v6.2 (Final Release) */
+/* main.js — AksharaChitra v7.0 (Enhanced UX & Layout Control) */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // === Quick Access ===
   const id = (x) => document.getElementById(x);
 
   // Elements
@@ -9,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     subtitleEl = id("subtitle"),
     messageEl = id("message"),
     fontFamily = id("fontFamily"),
-    fontSize = id("fontSize"),
     textColor = id("textColor"),
     bgColor = id("bgColor"),
     qrText = id("qrText"),
@@ -28,6 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
     saveBtn = id("saveBtn"),
     clearBtn = id("clearBtn"),
     themeToggle = id("themeToggle");
+
+  // New Controls
+  const titleSize = id("titleSize"),
+    subtitleSize = id("subtitleSize"),
+    messageSize = id("messageSize"),
+    titleAlign = id("titleAlign"),
+    subtitleAlign = id("subtitleAlign"),
+    contentAlign = id("contentAlign");
 
   // === Theme Toggle ===
   themeToggle.addEventListener("click", () => {
@@ -109,15 +115,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === Live Preview ===
   function renderPreview() {
-    pTitle.textContent = titleEl.value || "";
-    pSubtitle.textContent = subtitleEl.value || "";
-    pMessage.innerHTML = (messageEl.value || "").replace(/\n/g, "<br>");
+    // Font & color settings
     previewCard.style.background = bgColor.value;
     previewCard.style.color = textColor.value;
     previewCard.style.fontFamily = fontFamily.value;
-    previewCard.style.fontSize = fontSize.value + "px";
 
-    // Image placement
+    // Title
+    pTitle.textContent = titleEl.value || "";
+    pTitle.style.fontSize = titleSize.value + "px";
+    pTitle.className = "p-title text-" + titleAlign.value;
+
+    // Subtitle
+    pSubtitle.textContent = subtitleEl.value || "";
+    pSubtitle.style.fontSize = subtitleSize.value + "px";
+    pSubtitle.className = "p-subtitle text-" + subtitleAlign.value;
+
+    // Message
+    pMessage.innerHTML = (messageEl.value || "").replace(/\n/g, "<br>");
+    pMessage.style.fontSize = messageSize.value + "px";
+    pMessage.className = "p-body text-" + contentAlign.value;
+
+    // Image
     const pos = imagePosition.value || "center";
     pImage.className = "p-image align-" + pos;
     pImage.innerHTML = "";
@@ -138,9 +156,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  [titleEl, subtitleEl, messageEl, fontFamily, fontSize, textColor, bgColor, qrText, imagePosition].forEach((el) =>
-    el.addEventListener("input", renderPreview)
-  );
+  // Bind all input changes to live preview
+  [
+    titleEl,
+    subtitleEl,
+    messageEl,
+    fontFamily,
+    textColor,
+    bgColor,
+    qrText,
+    imagePosition,
+    titleSize,
+    subtitleSize,
+    messageSize,
+    titleAlign,
+    subtitleAlign,
+    contentAlign,
+  ].forEach((el) => el.addEventListener("input", renderPreview));
 
   // === Generate + Download ===
   async function generateImage() {
@@ -182,16 +214,16 @@ document.addEventListener("DOMContentLoaded", () => {
   saveBtn.addEventListener("click", async () => {
     const canvas = await html2canvas(previewCard, { scale: 1 });
     const data = canvas.toDataURL("image/png");
-    const list = JSON.parse(localStorage.getItem("ak_gallery_v6") || "[]");
+    const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
     list.unshift({ title: titleEl.value || "Untitled", ts: Date.now(), data });
     while (list.length > 50) list.pop();
-    localStorage.setItem("ak_gallery_v6", JSON.stringify(list));
+    localStorage.setItem("ak_gallery_v7", JSON.stringify(list));
     alert("Saved to My Creations (Offline).");
   });
 
   // === Clear Fields ===
   clearBtn.addEventListener("click", () => {
-    if (!confirm("Clear form fields?")) return;
+    if (!confirm("Clear all fields?")) return;
     [titleEl, subtitleEl, messageEl, qrText].forEach((e) => (e.value = ""));
     uploadedDataUrl = "";
     imageUpload.value = "";
@@ -205,17 +237,22 @@ document.addEventListener("DOMContentLoaded", () => {
       subtitle: subtitleEl.value,
       message: messageEl.value,
       fontFamily: fontFamily.value,
-      fontSize: fontSize.value,
       textColor: textColor.value,
       bgColor: bgColor.value,
       qrText: qrText.value,
       imagePos: imagePosition.value,
+      titleSize: titleSize.value,
+      subtitleSize: subtitleSize.value,
+      messageSize: messageSize.value,
+      titleAlign: titleAlign.value,
+      subtitleAlign: subtitleAlign.value,
+      contentAlign: contentAlign.value,
     };
-    localStorage.setItem("ak_autosave_v6", JSON.stringify(s));
+    localStorage.setItem("ak_autosave_v7", JSON.stringify(s));
   }, 3000);
 
   // Load saved data
-  const saved = JSON.parse(localStorage.getItem("ak_autosave_v6") || "null");
+  const saved = JSON.parse(localStorage.getItem("ak_autosave_v7") || "null");
   if (saved) {
     Object.keys(saved).forEach((k) => {
       if (id(k)) id(k).value = saved[k];
@@ -223,6 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPreview();
   }
 
-  // === Initial Render ===
+  // Initial render
   renderPreview();
 });
