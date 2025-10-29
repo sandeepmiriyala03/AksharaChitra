@@ -263,3 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial render
   renderPreview();
 });
+
+
+
