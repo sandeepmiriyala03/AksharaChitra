@@ -289,15 +289,59 @@ input[type="range"] {
 /* ===== QR CODE ===== */
 .p-qr { margin-top: 10px; }
 
-/* ===== WATERMARK ===== */
+/* ===== WATERMARK (Enhanced for Visibility, Accessibility & Branding) ===== */
 .watermark {
   position: absolute;
   right: 12px;
-  bottom: 8px;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.25);
+  bottom: 10px;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  text-transform: lowercase;
+  opacity: 0.4;
+  color: rgba(0, 0, 0, 0.45);
+  mix-blend-mode: soft-light;
   user-select: none;
+  pointer-events: none;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.35);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  filter: blur(0.2px);
 }
+
+/* Light mode visibility */
+body.light-mode .watermark {
+  color: rgba(0, 0, 0, 0.35);
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+/* Dark mode visibility */
+body.dark-mode .watermark {
+  color: rgba(255, 255, 255, 0.22);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+  mix-blend-mode: lighten;
+}
+
+/* Hover or focus state (slightly fade in for emphasis) */
+#previewCard:hover .watermark,
+#previewCard:focus-within .watermark {
+  opacity: 0.7;
+  transform: translateY(-2px);
+}
+
+/* Smooth fade-in on render */
+@keyframes fadeInWatermark {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 0.4; transform: translateY(0); }
+}
+.watermark {
+  animation: fadeInWatermark 1s ease-in-out;
+}
+
+/* Screen readers should skip watermark */
+.watermark[aria-hidden="true"] {
+  visibility: visible;
+}
+
 
 /* ===== GALLERY GRID ===== */
 .gallery-grid {
