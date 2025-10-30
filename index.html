@@ -288,6 +288,30 @@
     goTopBtn.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
-  </script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const startBtn = document.querySelector('[data-open="create"]');
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    if (startBtn) {
+      startBtn.addEventListener("click", () => {
+        // Remove active state from all tabs
+        tabButtons.forEach(btn => btn.classList.remove("active"));
+        tabContents.forEach(sec => sec.classList.remove("active"));
+
+        // Activate the Create tab
+        const createBtn = document.querySelector('[data-tab="create"]');
+        const createSection = document.getElementById("create");
+
+        if (createBtn) createBtn.classList.add("active");
+        if (createSection) createSection.classList.add("active");
+
+        // Smooth scroll to the Create section
+        createSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  });
+</script>
 </body>
 </html>
