@@ -272,19 +272,79 @@
 
 
     <!-- 📘 HELP PAGE -->
-    <section id="help" class="tab-content" aria-labelledby="help">
-      <div class="panel">
-        <h2>📘 Help & Tips</h2>
-        <p>Follow these quick steps to make the most of AksharaChitra:</p>
-        <ul class="help-list" role="list">
-          <li>🖋️ Type your text, set font sizes, and alignments.</li>
-          <li>🖼️ Upload an image, crop if needed, and choose its position.</li>
-          <li>🎨 Adjust colors and glow for beautiful contrast.</li>
-          <li>📤 Generate and share instantly — even offline.</li>
-        </ul>
-        <p class="muted">Need more help? Contact us via feedback form on the Home page.</p>
-      </div>
-    </section>
+<section id="help" class="tab-content" role="region" aria-labelledby="helpHeading">
+  <div class="panel">
+    <div class="help-header" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+      <h2 id="helpHeading">📘 Help & Tips</h2>
+      <button id="speakHelp" class="btn ghost" aria-label="Read help content aloud">
+        🔊 Listen
+      </button>
+    </div>
+
+    <p class="lead">
+      Welcome to the <strong>AksharaChitra Help Center</strong>!  
+      Here’s a quick guide to help you design beautiful posters effortlessly — even offline.
+    </p>
+
+    <hr aria-hidden="true" />
+
+    <!-- 🌈 Getting Started -->
+    <h3>🌈 Getting Started</h3>
+    <p>AksharaChitra is designed for everyone — from beginners to creative professionals.  
+       Follow these simple steps to start creating your own poster:</p>
+    <ol class="help-steps" role="list">
+      <li>🖋️ <strong>Set your text:</strong> Type your title, subtitle, and message. Adjust fonts and alignment as needed.</li>
+      <li>🖼️ <strong>Add an image:</strong> Upload and crop your photo. Choose its position — top, bottom, or background.</li>
+      <li>🎨 <strong>Style your design:</strong> Pick font colors, background tones, and glow or shadow effects for contrast.</li>
+      <li>💾 <strong>Generate and save:</strong> View your live preview, save your work, download, or share instantly.</li>
+      <li>📲 <strong>Use offline:</strong> Install AksharaChitra as an app (PWA) and create posters anytime — even without Internet!</li>
+    </ol>
+
+    <hr aria-hidden="true" />
+
+    <!-- 💡 Tips & Tricks -->
+    <h3>💡 Pro Tips</h3>
+    <ul class="help-list" role="list">
+      <li>✨ Use short, catchy titles — they make your design stand out.</li>
+      <li>📏 Keep font sizes balanced between title and message for visual harmony.</li>
+      <li>🎯 Dark text looks great on light backgrounds (and vice versa) for perfect contrast.</li>
+      <li>🔤 Explore different font families for cultural or festive designs.</li>
+      <li>🌐 Try multiple languages — AksharaChitra supports Indian regional scripts beautifully.</li>
+    </ul>
+
+    <hr aria-hidden="true" />
+
+    <!-- ♿ Accessibility & Compliance -->
+    <h3>♿ Accessibility</h3>
+    <p>
+      AksharaChitra fully supports <abbr title="Web Content Accessibility Guidelines">WCAG 2.2</abbr>  
+      and <abbr title="Americans with Disabilities Act">ADA</abbr> standards to ensure an inclusive experience.
+    </p>
+    <ul role="list" class="help-list">
+      <li>🔈 Screen reader friendly — every button and label is properly announced.</li>
+      <li>⌨️ Keyboard accessible — navigate all controls using <kbd>Tab</kbd> and <kbd>Enter</kbd>.</li>
+      <li>🌗 Theme aware — optimized for both light and dark modes.</li>
+      <li>🧭 Logical reading order — structured for clarity and usability.</li>
+    </ul>
+
+    <hr aria-hidden="true" />
+
+    <!-- 💬 Support -->
+    <h3>💬 Need More Help?</h3>
+    <p>
+      Got a question, idea, or bug report?  
+      Please share it through our feedback form — it helps us make AksharaChitra better for everyone!
+    </p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="btn primary"
+       aria-label="Open feedback form">📝 Open Feedback Form</a>
+
+    <p class="muted" style="margin-top:16px;">Made with ❤️ by <strong>Sandeep Miriyala</strong> — Empowering creativity through AI & Accessibility.</p>
+  </div>
+</section>
+
   </main>
 
   <!-- 🌐 FOOTER -->
@@ -346,6 +406,47 @@
       });
     }
   });
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const speakButton = document.getElementById("speakHelp");
+  const helpSection = document.getElementById("help");
+
+  // Initialize SpeechSynthesis
+  const synth = window.speechSynthesis;
+
+  speakButton?.addEventListener("click", () => {
+    if (!synth) {
+      alert("Text-to-speech is not supported on this browser.");
+      return;
+    }
+
+    // Stop ongoing speech
+    if (synth.speaking) {
+      synth.cancel();
+      speakButton.textContent = "🔊 Listen";
+      return;
+    }
+
+    // Get text content (exclude icons/emojis)
+    const text = helpSection.innerText
+      .replace(/🔊|🎨|📘|🖋️|🖼️|🎯|💬|♿|🌈|💾|✨|📲/g, "")
+      .replace(/\s{2,}/g, " ");
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    utter.rate = 0.98;
+    utter.pitch = 1.0;
+    utter.volume = 1.0;
+    utter.voice = synth.getVoices().find(v => /en/i.test(v.lang)) || null;
+
+    speakButton.textContent = "⏹ Stop Reading";
+    synth.speak(utter);
+
+    utter.onend = () => {
+      speakButton.textContent = "🔊 Listen";
+    };
+  });
+});
 </script>
 </body>
 </html>

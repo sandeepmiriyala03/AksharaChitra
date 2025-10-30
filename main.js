@@ -381,3 +381,5 @@ if (galleryTabBtn) {
 if (document.getElementById("gallery").classList.contains("active")) {
   loadGallery();
 }
+
+
