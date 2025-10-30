@@ -115,10 +115,13 @@
     <h2 id="createHeading" class="sr-only">Create Poster Section</h2>
 
     <!-- Accessibility instructions -->
-    <p id="formInstructions" class="visually-hidden">
-      Use the form controls below to customize your poster. 
-      All inputs are keyboard accessible and screen-reader friendly.
-    </p>
+    <div id="formInstructions" class="sr-only">
+      <p>
+        Use the left panel to customize your poster.  
+        Adjust text, fonts, colors, and images.  
+        The right panel shows a live preview of your design.  
+        Use keyboard navigation to access all controls.
+      </p>  
 
     <!-- Left Panel -->
     <div class="panel left-panel" role="group" aria-label="Poster customization settings">
@@ -183,7 +186,16 @@
       <h3 id="messageSection">💬 Message</h3>
       <label for="message" class="sr-only">Main message</label>
       <textarea id="message" rows="4" placeholder="Type your main message..." aria-labelledby="messageSection"></textarea>
-
+<!-- 🎤 Voice AI Assistant -->
+<div class="voice-section" role="group" aria-label="Voice input for message">
+  <button id="startVoice" class="btn ghost" aria-label="Start voice input">
+    🎤 Speak Message
+  </button>
+  <button id="stopVoice" class="btn ghost hidden" aria-label="Stop recording">
+    ⏹ Stop
+  </button>
+  <small class="muted" id="voiceTip">🎙 Speak naturally — supports all selected languages.</small>
+</div>
       <div class="row" role="group" aria-label="Message settings">
         <div>
           <label for="messageSize">Font Size</label>
@@ -493,6 +505,93 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const msgInput = document.getElementById("message");
+  const langSelect = document.getElementById("language");
+  const startBtn = document.getElementById("startVoice");
+  const stopBtn = document.getElementById("stopVoice");
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechSynthesis = window.speechSynthesis;
+
+  if (!SpeechRecognition) {
+    startBtn.disabled = true;
+    startBtn.textContent = "⚠️ Voice not supported";
+    return;
+  }
+
+  const recog = new SpeechRecognition();
+  recog.continuous = true;
+  recog.interimResults = false;
+
+  const langMap = {
+    "English": "en-IN",
+    "తెలుగు": "te-IN",
+    "हिंदी": "hi-IN",
+    "தமிழ்": "ta-IN",
+    "ಕನ್ನಡ": "kn-IN",
+    "മലയാളം": "ml-IN",
+    "ଓଡ଼ିଆ": "or-IN"
+  };
+
+  // 🔤 Update recognition language
+  function updateLang() {
+    recog.lang = langMap[langSelect.value] || "en-IN";
+  }
+  langSelect.addEventListener("change", updateLang);
+  updateLang();
+
+  // 🎤 Start Listening
+  startBtn.addEventListener("click", () => {
+    try {
+      recog.start();
+      startBtn.classList.add("listening");
+      startBtn.textContent = "🎙 Listening...";
+      startBtn.setAttribute("aria-pressed", "true");
+      stopBtn.classList.remove("hidden");
+    } catch {
+      startBtn.textContent = "🎤 Try Again";
+    }
+  });
+
+  // ⏹ Stop Listening
+  stopBtn.addEventListener("click", () => {
+    recog.stop();
+    startBtn.classList.remove("listening");
+    startBtn.textContent = "🎤 Speak Message";
+    stopBtn.classList.add("hidden");
+  });
+
+  // 🧠 Handle Speech Result
+  recog.onresult = (e) => {
+    const transcript = e.results[e.resultIndex][0].transcript.trim();
+    msgInput.value = transcript;
+
+    // 🔊 Voice Confirmation (TTS)
+    const confirmText = `Got it! You said: ${transcript}`;
+    const utter = new SpeechSynthesisUtterance(confirmText);
+    utter.lang = recog.lang;
+    SpeechSynthesis.speak(utter);
+  };
+
+  // ❌ Handle Errors
+  recog.onerror = (e) => {
+    console.error("Voice error:", e.error);
+    startBtn.textContent = "🎤 Try Again";
+    startBtn.classList.remove("listening");
+    stopBtn.classList.add("hidden");
+  };
+
+  recog.onend = () => {
+    startBtn.classList.remove("listening");
+    startBtn.textContent = "🎤 Speak Message";
+    stopBtn.classList.add("hidden");
+  };
+});
+
+
 </script>
 </body>
 </html>
