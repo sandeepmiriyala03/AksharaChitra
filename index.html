@@ -46,57 +46,67 @@
   <!-- MAIN -->
   <main class="content" id="mainContent" role="main" tabindex="-1">
     <!-- 🏠 HOME PAGE -->
-    <section id="home" class="tab-content active" aria-labelledby="home">
-      <div class="hero">
-        <img src="Logo.png" alt="AksharaChitra logo" class="hero-logo" onerror="this.style.display='none'">
-        <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
-        <p class="lead">Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.</p>
-        <button class="btn primary large" data-open="create" aria-label="Start creating">🚀 Start Creating Now</button>
+  <!-- 🏠 HOME PAGE -->
+<section id="home" class="tab-content active" aria-labelledby="home">
+  <div class="hero">
+    <div class="hero-header" style="display:flex;justify-content:space-between;align-items:center;">
+      <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
+      <button id="speakHome" class="btn ghost" aria-label="Listen to introduction">🔊 Listen</button>
+    </div>
+
+    <img src="Logo.png" alt="AksharaChitra logo" class="hero-logo" onerror="this.style.display='none'">
+    <p class="lead">
+      Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.
+    </p>
+    <button class="btn primary large" data-open="create" aria-label="Start creating">
+      🚀 Start Creating Now
+    </button>
+  </div>
+
+  <div class="section why">
+    <h2>🌸 Why AksharaChitra?</h2>
+    <p>
+      AksharaChitra makes <strong>designing easy, fast, and available offline</strong>.  
+      No heavy software, no design skills required — just your words, and we turn them into art.
+    </p>
+
+    <ul class="features" role="list">
+      <li>✅ Works fully offline (PWA enabled)</li>
+      <li>🎨 Supports multiple languages — English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ</li>
+      <li>🖼️ Add your own images, adjust positions, and preview instantly</li>
+      <li>💾 Save, Download, or Share posters directly</li>
+      <li>🌈 Customize fonts, colors, glow/shadow effects & layout</li>
+      <li>✨ Comes with built-in templates for birthdays, quotes, invites & more</li>
+      <li>🔒 Your data is never uploaded — all creations stay safely in your own browser</li>
+      <li>♿ Fully accessible — compliant with <abbr title="Americans with Disabilities Act">ADA</abbr> & <abbr title="World Wide Web Consortium">W3C</abbr> accessibility standards</li>
+    </ul>
+  </div>
+
+  <div class="section how">
+    <h2>🪄 How to Use</h2>
+    <ol class="steps" role="list">
+      <li>Choose your language & template</li>
+      <li>Type your text & upload an image</li>
+      <li>Customize colors, font, glow & layout</li>
+      <li>Preview instantly and generate your poster</li>
+    </ol>
+  </div>
+
+  <!-- Feedback Section -->
+  <section class="feedback" aria-label="Feedback form">
+    <div class="left">
+      <img src="Logo.png" alt="AksharaChitra logo small" class="hero-logo" onerror="this.style.display='none'">
+      <div>
+        <p>💌 Help us improve AksharaChitra</p>
+        <p class="muted">Share suggestions, bugs, or ideas — it only takes a minute.</p>
       </div>
-
-      <div class="section why">
-        <h2>🌸 Why AksharaChitra?</h2>
-        <p>AksharaChitra makes <strong>designing easy, fast, and available offline</strong>.  
-        No heavy software, no design skills required — just your words, and we turn them into art.</p>
-
-       <ul class="features" role="list">
-  <li>✅ Works fully offline (PWA enabled)</li>
-  <li>🎨 Supports multiple languages — English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ</li>
-  <li>🖼️ Add your own images, adjust positions, and preview instantly</li>
-  <li>💾 Save, Download, or Share posters directly</li>
-  <li>🌈 Customize fonts, colors, glow/shadow effects & layout</li>
-  <li>✨ Comes with built-in templates for birthdays, quotes, invites & more</li>
-  <li>🔒 Your data is never uploaded — all creations stay safely in your own browser</li>
-  <li>♿ Fully accessible — compliant with <abbr title="Americans with Disabilities Act">ADA</abbr> & <abbr title="World Wide Web Consortium">W3C</abbr> accessibility standards</li>
-</ul>
-
-      </div>
-
-      <div class="section how">
-        <h2>🪄 How to Use</h2>
-        <ol class="steps" role="list">
-          <li>Choose your language & template</li>
-          <li>Type your text & upload an image</li>
-          <li>Customize colors, font, glow & layout</li>
-          <li>Preview instantly and generate your poster</li>
-        </ol>
-      </div>
-
-      <!-- Feedback Section -->
-      <section class="feedback" aria-label="Feedback form">
-        <div class="left">
-          <img src="Logo.png" alt="AksharaChitra logo small" class="hero-logo" onerror="this.style.display='none'">
-          <div>
-            <p>💌 Help us improve AksharaChitra</p>
-            <p class="muted">Share suggestions, bugs, or ideas — it only takes a minute.</p>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" 
-             target="_blank" class="btn primary" aria-label="Give feedback">📝 Give Feedback</a>
-        </div>
-      </section>
-    </section>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" 
+         target="_blank" class="btn primary" aria-label="Give feedback">📝 Give Feedback</a>
+    </div>
+  </section>
+</section>
 
    <section id="create" class="tab-content" role="region" aria-labelledby="createHeading">
   <div class="editor" role="form" aria-describedby="formInstructions">
@@ -406,6 +416,42 @@
       });
     }
   });
+document.addEventListener("DOMContentLoaded", () => {
+  const speakHomeBtn = document.getElementById("speakHome");
+  const homeSection = document.getElementById("home");
+  const synth = window.speechSynthesis;
+
+  if (speakHomeBtn && synth) {
+    speakHomeBtn.addEventListener("click", () => {
+      if (synth.speaking) {
+        synth.cancel();
+        speakHomeBtn.textContent = "🔊 Listen";
+        return;
+      }
+
+      // Extract text for narration
+      const text = homeSection.innerText
+        .replace(/🔊|🚀|🎨|🌈|♿|✅|🖼️|💾|✨|🪄|💌/g, "")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      utter.rate = 0.97;
+      utter.pitch = 1.05;
+      utter.volume = 1.0;
+      utter.voice = synth.getVoices().find(v => /en/i.test(v.lang)) || null;
+
+      speakHomeBtn.textContent = "⏹ Stop Reading";
+      synth.speak(utter);
+
+      utter.onend = () => {
+        speakHomeBtn.textContent = "🔊 Listen";
+      };
+    });
+  }
+});
+
 
   document.addEventListener("DOMContentLoaded", () => {
   const speakButton = document.getElementById("speakHelp");
