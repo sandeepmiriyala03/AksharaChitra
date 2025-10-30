@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AksharaChitra — Create Beautiful Posters Offline 🎨</title>
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <meta name="theme-color" content="#1e88e5">
+
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
 
@@ -15,117 +20,84 @@
 </head>
 
 <body>
+  <!-- ♿ Skip to Main Content Button -->
+  <a href="#mainContent" class="skip-link" aria-label="Skip to main content">⇩ Skip to Main Content</a>
+
   <!-- HEADER -->
-  <header class="topbar">
+  <header class="topbar" role="banner">
     <div class="left">
-      <img src="Logo.png" alt="AksharaChitra" class="logo" onerror="this.style.display='none'">
+      <img src="Logo.png" alt="AksharaChitra logo" class="logo" onerror="this.style.display='none'">
       <span class="app-title">AksharaChitra</span>
     </div>
 
-    <nav class="nav">
-      <button class="tab-btn active" data-tab="home">🏠 Home</button>
-      <button class="tab-btn" data-tab="create">🎨 Create</button>
-      <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
-      <button class="tab-btn" data-tab="help">📘 Help</button>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <button class="tab-btn active" data-tab="home" aria-controls="home">🏠 Home</button>
+      <button class="tab-btn" data-tab="create" aria-controls="create">🎨 Create</button>
+      <button class="tab-btn" data-tab="gallery" aria-controls="gallery">💾 My Creations</button>
+      <button class="tab-btn" data-tab="help" aria-controls="help">📘 Help</button>
     </nav>
 
     <div class="right-controls">
-      <button id="themeToggle" title="Toggle theme">🌙</button>
-      <button id="installBtn" class="install-btn hidden" title="Install app">📲</button>
+      <button id="themeToggle" title="Toggle theme" aria-label="Toggle dark or light mode">🌙</button>
+      <button id="installBtn" class="install-btn hidden" title="Install app" aria-label="Install app">📲</button>
     </div>
   </header>
 
   <!-- MAIN -->
-  <main class="content">
-
+  <main class="content" id="mainContent" role="main" tabindex="-1">
     <!-- 🏠 HOME PAGE -->
-    <section id="home" class="tab-content active">
+    <section id="home" class="tab-content active" aria-labelledby="home">
       <div class="hero">
-        <img src="Logo.png" alt="AksharaChitra Logo" class="hero-logo" onerror="this.style.display='none'">
+        <img src="Logo.png" alt="AksharaChitra logo" class="hero-logo" onerror="this.style.display='none'">
         <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
         <p class="lead">Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.</p>
-        <button class="btn primary large" data-open="create">🚀 Start Creating Now</button>
+        <button class="btn primary large" data-open="create" aria-label="Start creating">🚀 Start Creating Now</button>
       </div>
 
       <div class="section why">
         <h2>🌸 Why AksharaChitra?</h2>
-        <p>
-          AksharaChitra was built to make <strong>designing easy, fast, and available offline</strong>.
-          No heavy software, no design skills required — just your words, and we turn them into art.
-        </p>
-    <ul class="features">
-  <li>✅ Works fully offline (PWA enabled)</li>
-  <li>🎨 Supports multiple languages — English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ</li>
-  <li>🖼️ Add your own images, adjust positions, and preview instantly</li>
-  <li>💾 Save, Download, or Share posters directly</li>
-  <li>🌈 Customize fonts, colors, glow/shadow effects & layout</li>
-  <li>✨ Comes with built-in templates for birthdays, quotes, invites & more</li>
-  <li>🔒 Your data is never uploaded — all creations stay safely in your own browser</li>
-</ul>
+        <p>AksharaChitra makes <strong>designing easy, fast, and available offline</strong>.  
+        No heavy software, no design skills required — just your words, and we turn them into art.</p>
+
+        <ul class="features" role="list">
+          <li>✅ Works fully offline (PWA enabled)</li>
+          <li>🎨 Supports multiple languages — English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ</li>
+          <li>🖼️ Add your own images, adjust positions, and preview instantly</li>
+          <li>💾 Save, Download, or Share posters directly</li>
+          <li>🌈 Customize fonts, colors, glow/shadow effects & layout</li>
+          <li>✨ Comes with built-in templates for birthdays, quotes, invites & more</li>
+          <li>🔒 Your data is never uploaded — all creations stay safely in your own browser</li>
+        </ul>
       </div>
 
       <div class="section how">
         <h2>🪄 How to Use</h2>
-        <div class="steps">
-          <div class="step">
-            <span class="icon">1️⃣</span>
-            <p>Choose your language & template</p>
-          </div>
-          <div class="step">
-            <span class="icon">2️⃣</span>
-            <p>Type your text & upload an image</p>
-          </div>
-          <div class="step">
-            <span class="icon">3️⃣</span>
-            <p>Customize colors, font, glow & layout</p>
-          </div>
-          <div class="step">
-            <span class="icon">4️⃣</span>
-            <p>Preview instantly and generate your poster</p>
+        <ol class="steps" role="list">
+          <li>Choose your language & template</li>
+          <li>Type your text & upload an image</li>
+          <li>Customize colors, font, glow & layout</li>
+          <li>Preview instantly and generate your poster</li>
+        </ol>
+      </div>
+
+      <!-- Feedback Section -->
+      <section class="feedback" aria-label="Feedback form">
+        <div class="left">
+          <img src="Logo.png" alt="AksharaChitra logo small" class="hero-logo" onerror="this.style.display='none'">
+          <div>
+            <p>💌 Help us improve AksharaChitra</p>
+            <p class="muted">Share suggestions, bugs, or ideas — it only takes a minute.</p>
           </div>
         </div>
-      </div>
-    <!-- Feedback block (put inside Home or Footer where appropriate) -->
-<div class="feedback" id="feedbackBlock" aria-live="polite">
-  <div class="left">
-    <img src="Logo.png" alt="AksharaChitra Logo" class="hero-logo" onerror="this.style.display='none'">
-    <div>
-      <p>💌 Help us improve AksharaChitra</p>
-      <div class="muted">Share suggestions, bugs or ideas — it only takes 1 minute.</div>
-    </div>
-  </div>
-
-  <div style="display:flex;gap:8px;align-items:center">
-    <!-- Opens embedded modal (preferred) -->
-    <button id="openFeedbackModal" class="btn primary" aria-haspopup="dialog" aria-controls="feedbackModal">📝 Give Feedback</button>
-
-    <!-- Fallback opens in new tab -->
-    <a id="feedbackNewTab" class="btn secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open in new tab</a>
-  </div>
-</div>
-
-<!-- Feedback Modal (hidden by default) -->
-<div id="feedbackModal" class="modal hidden feedback-modal" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
-  <div class="modal-content" style="max-width:1000px; width:92%; padding:12px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-      <h3 id="feedbackTitle" style="margin:0">📝 AksharaChitra — Feedback</h3>
-      <div>
-        <a id="openInTabFromModal" class="btn ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Open in tab</a>
-        <button id="closeFeedbackModal" class="btn ghost" aria-label="Close feedback dialog">Close ✕</button>
-      </div>
-    </div>
-
-    <div style="margin-top:10px;">
-      <!-- iframe embed — Google Forms sometimes blocks embedding; fallback handled in JS -->
-      <iframe id="feedbackIframe" class="modal-iframe" src="about:blank" title="AksharaChitra Feedback Form"></iframe>
-    </div>
-  </div>
-</div>
-
+        <div style="display:flex;gap:8px;align-items:center">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" 
+             target="_blank" class="btn primary" aria-label="Give feedback">📝 Give Feedback</a>
+        </div>
+      </section>
     </section>
 
     <!-- 🎨 CREATE PAGE -->
-    <section id="create" class="tab-content">
+  <section id="create" class="tab-content">
       <div class="editor">
         <!-- Left Panel -->
         <div class="panel left-panel">
@@ -266,27 +238,32 @@
     </section>
 
     <!-- 📘 HELP PAGE -->
-    <section id="help" class="tab-content">
+    <section id="help" class="tab-content" aria-labelledby="help">
       <div class="panel">
         <h2>📘 Help & Tips</h2>
         <p>Follow these quick steps to make the most of AksharaChitra:</p>
-        <ul class="help-list">
+        <ul class="help-list" role="list">
           <li>🖋️ Type your text, set font sizes, and alignments.</li>
           <li>🖼️ Upload an image, crop if needed, and choose its position.</li>
           <li>🎨 Adjust colors and glow for beautiful contrast.</li>
           <li>📤 Generate and share instantly — even offline.</li>
-        
         </ul>
         <p class="muted">Need more help? Contact us via feedback form on the Home page.</p>
       </div>
     </section>
   </main>
 
+  <!-- 🌐 FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <p>© <span id="year"></span> <strong>AksharaChitra</strong> • Made with ❤️ by <strong>Sandeep Miriyala</strong></p>
+    <button id="goTopBtn" class="go-top" aria-label="Go to top">⬆️ Go to Top</button>
+  </footer>
+
   <!-- Cropper Modal -->
   <div id="cropModal" class="modal hidden">
     <div class="modal-content">
       <h3>Crop Image</h3>
-      <div class="crop-container"><img id="cropImage" alt="Crop preview" /></div>
+      <div class="crop-container"><img id="cropImage" alt="Crop preview"></div>
       <div class="modal-actions">
         <button id="cancelCropBtn" class="btn ghost">Cancel</button>
         <button id="applyCropBtn" class="btn primary">Apply</button>
@@ -299,5 +276,18 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
+
+  <!-- Go to Top Script -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const goTopBtn = document.getElementById("goTopBtn");
+    window.addEventListener("scroll", () => {
+      goTopBtn.style.display = window.scrollY > 200 ? "block" : "none";
+    });
+    goTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
 </body>
 </html>
