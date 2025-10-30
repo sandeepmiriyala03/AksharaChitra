@@ -86,7 +86,7 @@
 <!-- 📤 WhatsApp Share Button -->
 <div class="share-features" style="margin-top: 14px;">
   <button id="shareWhatsAppBtn" class="btn primary" aria-label="Share features on WhatsApp">
-    📤 Share on WhatsApp
+    📤 WhatsApp
   </button>
   <small class="muted">Tap to share project highlights via WhatsApp</small>
 </div>
@@ -419,25 +419,39 @@
   document.addEventListener("DOMContentLoaded", () => {
 
 
-    const shareBtn = document.getElementById("shareWhatsAppBtn");
-  const featureList = document.getElementById("featureList");
+  // 🌸 AksharaChitra — WhatsApp Share (Enhanced UI/UX v2.2)
+const shareBtn = document.getElementById("shareWhatsAppBtn");
+const featureList = document.getElementById("featureList");
 
+if (shareBtn && featureList) {
   shareBtn.addEventListener("click", () => {
+    // Collect features cleanly
     const features = Array.from(featureList.querySelectorAll("li"))
-      .map(li => li.innerText)
-      .join("\n• ");
+      .map(li => `• ${li.innerText.trim()}`)
+      .join("\n");
 
-    const message = 
-`🌸 *AksharaChitra — Create Beautiful Posters Offline 🎨*  
+    // Beautiful WhatsApp message with strong visual hierarchy
+    const message = `
+🌸 *AksharaChitra * — Create Beautiful Posters *Offline* 🎨
 
+🚀 *Top Features:*
 ${features}
 
-Try it now 👇  
-🔗 https://aksharachitra.netlify.app`;
+✨ Works 100% offline — no data uploaded  
+♿ Accessible & multilingual (English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ)
+🎨 Instant preview, custom fonts, colors & glow
 
-    const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+🔗 Try it now → https://aksharachitra.netlify.app  
+💡 Made with ❤️ by *Sandeep Miriyala*
+`;
+
+    // Open WhatsApp share
+    const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message.trim());
     window.open(whatsappUrl, "_blank");
   });
+} else {
+  console.warn("Share button or feature list not found in DOM.");
+}
 
     const startBtn = document.querySelector('[data-open="create"]');
     const tabButtons = document.querySelectorAll(".tab-btn");

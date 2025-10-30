@@ -146,10 +146,7 @@ body {
   width: 360px;
   min-width: 280px;
 }
-.right-panel {
-  flex: 1;
-  min-width: 320px;
-}
+
 
 /* ===== FORM ELEMENTS ===== */
 label {
@@ -322,11 +319,7 @@ body.dark-mode .watermark {
 }
 
 /* Hover or focus state (slightly fade in for emphasis) */
-#previewCard:hover .watermark,
-#previewCard:focus-within .watermark {
-  opacity: 0.7;
-  transform: translateY(-2px);
-}
+
 
 /* Smooth fade-in on render */
 @keyframes fadeInWatermark {
@@ -737,4 +730,69 @@ body.dark input[type="range"]::-webkit-slider-thumb {
 #shareWhatsAppBtn:hover {
   background-color: #1da851;
   transform: scale(1.03);
+}
+
+/* ===== CREATE SECTION EDITOR ===== */
+.editor {
+  display: flex;
+  flex-wrap: wrap; /* allows stacking on small screens */
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+/* ===== LEFT PANEL ===== */
+.left-panel {
+  flex: 1 1 350px; /* flexible but has min width */
+  max-width: 420px;
+  background: var(--panel-bg, #f9f9f9);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ===== RIGHT PANEL ===== */
+.right-panel {
+  flex: 2 1 600px;
+  min-width: 360px;
+  background: var(--panel-bg, #ffffff);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  align-self: flex-start;
+}
+
+/* ===== PREVIEW CARD ===== */
+#previewCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5; /* keeps shape consistent */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 900px) {
+  .editor {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  .right-panel {
+    order: 2;
+  }
 }
