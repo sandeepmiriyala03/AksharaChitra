@@ -98,146 +98,177 @@
       </section>
     </section>
 
-    <!-- 🎨 CREATE PAGE -->
-  <section id="create" class="tab-content">
-      <div class="editor">
-        <!-- Left Panel -->
-        <div class="panel left-panel">
-          <label>Language</label>
-          <select id="language">
-            <option>English</option><option>తెలుగు</option><option>हिंदी</option>
-            <option>தமிழ்</option><option>ಕನ್ನಡ</option><option>മലയാളം</option><option>ଓଡ଼ିଆ</option>
-          </select>
+   <section id="create" class="tab-content" role="region" aria-labelledby="createHeading">
+  <div class="editor" role="form" aria-describedby="formInstructions">
 
-          <label>Template</label>
-          <select id="templateSelect">
-            <option value="">— choose —</option>
-            <option value="news">News</option>
-            <option value="birthday">Birthday</option>
-            <option value="devotional">Devotional</option>
-            <option value="business">Business Card</option>
-            <option value="invitation">Invitation</option>
-            <option value="quote">Quote</option>
-          </select>
+    <!-- Hidden heading for accessibility -->
+    <h2 id="createHeading" class="sr-only">Create Poster Section</h2>
 
-          <hr class="divider">
+    <!-- Accessibility instructions -->
+    <p id="formInstructions" class="visually-hidden">
+      Use the form controls below to customize your poster. 
+      All inputs are keyboard accessible and screen-reader friendly.
+    </p>
 
-          <h4>🖋️ Title</h4>
-          <input id="title" type="text" placeholder="Enter title..." />
-          <div class="row">
-            <div>
-              <label>Font Size</label>
-              <input id="titleSize" type="number" min="10" max="80" value="28" />
-            </div>
-            <div>
-              <label>Position</label>
-              <select id="titleAlign">
-                <option value="center" selected>Center</option>
-                <option value="left">Left</option>
-                <option value="right">Right</option>
-              </select>
-            </div>
-          </div>
+    <!-- Left Panel -->
+    <div class="panel left-panel" role="group" aria-label="Poster customization settings">
 
-          <h4>🪶 Subtitle</h4>
-          <input id="subtitle" type="text" placeholder="Enter subtitle..." />
-          <div class="row">
-            <div>
-              <label>Font Size</label>
-              <input id="subtitleSize" type="number" min="10" max="60" value="20" />
-            </div>
-            <div>
-              <label>Position</label>
-              <select id="subtitleAlign">
-                <option value="center" selected>Center</option>
-                <option value="left">Left</option>
-                <option value="right">Right</option>
-              </select>
-            </div>
-          </div>
+      <label for="language">Language</label>
+      <select id="language" aria-label="Select Language">
+        <option>English</option><option>తెలుగు</option><option>हिंदी</option>
+        <option>தமிழ்</option><option>ಕನ್ನಡ</option><option>മലയാളം</option><option>ଓଡ଼ିଆ</option>
+      </select>
 
-          <h4>💬 Message</h4>
-          <textarea id="message" rows="4" placeholder="Type your main message..."></textarea>
-          <div class="row">
-            <div>
-              <label>Font Size</label>
-              <input id="messageSize" type="number" min="10" max="48" value="18" />
-            </div>
-            <div>
-              <label>Alignment</label>
-              <select id="contentAlign">
-                <option value="center" selected>Center</option>
-                <option value="left">Left</option>
-                <option value="right">Right</option>
-              </select>
-            </div>
-          </div>
+      <label for="templateSelect">Template</label>
+      <select id="templateSelect" aria-label="Choose Template">
+        <option value="">— Choose Template —</option>
+        <option value="news">News</option>
+        <option value="birthday">Birthday</option>
+        <option value="devotional">Devotional</option>
+        <option value="business">Business Card</option>
+        <option value="invitation">Invitation</option>
+        <option value="quote">Quote</option>
+      </select>
 
-          <hr class="divider">
+      <hr class="divider" aria-hidden="true" />
 
-          <label>Font Family</label>
-          <select id="fontFamily">
-            <option value="Montserrat, sans-serif">Montserrat</option>
-            <option value="'Noto Sans Telugu', serif">Noto Sans Telugu</option>
-          </select>
+      <h3 id="titleSection">🖋️ Title</h3>
+      <label for="title" class="sr-only">Title text</label>
+      <input id="title" type="text" placeholder="Enter title..." aria-labelledby="titleSection" />
 
-          <div class="row">
-            <div><label>Text Color</label><input id="textColor" type="color" value="#111111" /></div>
-            <div><label>Background</label><input id="bgColor" type="color" value="#ffffff" /></div>
-          </div>
-
-          <h4>✨ Glow / Shadow</h4>
-          <div class="row">
-            <div><label>Color</label><input type="color" id="shadowColor" value="#000000" /></div>
-            <div><label>Blur</label><input type="range" id="shadowBlur" min="0" max="30" value="0" /></div>
-          </div>
-
-          <label>Upload Image (Crop Supported)</label>
-          <input id="imageUpload" type="file" accept="image/*" />
-
-          <label>Image Position</label>
-          <select id="imagePosition">
-            <option value="top">Top</option>
-            <option value="bottom">Bottom</option>
+      <div class="row" role="group" aria-label="Title settings">
+        <div>
+          <label for="titleSize">Font Size</label>
+          <input id="titleSize" type="number" min="10" max="80" value="28" aria-describedby="titleSection" />
+        </div>
+        <div>
+          <label for="titleAlign">Position</label>
+          <select id="titleAlign" aria-label="Title alignment">
+            <option value="center" selected>Center</option>
             <option value="left">Left</option>
             <option value="right">Right</option>
-            <option value="center" selected>Center</option>
           </select>
-
-          <label>QR / Link (optional)</label>
-          <input id="qrText" type="text" placeholder="https:// or phone/email" />
-
-          <div class="row actions">
-            <button id="clearBtn" class="btn ghost">Clear</button>
-            <button id="saveBtn" class="btn">💾 Save</button>
-            <button id="generateBtn" class="btn primary">🖼 Generate</button>
-          </div>
-
-          <div class="row">
-            <button id="downloadBtn" class="btn">⬇ Download</button>
-            <button id="shareBtn" class="btn ghost">📤 Share</button>
-          </div>
-
-          <small class="muted">🎯 Tip: Changes reflect instantly in the live preview →</small>
-        </div>
-
-        <!-- Right Panel -->
-        <div class="panel right-panel">
-          <h3>Live Preview</h3>
-          <div id="previewCard" class="card">
-            <div id="pTitle" class="p-title"></div>
-            <div id="pSubtitle" class="p-subtitle"></div>
-            <div id="pImage" class="p-image"></div>
-            <div id="pMessage" class="p-body"></div>
-            <div id="pQR" class="p-qr"></div>
-            <div class="watermark">aksharachitra.netlify.app</div>
-          </div>
-
-          <h4 style="margin-top:14px">My Creations</h4>
-          <div id="galleryGrid" class="gallery-grid"></div>
         </div>
       </div>
-    </section>
+
+      <h3 id="subtitleSection">🪶 Subtitle</h3>
+      <label for="subtitle" class="sr-only">Subtitle text</label>
+      <input id="subtitle" type="text" placeholder="Enter subtitle..." aria-labelledby="subtitleSection" />
+
+      <div class="row" role="group" aria-label="Subtitle settings">
+        <div>
+          <label for="subtitleSize">Font Size</label>
+          <input id="subtitleSize" type="number" min="10" max="60" value="20" aria-describedby="subtitleSection" />
+        </div>
+        <div>
+          <label for="subtitleAlign">Position</label>
+          <select id="subtitleAlign" aria-label="Subtitle alignment">
+            <option value="center" selected>Center</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+      </div>
+
+      <h3 id="messageSection">💬 Message</h3>
+      <label for="message" class="sr-only">Main message</label>
+      <textarea id="message" rows="4" placeholder="Type your main message..." aria-labelledby="messageSection"></textarea>
+
+      <div class="row" role="group" aria-label="Message settings">
+        <div>
+          <label for="messageSize">Font Size</label>
+          <input id="messageSize" type="number" min="10" max="48" value="18" aria-describedby="messageSection" />
+        </div>
+        <div>
+          <label for="contentAlign">Alignment</label>
+          <select id="contentAlign" aria-label="Message alignment">
+            <option value="center" selected>Center</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="divider" aria-hidden="true" />
+
+      <label for="fontFamily">Font Family</label>
+      <select id="fontFamily" aria-label="Font family selection">
+        <option value="Montserrat, sans-serif">Montserrat</option>
+        <option value="'Noto Sans Telugu', serif">Noto Sans Telugu</option>
+      </select>
+
+      <div class="row" role="group" aria-label="Color customization">
+        <div>
+          <label for="textColor">Text Color</label>
+          <input id="textColor" type="color" value="#111111" aria-label="Choose text color" />
+        </div>
+        <div>
+          <label for="bgColor">Background Color</label>
+          <input id="bgColor" type="color" value="#ffffff" aria-label="Choose background color" />
+        </div>
+      </div>
+
+      <h3 id="glowShadowSection">✨ Glow / Shadow</h3>
+      <div class="row" role="group" aria-labelledby="glowShadowSection">
+        <div>
+          <label for="shadowColor">Shadow Color</label>
+          <input type="color" id="shadowColor" value="#000000" aria-label="Shadow color" />
+        </div>
+        <div>
+          <label for="shadowBlur">Shadow Blur</label>
+          <input type="range" id="shadowBlur" min="0" max="30" value="0" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" />
+        </div>
+      </div>
+
+      <label for="imageUpload">Upload Image (Crop Supported)</label>
+      <input id="imageUpload" type="file" accept="image/*" aria-label="Upload image for poster" />
+
+      <label for="imagePosition">Image Position</label>
+      <select id="imagePosition" aria-label="Choose image position">
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+        <option value="center" selected>Center</option>
+      </select>
+
+      <label for="qrText">QR / Link (optional)</label>
+      <input id="qrText" type="text" placeholder="https:// or phone/email" aria-label="Enter QR or link text" />
+
+      <div class="row actions" role="group" aria-label="Poster actions">
+        <button id="clearBtn" class="btn ghost" aria-label="Clear all fields">Clear</button>
+        <button id="saveBtn" class="btn" aria-label="Save creation">💾 Save</button>
+        <button id="generateBtn" class="btn primary" aria-label="Generate poster image">🖼 Generate</button>
+      </div>
+
+      <div class="row" role="group" aria-label="Download and share actions">
+        <button id="downloadBtn" class="btn" aria-label="Download poster">⬇ Download</button>
+        <button id="shareBtn" class="btn ghost" aria-label="Share poster">📤 Share</button>
+      </div>
+
+      <small class="muted" id="previewTip">
+        🎯 Tip: All changes reflect instantly in the live preview on the right.
+      </small>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="panel right-panel" role="region" aria-label="Live preview area">
+      <h3 id="previewHeading">Live Preview</h3>
+      <div id="previewCard" class="card" tabindex="0" role="img" aria-labelledby="previewHeading" aria-describedby="previewTip">
+        <div id="pTitle" class="p-title"></div>
+        <div id="pSubtitle" class="p-subtitle"></div>
+        <div id="pImage" class="p-image"></div>
+        <div id="pMessage" class="p-body"></div>
+        <div id="pQR" class="p-qr"></div>
+        <div class="watermark">aksharachitra.netlify.app</div>
+      </div>
+
+      <h4 style="margin-top:14px">My Creations</h4>
+      <div id="galleryGrid" class="gallery-grid" role="list" aria-label="Saved creations gallery"></div>
+    </div>
+  </div>
+</section>
+
 
     <!-- 📘 HELP PAGE -->
     <section id="help" class="tab-content" aria-labelledby="help">
