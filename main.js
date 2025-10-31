@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
         imagePosition = id("imagePosition"),
         templateSelect = id("templateSelect"),
         previewCard = id("previewCard"),
-        pTitle = id("pTitle"),
-        pSubtitle = id("pSubtitle"),
-        pMessage = id("pMessage"),
+        pTitle = id("pTitle"), // pTitle element from HTML
+        pSubtitle = id("pSubtitle"), // pSubtitle element from HTML
+        pMessage = id("pMessage"), // pMessage element from HTML
         pImage = id("pImage"),
         pQR = id("pQR"),
         generateBtn = id("generateBtn"),
@@ -101,12 +101,10 @@ document.addEventListener("DOMContentLoaded", () => {
             cropModal.classList.remove("hidden");
             cropImage.onload = () => {
                 if (cropper) cropper.destroy();
-                // Ensure Cropper library is loaded in the HTML for this to work
                 if (typeof Cropper !== 'undefined') {
                     cropper = new Cropper(cropImage, { viewMode: 1, autoCropArea: 1 });
                 } else {
                     console.error("Cropper library is not loaded.");
-                    // Fallback to direct use if cropper is missing
                     uploadedDataUrl = ev.target.result;
                     cropModal.classList.add("hidden");
                     renderPreview();
@@ -126,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
     applyCropBtn.addEventListener("click", () => {
         if (!cropper) return;
         try {
-            // FIX 1: Increased maxWidth for better uploaded image detail.
             const canvas = cropper.getCroppedCanvas({ maxWidth: 2500 }); 
             uploadedDataUrl = canvas.toDataURL("image/png");
         } catch (e) {
@@ -141,13 +138,12 @@ document.addEventListener("DOMContentLoaded", () => {
         renderPreview();
     });
 
-    // --- Render Preview (FIXED) ---
+    // --- Render Preview (Final Fixes for Text Visibility & Styles) ---
     function renderPreview() {
         previewCard.style.background = bgColor.value;
         previewCard.style.color = textColor.value;
         previewCard.style.fontFamily = fontFamily.value;
 
-        // Calculate text shadow/glow only once
         const shadow = shadowBlur > 0 ? `0 0 ${shadowBlur}px ${shadowColor}` : "none";
         
         // Apply text shadow to all text elements
@@ -162,31 +158,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         // Title
+        pTitle.className = "p-title"; // ⭐ CRITICAL: Apply the CSS class for styling (font-weight, margin)
         pTitle.textContent = titleEl.value || "";
         pTitle.style.fontSize = titleSize.value + "px";
         pTitle.style.textAlign = titleAlign.value;
-        // ⭐ CRITICAL FIX: Ensure text wraps correctly for html2canvas
         pTitle.style.whiteSpace = "normal"; 
+        pTitle.style.display = "block"; 
+        pTitle.style.width = "100%"; 
+        pTitle.style.boxSizing = "border-box";
+        
 
         // Subtitle
+        pSubtitle.className = "p-subtitle"; // ⭐ CRITICAL: Apply the CSS class for styling (font-weight, margin)
         pSubtitle.textContent = subtitleEl.value || "";
         pSubtitle.style.fontSize = subtitleSize.value + "px";
         pSubtitle.style.textAlign = subtitleAlign.value;
-        // ⭐ CRITICAL FIX: Ensure text wraps correctly for html2canvas
         pSubtitle.style.whiteSpace = "normal"; 
+        pSubtitle.style.display = "block";
+        pSubtitle.style.width = "100%";
+        pSubtitle.style.boxSizing = "border-box";
 
 
         // Message
+        pMessage.className = "p-body"; // ⭐ CRITICAL: Apply the CSS class for styling (margin, line-height)
         pMessage.innerHTML = (messageEl.value || "").replace(/\n/g, "<br>");
         pMessage.style.fontSize = messageSize.value + "px";
         pMessage.style.textAlign = contentAlign.value;
-        // Pmessage already handles line breaks with <br>, but explicitly setting white-space to normal is safer.
         pMessage.style.whiteSpace = "normal"; 
+        pMessage.style.display = "block";
 
 
         // Image
         const pos = imagePosition.value || "center";
-        pImage.className = "p-image align-" + pos;
+        // The pImage element MUST exist in your HTML
+        pImage.className = "p-image align-" + pos; 
         pImage.innerHTML = "";
         if (uploadedDataUrl) {
             const img = document.createElement("img");
@@ -205,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- Live Input Binding ---
+    // --- Live Input Binding (Same) ---
     [
         titleEl, subtitleEl, messageEl, fontFamily, textColor, bgColor, qrText,
         imagePosition, titleSize, subtitleSize, messageSize, titleAlign,
@@ -223,13 +228,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Generate / Download (FIXED TO SIMPLIFY USER ACTION) ---
+    // --- Generate / Download ---
     async function generateImage(download) {
         try {
-            // FIX 2: Increased scale from 2 to 4 for much higher resolution.
+            // High scale for sharp output
             const canvas = await html2canvas(previewCard, { scale: 4 }); 
             const ctx = canvas.getContext("2d");
-            // Watermark application (retained)
+            // Watermark application
             ctx.font = "32px Montserrat"; 
             ctx.fillStyle = "rgba(0,0,0,0.4)";
             ctx.textAlign = "right";
@@ -244,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 a.download = filename + ".png";
                 a.click();
             }
-            return data; // Return data for sharing
+            return data; 
         } catch (err) {
             alert("⚠️ Failed to generate image. Ensure html2canvas library is loaded.");
             console.error(err);
@@ -254,11 +259,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Updated button handlers for clarity
     generateBtn.addEventListener("click", () => generateImage(true));
-    downloadBtn.addEventListener("click", () => generateImage(true)); // Download should be the main action
+    downloadBtn.addEventListener("click", () => generateImage(true)); 
 
-    // --- Share API (FIXED FOR BETTER MOBILE SUPPORT) ---
+    // --- Share API (Same) ---
     shareBtn.addEventListener("click", async () => {
-        const dataUrl = await generateImage(false); // Generate image without downloading
+        const dataUrl = await generateImage(false); 
         if (!dataUrl) return;
 
         try {
@@ -271,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     files: [file], 
                     title: "AksharaChitra Poster",
                     text: "Check out my poster created with AksharaChitra!",
-                    url: window.location.href // Adds a link back to the tool
+                    url: window.location.href 
                 });
             } else {
                 alert("Sharing not natively supported on this device. Please use the 'Download' button and share the saved image.");
@@ -283,10 +288,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // --- Save Offline ---
+    // --- Save Offline (Same) ---
     saveBtn.addEventListener("click", async () => {
         try {
-            // Using scale: 1 for small gallery thumbnails
             const canvas = await html2canvas(previewCard, { scale: 1 }); 
             const data = canvas.toDataURL("image/png");
             const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
@@ -294,7 +298,6 @@ document.addEventListener("DOMContentLoaded", () => {
             while (list.length > 50) list.pop();
             localStorage.setItem("ak_gallery_v7", JSON.stringify(list));
             alert("💾 Saved to My Creations (Offline).");
-            // If the gallery tab is active, refresh it
             if (document.getElementById("gallery").classList.contains("active")) {
                 loadGallery();
             }
@@ -304,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- Clear Fields ---
+    // --- Clear Fields (Same) ---
     clearBtn.addEventListener("click", () => {
         if (!confirm("Clear all fields?")) return;
         [titleEl, subtitleEl, messageEl, qrText].forEach((e) => (e.value = ""));
@@ -312,7 +315,6 @@ document.addEventListener("DOMContentLoaded", () => {
         imageUpload.value = "";
         shadowBlur = 0;
         shadowColor = "#000000";
-        // Reset color pickers to default
         textColor.value = "#111111";
         bgColor.value = "#ffffff";
         shadowColorInput.value = "#000000";
@@ -320,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderPreview();
     });
 
-    // --- Auto Save ---
+    // --- Auto Save (Same) ---
     setInterval(() => {
         const s = {
             title: titleEl.value, subtitle: subtitleEl.value, message: messageEl.value,
@@ -333,11 +335,10 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("ak_autosave_v7", JSON.stringify(s));
     }, 3000);
 
-    // --- Load Saved ---
+    // --- Load Saved (Same) ---
     const saved = JSON.parse(localStorage.getItem("ak_autosave_v7") || "null");
     if (saved) {
         Object.keys(saved).forEach((k) => {
-            // Special handling for shadow blur/color which are not direct element IDs
             if (k === "shadowBlur") {
                 shadowBlur = saved[k];
                 if (shadowBlurInput) shadowBlurInput.value = saved[k];
@@ -353,68 +354,14 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPreview();
 });
 
-// === Feedback Modal Logic (UNCHANGED) ===
-document.addEventListener('DOMContentLoaded', () => {
-    const openBtn = document.getElementById('openFeedbackModal');
-    const modal = document.getElementById('feedbackModal');
-    const iframe = document.getElementById('feedbackIframe');
-    const closeBtn = document.getElementById('closeFeedbackModal');
-    const feedbackUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor';
-    const fallbackLink = document.getElementById('feedbackNewTab');
-    const openInTabFromModal = document.getElementById('openInTabFromModal');
-
-    // set link targets
-    if (fallbackLink) fallbackLink.href = feedbackUrl;
-    if (openInTabFromModal) openInTabFromModal.href = feedbackUrl;
-
-    function openModal() {
-        // try to embed the form first
-        iframe.src = feedbackUrl;
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-        
-        setTimeout(() => {
-            try {
-                // try reading iframe location — may throw if cross-origin blocked
-                const href = iframe.contentWindow && iframe.contentWindow.location && iframe.contentWindow.location.href;
-                if (!href) throw new Error('iframe inaccessible');
-            } catch (e) {
-                // fallback: open new tab instead and close modal
-                window.open(feedbackUrl, '_blank', 'noopener');
-                closeModal();
-            }
-        }, 700);
-    }
-
-    function closeModal() {
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-        // clear iframe src to release resources
-        iframe.src = 'about:blank';
-    }
-
-    if(openBtn) openBtn.addEventListener('click', openModal);
-    if(closeBtn) closeBtn.addEventListener('click', closeModal);
-
-    // close when clicking outside modal content
-    if(modal) modal.addEventListener('click', (ev) => {
-        if (ev.target === modal) closeModal();
-    });
-
-    // keyboard: Esc closes modal
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) closeModal();
-    });
-});
-
-// === Gallery Rendering (UNCHANGED) ===
+// === (Remaining functions: Feedback Modal Logic, Gallery Rendering - UNCHANGED) ===
 function loadGallery() {
     const grid = document.getElementById("galleryGrid");
     const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
 
-    if (!grid) return; // safety check
+    if (!grid) return; 
 
-    grid.innerHTML = ""; // clear old
+    grid.innerHTML = ""; 
 
     if (list.length === 0) {
         grid.innerHTML = `<p class="muted">No saved creations yet. Save your designs to view them here!</p>`;
@@ -434,7 +381,6 @@ function loadGallery() {
         grid.appendChild(div);
     });
 
-    // Handle click to open preview
     grid.querySelectorAll("img").forEach((img) => {
         img.addEventListener("click", () => {
             const w = window.open();
@@ -442,7 +388,6 @@ function loadGallery() {
         });
     });
 
-    // Handle delete button
     grid.querySelectorAll(".delete-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
             const index = parseInt(btn.dataset.index);
@@ -450,18 +395,62 @@ function loadGallery() {
             if (confirmDelete) {
                 list.splice(index, 1);
                 localStorage.setItem("ak_gallery_v7", JSON.stringify(list));
-                loadGallery(); // refresh grid
+                loadGallery(); 
             }
         });
     });
 }
 
-// Load when My Creations tab clicked
 const galleryTabBtn = document.querySelector('button[data-tab="gallery"]');
 if (galleryTabBtn) {
     galleryTabBtn.addEventListener("click", loadGallery);
 }
-// Initial load if already on gallery tab
 if (document.getElementById("gallery") && document.getElementById("gallery").classList.contains("active")) {
     loadGallery();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const openBtn = document.getElementById('openFeedbackModal');
+    const modal = document.getElementById('feedbackModal');
+    const iframe = document.getElementById('feedbackIframe');
+    const closeBtn = document.getElementById('closeFeedbackModal');
+    const feedbackUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor';
+    const fallbackLink = document.getElementById('feedbackNewTab');
+    const openInTabFromModal = document.getElementById('openInTabFromModal');
+
+    if (fallbackLink) fallbackLink.href = feedbackUrl;
+    if (openInTabFromModal) openInTabFromModal.href = feedbackUrl;
+
+    function openModal() {
+        iframe.src = feedbackUrl;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        setTimeout(() => {
+            try {
+                const href = iframe.contentWindow && iframe.contentWindow.location && iframe.contentWindow.location.href;
+                if (!href) throw new Error('iframe inaccessible');
+            } catch (e) {
+                window.open(feedbackUrl, '_blank', 'noopener');
+                closeModal();
+            }
+        }, 700);
+    }
+
+    function closeModal() {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        iframe.src = 'about:blank';
+    }
+
+    if(openBtn) openBtn.addEventListener('click', openModal);
+    if(closeBtn) closeBtn.addEventListener('click', closeModal);
+
+    if(modal) modal.addEventListener('click', (ev) => {
+        if (ev.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) closeModal();
+    });
+});
