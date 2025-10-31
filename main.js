@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     applyCropBtn.addEventListener("click", () => {
         if (!cropper) return;
         try {
-            // ⭐ FIX 1: Increased maxWidth from 1080 to 2500 to retain better image quality after cropping.
+            // FIX 1: Increased maxWidth for better uploaded image detail.
             const canvas = cropper.getCroppedCanvas({ maxWidth: 2500 }); 
             uploadedDataUrl = canvas.toDataURL("image/png");
         } catch (e) {
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         pSubtitle.style.textShadow = shadow;
         pMessage.style.textShadow = shadow;
         
-        // Apply font family explicitly to text elements (fixes inheritance issues on mobile)
+        // Apply font family explicitly to text elements
         pTitle.style.fontFamily = fontFamily.value;
         pSubtitle.style.fontFamily = fontFamily.value;
         pMessage.style.fontFamily = fontFamily.value;
@@ -165,16 +165,24 @@ document.addEventListener("DOMContentLoaded", () => {
         pTitle.textContent = titleEl.value || "";
         pTitle.style.fontSize = titleSize.value + "px";
         pTitle.style.textAlign = titleAlign.value;
+        // ⭐ CRITICAL FIX: Ensure text wraps correctly for html2canvas
+        pTitle.style.whiteSpace = "normal"; 
 
         // Subtitle
         pSubtitle.textContent = subtitleEl.value || "";
         pSubtitle.style.fontSize = subtitleSize.value + "px";
         pSubtitle.style.textAlign = subtitleAlign.value;
+        // ⭐ CRITICAL FIX: Ensure text wraps correctly for html2canvas
+        pSubtitle.style.whiteSpace = "normal"; 
+
 
         // Message
         pMessage.innerHTML = (messageEl.value || "").replace(/\n/g, "<br>");
         pMessage.style.fontSize = messageSize.value + "px";
         pMessage.style.textAlign = contentAlign.value;
+        // Pmessage already handles line breaks with <br>, but explicitly setting white-space to normal is safer.
+        pMessage.style.whiteSpace = "normal"; 
+
 
         // Image
         const pos = imagePosition.value || "center";
@@ -218,11 +226,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Generate / Download (FIXED TO SIMPLIFY USER ACTION) ---
     async function generateImage(download) {
         try {
-            // ⭐ FIX 2: Increased scale from 2 to 4 for much higher resolution, sharper output to fix fuzziness.
+            // FIX 2: Increased scale from 2 to 4 for much higher resolution.
             const canvas = await html2canvas(previewCard, { scale: 4 }); 
             const ctx = canvas.getContext("2d");
             // Watermark application (retained)
-            ctx.font = "32px Montserrat"; // Increased size for scale 2
+            ctx.font = "32px Montserrat"; 
             ctx.fillStyle = "rgba(0,0,0,0.4)";
             ctx.textAlign = "right";
             ctx.fillText("aksharachitra.netlify.app", canvas.width - 40, canvas.height - 40);
@@ -278,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Save Offline ---
     saveBtn.addEventListener("click", async () => {
         try {
-            // Using scale: 1 for small gallery thumbnails to save storage/memory
+            // Using scale: 1 for small gallery thumbnails
             const canvas = await html2canvas(previewCard, { scale: 1 }); 
             const data = canvas.toDataURL("image/png");
             const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
