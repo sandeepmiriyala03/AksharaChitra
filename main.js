@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+Document.addEventListener("DOMContentLoaded", () => {
     const id = (x) => document.getElementById(x);
 
     // --- Core Elements ---
@@ -60,6 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetTab = btn.getAttribute("data-tab");
             const section = document.getElementById(targetTab);
             if (section) section.classList.add("active");
+
+            // Load gallery when switching to the gallery tab
+            if (targetTab === "gallery") {
+                loadGallery();
+            }
         });
     });
 
@@ -101,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cropModal.classList.remove("hidden");
             cropImage.onload = () => {
                 if (cropper) cropper.destroy();
+                // Ensure Cropper is defined
                 if (typeof Cropper !== 'undefined') {
                     cropper = new Cropper(cropImage, { viewMode: 1, autoCropArea: 1 });
                 } else {
@@ -158,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         // Title
-        pTitle.className = "p-title"; // ⭐ CRITICAL: Apply the CSS class for styling (font-weight, margin)
+        pTitle.className = "p-title"; 
         pTitle.textContent = titleEl.value || "";
         pTitle.style.fontSize = titleSize.value + "px";
         pTitle.style.textAlign = titleAlign.value;
@@ -169,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
 
         // Subtitle
-        pSubtitle.className = "p-subtitle"; // ⭐ CRITICAL: Apply the CSS class for styling (font-weight, margin)
+        pSubtitle.className = "p-subtitle"; 
         pSubtitle.textContent = subtitleEl.value || "";
         pSubtitle.style.fontSize = subtitleSize.value + "px";
         pSubtitle.style.textAlign = subtitleAlign.value;
@@ -180,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         // Message
-        pMessage.className = "p-body"; // ⭐ CRITICAL: Apply the CSS class for styling (margin, line-height)
+        pMessage.className = "p-body"; 
         pMessage.innerHTML = (messageEl.value || "").replace(/\n/g, "<br>");
         pMessage.style.fontSize = messageSize.value + "px";
         pMessage.style.textAlign = contentAlign.value;
@@ -190,7 +196,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Image
         const pos = imagePosition.value || "center";
-        // The pImage element MUST exist in your HTML
         pImage.className = "p-image align-" + pos; 
         pImage.innerHTML = "";
         if (uploadedDataUrl) {
@@ -210,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- Live Input Binding (Same) ---
+    // --- Live Input Binding ---
     [
         titleEl, subtitleEl, messageEl, fontFamily, textColor, bgColor, qrText,
         imagePosition, titleSize, subtitleSize, messageSize, titleAlign,
@@ -228,17 +233,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Generate / Download ---
+    // --- Generate / Download (FIXED FOR SCALING/OVERFLOW) ---
     async function generateImage(download) {
         try {
-            // High scale for sharp output
-            const canvas = await html2canvas(previewCard, { scale: 4 }); 
+            // 1. Get the current, visible dimensions of the preview card.
+            // This is CRITICAL for html2canvas to capture the element correctly
+            // when scaling, preventing overflow/distortion issues.
+            const rect = previewCard.getBoundingClientRect();
+
+            // High scale for sharp output, passing explicit width/height
+            const canvas = await html2canvas(previewCard, { 
+                scale: 4, 
+                width: rect.width,    
+                height: rect.height,  
+                allowTaint: true,
+                useCORS: true, 
+            }); 
+            
             const ctx = canvas.getContext("2d");
-            // Watermark application
-            ctx.font = "32px Montserrat"; 
+            
+            // Watermark application - scaling font size and position by 4
+            const scaleFactor = 4;
+            ctx.font = `${32 * scaleFactor}px Montserrat`; 
             ctx.fillStyle = "rgba(0,0,0,0.4)";
             ctx.textAlign = "right";
-            ctx.fillText("aksharachitra.netlify.app", canvas.width - 40, canvas.height - 40);
+            ctx.fillText("aksharachitra.netlify.app", canvas.width - 40 * scaleFactor, canvas.height - 40 * scaleFactor);
 
             const data = canvas.toDataURL("image/png");
             
@@ -257,11 +276,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-    // Updated button handlers for clarity
+    // Updated button handlers 
     generateBtn.addEventListener("click", () => generateImage(true));
     downloadBtn.addEventListener("click", () => generateImage(true)); 
 
-    // --- Share API (Same) ---
+    // --- Share API ---
     shareBtn.addEventListener("click", async () => {
         const dataUrl = await generateImage(false); 
         if (!dataUrl) return;
@@ -288,9 +307,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // --- Save Offline (Same) ---
+    // --- Save Offline ---
     saveBtn.addEventListener("click", async () => {
         try {
+            // Save at scale 1 for small thumbnail in gallery
             const canvas = await html2canvas(previewCard, { scale: 1 }); 
             const data = canvas.toDataURL("image/png");
             const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
@@ -307,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- Clear Fields (Same) ---
+    // --- Clear Fields ---
     clearBtn.addEventListener("click", () => {
         if (!confirm("Clear all fields?")) return;
         [titleEl, subtitleEl, messageEl, qrText].forEach((e) => (e.value = ""));
@@ -317,12 +337,12 @@ document.addEventListener("DOMContentLoaded", () => {
         shadowColor = "#000000";
         textColor.value = "#111111";
         bgColor.value = "#ffffff";
-        shadowColorInput.value = "#000000";
-        shadowBlurInput.value = "0";
+        if (shadowColorInput) shadowColorInput.value = "#000000";
+        if (shadowBlurInput) shadowBlurInput.value = "0";
         renderPreview();
     });
 
-    // --- Auto Save (Same) ---
+    // --- Auto Save ---
     setInterval(() => {
         const s = {
             title: titleEl.value, subtitle: subtitleEl.value, message: messageEl.value,
@@ -335,7 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("ak_autosave_v7", JSON.stringify(s));
     }, 3000);
 
-    // --- Load Saved (Same) ---
+    // --- Load Saved ---
     const saved = JSON.parse(localStorage.getItem("ak_autosave_v7") || "null");
     if (saved) {
         Object.keys(saved).forEach((k) => {
@@ -348,13 +368,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             else if (id(k)) id(k).value = saved[k];
         });
-        renderPreview();
     }
 
+    // Initial render
     renderPreview();
 });
 
-// === (Remaining functions: Feedback Modal Logic, Gallery Rendering - UNCHANGED) ===
+// === Gallery Rendering Function ===
 function loadGallery() {
     const grid = document.getElementById("galleryGrid");
     const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
@@ -401,14 +421,7 @@ function loadGallery() {
     });
 }
 
-const galleryTabBtn = document.querySelector('button[data-tab="gallery"]');
-if (galleryTabBtn) {
-    galleryTabBtn.addEventListener("click", loadGallery);
-}
-if (document.getElementById("gallery") && document.getElementById("gallery").classList.contains("active")) {
-    loadGallery();
-}
-
+// === Feedback Modal Logic ===
 document.addEventListener('DOMContentLoaded', () => {
     const openBtn = document.getElementById('openFeedbackModal');
     const modal = document.getElementById('feedbackModal');
@@ -422,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openInTabFromModal) openInTabFromModal.href = feedbackUrl;
 
     function openModal() {
+        if (!modal) return;
         iframe.src = feedbackUrl;
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -431,6 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const href = iframe.contentWindow && iframe.contentWindow.location && iframe.contentWindow.location.href;
                 if (!href) throw new Error('iframe inaccessible');
             } catch (e) {
+                // Fallback if iframe access is blocked (CORS)
                 window.open(feedbackUrl, '_blank', 'noopener');
                 closeModal();
             }
@@ -438,6 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function closeModal() {
+        if (!modal) return;
         modal.classList.add('hidden');
         document.body.style.overflow = '';
         iframe.src = 'about:blank';
@@ -453,4 +469,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) closeModal();
     });
+
+    // Ensure gallery loads if it's the default active tab on startup
+    if (document.getElementById("gallery") && document.getElementById("gallery").classList.contains("active")) {
+        loadGallery();
+    }
 });
