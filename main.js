@@ -126,7 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
     applyCropBtn.addEventListener("click", () => {
         if (!cropper) return;
         try {
-            const canvas = cropper.getCroppedCanvas({ maxWidth: 1080 });
+            // ⭐ FIX 1: Increased maxWidth from 1080 to 2500 to retain better image quality after cropping.
+            const canvas = cropper.getCroppedCanvas({ maxWidth: 2500 }); 
             uploadedDataUrl = canvas.toDataURL("image/png");
         } catch (e) {
             console.error("Error cropping image:", e);
@@ -217,8 +218,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Generate / Download (FIXED TO SIMPLIFY USER ACTION) ---
     async function generateImage(download) {
         try {
-            // Note: html2canvas must be loaded in the HTML
-            const canvas = await html2canvas(previewCard, { scale: 2 });
+            // ⭐ FIX 2: Increased scale from 2 to 4 for much higher resolution, sharper output to fix fuzziness.
+            const canvas = await html2canvas(previewCard, { scale: 4 }); 
             const ctx = canvas.getContext("2d");
             // Watermark application (retained)
             ctx.font = "32px Montserrat"; // Increased size for scale 2
@@ -277,7 +278,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Save Offline ---
     saveBtn.addEventListener("click", async () => {
         try {
-            const canvas = await html2canvas(previewCard, { scale: 1 });
+            // Using scale: 1 for small gallery thumbnails to save storage/memory
+            const canvas = await html2canvas(previewCard, { scale: 1 }); 
             const data = canvas.toDataURL("image/png");
             const list = JSON.parse(localStorage.getItem("ak_gallery_v7") || "[]");
             list.unshift({ title: titleEl.value || "Untitled", ts: Date.now(), data });
