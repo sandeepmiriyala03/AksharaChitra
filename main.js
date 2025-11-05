@@ -719,4 +719,19 @@ document.querySelectorAll(".tab-btn").forEach((btn) => {
   });
 });
 
+const installButtons = [document.getElementById("installBtn"), document.getElementById("installBtnHeader")];
+installButtons.forEach(btn => {
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    if (window.deferredPrompt) {
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then(choice => {
+        if (choice.outcome === "accepted") console.log("App installed");
+        window.deferredPrompt = null;
+      });
+    } else {
+      alert("✅ App already installed or install not available.");
+    }
+  });
+});
 
