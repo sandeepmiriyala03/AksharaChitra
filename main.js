@@ -314,17 +314,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Message
-    if (pMessage) {
-      const raw = (messageEl ? (messageEl.value || "") : "");
-      let content = raw.replace(/\n/g, "<br>");
-      if (posterDate) content += `<br><small style="opacity:0.7;">📅 ${posterDate}</small>`;
-      pMessage.innerHTML = content;
-      pMessage.style.fontSize = (messageSize ? (messageSize.value + "px") : "16px");
-      pMessage.style.textAlign = (contentAlign ? contentAlign.value : "center");
-      pMessage.style.color = (messageColor ? messageColor.value : "#111");
-      pMessage.style.background = (messageBg ? messageBg.value : "transparent");
-      pMessage.style.wordBreak = "break-word";
-    }
+   if (pMessage) {
+  const raw = (messageEl ? (messageEl.value || "") : "");
+  let content = raw.replace(/\n/g, "<br>");
+  
+  // ✨ Move poster date to the *last line* below everything
+  if (posterDate) content = `${content}<br><br><small style="opacity:0.7; display:block; text-align:right;">📅 ${posterDate}</small>`;
+  
+  pMessage.innerHTML = content;
+  pMessage.style.fontSize = (messageSize ? (messageSize.value + "px") : "16px");
+  pMessage.style.textAlign = (contentAlign ? contentAlign.value : "center");
+  pMessage.style.color = (messageColor ? messageColor.value : "#111");
+  pMessage.style.background = (messageBg ? messageBg.value : "transparent");
+  pMessage.style.wordBreak = "break-word";
+}
+
 
     // Main image
     if (pImage) {
