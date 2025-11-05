@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Title (user-controlled) ---
     if (pTitle) {
       pTitle.textContent = titleEl ? (titleEl.value || "") : "";
-      pTitle.style.fontSize = (titleSize ? (titleSize.value + "px") : "32px");
+      pTitle.style.fontSize = (titleSize ? (titleSize.value + "px") : "10px");
       pTitle.style.textAlign = (titleAlign ? titleAlign.value : "center");
       pTitle.style.color = (titleColor ? titleColor.value : "#111");
       pTitle.style.background = (titleBg ? titleBg.value : "transparent");
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Subtitle (user-controlled) ---
     if (pSubtitle) {
       pSubtitle.textContent = subtitleEl ? (subtitleEl.value || "") : "";
-      pSubtitle.style.fontSize = (subtitleSize ? (subtitleSize.value + "px") : "22px");
+      pSubtitle.style.fontSize = (subtitleSize ? (subtitleSize.value + "px") : "10px");
       pSubtitle.style.textAlign = (subtitleAlign ? subtitleAlign.value : "center");
       pSubtitle.style.color = (subtitleColor ? subtitleColor.value : "#333");
       pSubtitle.style.background = (subtitleBg ? subtitleBg.value : "transparent");
@@ -355,7 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
         position: "absolute",
         bottom: "8px",
         left: "10px",
-        fontSize: "12px",
+        fontSize: "8px",
         opacity: "0.8",
         color: "#333",
         textAlign: "left"
@@ -376,7 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
       position: "absolute",
       bottom: "8px",
       right: "10px",
-      fontSize: "12px",
+      fontSize: "8px",
       opacity: "0.6",
       color: "#000",
       fontStyle: "italic",
