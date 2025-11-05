@@ -272,100 +272,125 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- renderPreview: build preview content and styles ---
+    // --- renderPreview: build preview content and styles (FINAL ORDER) ---
   function renderPreview() {
     if (!previewCard) return;
 
-    // Base card styles
-    previewCard.style.background = ( (window.bgColor && window.bgColor.value) ? window.bgColor.value : "#fff" );
-    if (fontFamily && fontFamily.value) previewCard.style.fontFamily = fontFamily.value;
+    // Basic card styling
+    previewCard.style.background = ((window.bgColor && window.bgColor.value) ? window.bgColor.value : "#fff");
+    previewCard.style.fontFamily = (fontFamily && fontFamily.value) || "sans-serif";
+    previewCard.style.position = "relative";
+    previewCard.style.paddingBottom = "50px"; // for date & watermark space
+    previewCard.style.textAlign = "center";
+    previewCard.style.overflow = "hidden";
 
-    // small logo inline before title (if present)
+    // --- Small Logo (top) ---
     if (pSmallLogo) {
       pSmallLogo.innerHTML = uploadedLogoData
-        ? `<img src="${uploadedLogoData}" alt="logo" style="width:56px;height:56px;border-radius:8px;margin-bottom:8px;display:block">`
+        ? `<img src="${uploadedLogoData}" alt="logo"
+            style="width:60px;height:60px;border-radius:10px;margin:10px auto;display:block;">`
         : "";
-      // ensure it appears before pTitle in DOM:
-      if (pSmallLogo && pTitle && previewCard && previewCard.firstChild !== pSmallLogo) {
-        try { previewCard.insertBefore(pSmallLogo, pTitle); } catch (e) {}
-      }
     }
 
-    // Title
+    // --- Title (user-controlled) ---
     if (pTitle) {
       pTitle.textContent = titleEl ? (titleEl.value || "") : "";
-      pTitle.style.fontSize = (titleSize ? (titleSize.value + "px") : "28px");
+      pTitle.style.fontSize = (titleSize ? (titleSize.value + "px") : "32px");
       pTitle.style.textAlign = (titleAlign ? titleAlign.value : "center");
       pTitle.style.color = (titleColor ? titleColor.value : "#111");
       pTitle.style.background = (titleBg ? titleBg.value : "transparent");
+      pTitle.style.fontWeight = "bold";
+      pTitle.style.margin = "8px 0";
       pTitle.style.wordBreak = "break-word";
       pTitle.style.display = pTitle.textContent ? "block" : "none";
     }
 
-    // Subtitle
+    // --- Subtitle (user-controlled) ---
     if (pSubtitle) {
       pSubtitle.textContent = subtitleEl ? (subtitleEl.value || "") : "";
-      pSubtitle.style.fontSize = (subtitleSize ? (subtitleSize.value + "px") : "20px");
+      pSubtitle.style.fontSize = (subtitleSize ? (subtitleSize.value + "px") : "22px");
       pSubtitle.style.textAlign = (subtitleAlign ? subtitleAlign.value : "center");
       pSubtitle.style.color = (subtitleColor ? subtitleColor.value : "#333");
       pSubtitle.style.background = (subtitleBg ? subtitleBg.value : "transparent");
+      pSubtitle.style.margin = "5px 0 10px";
       pSubtitle.style.wordBreak = "break-word";
       pSubtitle.style.display = pSubtitle.textContent ? "block" : "none";
     }
 
-    // Message
-   if (pMessage) {
-  const raw = (messageEl ? (messageEl.value || "") : "");
-  let content = raw.replace(/\n/g, "<br>");
-  
-  // ✨ Move poster date to the *last line* below everything
-  if (posterDate) content = `${content}<br><br><small style="opacity:0.7; display:block; text-align:right;">📅 ${posterDate}</small>`;
-  
-  pMessage.innerHTML = content;
-  pMessage.style.fontSize = (messageSize ? (messageSize.value + "px") : "16px");
-  pMessage.style.textAlign = (contentAlign ? contentAlign.value : "center");
-  pMessage.style.color = (messageColor ? messageColor.value : "#111");
-  pMessage.style.background = (messageBg ? messageBg.value : "transparent");
-  pMessage.style.wordBreak = "break-word";
-}
-
-
-    // Main image
+    // --- Uploaded Main Image (after subtitle) ---
     if (pImage) {
       if (uploadedMainData) {
-        // place according to imagePosition
-        const pos = imagePosition ? (imagePosition.value || "center") : "center";
-        // simple layout: show the img and add alignment via margin
-        let style = 'max-width:100%;display:block;margin:0 auto;'; // center default
-        if (pos === "left") style = 'max-width:100%;display:block;margin:0 auto 0 0;';
-        if (pos === "right") style = 'max-width:100%;display:block;margin:0 0 0 auto;';
-        if (pos === "top") style = 'max-width:100%;display:block;margin:0 auto 12px;';
-        if (pos === "bottom") style = 'max-width:100%;display:block;margin:12px auto 0;';
+        const pos = imagePosition ? imagePosition.value : "center";
+        let style = 'max-width:100%;display:block;margin:10px auto;border-radius:10px;';
+        if (pos === "left") style = 'max-width:100%;display:block;margin:10px auto 10px 0;';
+        if (pos === "right") style = 'max-width:100%;display:block;margin:10px 0 10px auto;';
         pImage.innerHTML = `<img src="${uploadedMainData}" alt="main" style="${style}">`;
       } else {
         pImage.innerHTML = "";
       }
     }
 
-    // QR
-    if (pQR) {
-      if (qrText && qrText.value && qrText.value.trim()) {
-        pQR.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrText.value)}" width="80" style="display:block;margin:10px auto;">`;
-      } else {
-        pQR.innerHTML = "";
-      }
+    // --- Message / Content (user-controlled) ---
+    if (pMessage) {
+      const raw = messageEl ? (messageEl.value || "") : "";
+      pMessage.innerHTML = raw.replace(/\n/g, "<br>");
+      pMessage.style.fontSize = (messageSize ? (messageSize.value + "px") : "16px");
+      pMessage.style.textAlign = (contentAlign ? contentAlign.value : "center");
+      pMessage.style.color = (messageColor ? messageColor.value : "#111");
+      pMessage.style.background = (messageBg ? messageBg.value : "transparent");
+      pMessage.style.marginTop = "12px";
+      pMessage.style.wordBreak = "break-word";
     }
 
-    // auto-fit title/subtitle/message to prevent overflow
-    try {
-      // attempt responsive fit: try decreasing title/subtitle/message sizes until preview scroll fits
-      // Save original sizes to respect user chosen sizes minimally
-      if (pTitle && titleSize) autoFitText(pTitle, Math.max(12, parseInt(titleSize.value || 28, 10)));
-      if (pSubtitle && subtitleSize) autoFitText(pSubtitle, Math.max(10, parseInt(subtitleSize.value || 20, 10)));
-      if (pMessage && messageSize) autoFitText(pMessage, Math.max(10, parseInt(messageSize.value || 16, 10)));
-    } catch (e) { /* ignore fit errors */ }
+    // --- 📅 Created Date (bottom-left) ---
+    let createdDateEl = previewCard.querySelector(".ak-created-date");
+    if (!createdDateEl) {
+      createdDateEl = document.createElement("div");
+      createdDateEl.className = "ak-created-date";
+      previewCard.appendChild(createdDateEl);
+    }
+    if (posterDate) {
+      createdDateEl.textContent = `📅 ${posterDate}`;
+      Object.assign(createdDateEl.style, {
+        position: "absolute",
+        bottom: "8px",
+        left: "10px",
+        fontSize: "12px",
+        opacity: "0.8",
+        color: "#333",
+        textAlign: "left"
+      });
+    } else {
+      createdDateEl.textContent = "";
+    }
 
-  } // renderPreview
+    // --- 💧 Watermark (bottom-right) ---
+    let watermarkEl = previewCard.querySelector(".ak-watermark");
+    if (!watermarkEl) {
+      watermarkEl = document.createElement("div");
+      watermarkEl.className = "ak-watermark";
+      previewCard.appendChild(watermarkEl);
+    }
+    watermarkEl.textContent = "aksharachitra.netlify.app";
+    Object.assign(watermarkEl.style, {
+      position: "absolute",
+      bottom: "8px",
+      right: "10px",
+      fontSize: "12px",
+      opacity: "0.6",
+      color: "#000",
+      fontStyle: "italic",
+      textAlign: "right"
+    });
+
+    // --- Auto-fit safeguard ---
+    try {
+      if (pTitle && titleSize) autoFitText(pTitle, parseInt(titleSize.value || 32, 10));
+      if (pSubtitle && subtitleSize) autoFitText(pSubtitle, parseInt(subtitleSize.value || 22, 10));
+      if (pMessage && messageSize) autoFitText(pMessage, parseInt(messageSize.value || 16, 10));
+    } catch (e) {}
+  }
+
 
   // Listen to inputs to rerender
   [
@@ -398,17 +423,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- Generate image (html2canvas) with watermark bottom-left date/time and website bottom-right ---
+   // --- Generate image (html2canvas) with bottom-left date + bottom-right watermark ---
   async function generateImage({ download = false, userTimestamp = null } = {}) {
     if (!previewCard) { alert("Preview not found"); return null; }
     if (typeof html2canvas === "undefined") { alert("html2canvas not loaded!"); return null; }
 
-    // temporarily expand previewCard width for better render on small screens
     const originalWidth = previewCard.style.width || "";
     previewCard.style.width = previewCard.clientWidth + "px";
 
     const rect = previewCard.getBoundingClientRect();
     const scale = Math.max(2, Math.min(4, window.devicePixelRatio || 2));
+
     try {
       const canvas = await html2canvas(previewCard, {
         scale,
@@ -419,25 +444,35 @@ document.addEventListener("DOMContentLoaded", () => {
         allowTaint: true
       });
 
-      // watermark text: left = userTimestamp or now, right = site
+      // ✨ Draw bottom-left date and bottom-right watermark
       try {
         const ctx = canvas.getContext("2d");
         const now = userTimestamp ? new Date(userTimestamp) : new Date();
-        const dateText = now.toLocaleDateString("en-GB") + " " + now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: true });
+        const dateText = `📅 ${posterDate || now.toLocaleString("en-IN")}`;
         const siteText = "aksharachitra.netlify.app";
-        const fontSize = Math.max(10, Math.round(11 * scale));
-        ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-        ctx.fillStyle = "rgba(0,0,0,0.35)";
+
+        const fontSize = Math.max(12, Math.round(13 * scale));
+        ctx.font = `${fontSize}px 'Montserrat', Arial, sans-serif`;
+        ctx.fillStyle = "rgba(0,0,0,0.6)";
         ctx.textBaseline = "bottom";
+
+        // Bottom-left 📅 date
         ctx.textAlign = "left";
-        ctx.fillText(dateText, 12 * scale, canvas.height - 12 * scale);
+        ctx.fillText(dateText, 16 * scale, canvas.height - 16 * scale);
+
+        // Bottom-right 💧 watermark
         ctx.textAlign = "right";
-        ctx.fillText(siteText, canvas.width - 12 * scale, canvas.height - 12 * scale);
-      } catch (e) { console.warn("watermark draw failed", e); }
+        ctx.fillText(siteText, canvas.width - 16 * scale, canvas.height - 16 * scale);
+      } catch (e) {
+        console.warn("watermark draw failed", e);
+      }
 
       const dataUrl = canvas.toDataURL("image/png");
+
       if (download) {
-        const defaultName = (titleEl && titleEl.value) ? titleEl.value.replace(/[^\w\- ]/g, "").slice(0,40) : "AksharaChitra";
+        const defaultName = (titleEl && titleEl.value)
+          ? titleEl.value.replace(/[^\w\- ]/g, "").slice(0, 40)
+          : "AksharaChitra";
         const fname = (prompt("File name", defaultName) || defaultName) + ".png";
         const a = document.createElement("a");
         a.href = dataUrl;
@@ -447,7 +482,6 @@ document.addEventListener("DOMContentLoaded", () => {
         a.remove();
       }
 
-      // restore
       previewCard.style.width = originalWidth;
       return dataUrl;
     } catch (err) {
@@ -457,6 +491,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return null;
     }
   }
+  
 
   if (generateBtn) on(generateBtn, "click", async () => {
     const d = await generateImage({ download: false });
