@@ -5,28 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AksharaChitra — Create Beautiful Posters Offline 🎨</title>
 
-  <!-- Favicon & PWA -->
-  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
-  <meta name="theme-color" content="#1e88e5">
+  <link rel="icon" type="image/png" href="logo.png" />
   <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1e88e5">
 
-  <!-- Fonts & Styles -->
+  <!-- Styles & Fonts -->
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&family=NTR&family=Ramabhadra&family=Gurajada&family=Gidugu&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&family=NTR&family=Ramabhadra&family=Gurajada&family=Gidugu&family=Noto+Serif+Devanagari:wght@500&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet" />
 </head>
 
 <body>
-  <a href="#mainContent" class="skip-link" aria-label="Skip to main content">⇩ Skip to Main Content</a>
-
-  <!-- HEADER -->
+  <!-- 🌸 Header -->
   <header class="topbar">
     <div class="left">
       <img src="logo.png" alt="AksharaChitra logo" class="logo" />
       <span class="app-title">AksharaChitra</span>
     </div>
-
     <nav class="nav">
       <button class="tab-btn active" data-tab="home">🏠 Home</button>
       <button class="tab-btn" data-tab="create">🎨 Create</button>
@@ -34,123 +29,209 @@
       <button class="tab-btn" data-tab="help">📘 Help</button>
       <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
     </nav>
-
-    <!-- ✅ Added Install button to header -->
     <div class="right-controls">
-      <button id="installBtnHeader" title="Install AksharaChitra App">📲</button>
-      <button id="themeToggle" title="Toggle theme">🌙</button>
+      <button id="installBtnHeader" title="Install App">📲</button>
+      <button id="themeToggle" title="Toggle Theme">🌙</button>
     </div>
   </header>
 
-  <!-- MAIN -->
-  <main class="content" id="mainContent">
+  <!-- 🌈 MAIN CONTENT -->
+  <main id="mainContent" class="content">
+ <!-- 🏠 HOME -->
+<section id="home" class="tab-content active">
+  <div class="hero">
+    <img src="logo.png" alt="AksharaChitra logo" class="hero-logo" />
+    <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
+    <p class="lead">
+      Create <strong>beautiful multilingual posters</strong> in seconds —
+      works <em>offline</em> & ready to share instantly! 🎨✨
+    </p>
 
-    <!-- 🏠 HOME -->
-    <section id="home" class="tab-content active">
-      <div class="hero">
-        <div class="hero-header">
-          <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
-          <div class="voice-controls">
-            <button id="speakHome" class="btn ghost">🔊 Listen</button>
-            <button id="startSpeak" class="btn ghost">▶️ Start</button>
-            <button id="stopSpeak" class="btn ghost">⏹ Stop</button>
-          </div>
-        </div>
-        <img src="logo.png" alt="AksharaChitra logo" class="hero-logo" />
-        <p class="lead">
-          Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.
-        </p>
-         </div>
+    <div class="hero-buttons">
+      <button data-open="create" id="openCreateBtn" class="btn primary large">🚀 Start Creating</button>
+      <button id="shareWhatsAppBtn" class="btn ghost">💬 Share on WhatsApp</button>
+    </div>
 
-      <div class="section why">
-        <h2>🌸 Why AksharaChitra?</h2>
-        <ul id="featureList">
-          <li>✅ Works offline (PWA)</li>
-          <li>🎨 Supports English & Indian languages</li>
-          <li>🖼️ Upload & crop images easily</li>
-          <li>💾 Save, Download, or Share posters</li>
-          <li>🌈 Fonts, colors, glow & layout customization</li>
-          <li>🎙️ Voice Input & 🔊 Voice Feedback</li>
-          <li>♿ Accessible, privacy-first design</li>
-        </ul>
-        <div class="share-features">
-          <button id="shareWhatsAppBtn" class="btn primary">📤 WhatsApp</button>
-        </div>
-      </div>
-    </section>
+   <div class="voice-section center">
+  <button id="startSpeak" class="btn ghost">🔊 Listen</button>
+  <button id="stopSpeak" class="btn ghost">⏹ Stop</button>
+</div>
+
+    <!-- 🌟 Feature Highlights -->
+    <div class="features-section">
+      <h2>✨ What You Can Do</h2>
+      <ul class="features-list">
+        <li>🖋️ Customize <strong>Title, Subtitle & Message</strong> independently</li>
+        <li>🌐 Supports <strong>English, Telugu, Hindi, Tamil, Sanskrit</strong> & more</li>
+        <li>🖼️ Upload & <strong>Crop Images</strong> perfectly for your poster</li>
+        <li>🔖 Add <strong>small logo</strong> or watermark before title</li>
+        <li>📅 Auto date/time stamp or choose custom poster date</li>
+        <li>🎙️ Voice input & Text-to-Speech support</li>
+        <li>💾 Save your creations <strong>offline</strong> in the gallery</li>
+        <li>📤 Share directly to WhatsApp, social apps or download</li>
+        <li>🌙 Built-in <strong>Dark Mode</strong> for comfortable editing</li>
+        <li>⚡ Works <strong>completely offline (PWA)</strong> — no internet needed!</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 
     <!-- 🎨 CREATE -->
     <section id="create" class="tab-content">
       <div class="editor">
+
+        <!-- LEFT PANEL -->
         <div class="panel left-panel">
-          <label>Language</label>
-          <select id="language">
-            <option>English</option>
-            <option>తెలుగు</option>
-            <option>हिंदी</option>
-            <option>தமிழ்</option>
-            <option>ಕನ್ನಡ</option>
-            <option>മലയാളം</option>
-            <option>ଓଡ଼ିଆ</option>
-          </select>
-
-          <label>Template</label>
-          <select id="templateSelect">
-            <option value="">— Choose Template —</option>
-            <option value="news">News</option>
-            <option value="birthday">Birthday</option>
-            <option value="devotional">Devotional</option>
-            <option value="business">Business</option>
-            <option value="invitation">Invitation</option>
-            <option value="quote">Quote</option>
-          </select>
-
-          <label>🖋️ Title</label>
-          <input id="title" placeholder="Enter title...">
-
-          <label>🪶 Subtitle</label>
-          <input id="subtitle" placeholder="Enter subtitle...">
-
-          <label>💬 Message</label>
-          <textarea id="message" rows="3" placeholder="Type your message..."></textarea>
-
-          <div class="voice-section">
-            <button id="startVoice" class="btn ghost">🎤 Speak</button>
-            <button id="stopVoice" class="btn ghost hidden">⏹ Stop</button>
+          <!-- 🌐 Language -->
+          <div class="group">
+            <label>🌐 Language</label>
+            <select id="language">
+              <option value="en">English</option>
+              <option value="te">తెలుగు</option>
+              <option value="hi">हिंदी</option>
+              <option value="ta">தமிழ்</option>
+              <option value="kn">ಕನ್ನಡ</option>
+              <option value="ml">മലയാളം</option>
+              <option value="or">ଓଡ଼ିଆ</option>
+              <option value="sa">संस्कृतम्</option>
+            </select>
           </div>
 
-          <label>Font (Telugu & English)</label>
-          <select id="fontFamily">
-            <optgroup label="English">
+          <!-- 🧩 Template -->
+          <div class="group">
+            <label>🧩 Template</label>
+            <select id="templateSelect">
+              <option value="">— Choose Template —</option>
+              <option value="news">📰 News</option>
+              <option value="birthday">🎂 Birthday</option>
+              <option value="devotional">🕉️ Devotional</option>
+              <option value="business">🏢 Business</option>
+              <option value="invitation">💌 Invitation</option>
+              <option value="quote">💬 Quote</option>
+            </select>
+          </div>
+
+          <!-- 🔖 Small Logo -->
+          <div class="group">
+            <label>🔖 Small Logo (appears before title)</label>
+            <input type="file" id="smallLogoUpload" accept="image/*" />
+          </div>
+
+          <!-- 🖋️ Title -->
+          <div class="group section-control">
+            <h3>🖋️ Title</h3>
+            <input id="title" placeholder="Enter title..." />
+            <div class="row">
+              <label>Font Size</label><input id="titleSize" type="number" value="32" min="10" max="100" />
+              <label>Align</label>
+              <select id="titleAlign">
+                <option value="center">Center</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+            <div class="row">
+              <label>Text Color</label><input type="color" id="titleColor" value="#111111" />
+              <label>BG Color</label><input type="color" id="titleBg" value="#ffffff" />
+            </div>
+          </div>
+
+          <!-- 🪶 Subtitle -->
+          <div class="group section-control">
+            <h3>🪶 Subtitle</h3>
+            <input id="subtitle" placeholder="Enter subtitle..." />
+            <div class="row">
+              <label>Font Size</label><input id="subtitleSize" type="number" value="26" min="10" max="80" />
+              <label>Align</label>
+              <select id="subtitleAlign">
+                <option value="center">Center</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+            <div class="row">
+              <label>Text Color</label><input type="color" id="subtitleColor" value="#111111" />
+              <label>BG Color</label><input type="color" id="subtitleBg" value="#ffffff" />
+            </div>
+          </div>
+
+          <!-- 💬 Message -->
+          <div class="group section-control">
+            <h3>💬 Message</h3>
+            <textarea id="message" rows="3" placeholder="Type your message..."></textarea>
+            <div class="row">
+              <label>Font Size</label><input id="messageSize" type="number" value="20" min="10" max="60" />
+              <label>Align</label>
+              <select id="contentAlign">
+                <option value="center">Center</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+                <option value="justify">Justify</option>
+              </select>
+            </div>
+            <div class="row">
+              <label>Text Color</label><input type="color" id="messageColor" value="#111111" />
+              <label>BG Color</label><input type="color" id="messageBg" value="#ffffff" />
+            </div>
+          </div>
+
+          <!-- 🖼️ Image Upload -->
+          <div class="group">
+            <label>🖼️ Upload Main Image</label>
+            <input type="file" id="imageUpload" accept="image/*" />
+            <label>Position</label>
+            <select id="imagePosition">
+              <option value="center">Center</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+              <option value="top">Top</option>
+              <option value="bottom">Bottom</option>
+            </select>
+          </div>
+
+          <!-- 🧾 QR -->
+          <div class="group">
+            <label>🧾 QR Code (optional)</label>
+            <input id="qrText" placeholder="Enter URL or text" />
+          </div>
+
+          <!-- 📅 Date -->
+          <div class="group">
+            <label>📅 Poster Date</label>
+            <select id="posterDateOption">
+              <option value="current">Current Date</option>
+              <option value="prevMonth">Previous Month</option>
+              <option value="custom">Custom Date</option>
+            </select>
+            <input type="date" id="customDate" class="hidden" />
+          </div>
+
+          <!-- ✍️ Font -->
+          <div class="group">
+            <label>✍️ Font Family</label>
+            <select id="fontFamily">
               <option>Montserrat</option>
-            </optgroup>
-            <optgroup label="Telugu">
               <option>Noto Sans Telugu</option>
               <option>NTR</option>
               <option>Ramabhadra</option>
               <option>Gurajada</option>
               <option>Gidugu</option>
-            </optgroup>
-          </select>
-
-          <div class="row">
-            <label>Title Size</label>
-            <input id="titleSize" type="number" min="10" max="80" value="28">
-            <label>Subtitle Size</label>
-            <input id="subtitleSize" type="number" min="10" max="60" value="22">
+              <option>Noto Serif Devanagari</option>
+            </select>
           </div>
 
-          <div class="row">
-            <label>Message Size</label>
-            <input id="messageSize" type="number" min="10" max="48" value="18">
+          <!-- 🎙️ Voice Input -->
+          <div class="group">
+            <label>🎙️ Voice Input</label>
+            <div class="row">
+              <button id="startVoice" class="btn ghost">🎤 Speak</button>
+              <button id="stopVoice" class="btn ghost">⏹ Stop</button>
+            </div>
           </div>
 
-          <div class="row">
-            <label>Text Color</label><input type="color" id="textColor" value="#111111">
-            <label>BG Color</label><input type="color" id="bgColor" value="#ffffff">
-          </div>
-
-          <div class="row actions">
+          <!-- ⚙️ Actions -->
+          <div class="actions">
             <button id="clearBtn" class="btn ghost">🧹 Clear</button>
             <button id="saveBtn" class="btn">💾 Save</button>
             <button id="generateBtn" class="btn primary">🖼 Generate</button>
@@ -161,59 +242,67 @@
           </div>
         </div>
 
+        <!-- RIGHT PANEL -->
         <div class="panel right-panel">
-          <h3>Live Preview</h3>
+          <h3>🖼️ Live Preview</h3>
           <div id="previewCard" class="card">
+            <div id="pSmallLogo" class="p-logo"></div>
             <div id="pTitle" class="p-title"></div>
             <div id="pSubtitle" class="p-subtitle"></div>
             <div id="pMessage" class="p-body"></div>
             <div id="pImage" class="p-image"></div>
             <div id="pQR" class="p-qr"></div>
-            <div class="watermark">aksharachitra.netlify.app</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 💾 MY CREATIONS -->
+    <!-- 💾 GALLERY -->
     <section id="gallery" class="tab-content">
       <h2>💾 My Creations</h2>
-      <div id="galleryGrid" class="gallery-grid"></div>
+      <div id="galleryGrid"></div>
     </section>
 
     <!-- 📘 HELP -->
     <section id="help" class="tab-content">
-      <h2>📘 Help & Tips</h2>
-     
+      <h2>📘 Help</h2>
       <ul>
-        <li>🖋️ Set text, upload image</li>
-        <li>🎨 Style fonts, colors, glow</li>
-        <li>💾 Save or share instantly</li>
-        <li>📲 Works offline as PWA</li>
+        <li>🖋️ Customize title, subtitle, and message independently</li>
+        <li>🖼️ Upload & crop images</li>
+        <li>🌐 Use multilingual fonts (Telugu, Hindi, Sanskrit, Tamil...)</li>
+        <li>💾 Works fully offline (PWA)</li>
       </ul>
     </section>
 
     <!-- 💌 FEEDBACK -->
     <section id="feedback" class="tab-content">
-      <h2>💌 Feedback & Suggestions</h2>
-      <iframe
-        src="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?embedded=true"
-        style="width:100%;height:480px;border:none;border-radius:10px;"
-        loading="lazy"
-      ></iframe>
+      <h2>💌 Feedback</h2>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?embedded=true"
+        style="width:100%;height:500px;border:none;border-radius:10px;"></iframe>
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <p>© <span id="year"></span> AksharaChitra — Made with ❤️ by <strong>Sandeep Miriyala</strong></p>
   </footer>
 
-  <!-- FLOATING BUTTONS -->
-  <button id="installBtn" class="install-fab" title="Install AksharaChitra App" style="left:16px;right:auto;">📲</button>
+  <!-- Floating Buttons -->
+  <button id="installBtn" class="install-fab">📲</button>
   <button id="goTopBtn" class="go-top">⬆️</button>
 
-  <!-- JS Dependencies -->
+  <!-- ✂ Crop Modal -->
+  <div id="cropModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>✂ Crop Image</h3>
+      <img id="cropImage" src="" style="max-width:100%;border-radius:8px;" />
+      <div class="modal-actions">
+        <button id="applyCropBtn" class="btn primary">✅ Apply</button>
+        <button id="cancelCropBtn" class="btn ghost">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js" defer></script>
   <script src="main.js" defer></script>

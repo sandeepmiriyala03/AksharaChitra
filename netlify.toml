@@ -1,8 +1,0 @@
-[build]
-  publish = "."                      # Root folder serves your app files
-  functions = "netlify/functions"   # Folder where serverless functions are placed
-
-[[redirects]]
-  from = "/*"                       # Redirect all routes
-  to = "/index.html"                # Serve the main index for SPA routing
-  status = 200                     # Use status 200 for client-side routing fallback
