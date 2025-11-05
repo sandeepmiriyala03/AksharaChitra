@@ -48,7 +48,11 @@
       <div class="hero">
         <div class="hero-header">
           <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
-          <button id="speakHome" class="btn ghost">🔊 Listen</button>
+          <div class="voice-controls">
+            <button id="speakHome" class="btn ghost">🔊 Listen</button>
+            <button id="startSpeak" class="btn ghost">▶️ Start</button>
+            <button id="stopSpeak" class="btn ghost">⏹ Stop</button>
+          </div>
         </div>
         <img src="logo.png" alt="AksharaChitra logo" class="hero-logo" />
         <p class="lead">
@@ -206,12 +210,6 @@
       </div>
     </section>
 
-    <!-- 🖼 GALLERY -->
-    <section id="gallery" class="tab-content">
-      <h2>🖼 My Saved Posters</h2>
-      <div id="galleryGrid"></div>
-    </section>
-
     <!-- 📘 HELP -->
     <section id="help" class="tab-content">
       <h2>📘 Help & Tips</h2>
@@ -230,90 +228,78 @@
     <button id="goTopBtn" class="go-top">⬆️ Go to Top</button>
   </footer>
 
-  <!-- 🖼 Crop Modal -->
-  <div id="cropModal" class="modal hidden">
-    <div class="modal-content">
-      <h3>Crop Image</h3>
-      <div class="crop-container"><img id="cropImage" alt="Crop preview"></div>
-      <div class="modal-actions">
-        <button id="cancelCropBtn" class="btn ghost">Cancel</button>
-        <button id="applyCropBtn" class="btn primary">Apply</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 💌 Feedback Modal -->
-  <div id="feedbackModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
-    <div class="modal-content">
-      <header class="modal-header">
-        <h3 id="feedbackTitle">💌 Share Your Feedback</h3>
-        <button id="closeFeedbackModal" class="btn ghost" aria-label="Close feedback form">✖</button>
-      </header>
-
-      <div class="modal-body">
-        <p>We’d love to hear from you! Please fill out the quick form below or use the link if it doesn’t load properly.</p>
-        <iframe
-          id="feedbackIframe"
-          title="AksharaChitra Feedback Form"
-          loading="lazy"
-          style="width:100%;height:420px;border:none;border-radius:8px;"
-        ></iframe>
-        <p class="muted">
-          🔗 If the form doesn’t appear, open directly:
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor"
-             target="_blank" rel="noopener noreferrer">Open in Google Forms</a>
-        </p>
-      </div>
-
-      <footer class="modal-actions">
-        <button id="closeFeedbackModalFooter" class="btn ghost">Close</button>
-      </footer>
-    </div>
-  </div>
-
-  <!-- Floating Feedback Button -->
-  <button id="openFeedbackModal" class="feedback-btn" title="Send feedback" aria-label="Open feedback form">💌</button>
-
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
 
+  <!-- 🎤 Text-to-Speech Script -->
   <script>
-    // Set current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
-    // 🗣️ Simple Text-to-Speech Function
-function speakText(text, lang = "en-IN", rate = 1, pitch = 1, volume = 1) {
-  if (!("speechSynthesis" in window)) {
-    alert("Sorry, your browser doesn’t support text-to-speech.");
-    return;
+
+    function speakText(text, lang = "en-IN", rate = 1, pitch = 1, volume = 1) {
+      if (!("speechSynthesis" in window)) {
+        alert("Sorry, your browser doesn’t support text-to-speech.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      utterance.rate = rate;
+      utterance.pitch = pitch;
+      utterance.volume = volume;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopSpeech() {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    document.getElementById("startSpeak")?.addEventListener("click", () => {
+      speakText("Welcome to Akshara Chitra! Create beautiful posters, invitations, and quotes instantly.");
+    });
+
+    document.getElementById("stopSpeak")?.addEventListener("click", stopSpeech);
+
+    document.getElementById("speakHelp")?.addEventListener("click", () => {
+      speakText("Here are a few tips. Set your text and upload an image. Customize fonts, colors, and glow. Save or share instantly. Works offline as a progressive web app.");
+    });
+    document.getElementById("speakHome")?.addEventListener("click", () => {
+      speakText("Welcome to Akshara Chitra! Your smart, offline tool to create posters, invitations, and quotes instantly—from just text and image.");
+    });
+  // 🟢 WhatsApp Share Function
+  function shareToWhatsApp(message = "") {
+    const siteURL = "https://aksharachitra.netlify.app"; // your site link
+    const text = message || 
+      `🎨 Check out AksharaChitra — Create beautiful posters, invitations, and quotes instantly!\n\n${siteURL}`;
+
+    const encodedText = encodeURIComponent(text);
+    const whatsappURL = `https://wa.me/?text=${encodedText}`;
+
+    // Open WhatsApp
+    window.open(whatsappURL, "_blank");
   }
 
-  // Stop any ongoing speech before starting new one
-  window.speechSynthesis.cancel();
+  // 🖱️ HOME “WhatsApp Share” Button
+  document.getElementById("shareWhatsAppBtn")?.addEventListener("click", () => {
+    shareToWhatsApp();
+  });
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;      // English (India)
-  utterance.rate = rate;      // 1 = normal speed
-  utterance.pitch = pitch;    // 1 = normal tone
-  utterance.volume = volume;  // 1 = full volume
+  // 🖱️ CREATE “Share” Button — share poster or message
+  document.getElementById("shareBtn")?.addEventListener("click", () => {
+    const title = document.getElementById("title").value || "My Poster";
+    const message = document.getElementById("message").value || "";
+    const shareMsg = `🖼️ *${title}*\n\n${message}\n\nMade with ❤️ in AksharaChitra\nhttps://aksharachitra.netlify.app`;
+    shareToWhatsApp(shareMsg);
+  });
 
-  window.speechSynthesis.speak(utterance);
-}
 
-// 🎧 HOME “Listen” Button — Plays welcome message
-document.getElementById("speakHome")?.addEventListener("click", () => {
-  speakText("Welcome to Akshara Chitra! Create beautiful posters, invitations, and quotes instantly.");
-});
 
-// 🎧 HELP “Listen” Button — Reads help instructions
-document.getElementById("speakHelp")?.addEventListener("click", () => {
-  speakText("Here are a few tips. Set your text and upload an image. Customize fonts, colors, and glow. Save or share instantly. Works offline as a progressive web app.");
-});
 
-// 📅 Footer year auto-update (optional small enhancement)
-document.getElementById("year").textContent = new Date().getFullYear();
+
   </script>
 </body>
 </html>
