@@ -269,24 +269,38 @@ document.addEventListener("DOMContentLoaded", () => {
         backgroundColor: null
       });
 
-      // Draw watermark (scaled coordinates)
-      try {
-        const ctx = canvas.getContext("2d");
-        const fontSize = Math.round(12 * scale);
-        ctx.font = `${fontSize}px Montserrat, Arial`;
-        ctx.fillStyle = "rgba(0,0,0,0.35)";
-        ctx.textAlign = "right";
-        // 🕒 Add current date & time before watermark
-const now = new Date();
-const date = now.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" });
-const time = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
-const watermarkText = `${date} ${time}  |  aksharachitra.netlify.app`;
+     // 🎨 Draw dual watermark — date left, site right
+try {
+  const ctx = canvas.getContext("2d");
+  const fontSize = Math.round(11 * scale); // slightly smaller font
+  ctx.font = `${fontSize}px 'Montserrat', Arial, sans-serif`;
+  ctx.fillStyle = "rgba(0,0,0,0.35)";
+  ctx.textBaseline = "bottom";
 
-ctx.fillText(watermarkText, canvas.width - 20 * scale, canvas.height - 18 * scale);
+  // 🕒 Date (bottom-left)
+  const now = new Date();
+  const date = now.toLocaleDateString("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "2-digit",
+  });
+  const time = now.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+  const dateText = `${date} ${time}`;
 
-            } catch (e) {
-        console.warn("Watermark drawing failed:", e);
-      }
+  ctx.textAlign = "left";
+  ctx.fillText(dateText, 16 * scale, canvas.height - 12 * scale);
+
+  // 🌐 Website (bottom-right)
+  ctx.textAlign = "right";
+  ctx.fillText("aksharachitra.netlify.app", canvas.width - 12 * scale, canvas.height - 12 * scale);
+} catch (e) {
+  console.warn("Watermark drawing failed:", e);
+}
+
 
       const dataUrl = canvas.toDataURL("image/png");
 
