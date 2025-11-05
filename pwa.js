@@ -1,5 +1,6 @@
 /* ==========================================================
-   🌸 AksharaChitra v2.0 — Progressive Web App (pwa.js)
+   🌸 AksharaChitra v2.6 — Progressive Web App (pwa.js)
+   Full PWA Handling • Multi-button Support • Toast Feedback
    ========================================================== */
 
 // ---- 1️⃣ Register the Service Worker ----
@@ -14,73 +15,84 @@ if ('serviceWorker' in navigator) {
   console.warn('[PWA] Service workers not supported in this browser.');
 }
 
-// ---- 2️⃣ Handle Install Prompt ----
-let deferredPrompt; // event stored for later trigger
-const installBtn = document.getElementById('installBtn');
+// ---- 2️⃣ Handle Install Prompt (for both buttons) ----
+let deferredPrompt = null;
+const installBtns = [
+  document.getElementById('installBtn'),
+  document.getElementById('installBtnHeader')
+].filter(Boolean);
 
 window.addEventListener('beforeinstallprompt', (event) => {
-  // Prevent automatic mini-infobar
   event.preventDefault();
   deferredPrompt = event;
 
-  // Show the install button
-  if (installBtn) installBtn.classList.remove('hidden');
-  console.log('[PWA] Install prompt ready');
+  // Show install buttons
+  installBtns.forEach(btn => btn.classList.add('show'));
+  console.log('[PWA] Install prompt captured and ready');
 });
 
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
+installBtns.forEach(btn => {
+  btn.addEventListener('click', async () => {
     if (!deferredPrompt) {
       alert('📲 App install not available yet. Please refresh or open in Chrome.');
       return;
     }
 
-    // Show prompt
     deferredPrompt.prompt();
     const choiceResult = await deferredPrompt.userChoice;
 
     if (choiceResult.outcome === 'accepted') {
       console.log('[PWA] User accepted install');
-      installBtn.classList.add('hidden');
+      showInstallToast('🎉 AksharaChitra installed successfully!');
     } else {
       console.log('[PWA] User dismissed install');
     }
 
+    // Hide buttons post prompt
+    installBtns.forEach(b => b.classList.remove('show'));
     deferredPrompt = null;
   });
-}
-
-// ---- 3️⃣ Hide button when installed ----
-window.addEventListener('appinstalled', () => {
-  console.log('[PWA] App installed successfully ✅');
-  if (installBtn) installBtn.classList.add('hidden');
-
-  // Optional: show thank-you toast
-  showInstallToast('🎉 AksharaChitra installed successfully! You can now use it offline.');
 });
 
-// ---- 4️⃣ Optional: Detect if already installed ----
+// ---- 3️⃣ When installed ----
+window.addEventListener('appinstalled', () => {
+  console.log('[PWA] App installed successfully ✅');
+  installBtns.forEach(b => b.classList.remove('show'));
+  showInstallToast('✅ AksharaChitra installed! Use it offline anytime.');
+});
+
+// ---- 4️⃣ If running standalone (already installed) ----
 if (window.matchMedia('(display-mode: standalone)').matches) {
-  if (installBtn) installBtn.classList.add('hidden');
+  installBtns.forEach(b => b.classList.remove('show'));
   console.log('[PWA] App running in standalone mode');
 }
 
-// ---- 5️⃣ Small helper: install success toast ----
+// ---- 5️⃣ Optional iOS Safari Detection ----
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+if (isIOS() && !window.matchMedia('(display-mode: standalone)').matches) {
+  showInstallToast('📲 On iPhone/iPad: Tap “Share” → “Add to Home Screen” to install.');
+}
+
+// ---- 6️⃣ Helper: Toast Notification ----
 function showInstallToast(msg) {
   const toast = document.createElement('div');
   toast.textContent = msg;
-  toast.style.position = 'fixed';
-  toast.style.bottom = '20px';
-  toast.style.left = '50%';
-  toast.style.transform = 'translateX(-50%)';
-  toast.style.background = '#3949ab';
-  toast.style.color = '#fff';
-  toast.style.padding = '10px 18px';
-  toast.style.borderRadius = '8px';
-  toast.style.boxShadow = '0 4px 10px rgba(0,0,0,0.25)';
-  toast.style.zIndex = '10000';
-  toast.style.fontWeight = '600';
-  toast.style.transition = 'opacity 0.5s ease';
+  Object.assign(toast.style, {
+    position: 'fixed',
+    bottom: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    background: '#1e88e5',
+    color: '#fff',
+    padding: '10px 18px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 10px rgba(0,0,0,0.25)',
+    zIndex: '10000',
+    fontWeight: '600',
+    transition: 'opacity 0.5s ease',
+  });
   document.body.appendChild(toast);
 
   setTimeout(() => (toast.style.opacity = '0'), 2500);

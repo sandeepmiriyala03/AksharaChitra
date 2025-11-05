@@ -691,11 +691,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (installBtn) installBtn.classList.add("show");
   });
   [installBtn, installBtnHeader].forEach(b => { if (b) on(b, "click", async () => {
-    if (!deferredPrompt) { alert("Install not available"); return; }
+    if (!deferredPrompt) {
+       alert("Install not available"); return; }
     try {
       deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
-      if (choice && choice.outcome === "accepted") console.log("installed");
+      if (choice && choice.outcome === "accepted")
+         console.log("installed");
       deferredPrompt = null;
       if (installBtn) installBtn.classList.remove("show");
     } catch (e) { console.warn("install prompt fail", e); }
