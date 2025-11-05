@@ -13,7 +13,7 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&family=NTR&family=Ramabhadra&family=Gurajada&family=Gidugu&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet" />
 </head>
 
@@ -32,11 +32,11 @@
       <button class="tab-btn" data-tab="create">🎨 Create</button>
       <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
       <button class="tab-btn" data-tab="help">📘 Help</button>
+      <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
     </nav>
 
     <div class="right-controls">
       <button id="themeToggle" title="Toggle theme">🌙</button>
-      <button id="installBtn" class="hidden" title="Install app">📲</button>
     </div>
   </header>
 
@@ -84,8 +84,13 @@
         <div class="panel left-panel">
           <label>Language</label>
           <select id="language">
-            <option>English</option><option>తెలుగు</option><option>हिंदी</option>
-            <option>தமிழ்</option><option>ಕನ್ನಡ</option><option>മലയാളം</option><option>ଓଡ଼ିଆ</option>
+            <option>English</option>
+            <option>తెలుగు</option>
+            <option>हिंदी</option>
+            <option>தமிழ்</option>
+            <option>ಕನ್ನಡ</option>
+            <option>മലയാളം</option>
+            <option>ଓଡ଼ିଆ</option>
           </select>
 
           <label>Template</label>
@@ -113,72 +118,35 @@
             <button id="stopVoice" class="btn ghost hidden">⏹ Stop</button>
           </div>
 
+          <label>Font (Telugu & English)</label>
+          <select id="fontFamily">
+            <optgroup label="English">
+              <option>Montserrat</option>
+            </optgroup>
+            <optgroup label="Telugu">
+              <option>Noto Sans Telugu</option>
+              <option>NTR</option>
+              <option>Ramabhadra</option>
+              <option>Gurajada</option>
+              <option>Gidugu</option>
+            </optgroup>
+          </select>
+
           <div class="row">
             <label>Title Size</label>
             <input id="titleSize" type="number" min="10" max="80" value="28">
-            <label>Title Align</label>
-            <select id="titleAlign">
-              <option value="center" selected>Center</option>
-              <option value="left">Left</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
-
-          <div class="row">
             <label>Subtitle Size</label>
             <input id="subtitleSize" type="number" min="10" max="60" value="22">
-            <label>Subtitle Align</label>
-            <select id="subtitleAlign">
-              <option value="center" selected>Center</option>
-              <option value="left">Left</option>
-              <option value="right">Right</option>
-            </select>
           </div>
 
           <div class="row">
             <label>Message Size</label>
             <input id="messageSize" type="number" min="10" max="48" value="18">
-            <label>Message Align</label>
-            <select id="contentAlign">
-              <option value="center" selected>Center</option>
-              <option value="left">Left</option>
-              <option value="right">Right</option>
-            </select>
           </div>
-
-          <div class="row">
-            <label>Image Position</label>
-            <select id="imagePosition">
-              <option value="center" selected>Center</option>
-              <option value="top">Top</option>
-              <option value="bottom">Bottom</option>
-              <option value="left">Left</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
-
-          <label>Upload Image</label>
-          <input id="imageUpload" type="file" accept="image/*">
-
-          <label>QR Code</label>
-          <input id="qrText" placeholder="Link or contact info">
 
           <div class="row">
             <label>Text Color</label><input type="color" id="textColor" value="#111111">
             <label>BG Color</label><input type="color" id="bgColor" value="#ffffff">
-          </div>
-
-          <div class="row">
-            <label>Font</label>
-            <select id="fontFamily">
-              <option>Montserrat</option>
-              <option>Noto Sans Telugu</option>
-            </select>
-          </div>
-
-          <div class="row">
-            <label>Glow</label><input type="color" id="shadowColor" value="#000000">
-            <label>Blur</label><input type="number" id="shadowBlur" value="0" min="0" max="30">
           </div>
 
           <div class="row actions">
@@ -186,7 +154,6 @@
             <button id="saveBtn" class="btn">💾 Save</button>
             <button id="generateBtn" class="btn primary">🖼 Generate</button>
           </div>
-
           <div class="row">
             <button id="downloadBtn" class="btn">⬇ Download</button>
             <button id="shareBtn" class="btn ghost">📤 Share</button>
@@ -218,93 +185,26 @@
         <li>📲 Works offline as PWA</li>
       </ul>
     </section>
-  </main>
 
-  <footer class="footer">
-    <p>© <span id="year"></span> AksharaChitra — Made with ❤️ by <strong>Sandeep Miriyala</strong></p>
-    <button id="goTopBtn" class="go-top">⬆️ Go to Top</button>
-    <button id="openFeedbackModal" class="feedback-btn" title="Send feedback">💌 Feedback</button>
-  </footer>
-
-  <!-- 💌 Feedback Modal -->
-  <div id="feedbackModal" class="modal hidden">
-    <div class="modal-content">
-      <h3>💌 Share Your Feedback</h3>
+    <!-- 💌 FEEDBACK -->
+    <section id="feedback" class="tab-content">
+      <h2>💌 Feedback & Suggestions</h2>
       <iframe
         src="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?embedded=true"
-        style="width:100%;height:420px;border:none;border-radius:8px;"
+        style="width:100%;height:480px;border:none;border-radius:10px;"
         loading="lazy"
       ></iframe>
-      <button id="closeFeedbackModal" class="btn ghost">Close</button>
-    </div>
-  </div>
+    </section>
+  </main>
 
-  <!-- JS -->
-  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="main.js" defer></script>
-  <script src="pwa.js" defer></script>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© <span id="year"></span> AksharaChitra — Made with ❤️ by <strong>Sandeep Miriyala</strong></p>
+  </footer>
 
-  <!-- 🎤 Voice + Share + Navigation Fixes -->
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+  <!-- FLOATING BUTTONS -->
+  <button id="installBtn" class="install-fab" title="Install AksharaChitra App" style="left:16px;right:auto;">📲</button>
+  <button id="goTopBtn" class="go-top">⬆️</button>
 
-    function speakText(text, lang = "en-IN", rate = 1, pitch = 1, volume = 1) {
-      if (!("speechSynthesis" in window)) return alert("Speech not supported");
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = lang; utter.rate = rate; utter.pitch = pitch; utter.volume = volume;
-      window.speechSynthesis.speak(utter);
-    }
-
-    function stopSpeech() { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }
-
-    document.getElementById("startSpeak")?.addEventListener("click", () =>
-      speakText("Welcome to Akshara Chitra! Create beautiful posters, invitations, and quotes instantly.")
-    );
-    document.getElementById("stopSpeak")?.addEventListener("click", stopSpeech);
-    document.getElementById("speakHelp")?.addEventListener("click", () =>
-      speakText("Here are a few tips. Set your text and upload an image. Customize fonts, colors, and glow. Save or share instantly. Works offline as a progressive web app.")
-    );
-    document.getElementById("speakHome")?.addEventListener("click", () =>
-      speakText("Welcome to Akshara Chitra! Your smart, offline tool to create posters, invitations, and quotes instantly—from just text and image.")
-    );
-
-    // 🟢 WhatsApp Share
-    function shareToWhatsApp(msg = "") {
-      const siteURL = "https://aksharachitra.netlify.app";
-      const text = msg || `🎨 Check out AksharaChitra — Create beautiful posters, invitations, and quotes instantly!\n\n${siteURL}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
-    }
-    document.getElementById("shareWhatsAppBtn")?.addEventListener("click", () => shareToWhatsApp());
-    document.getElementById("shareBtn")?.addEventListener("click", () => {
-      const title = document.getElementById("title").value || "My Poster";
-      const msg = document.getElementById("message").value || "";
-      shareToWhatsApp(`🖼️ *${title}*\n\n${msg}\n\nMade with ❤️ in AksharaChitra\nhttps://aksharachitra.netlify.app`);
-    });
-
-    // 🚀 Start Creating button
-    document.getElementById("openCreateBtn")?.addEventListener("click", () => {
-      document.querySelectorAll(".tab-content").forEach(sec => sec.classList.remove("active"));
-      document.getElementById("create").classList.add("active");
-      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-      document.querySelector('[data-tab="create"]').classList.add("active");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    // ⬆️ Go to Top button
-    document.getElementById("goTopBtn")?.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    // 💌 Feedback modal open/close
-    const feedbackModal = document.getElementById("feedbackModal");
-    document.getElementById("openFeedbackModal")?.addEventListener("click", () => {
-      feedbackModal.classList.remove("hidden");
-    });
-    document.getElementById("closeFeedbackModal")?.addEventListener("click", () => {
-      feedbackModal.classList.add("hidden");
-    });
-  </script>
 </body>
 </html>

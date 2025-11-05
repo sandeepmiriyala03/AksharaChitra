@@ -55,13 +55,7 @@ body {
   transition: var(--transition);
 }
 .right-controls button:hover { transform: scale(1.15); }
-#installBtn {
-  background: var(--primary); color: #fff; border-radius: 8px;
-  padding: 6px 12px; font-weight: 600; border: none; cursor: pointer;
-  transition: var(--transition);
-}
-#installBtn:hover { background: #1565c0; }
-#installBtn.hidden { display: none; }
+
 
 /* ===== CONTENT & TABS ===== */
 .content { padding: 16px; animation: fadeIn 0.4s ease-in-out; }
@@ -294,13 +288,7 @@ body.dark .footer { color: #aaa; }
   .editor { flex-direction: column; align-items: stretch; }
   .right-panel { order: 2; }
   #previewCard { width: 100%; max-width: 400px; }
-  #installBtn {
-    position: fixed; bottom: 16px; right: 16px;
-    border-radius: 50%; width: 54px; height: 54px;
-    font-size: 1.5rem; display: flex;
-    align-items: center; justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  }
+
   .go-top { bottom: 80px; }
   .topbar { flex-wrap: wrap; gap: 6px; }
 }
@@ -308,3 +296,27 @@ body.dark .footer { color: #aaa; }
   .nav { justify-content: center; }
   .tab-btn { padding: 6px 10px; font-size: 0. ninerem; }
 }
+
+ .install-fab {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      background: #1e88e5;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .install-fab.show { display: flex; }
+    .modal { position: fixed; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.5); z-index:9999; }
+    .modal.hidden { display:none; }
+    .modal-content { background:#fff; padding:16px; border-radius:10px; width:90%; max-width:400px; max-height:90vh; overflow:auto; }
+    @media(max-width:600px){ .modal-content{width:95%;padding:12px;} }

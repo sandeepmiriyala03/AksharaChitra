@@ -528,5 +528,195 @@ ctx.fillText(watermarkText, canvas.width - 20 * scale, canvas.height - 18 * scal
 
   // ensure gallery loads if gallery tab active on startup
   if (document.getElementById("gallery") && document.getElementById("gallery").classList.contains("active")) loadGallery();
+
+/* ======== 🔰 ENHANCEMENTS APPENDED SAFELY ======== */
+
+// 🟢 WhatsApp Image Share (image-first)
+const shareWhatsAppBtn = document.getElementById("shareWhatsAppBtn");
+if (shareWhatsAppBtn) {
+  shareWhatsAppBtn.addEventListener("click", async () => {
+    try {
+      const dataUrl = await generateImage({ download: false });
+      if (!dataUrl) return;
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], "poster.png", { type: "image/png" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "AksharaChitra Poster",
+          text: "🖼️ Created with AksharaChitra 🎨",
+        });
+      } else {
+        const site = "https://aksharachitra.netlify.app";
+        const txt = `🎨 Check out AksharaChitra — Create posters, quotes & invites easily!\n${site}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank");
+      }
+    } catch (err) {
+      console.error("WhatsApp Share Failed:", err);
+      alert("Sharing failed or not supported.");
+    }
+  });
+}
+
+// 🗂️ IndexedDB Gallery
+const DB_NAME = "ak_gallery_v8";
+const STORE_NAME = "posters";
+let db = null;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+      }
+    };
+    req.onsuccess = (e) => { db = e.target.result; resolve(db); };
+    req.onerror = (e) => reject(e);
+  });
+}
+
+async function saveToDB(title, dataUrl) {
+  if (!db) await openDB();
+  const tx = db.transaction(STORE_NAME, "readwrite");
+  tx.objectStore(STORE_NAME).add({ title, dataUrl, ts: Date.now() });
+  return new Promise((res) => (tx.oncomplete = res));
+}
+
+async function loadFromDB() {
+  if (!db) await openDB();
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const store = tx.objectStore(STORE_NAME);
+  const req = store.getAll();
+  return new Promise((res) => (req.onsuccess = () => res(req.result.reverse())));
+}
+
+async function deleteFromDB(id) {
+  if (!db) await openDB();
+  const tx = db.transaction(STORE_NAME, "readwrite");
+  tx.objectStore(STORE_NAME).delete(id);
+  return new Promise((res) => (tx.oncomplete = res));
+}
+
+// 💾 Replace save button with IndexedDB
+const saveBtnFinal = document.getElementById("saveBtn");
+if (saveBtnFinal) {
+  saveBtnFinal.addEventListener("click", async () => {
+    const d = await generateImage({ download: false });
+    if (!d) return;
+    const t = document.getElementById("title")?.value || "Untitled";
+    await saveToDB(t, d);
+    alert("✅ Poster saved offline (IndexedDB). Check My Creations tab.");
+  });
+}
+
+// 🖼 Improved Gallery Loader
+async function renderIndexedGallery() {
+  const grid = document.getElementById("galleryGrid");
+  if (!grid) return;
+  grid.innerHTML = "<p class='muted'>Loading your saved posters...</p>";
+
+  const posters = await loadFromDB();
+  if (!posters.length) {
+    grid.innerHTML = "<p class='muted'>No saved posters yet. Save one to see it here!</p>";
+    return;
+  }
+
+  grid.innerHTML = posters
+    .map(
+      (p) => `
+      <div class="gallery-item">
+        <img src="${p.dataUrl}" alt="${p.title}" />
+        <div class="gallery-meta">
+          <span>${p.title}</span>
+          <button class="delete-btn" data-id="${p.id}">🗑️</button>
+        </div>
+      </div>`
+    )
+    .join("");
+
+  grid.querySelectorAll("img").forEach((img) => {
+    img.addEventListener("click", () => {
+      const w = window.open();
+      w.document.write(`<img src="${img.src}" style="max-width:100%;display:block;margin:auto">`);
+    });
+  });
+
+  grid.querySelectorAll(".delete-btn").forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      if (confirm("Delete this poster?")) {
+        await deleteFromDB(Number(btn.dataset.id));
+        renderIndexedGallery();
+      }
+    })
+  );
+}
+
+// 🔄 Load Gallery when tab clicked
+document.querySelector('[data-tab="gallery"]')?.addEventListener("click", () => {
+  setTimeout(() => renderIndexedGallery(), 300);
+});
+
+// 💅 Gallery UI Improvements
+const style = document.createElement("style");
+style.textContent = `
+#galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+.gallery-item {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: transform 0.25s ease;
+}
+.gallery-item:hover { transform: scale(1.03); }
+.gallery-item img {
+  width: 100%; height: 160px; object-fit: cover; display: block;
+}
+.gallery-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 8px; font-size: 0.9rem; background: rgba(0,0,0,0.03);
+}
+.gallery-meta span { font-weight: 600; color: var(--accent, #1976d2); }
+.delete-btn {
+  background: transparent; border: none; cursor: pointer; font-size: 1.1rem;
+  transition: transform 0.2s ease; color: #555;
+}
+.delete-btn:hover { color: #e53935; transform: scale(1.2); }
+`;
+document.head.appendChild(style);
+
+/* ======== 🔰 ENHANCEMENTS END ======== */
+
 }); // DOMContentLoaded end
+
+// --- Tabs navigation (delegated) ---
+document.querySelectorAll(".tab-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach((sec) => sec.classList.remove("active"));
+    btn.classList.add("active");
+    const targetTab = btn.getAttribute("data-tab");
+    const section = document.getElementById(targetTab);
+    if (section) section.classList.add("active");
+
+    // ✅ Always refresh IndexedDB gallery when "gallery" tab selected
+    if (targetTab === "gallery") {
+      setTimeout(() => {
+        if (typeof renderIndexedGallery === "function") {
+          renderIndexedGallery();
+        } else if (typeof loadGallery === "function") {
+          loadGallery();
+        }
+      }, 250);
+    }
+  });
+});
+
 
