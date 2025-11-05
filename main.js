@@ -276,8 +276,15 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.font = `${fontSize}px Montserrat, Arial`;
         ctx.fillStyle = "rgba(0,0,0,0.35)";
         ctx.textAlign = "right";
-        ctx.fillText("aksharachitra.netlify.app", canvas.width - 20 * scale, canvas.height - 18 * scale);
-      } catch (e) {
+        // 🕒 Add current date & time before watermark
+const now = new Date();
+const date = now.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" });
+const time = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+const watermarkText = `${date} ${time}  |  aksharachitra.netlify.app`;
+
+ctx.fillText(watermarkText, canvas.width - 20 * scale, canvas.height - 18 * scale);
+
+            } catch (e) {
         console.warn("Watermark drawing failed:", e);
       }
 
@@ -523,24 +530,3 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("gallery") && document.getElementById("gallery").classList.contains("active")) loadGallery();
 }); // DOMContentLoaded end
 
-// 🗣️ Simple Text-to-Speech Utility
-function speakText(text, lang = "en-IN", rate = 1, pitch = 1, volume = 1) {
-  // Check if TTS is supported
-  if (!("speechSynthesis" in window)) {
-    alert("Sorry, your browser doesn’t support text-to-speech.");
-    return;
-  }
-
-  // Cancel any ongoing speech
-  window.speechSynthesis.cancel();
-
-  // Create a new utterance
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;       // Language (you can change to "te-IN" for Telugu, etc.)
-  utterance.rate = rate;       // Speed (0.5 = slow, 1 = normal, 1.5 = fast)
-  utterance.pitch = pitch;     // Voice pitch (0 to 2)
-  utterance.volume = volume;   // Volume (0 to 1)
-
-  // Speak the text
-  window.speechSynthesis.speak(utterance);
-}
