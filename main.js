@@ -847,5 +847,26 @@ if (openCreateBtn) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
+// 🌐 Interactive Font Preview Highlight
+const langSelect = document.getElementById("previewLangSelect");
+const cards = document.querySelectorAll(".font-card");
+
+if (langSelect && cards.length) {
+  langSelect.addEventListener("change", () => {
+    const val = langSelect.value;
+    cards.forEach(card => {
+      if (card.dataset.lang === val) {
+        card.classList.add("active");
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        card.classList.remove("active");
+      }
+    });
+  });
+
+  // default highlight
+  langSelect.dispatchEvent(new Event("change"));
+}
+
 
 }); // DOMContentLoaded end
