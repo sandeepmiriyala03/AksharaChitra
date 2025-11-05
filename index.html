@@ -58,7 +58,7 @@
         <p class="lead">
           Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.
         </p>
-        <button class="btn primary large" data-open="create">🚀 Start Creating</button>
+        <button class="btn primary large" id="openCreateBtn">🚀 Start Creating</button>
       </div>
 
       <div class="section why">
@@ -113,7 +113,6 @@
             <button id="stopVoice" class="btn ghost hidden">⏹ Stop</button>
           </div>
 
-          <!-- Font Sizes & Alignments -->
           <div class="row">
             <label>Title Size</label>
             <input id="titleSize" type="number" min="10" max="80" value="28">
@@ -204,8 +203,6 @@
             <div id="pQR" class="p-qr"></div>
             <div class="watermark">aksharachitra.netlify.app</div>
           </div>
-          <h4>My Creations</h4>
-          <div id="galleryGrid" class="gallery-grid"></div>
         </div>
       </div>
     </section>
@@ -226,7 +223,21 @@
   <footer class="footer">
     <p>© <span id="year"></span> AksharaChitra — Made with ❤️ by <strong>Sandeep Miriyala</strong></p>
     <button id="goTopBtn" class="go-top">⬆️ Go to Top</button>
+    <button id="openFeedbackModal" class="feedback-btn" title="Send feedback">💌 Feedback</button>
   </footer>
+
+  <!-- 💌 Feedback Modal -->
+  <div id="feedbackModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>💌 Share Your Feedback</h3>
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?embedded=true"
+        style="width:100%;height:420px;border:none;border-radius:8px;"
+        loading="lazy"
+      ></iframe>
+      <button id="closeFeedbackModal" class="btn ghost">Close</button>
+    </div>
+  </div>
 
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
@@ -234,72 +245,66 @@
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
 
-  <!-- 🎤 Text-to-Speech Script -->
+  <!-- 🎤 Voice + Share + Navigation Fixes -->
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
     function speakText(text, lang = "en-IN", rate = 1, pitch = 1, volume = 1) {
-      if (!("speechSynthesis" in window)) {
-        alert("Sorry, your browser doesn’t support text-to-speech.");
-        return;
-      }
+      if (!("speechSynthesis" in window)) return alert("Speech not supported");
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang;
-      utterance.rate = rate;
-      utterance.pitch = pitch;
-      utterance.volume = volume;
-      window.speechSynthesis.speak(utterance);
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = lang; utter.rate = rate; utter.pitch = pitch; utter.volume = volume;
+      window.speechSynthesis.speak(utter);
     }
 
-    function stopSpeech() {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-    }
+    function stopSpeech() { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }
 
-    document.getElementById("startSpeak")?.addEventListener("click", () => {
-      speakText("Welcome to Akshara Chitra! Create beautiful posters, invitations, and quotes instantly.");
-    });
-
+    document.getElementById("startSpeak")?.addEventListener("click", () =>
+      speakText("Welcome to Akshara Chitra! Create beautiful posters, invitations, and quotes instantly.")
+    );
     document.getElementById("stopSpeak")?.addEventListener("click", stopSpeech);
+    document.getElementById("speakHelp")?.addEventListener("click", () =>
+      speakText("Here are a few tips. Set your text and upload an image. Customize fonts, colors, and glow. Save or share instantly. Works offline as a progressive web app.")
+    );
+    document.getElementById("speakHome")?.addEventListener("click", () =>
+      speakText("Welcome to Akshara Chitra! Your smart, offline tool to create posters, invitations, and quotes instantly—from just text and image.")
+    );
 
-    document.getElementById("speakHelp")?.addEventListener("click", () => {
-      speakText("Here are a few tips. Set your text and upload an image. Customize fonts, colors, and glow. Save or share instantly. Works offline as a progressive web app.");
+    // 🟢 WhatsApp Share
+    function shareToWhatsApp(msg = "") {
+      const siteURL = "https://aksharachitra.netlify.app";
+      const text = msg || `🎨 Check out AksharaChitra — Create beautiful posters, invitations, and quotes instantly!\n\n${siteURL}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+    }
+    document.getElementById("shareWhatsAppBtn")?.addEventListener("click", () => shareToWhatsApp());
+    document.getElementById("shareBtn")?.addEventListener("click", () => {
+      const title = document.getElementById("title").value || "My Poster";
+      const msg = document.getElementById("message").value || "";
+      shareToWhatsApp(`🖼️ *${title}*\n\n${msg}\n\nMade with ❤️ in AksharaChitra\nhttps://aksharachitra.netlify.app`);
     });
-    document.getElementById("speakHome")?.addEventListener("click", () => {
-      speakText("Welcome to Akshara Chitra! Your smart, offline tool to create posters, invitations, and quotes instantly—from just text and image.");
+
+    // 🚀 Start Creating button
+    document.getElementById("openCreateBtn")?.addEventListener("click", () => {
+      document.querySelectorAll(".tab-content").forEach(sec => sec.classList.remove("active"));
+      document.getElementById("create").classList.add("active");
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelector('[data-tab="create"]').classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
-  // 🟢 WhatsApp Share Function
-  function shareToWhatsApp(message = "") {
-    const siteURL = "https://aksharachitra.netlify.app"; // your site link
-    const text = message || 
-      `🎨 Check out AksharaChitra — Create beautiful posters, invitations, and quotes instantly!\n\n${siteURL}`;
 
-    const encodedText = encodeURIComponent(text);
-    const whatsappURL = `https://wa.me/?text=${encodedText}`;
+    // ⬆️ Go to Top button
+    document.getElementById("goTopBtn")?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
-    // Open WhatsApp
-    window.open(whatsappURL, "_blank");
-  }
-
-  // 🖱️ HOME “WhatsApp Share” Button
-  document.getElementById("shareWhatsAppBtn")?.addEventListener("click", () => {
-    shareToWhatsApp();
-  });
-
-  // 🖱️ CREATE “Share” Button — share poster or message
-  document.getElementById("shareBtn")?.addEventListener("click", () => {
-    const title = document.getElementById("title").value || "My Poster";
-    const message = document.getElementById("message").value || "";
-    const shareMsg = `🖼️ *${title}*\n\n${message}\n\nMade with ❤️ in AksharaChitra\nhttps://aksharachitra.netlify.app`;
-    shareToWhatsApp(shareMsg);
-  });
-
-
-
-
-
+    // 💌 Feedback modal open/close
+    const feedbackModal = document.getElementById("feedbackModal");
+    document.getElementById("openFeedbackModal")?.addEventListener("click", () => {
+      feedbackModal.classList.remove("hidden");
+    });
+    document.getElementById("closeFeedbackModal")?.addEventListener("click", () => {
+      feedbackModal.classList.add("hidden");
+    });
   </script>
 </body>
 </html>
