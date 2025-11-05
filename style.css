@@ -487,5 +487,33 @@ body.dark .hero-logo:hover {
     grid-template-columns: 1fr;
   }
 }
+.ak-created-date {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  font-size: 12px;
+  opacity: 0.8;
+  color: #333;
+}
+
+.ak-watermark {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 12px;
+  opacity: 0.6;
+  color: #000;
+  font-style: italic;
+}
+
+body.dark .ak-created-date {
+  color: #eee;
+  opacity: 0.9;
+}
+
+body.dark .ak-watermark {
+  color: #ccc;
+  opacity: 0.8;
+}
 
 

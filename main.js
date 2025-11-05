@@ -448,7 +448,10 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const ctx = canvas.getContext("2d");
         const now = userTimestamp ? new Date(userTimestamp) : new Date();
-        const dateText = `📅 ${posterDate || now.toLocaleString("en-IN")}`;
+       const options = { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true };
+const formatted = now.toLocaleString("en-IN", options);
+const dateText = `📅 ${posterDate || formatted}`;
+
         const siteText = "aksharachitra.netlify.app";
 
         const fontSize = Math.max(12, Math.round(13 * scale));
