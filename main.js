@@ -708,6 +708,7 @@ document.head.appendChild(style);
 
 /* ======== 🔰 ENHANCEMENTS END ======== */
 
+
 }); // DOMContentLoaded end
 
 // --- Tabs navigation (delegated) ---
@@ -749,3 +750,37 @@ installButtons.forEach(btn => {
   });
 });
 
+// 🔊 Text-to-Speech (Home section)
+const startSpeakBtn = document.getElementById("startSpeak");
+const stopSpeakBtn = document.getElementById("stopSpeak");
+const synth = window.speechSynthesis;
+
+if (startSpeakBtn && stopSpeakBtn && synth) {
+  const textToSpeak = () => {
+    // Get the home section text, remove emojis & trim
+    const homeSection = document.getElementById("home");
+    if (!homeSection) return "";
+    return homeSection.innerText.replace(/[🎨📘🔊🌸🚀✅💾🖼️🌈🎙️♿]/g, "").trim();
+  };
+
+  startSpeakBtn.addEventListener("click", () => {
+    if (synth.speaking) synth.cancel(); // cancel any ongoing speech
+    const utter = new SpeechSynthesisUtterance(textToSpeak());
+    utter.lang = "en-IN";     // Indian English accent
+    utter.rate = 0.95;        // natural speed
+    utter.pitch = 1.0;
+    synth.speak(utter);
+    startSpeakBtn.disabled = true;
+    stopSpeakBtn.disabled = false;
+    utter.onend = () => {
+      startSpeakBtn.disabled = false;
+      stopSpeakBtn.disabled = true;
+    };
+  });
+
+  stopSpeakBtn.addEventListener("click", () => {
+    synth.cancel();
+    startSpeakBtn.disabled = false;
+    stopSpeakBtn.disabled = true;
+  });
+}
