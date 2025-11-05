@@ -5,379 +5,232 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AksharaChitra — Create Beautiful Posters Offline 🎨</title>
 
-  <!-- Favicon -->
+  <!-- Favicon & PWA -->
   <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
   <meta name="theme-color" content="#1e88e5">
-
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css" />
 
-  <!-- Fonts -->
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
-  <!-- Cropper CSS -->
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet" />
 </head>
 
 <body>
-  <!-- ♿ Skip to Main Content Button -->
   <a href="#mainContent" class="skip-link" aria-label="Skip to main content">⇩ Skip to Main Content</a>
 
   <!-- HEADER -->
-  <header class="topbar" role="banner">
+  <header class="topbar">
     <div class="left">
-      <img src="Logo.png" alt="AksharaChitra logo" class="logo" onerror="this.style.display='none'">
+      <img src="logo.png" alt="AksharaChitra logo" class="logo" />
       <span class="app-title">AksharaChitra</span>
     </div>
 
-    <nav class="nav" role="navigation" aria-label="Main navigation">
-      <button class="tab-btn active" data-tab="home" aria-controls="home">🏠 Home</button>
-      <button class="tab-btn" data-tab="create" aria-controls="create">🎨 Create</button>
-      <button class="tab-btn" data-tab="gallery" aria-controls="gallery">💾 My Creations</button>
-      <button class="tab-btn" data-tab="help" aria-controls="help">📘 Help</button>
+    <nav class="nav">
+      <button class="tab-btn active" data-tab="home">🏠 Home</button>
+      <button class="tab-btn" data-tab="create">🎨 Create</button>
+      <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
+      <button class="tab-btn" data-tab="help">📘 Help</button>
     </nav>
 
     <div class="right-controls">
-      <button id="themeToggle" title="Toggle theme" aria-label="Toggle dark or light mode">🌙</button>
-      <button id="installBtn" class="install-btn hidden" title="Install app" aria-label="Install app">📲</button>
+      <button id="themeToggle" title="Toggle theme">🌙</button>
+      <button id="installBtn" class="hidden" title="Install app">📲</button>
     </div>
   </header>
 
   <!-- MAIN -->
-  <main class="content" id="mainContent" role="main" tabindex="-1">
-    <!-- 🏠 HOME PAGE -->
-  <!-- 🏠 HOME PAGE -->
-<section id="home" class="tab-content active" aria-labelledby="home">
-  <div class="hero">
-    <div class="hero-header" style="display:flex;justify-content:space-between;align-items:center;">
-      <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
-      <button id="speakHome" class="btn ghost" aria-label="Listen to introduction">🔊 Listen</button>
-    </div>
+  <main class="content" id="mainContent">
 
-    <img src="Logo.png" alt="AksharaChitra logo" class="hero-logo" onerror="this.style.display='none'">
-    <p class="lead">
-      Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.
-    </p>
-    <button class="btn primary large" data-open="create" aria-label="Start creating">
-      🚀 Start Creating Now
-    </button>
-  </div>
-
-  <div class="section why">
-    <h2>🌸 Why AksharaChitra?</h2>
-    <p>
-      AksharaChitra makes <strong>designing easy, fast, and available offline</strong>.  
-      No heavy software, no design skills required — just your words, and we turn them into art.
-    </p>
-
-    <ul class="features" role="list" id="featureList">
-  <li>✅ Works fully offline (PWA enabled)</li>
-  <li>🎨 Supports multiple languages — English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ</li>
-  <li>🖼️ Add your own images, adjust positions, and preview instantly</li>
-  <li>💾 Save, Download, or Share posters directly</li>
-  <li>🌈 Customize fonts, colors, glow/shadow effects & layout</li>
-  <li>✨ Built-in templates for birthdays, quotes, invitations, devotional & more</li>
-  <li>🎙️ AI Voice Input — Speak your message in any supported language</li>
-  <li>🔊 AI Voice Feedback — Text-to-Speech preview with multilingual support</li>
-  <li>♿ Fully accessible — compliant with <abbr title="Americans with Disabilities Act">ADA</abbr> & <abbr title="World Wide Web Consortium">W3C</abbr> accessibility standards</li>
-  <li>🔒 100% Privacy — All data stays in your local browser (no uploads)</li>
-</ul>
-
-<!-- 📤 WhatsApp Share Button -->
-<div class="share-features" style="margin-top: 14px;">
-  <button id="shareWhatsAppBtn" class="btn primary" aria-label="Share features on WhatsApp">
-    📤 WhatsApp
-  </button>
-  <small class="muted">Tap to share project highlights via WhatsApp</small>
-</div>
-
-  </div>
-
-  <div class="section how">
-    <h2>🪄 How to Use</h2>
-    <ol class="steps" role="list">
-      <li>Choose your language & template</li>
-      <li>Type your text & upload an image</li>
-      <li>Customize colors, font, glow & layout</li>
-      <li>Preview instantly and generate your poster</li>
-    </ol>
-  </div>
-
-  <!-- Feedback Section -->
-  <section class="feedback" aria-label="Feedback form">
-    <div class="left">
-      <img src="Logo.png" alt="AksharaChitra logo small" class="hero-logo" onerror="this.style.display='none'">
-      <div>
-        <p>💌 Help us improve AksharaChitra</p>
-        <p class="muted">Share suggestions, bugs, or ideas — it only takes a minute.</p>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor" 
-         target="_blank" class="btn primary" aria-label="Give feedback">📝 Give Feedback</a>
-    </div>
-  </section>
-</section>
-
-   <section id="create" class="tab-content" role="region" aria-labelledby="createHeading">
-  <div class="editor" role="form" aria-describedby="formInstructions">
-
-    <!-- Hidden heading for accessibility -->
-
-    <h2 id="createHeading" class="sr-only">Create Your Poster</h2>
-    <!-- Left Panel -->
-    <div class="panel left-panel" role="group" aria-label="Poster customization settings">
-
-      <label for="language">Language</label>
-      <select id="language" aria-label="Select Language">
-        <option>English</option><option>తెలుగు</option><option>हिंदी</option>
-        <option>தமிழ்</option><option>ಕನ್ನಡ</option><option>മലയാളം</option><option>ଓଡ଼ିଆ</option>
-      </select>
-
-      <label for="templateSelect">Template</label>
-      <select id="templateSelect" aria-label="Choose Template">
-        <option value="">— Choose Template —</option>
-        <option value="news">News</option>
-        <option value="birthday">Birthday</option>
-        <option value="devotional">Devotional</option>
-        <option value="business">Business Card</option>
-        <option value="invitation">Invitation</option>
-        <option value="quote">Quote</option>
-      </select>
-
-      <hr class="divider" aria-hidden="true" />
-
-      <h3 id="titleSection">🖋️ Title</h3>
-      <label for="title" class="sr-only">Title text</label>
-      <input id="title" type="text" placeholder="Enter title..." aria-labelledby="titleSection" />
-
-      <div class="row" role="group" aria-label="Title settings">
-        <div>
-          <label for="titleSize">Font Size</label>
-          <input id="titleSize" type="number" min="10" max="80" value="28" aria-describedby="titleSection" />
+    <!-- 🏠 HOME -->
+    <section id="home" class="tab-content active">
+      <div class="hero">
+        <div class="hero-header">
+          <h1>Welcome to <span class="highlight">AksharaChitra</span></h1>
+          <button id="speakHome" class="btn ghost">🔊 Listen</button>
         </div>
-        <div>
-          <label for="titleAlign">Position</label>
-          <select id="titleAlign" aria-label="Title alignment">
-            <option value="center" selected>Center</option>
-            <option value="left">Left</option>
-            <option value="right">Right</option>
+        <img src="logo.png" alt="AksharaChitra logo" class="hero-logo" />
+        <p class="lead">
+          Your smart, offline tool to create posters, invitations, and quotes instantly — from just text & image.
+        </p>
+        <button class="btn primary large" data-open="create">🚀 Start Creating</button>
+      </div>
+
+      <div class="section why">
+        <h2>🌸 Why AksharaChitra?</h2>
+        <ul id="featureList">
+          <li>✅ Works offline (PWA)</li>
+          <li>🎨 Supports English & Indian languages</li>
+          <li>🖼️ Upload & crop images easily</li>
+          <li>💾 Save, Download, or Share posters</li>
+          <li>🌈 Fonts, colors, glow & layout customization</li>
+          <li>🎙️ Voice Input & 🔊 Voice Feedback</li>
+          <li>♿ Accessible, privacy-first design</li>
+        </ul>
+        <div class="share-features">
+          <button id="shareWhatsAppBtn" class="btn primary">📤 WhatsApp</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 🎨 CREATE -->
+    <section id="create" class="tab-content">
+      <div class="editor">
+        <div class="panel left-panel">
+          <label>Language</label>
+          <select id="language">
+            <option>English</option><option>తెలుగు</option><option>हिंदी</option>
+            <option>தமிழ்</option><option>ಕನ್ನಡ</option><option>മലയാളം</option><option>ଓଡ଼ିଆ</option>
           </select>
-        </div>
-      </div>
 
-      <h3 id="subtitleSection">🪶 Subtitle</h3>
-      <label for="subtitle" class="sr-only">Subtitle text</label>
-      <input id="subtitle" type="text" placeholder="Enter subtitle..." aria-labelledby="subtitleSection" />
-
-      <div class="row" role="group" aria-label="Subtitle settings">
-        <div>
-          <label for="subtitleSize">Font Size</label>
-          <input id="subtitleSize" type="number" min="10" max="60" value="20" aria-describedby="subtitleSection" />
-        </div>
-        <div>
-          <label for="subtitleAlign">Position</label>
-          <select id="subtitleAlign" aria-label="Subtitle alignment">
-            <option value="center" selected>Center</option>
-            <option value="left">Left</option>
-            <option value="right">Right</option>
+          <label>Template</label>
+          <select id="templateSelect">
+            <option value="">— Choose Template —</option>
+            <option value="news">News</option>
+            <option value="birthday">Birthday</option>
+            <option value="devotional">Devotional</option>
+            <option value="business">Business</option>
+            <option value="invitation">Invitation</option>
+            <option value="quote">Quote</option>
           </select>
+
+          <label>🖋️ Title</label>
+          <input id="title" placeholder="Enter title...">
+
+          <label>🪶 Subtitle</label>
+          <input id="subtitle" placeholder="Enter subtitle...">
+
+          <label>💬 Message</label>
+          <textarea id="message" rows="3" placeholder="Type your message..."></textarea>
+
+          <div class="voice-section">
+            <button id="startVoice" class="btn ghost">🎤 Speak</button>
+            <button id="stopVoice" class="btn ghost hidden">⏹ Stop</button>
+          </div>
+
+          <!-- Font Sizes & Alignments -->
+          <div class="row">
+            <label>Title Size</label>
+            <input id="titleSize" type="number" min="10" max="80" value="28">
+            <label>Title Align</label>
+            <select id="titleAlign">
+              <option value="center" selected>Center</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label>Subtitle Size</label>
+            <input id="subtitleSize" type="number" min="10" max="60" value="22">
+            <label>Subtitle Align</label>
+            <select id="subtitleAlign">
+              <option value="center" selected>Center</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label>Message Size</label>
+            <input id="messageSize" type="number" min="10" max="48" value="18">
+            <label>Message Align</label>
+            <select id="contentAlign">
+              <option value="center" selected>Center</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label>Image Position</label>
+            <select id="imagePosition">
+              <option value="center" selected>Center</option>
+              <option value="top">Top</option>
+              <option value="bottom">Bottom</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          <label>Upload Image</label>
+          <input id="imageUpload" type="file" accept="image/*">
+
+          <label>QR Code</label>
+          <input id="qrText" placeholder="Link or contact info">
+
+          <div class="row">
+            <label>Text Color</label><input type="color" id="textColor" value="#111111">
+            <label>BG Color</label><input type="color" id="bgColor" value="#ffffff">
+          </div>
+
+          <div class="row">
+            <label>Font</label>
+            <select id="fontFamily">
+              <option>Montserrat</option>
+              <option>Noto Sans Telugu</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label>Glow</label><input type="color" id="shadowColor" value="#000000">
+            <label>Blur</label><input type="number" id="shadowBlur" value="0" min="0" max="30">
+          </div>
+
+          <div class="row actions">
+            <button id="clearBtn" class="btn ghost">🧹 Clear</button>
+            <button id="saveBtn" class="btn">💾 Save</button>
+            <button id="generateBtn" class="btn primary">🖼 Generate</button>
+          </div>
+
+          <div class="row">
+            <button id="downloadBtn" class="btn">⬇ Download</button>
+            <button id="shareBtn" class="btn ghost">📤 Share</button>
+          </div>
+        </div>
+
+        <div class="panel right-panel">
+          <h3>Live Preview</h3>
+          <div id="previewCard" class="card">
+            <div id="pTitle" class="p-title"></div>
+            <div id="pSubtitle" class="p-subtitle"></div>
+            <div id="pMessage" class="p-body"></div>
+            <div id="pImage" class="p-image"></div>
+            <div id="pQR" class="p-qr"></div>
+            <div class="watermark">aksharachitra.netlify.app</div>
+          </div>
+          <h4>My Creations</h4>
+          <div id="galleryGrid" class="gallery-grid"></div>
         </div>
       </div>
+    </section>
 
-      <h3 id="messageSection">💬 Message</h3>
-      <label for="message" class="sr-only">Main message</label>
-      <textarea id="message" rows="4" placeholder="Type your main message..." aria-labelledby="messageSection"></textarea>
-<!-- 🎤 Voice AI Assistant -->
-<div class="voice-section" role="group" aria-label="Voice input for message">
-  <button id="startVoice" class="btn ghost" aria-label="Start voice input">
-    🎤 Speak Message
-  </button>
-  <button id="stopVoice" class="btn ghost hidden" aria-label="Stop recording">
-    ⏹ Stop
-  </button>
-  <small class="muted" id="voiceTip">🎙 Speak naturally — supports all selected languages.</small>
-</div>
-      <div class="row" role="group" aria-label="Message settings">
-        <div>
-          <label for="messageSize">Font Size</label>
-          <input id="messageSize" type="number" min="10" max="48" value="18" aria-describedby="messageSection" />
-        </div>
-        <div>
-          <label for="contentAlign">Alignment</label>
-          <select id="contentAlign" aria-label="Message alignment">
-            <option value="center" selected>Center</option>
-            <option value="left">Left</option>
-            <option value="right">Right</option>
-          </select>
-        </div>
-      </div>
+    <!-- 🖼 GALLERY -->
+    <section id="gallery" class="tab-content">
+      <h2>🖼 My Saved Posters</h2>
+      <div id="galleryGrid"></div>
+    </section>
 
-      <hr class="divider" aria-hidden="true" />
-
-      <label for="fontFamily">Font Family</label>
-      <select id="fontFamily" aria-label="Font family selection">
-        <option value="Montserrat, sans-serif">Montserrat</option>
-        <option value="'Noto Sans Telugu', serif">Noto Sans Telugu</option>
-      </select>
-
-      <div class="row" role="group" aria-label="Color customization">
-        <div>
-          <label for="textColor">Text Color</label>
-          <input id="textColor" type="color" value="#111111" aria-label="Choose text color" />
-        </div>
-        <div>
-          <label for="bgColor">Background Color</label>
-          <input id="bgColor" type="color" value="#ffffff" aria-label="Choose background color" />
-        </div>
-      </div>
-
-      <h3 id="glowShadowSection">✨ Glow / Shadow</h3>
-      <div class="row" role="group" aria-labelledby="glowShadowSection">
-        <div>
-          <label for="shadowColor">Shadow Color</label>
-          <input type="color" id="shadowColor" value="#000000" aria-label="Shadow color" />
-        </div>
-        <div>
-          <label for="shadowBlur">Shadow Blur</label>
-          <input type="range" id="shadowBlur" min="0" max="30" value="0" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" />
-        </div>
-      </div>
-
-      <label for="imageUpload">Upload Image (Crop Supported)</label>
-      <input id="imageUpload" type="file" accept="image/*" aria-label="Upload image for poster" />
-
-      <label for="imagePosition">Image Position</label>
-      <select id="imagePosition" aria-label="Choose image position">
-        <option value="top">Top</option>
-        <option value="bottom">Bottom</option>
-        <option value="left">Left</option>
-        <option value="right">Right</option>
-        <option value="center" selected>Center</option>
-      </select>
-
-      <label for="qrText">QR / Link (optional)</label>
-      <input id="qrText" type="text" placeholder="https:// or phone/email" aria-label="Enter QR or link text" />
-
-      <div class="row actions" role="group" aria-label="Poster actions">
-        <button id="clearBtn" class="btn ghost" aria-label="Clear all fields">Clear</button>
-        <button id="saveBtn" class="btn" aria-label="Save creation">💾 Save</button>
-        <button id="generateBtn" class="btn primary" aria-label="Generate poster image">🖼 Generate</button>
-      </div>
-
-      <div class="row" role="group" aria-label="Download and share actions">
-        <button id="downloadBtn" class="btn" aria-label="Download poster">⬇ Download</button>
-        <button id="shareBtn" class="btn ghost" aria-label="Share poster">📤 Share</button>
-      </div>
-
-      <small class="muted" id="previewTip">
-        🎯 Tip: All changes reflect instantly in the live preview on the right.
-      </small>
-    </div>
-
-    <!-- Right Panel -->
-    <div class="panel right-panel" role="region" aria-label="Live preview area">
-      <h3 id="previewHeading">Live Preview</h3>
-      <div id="previewCard" class="card" tabindex="0" role="img" aria-labelledby="previewHeading" aria-describedby="previewTip">
-        <div id="pTitle" class="p-title"></div>
-        <div id="pSubtitle" class="p-subtitle"></div>
-        <div id="pImage" class="p-image"></div>
-        <div id="pMessage" class="p-body"></div>
-        <div id="pQR" class="p-qr"></div>
-        <div class="watermark" aria-hidden="true">aksharachitra.netlify.app</div>
-
-      </div>
-
-      <h4 style="margin-top:14px">My Creations</h4>
-      <div id="galleryGrid" class="gallery-grid" role="list" aria-label="Saved creations gallery"></div>
-    </div>
-  </div>
-</section>
-
-
-    <!-- 📘 HELP PAGE -->
-<section id="help" class="tab-content" role="region" aria-labelledby="helpHeading">
-  <div class="panel">
-    <div class="help-header" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-      <h2 id="helpHeading">📘 Help & Tips</h2>
-      <button id="speakHelp" class="btn ghost" aria-label="Read help content aloud">
-        🔊 Listen
-      </button>
-    </div>
-
-    <p class="lead">
-      Welcome to the <strong>AksharaChitra Help Center</strong>!  
-      Here’s a quick guide to help you design beautiful posters effortlessly — even offline.
-    </p>
-
-    <hr aria-hidden="true" />
-
-    <!-- 🌈 Getting Started -->
-    <h3>🌈 Getting Started</h3>
-    <p>AksharaChitra is designed for everyone — from beginners to creative professionals.  
-       Follow these simple steps to start creating your own poster:</p>
-    <ol class="help-steps" role="list">
-      <li>🖋️ <strong>Set your text:</strong> Type your title, subtitle, and message. Adjust fonts and alignment as needed.</li>
-      <li>🖼️ <strong>Add an image:</strong> Upload and crop your photo. Choose its position — top, bottom, or background.</li>
-      <li>🎨 <strong>Style your design:</strong> Pick font colors, background tones, and glow or shadow effects for contrast.</li>
-      <li>💾 <strong>Generate and save:</strong> View your live preview, save your work, download, or share instantly.</li>
-      <li>📲 <strong>Use offline:</strong> Install AksharaChitra as an app (PWA) and create posters anytime — even without Internet!</li>
-    </ol>
-
-    <hr aria-hidden="true" />
-
-    <!-- 💡 Tips & Tricks -->
-    <h3>💡 Pro Tips</h3>
-    <ul class="help-list" role="list">
-      <li>✨ Use short, catchy titles — they make your design stand out.</li>
-      <li>📏 Keep font sizes balanced between title and message for visual harmony.</li>
-      <li>🎯 Dark text looks great on light backgrounds (and vice versa) for perfect contrast.</li>
-      <li>🔤 Explore different font families for cultural or festive designs.</li>
-      <li>🌐 Try multiple languages — AksharaChitra supports Indian regional scripts beautifully.</li>
-    </ul>
-
-    <hr aria-hidden="true" />
-
-    <!-- ♿ Accessibility & Compliance -->
-    <h3>♿ Accessibility</h3>
-    <p>
-      AksharaChitra fully supports <abbr title="Web Content Accessibility Guidelines">WCAG 2.2</abbr>  
-      and <abbr title="Americans with Disabilities Act">ADA</abbr> standards to ensure an inclusive experience.
-    </p>
-    <ul role="list" class="help-list">
-      <li>🔈 Screen reader friendly — every button and label is properly announced.</li>
-      <li>⌨️ Keyboard accessible — navigate all controls using <kbd>Tab</kbd> and <kbd>Enter</kbd>.</li>
-      <li>🌗 Theme aware — optimized for both light and dark modes.</li>
-      <li>🧭 Logical reading order — structured for clarity and usability.</li>
-    </ul>
-
-    <hr aria-hidden="true" />
-
-    <!-- 💬 Support -->
-    <h3>💬 Need More Help?</h3>
-    <p>
-      Got a question, idea, or bug report?  
-      Please share it through our feedback form — it helps us make AksharaChitra better for everyone!
-    </p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="btn primary"
-       aria-label="Open feedback form">📝 Open Feedback Form</a>
-
-    <p class="muted" style="margin-top:16px;">Made with ❤️ by <strong>Sandeep Miriyala</strong> — Empowering creativity through AI & Accessibility.</p>
-  </div>
-</section>
-
+    <!-- 📘 HELP -->
+    <section id="help" class="tab-content">
+      <h2>📘 Help & Tips</h2>
+      <button id="speakHelp" class="btn ghost">🔊 Listen</button>
+      <ul>
+        <li>🖋️ Set text, upload image</li>
+        <li>🎨 Style fonts, colors, glow</li>
+        <li>💾 Save or share instantly</li>
+        <li>📲 Works offline as PWA</li>
+      </ul>
+    </section>
   </main>
 
-  <!-- 🌐 FOOTER -->
-  <footer class="footer" role="contentinfo">
-    <p>© <span id="year"></span> <strong>AksharaChitra</strong> • Made with ❤️ by <strong>Sandeep Miriyala</strong></p>
-    <button id="goTopBtn" class="go-top" aria-label="Go to top">⬆️ Go to Top</button>
+  <footer class="footer">
+    <p>© <span id="year"></span> AksharaChitra — Made with ❤️ by <strong>Sandeep Miriyala</strong></p>
+    <button id="goTopBtn" class="go-top">⬆️ Go to Top</button>
   </footer>
 
-  <!-- Cropper Modal -->
+  <!-- 🖼 Crop Modal -->
   <div id="cropModal" class="modal hidden">
     <div class="modal-content">
       <h3>Crop Image</h3>
@@ -389,247 +242,78 @@
     </div>
   </div>
 
+  <!-- 💌 Feedback Modal -->
+  <div id="feedbackModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h3 id="feedbackTitle">💌 Share Your Feedback</h3>
+        <button id="closeFeedbackModal" class="btn ghost" aria-label="Close feedback form">✖</button>
+      </header>
+
+      <div class="modal-body">
+        <p>We’d love to hear from you! Please fill out the quick form below or use the link if it doesn’t load properly.</p>
+        <iframe
+          id="feedbackIframe"
+          title="AksharaChitra Feedback Form"
+          loading="lazy"
+          style="width:100%;height:420px;border:none;border-radius:8px;"
+        ></iframe>
+        <p class="muted">
+          🔗 If the form doesn’t appear, open directly:
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkJ4AgmO7FJOZuhnLO7KaOkuc17fvbkcrBw1eXliwn7GPz4w/viewform?usp=publish-editor"
+             target="_blank" rel="noopener noreferrer">Open in Google Forms</a>
+        </p>
+      </div>
+
+      <footer class="modal-actions">
+        <button id="closeFeedbackModalFooter" class="btn ghost">Close</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Floating Feedback Button -->
+  <button id="openFeedbackModal" class="feedback-btn" title="Send feedback" aria-label="Open feedback form">💌</button>
+
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
 
-  <!-- Go to Top Script -->
   <script>
+    // Set current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    const goTopBtn = document.getElementById("goTopBtn");
-    window.addEventListener("scroll", () => {
-      goTopBtn.style.display = window.scrollY > 200 ? "block" : "none";
-    });
-    goTopBtn.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-  document.addEventListener("DOMContentLoaded", () => {
-
-
-  // 🌸 AksharaChitra — WhatsApp Share (Enhanced UI/UX v2.2)
-const shareBtn = document.getElementById("shareWhatsAppBtn");
-const featureList = document.getElementById("featureList");
-
-if (shareBtn && featureList) {
-  shareBtn.addEventListener("click", () => {
-    // Collect features cleanly
-    const features = Array.from(featureList.querySelectorAll("li"))
-      .map(li => `• ${li.innerText.trim()}`)
-      .join("\n");
-
-    // Beautiful WhatsApp message with strong visual hierarchy
-    const message = `
-🌸 *AksharaChitra * — Create Beautiful Posters *Offline* 🎨
-
-🚀 *Top Features:*
-${features}
-
-✨ Works 100% offline — no data uploaded  
-♿ Accessible & multilingual (English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, ଓଡ଼ିଆ)
-🎨 Instant preview, custom fonts, colors & glow
-
-🔗 Try it now → https://aksharachitra.netlify.app  
-💡 Made with ❤️ by *Sandeep Miriyala*
-`;
-
-    // Open WhatsApp share
-    const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message.trim());
-    window.open(whatsappUrl, "_blank");
-  });
-} else {
-  console.warn("Share button or feature list not found in DOM.");
-}
-
-    const startBtn = document.querySelector('[data-open="create"]');
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const tabContents = document.querySelectorAll(".tab-content");
-
-    if (startBtn) {
-      startBtn.addEventListener("click", () => {
-        // Remove active state from all tabs
-        tabButtons.forEach(btn => btn.classList.remove("active"));
-        tabContents.forEach(sec => sec.classList.remove("active"));
-
-        // Activate the Create tab
-        const createBtn = document.querySelector('[data-tab="create"]');
-        const createSection = document.getElementById("create");
-
-        if (createBtn) createBtn.classList.add("active");
-        if (createSection) createSection.classList.add("active");
-
-        // Smooth scroll to the Create section
-        createSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-  });
-document.addEventListener("DOMContentLoaded", () => {
-  const speakHomeBtn = document.getElementById("speakHome");
-  const homeSection = document.getElementById("home");
-  const synth = window.speechSynthesis;
-
-  if (speakHomeBtn && synth) {
-    speakHomeBtn.addEventListener("click", () => {
-      if (synth.speaking) {
-        synth.cancel();
-        speakHomeBtn.textContent = "🔊 Listen";
-        return;
-      }
-
-      // Extract text for narration
-      const text = homeSection.innerText
-        .replace(/🔊|🚀|🎨|🌈|♿|✅|🖼️|💾|✨|🪄|💌/g, "")
-        .replace(/\s{2,}/g, " ")
-        .trim();
-
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "en-US";
-      utter.rate = 0.97;
-      utter.pitch = 1.05;
-      utter.volume = 1.0;
-      utter.voice = synth.getVoices().find(v => /en/i.test(v.lang)) || null;
-
-      speakHomeBtn.textContent = "⏹ Stop Reading";
-      synth.speak(utter);
-
-      utter.onend = () => {
-        speakHomeBtn.textContent = "🔊 Listen";
-      };
-    });
-  }
-});
-
-
-  document.addEventListener("DOMContentLoaded", () => {
-  const speakButton = document.getElementById("speakHelp");
-  const helpSection = document.getElementById("help");
-
-  // Initialize SpeechSynthesis
-  const synth = window.speechSynthesis;
-
-  speakButton?.addEventListener("click", () => {
-    if (!synth) {
-      alert("Text-to-speech is not supported on this browser.");
-      return;
-    }
-
-    // Stop ongoing speech
-    if (synth.speaking) {
-      synth.cancel();
-      speakButton.textContent = "🔊 Listen";
-      return;
-    }
-
-    // Get text content (exclude icons/emojis)
-    const text = helpSection.innerText
-      .replace(/🔊|🎨|📘|🖋️|🖼️|🎯|💬|♿|🌈|💾|✨|📲/g, "")
-      .replace(/\s{2,}/g, " ");
-
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "en-US";
-    utter.rate = 0.98;
-    utter.pitch = 1.0;
-    utter.volume = 1.0;
-    utter.voice = synth.getVoices().find(v => /en/i.test(v.lang)) || null;
-
-    speakButton.textContent = "⏹ Stop Reading";
-    synth.speak(utter);
-
-    utter.onend = () => {
-      speakButton.textContent = "🔊 Listen";
-    };
-  });
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const msgInput = document.getElementById("message");
-  const langSelect = document.getElementById("language");
-  const startBtn = document.getElementById("startVoice");
-  const stopBtn = document.getElementById("stopVoice");
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const SpeechSynthesis = window.speechSynthesis;
-
-  if (!SpeechRecognition) {
-    startBtn.disabled = true;
-    startBtn.textContent = "⚠️ Voice not supported";
+    // 🗣️ Simple Text-to-Speech Function
+function speakText(text, lang = "en-IN", rate = 1, pitch = 1, volume = 1) {
+  if (!("speechSynthesis" in window)) {
+    alert("Sorry, your browser doesn’t support text-to-speech.");
     return;
   }
 
-  const recog = new SpeechRecognition();
-  recog.continuous = true;
-  recog.interimResults = false;
+  // Stop any ongoing speech before starting new one
+  window.speechSynthesis.cancel();
 
-  const langMap = {
-    "English": "en-IN",
-    "తెలుగు": "te-IN",
-    "हिंदी": "hi-IN",
-    "தமிழ்": "ta-IN",
-    "ಕನ್ನಡ": "kn-IN",
-    "മലയാളം": "ml-IN",
-    "ଓଡ଼ିଆ": "or-IN"
-  };
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;      // English (India)
+  utterance.rate = rate;      // 1 = normal speed
+  utterance.pitch = pitch;    // 1 = normal tone
+  utterance.volume = volume;  // 1 = full volume
 
-  // 🔤 Update recognition language
-  function updateLang() {
-    recog.lang = langMap[langSelect.value] || "en-IN";
-  }
-  langSelect.addEventListener("change", updateLang);
-  updateLang();
+  window.speechSynthesis.speak(utterance);
+}
 
-  // 🎤 Start Listening
-  startBtn.addEventListener("click", () => {
-    try {
-      recog.start();
-      startBtn.classList.add("listening");
-      startBtn.textContent = "🎙 Listening...";
-      startBtn.setAttribute("aria-pressed", "true");
-      stopBtn.classList.remove("hidden");
-    } catch {
-      startBtn.textContent = "🎤 Try Again";
-    }
-  });
-
-  // ⏹ Stop Listening
-  stopBtn.addEventListener("click", () => {
-    recog.stop();
-    startBtn.classList.remove("listening");
-    startBtn.textContent = "🎤 Speak Message";
-    stopBtn.classList.add("hidden");
-  });
-
-  // 🧠 Handle Speech Result
-  recog.onresult = (e) => {
-    const transcript = e.results[e.resultIndex][0].transcript.trim();
-    msgInput.value = transcript;
-
-    // 🔊 Voice Confirmation (TTS)
-    const confirmText = `Got it! You said: ${transcript}`;
-    const utter = new SpeechSynthesisUtterance(confirmText);
-    utter.lang = recog.lang;
-    SpeechSynthesis.speak(utter);
-  };
-
-  // ❌ Handle Errors
-  recog.onerror = (e) => {
-    console.error("Voice error:", e.error);
-    startBtn.textContent = "🎤 Try Again";
-    startBtn.classList.remove("listening");
-    stopBtn.classList.add("hidden");
-  };
-
-  recog.onend = () => {
-    startBtn.classList.remove("listening");
-    startBtn.textContent = "🎤 Speak Message";
-    stopBtn.classList.add("hidden");
-  };
+// 🎧 HOME “Listen” Button — Plays welcome message
+document.getElementById("speakHome")?.addEventListener("click", () => {
+  speakText("Welcome to Akshara Chitra! Create beautiful posters, invitations, and quotes instantly.");
 });
 
+// 🎧 HELP “Listen” Button — Reads help instructions
+document.getElementById("speakHelp")?.addEventListener("click", () => {
+  speakText("Here are a few tips. Set your text and upload an image. Customize fonts, colors, and glow. Save or share instantly. Works offline as a progressive web app.");
+});
 
-</script>
+// 📅 Footer year auto-update (optional small enhancement)
+document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
