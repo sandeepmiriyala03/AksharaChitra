@@ -1,26 +1,24 @@
 /* ==========================================================
-   🌸 AksharaChitra — main.js (v15.6 Stable)
+   🌸 AksharaChitra — main.js (v15.7 Stable)
    ----------------------------------------------------------
-   Features: User Alignment Controls • QR Fix • Responsive Padding
+   Features:
+   ✅ Fixed Footer Duplication
+   ✅ Responsive Padding
+   ✅ QR Code Clear & Alignment
+   ✅ Language + Font Overview in WhatsApp Share
+   ✅ IndexedDB Save / Share / Delete
+   ✅ Voice + TTS + PWA Support
    ----------------------------------------------------------
-   Built & Maintained by: Sandeep Miriyala
+   Developed & Maintained by: Sandeep Miriyala
    ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // ---------------------------------------------
-  // 🔧 Small DOM helpers
-  // ---------------------------------------------
+  // 🔧 Shortcuts
   const $ = (id) => document.getElementById(id);
-  const on = (el, ev, fn) => {
-    if (!el || typeof el.addEventListener !== "function") return;
-    el.addEventListener(ev, fn);
-  };
-
+  const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
   const qsAll = (sel) => Array.from(document.querySelectorAll(sel));
 
-  // ---------------------------------------------
-  // 🧩 Core Elements
-  // ---------------------------------------------
+  // 🧩 Elements
   const titleEl = $("title"),
         subtitleEl = $("subtitle"),
         messageEl = $("message"),
@@ -43,9 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
         customDate = $("customDate"),
         installBtn = $("installBtn"),
         installBtnHeader = $("installBtnHeader"),
-        shareWhatsAppBtn = $("shareWhatsAppBtn");
+        shareWhatsAppBtn = $("shareWhatsAppBtn"),
+        openCreateBtn = $("openCreateBtn"),
+        goTopBtn = $("goTopBtn"),
+        fontFamily = $("fontFamily"),
+        imagePosition = $("imagePosition"),
+        smallLogoUpload = $("smallLogoUpload"),
+        imageUpload = $("imageUpload");
 
-  // Text controls
+  // Text Controls
   const titleSize = $("titleSize"),
         subtitleSize = $("subtitleSize"),
         messageSize = $("messageSize"),
@@ -57,1005 +61,217 @@ document.addEventListener("DOMContentLoaded", () => {
         messageColor = $("messageColor"),
         titleBg = $("titleBg"),
         subtitleBg = $("subtitleBg"),
-        messageBg = $("messageBg"),
-        fontFamily = $("fontFamily"),
-        imageUpload = $("imageUpload"),
-        imagePosition = $("imagePosition"),
-        smallLogoUpload = $("smallLogoUpload"),
-        openCreateBtn = $("openCreateBtn"),
-        goTopBtn = $("goTopBtn");
+        messageBg = $("messageBg");
 
-  // Crop modal
+  // Cropper
   const cropModal = $("cropModal"),
         cropImage = $("cropImage"),
         applyCropBtn = $("applyCropBtn"),
         cancelCropBtn = $("cancelCropBtn");
 
-  // ---------------------------------------------
-  // ⚙️ State variables
-  // ---------------------------------------------
-  let cropper = null;
-  let cropTarget = null; // "main" | "logo"
-  let uploadedMainData = "";
-  let uploadedLogoData = "";
-  let posterDate = "";
-  let deferredPrompt = null;
+  // ⚙️ States
+  let cropper = null, cropTarget = null, uploadedMainData = "", uploadedLogoData = "";
+  let posterDate = "", deferredPrompt = null;
   const AUTOSAVE_KEY = "ak_autosave_v13";
 
-  // ---------------------------------------------
-  // 💾 IndexedDB setup
-  // ---------------------------------------------
-  const DB_NAME = "ak_gallery_v13";
-  const STORE_NAME = "posters";
-  let db = null;
+  // 🧠 Utility
+  const safeSetStyle = (el, st) => el && Object.assign(el.style, st);
+  const formatFilename = (b, w, h) => `${(b || "AksharaChitra").replace(/[^\w\- ]/g, "").slice(0, 40)}_${w}x${h}.png`;
 
-  // 🔹 openDB() — creates or opens IndexedDB
-  function openDB() {
-    return new Promise((resolve, reject) => {
-      if (db) return resolve(db);
-      const req = indexedDB.open(DB_NAME, 1);
-      req.onupgradeneeded = (e) => {
-        const d = e.target.result;
-        if (!d.objectStoreNames.contains(STORE_NAME)) {
-          const store = d.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
-          store.createIndex("ts", "ts");
-          store.createIndex("title", "title");
-        }
-      };
-      req.onsuccess = (e) => { db = e.target.result; resolve(db); };
-      req.onerror = (e) => reject(e);
-    });
-  }
-
-  // 🔹 saveToDB(record)
-  async function saveToDB(rec) {
-    await openDB();
-    return new Promise((res, rej) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).add(rec);
-      tx.oncomplete = () => res();
-      tx.onerror = (ev) => rej(ev);
-    });
-  }
-
-  // 🔹 getAllFromDB()
-  async function getAllFromDB() {
-    await openDB();
-    return new Promise((res) => {
-      const tx = db.transaction(STORE_NAME, "readonly");
-      const req = tx.objectStore(STORE_NAME).getAll();
-      req.onsuccess = () => res(req.result || []);
-      req.onerror = () => res([]);
-    });
-  }
-
-  // 🔹 deleteFromDB(id)
-  async function deleteFromDB(id) {
-    await openDB();
-    return new Promise((res) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).delete(id);
-      tx.oncomplete = () => res();
-      tx.onerror = () => res();
-    });
-  }
-
-  // ---------------------------------------------
-  // 🧠 Utility helpers
-  // ---------------------------------------------
-  function safeSetStyle(el, styles) {
-    if (!el) return;
-    Object.assign(el.style, styles);
-  }
-
-  function formatFilename(base, w, h) {
-    const clean = (base || "AksharaChitra").replace(/[^\w\- ]/g, "").slice(0, 40);
-    return `${clean}_${w}x${h}.png`;
-  }
-
-  // ---------------------------------------------
-  // 🧭 Navigation between tabs
-  // ---------------------------------------------
-  qsAll(".tab-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
+  // 🧭 Tabs
+  qsAll(".tab-btn").forEach(btn => {
+    on(btn, "click", () => {
       qsAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      qsAll(".tab-content").forEach(s => s.classList.remove("active"));
+      qsAll(".tab-content").forEach(c => c.classList.remove("active"));
       btn.classList.add("active");
-      const target = btn.getAttribute("data-tab");
-      const sec = document.getElementById(target);
-      if (sec) sec.classList.add("active");
-      if (target === "gallery") setTimeout(renderIndexedGallery, 200);
+      $(btn.dataset.tab)?.classList.add("active");
+      if (btn.dataset.tab === "gallery") setTimeout(renderIndexedGallery, 200);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
+  on(openCreateBtn, "click", () => qsAll(".tab-btn")[1]?.click());
 
-  // Home “Create” shortcut
-  if (openCreateBtn) on(openCreateBtn, "click", () => {
-    const createBtn = document.querySelector('.tab-btn[data-tab="create"]');
-    if (createBtn) createBtn.click();
+  // 🌙 Theme toggle
+  on(themeToggle, "click", () => {
+    document.body.classList.toggle("dark");
+    localStorage.setItem("ak_theme_dark", document.body.classList.contains("dark"));
   });
+  if (localStorage.getItem("ak_theme_dark") === "true") document.body.classList.add("dark");
 
-  // ---------------------------------------------
-  // 🌙 Theme toggle (persist)
-  // ---------------------------------------------
-  if (themeToggle) {
-    on(themeToggle, "click", () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("ak_theme_dark", document.body.classList.contains("dark"));
-    });
-    if (localStorage.getItem("ak_theme_dark") === "true") document.body.classList.add("dark");
-  }
-
-  // ---------------------------------------------
-  // 🗓️ Poster Date options
-  // ---------------------------------------------
+  // 🗓️ Poster Date
   function updatePosterDateFromOption() {
-    if (!posterDateOption) return;
     const now = new Date();
-    if (posterDateOption.value === "current") {
-      posterDate = now.toLocaleString();
-      if (customDate) customDate.classList.add("hidden");
-    } else if (posterDateOption.value === "prevMonth") {
-      const d = new Date(now);
-      d.setMonth(d.getMonth() - 1);
-      posterDate = d.toLocaleString();
-      if (customDate) customDate.classList.add("hidden");
-    } else if (posterDateOption.value === "custom") {
-      if (customDate) customDate.classList.remove("hidden");
-      if (customDate && customDate.value) posterDate = new Date(customDate.value).toLocaleString();
-    } else {
-      posterDate = "";
-      if (customDate) customDate.classList.add("hidden");
-    }
+    if (posterDateOption.value === "current") posterDate = now.toLocaleString();
+    else if (posterDateOption.value === "prevMonth") { now.setMonth(now.getMonth() - 1); posterDate = now.toLocaleString(); }
+    else if (posterDateOption.value === "custom" && customDate.value) posterDate = new Date(customDate.value).toLocaleString();
   }
-  if (posterDateOption) on(posterDateOption, "change", () => { updatePosterDateFromOption(); renderPreview(); });
-  if (customDate) on(customDate, "change", () => { posterDate = new Date(customDate.value).toLocaleString(); renderPreview(); });
+  on(posterDateOption, "change", () => { updatePosterDateFromOption(); renderPreview(); });
+  on(customDate, "change", () => { updatePosterDateFromOption(); renderPreview(); });
 
-  // ---------------------------------------------
-  // ✂️ Cropper.js integration
-  // ---------------------------------------------
+  // ✂️ Cropper
   function openCropModal(dataUrl, target) {
+    cropTarget = target;
     if (!cropModal || !cropImage) {
       if (target === "logo") uploadedLogoData = dataUrl; else uploadedMainData = dataUrl;
-      renderPreview();
-      return;
+      return renderPreview();
     }
-    cropTarget = target;
     cropImage.src = dataUrl;
     cropModal.classList.remove("hidden");
-    try { if (cropper) cropper.destroy(); } catch (e) {}
-    cropper = new Cropper(cropImage, {
-      viewMode: 1,
-      autoCropArea: 1,
-      background: false,
-      responsive: true,
-      movable: true,
-      zoomable: true,
-      rotatable: false
-    });
+    cropper && cropper.destroy();
+    cropper = new Cropper(cropImage, { viewMode: 1, autoCropArea: 1, background: false });
   }
 
-  // ✅ Apply crop
-  if (applyCropBtn) on(applyCropBtn, "click", () => {
-    if (!cropper) { cropModal.classList.add("hidden"); return; }
-    try {
-      const canvas = cropper.getCroppedCanvas({ maxWidth: 3000, imageSmoothingQuality: "high" });
-      const dataUrl = canvas.toDataURL("image/png");
-      if (cropTarget === "logo") uploadedLogoData = dataUrl; else uploadedMainData = dataUrl;
-    } catch (err) {
-      console.error("Crop apply error", err);
-      alert("Unable to crop image.");
-    }
-    try { cropper.destroy(); } catch (e) {}
-    cropper = null;
+  on(applyCropBtn, "click", () => {
+    if (!cropper) return (cropModal.classList.add("hidden"));
+    const canvas = cropper.getCroppedCanvas({ maxWidth: 3000 });
+    const dataUrl = canvas.toDataURL("image/png");
+    cropTarget === "logo" ? uploadedLogoData = dataUrl : uploadedMainData = dataUrl;
+    cropper.destroy(); cropper = null;
     cropModal.classList.add("hidden");
     renderPreview();
   });
+  on(cancelCropBtn, "click", () => { cropper?.destroy(); cropper = null; cropModal.classList.add("hidden"); });
+  on(imageUpload, "change", e => { const f = e.target.files?.[0]; if (f) { const r = new FileReader(); r.onload = ev => openCropModal(ev.target.result, "main"); r.readAsDataURL(f); } });
+  on(smallLogoUpload, "change", e => { const f = e.target.files?.[0]; if (f) { const r = new FileReader(); r.onload = ev => openCropModal(ev.target.result, "logo"); r.readAsDataURL(f); } });
 
-  // ❌ Cancel crop
-  if (cancelCropBtn) on(cancelCropBtn, "click", () => {
-    try { if (cropper) cropper.destroy(); } catch (e) {}
-    cropper = null;
-    cropModal.classList.add("hidden");
-  });
-
-  // File input listeners
-  if (imageUpload) {
-    on(imageUpload, "change", (e) => {
-      const f = e.target.files?.[0];
-      if (!f) return;
-      const r = new FileReader();
-      r.onload = (ev) => openCropModal(ev.target.result, "main");
-      r.readAsDataURL(f);
-    });
-  }
-  if (smallLogoUpload) {
-    on(smallLogoUpload, "change", (e) => {
-      const f = e.target.files?.[0];
-      if (!f) return;
-      const r = new FileReader();
-      r.onload = (ev) => openCropModal(ev.target.result, "logo");
-      r.readAsDataURL(f);
-    });
-  }
-
-  // 🚧 End of Part 1 — next: Live Preview + Font Controls
-
-/* ==========================================================
-   🌸 AksharaChitra — v13 Final
-   Part 2 of 4 — Live Preview + Font Controls + Templates
-   ========================================================== */
-
-  // ---------------------------------------------
-  // 🪶 Render Preview — updates instantly when user edits
-  // ---------------------------------------------
+  // 🪶 Render Preview
   function renderPreview() {
-    // Guard: require previewCard
     if (!previewCard) return;
-
-    const qrAlignEl = document.getElementById("qrAlign");
-    if (qrAlignEl) on(qrAlignEl, "change", renderPreview);
-
-    previewCard.style.position = "relative";
-    previewCard.style.overflow = "hidden";
     previewCard.style.padding = window.innerWidth < 480 ? "8px" : "12px";
+    previewCard.style.background = (messageBg?.value) || "#fff";
+    previewCard.innerHTML = "";
 
-    previewCard.style.borderRadius = "12px";
-    previewCard.style.background = (messageBg && messageBg.value) || "#fff";
+    // Small Logo
+    if (uploadedLogoData)
+      previewCard.innerHTML += `<img src="${uploadedLogoData}" style="width:55px;height:55px;border-radius:8px;display:block;margin:6px auto;">`;
 
-    // ---------- Small Logo ----------
-    if (pSmallLogo) {
-      pSmallLogo.innerHTML = uploadedLogoData
-        ? `<img src="${uploadedLogoData}" alt="logo"
-               style="width:55px;height:55px;border-radius:8px;
-                      display:block;margin:6px auto;">`
-        : "";
+    // Title
+    if (titleEl?.value)
+      previewCard.innerHTML += `<h2 style="font-family:${fontFamily?.value};font-size:${titleSize?.value}px;text-align:${titleAlign?.value};color:${titleColor?.value};background:${titleBg?.value};font-weight:700;margin:6px 0;">${titleEl.value}</h2>`;
+
+    // Subtitle
+    if (subtitleEl?.value)
+      previewCard.innerHTML += `<h3 style="font-family:${fontFamily?.value};font-size:${subtitleSize?.value}px;text-align:${subtitleAlign?.value};color:${subtitleColor?.value};background:${subtitleBg?.value};font-weight:500;margin:4px 0;">${subtitleEl.value}</h3>`;
+
+    // Image
+    if (uploadedMainData)
+      previewCard.innerHTML += `<img src="${uploadedMainData}" style="max-width:100%;display:block;margin:8px auto;border-radius:10px;object-fit:cover;">`;
+
+    // Message
+    if (messageEl?.value)
+      previewCard.innerHTML += `<p style="font-family:${fontFamily?.value};font-size:${messageSize?.value}px;text-align:${contentAlign?.value};color:${messageColor?.value};background:${messageBg?.value};margin:10px 0;">${messageEl.value.replace(/\n/g, "<br>")}</p>`;
+
+    // QR Code
+    const qrVal = $("qrText")?.value?.trim();
+    if (qrVal && typeof QRCode !== "undefined") {
+      const qr = document.createElement("div");
+      new QRCode(qr, { text: qrVal, width: 70, height: 70 });
+      const qrWrap = document.createElement("div");
+      qrWrap.style.textAlign = $("qrAlign")?.value || "left";
+      qrWrap.appendChild(qr);
+      previewCard.appendChild(qrWrap);
     }
 
-    // ---------- Title ----------
-    if (pTitle) {
-      pTitle.textContent = titleEl?.value || "";
-      safeSetStyle(pTitle, {
-        fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (titleSize?.value || 16) + "px",
-        textAlign: titleAlign?.value, // ✅ User controlled only
-        color: titleColor?.value || "#111",
-        background: titleBg?.value || "transparent",
-        fontWeight: "700",
-        margin: "6px 0 4px",
-        wordBreak: "break-word",
-        display: pTitle.textContent ? "block" : "none",
-      });
-    }
-
-    // ---------- Subtitle ----------
-    if (pSubtitle) {
-      pSubtitle.textContent = subtitleEl?.value || "";
-      safeSetStyle(pSubtitle, {
-        fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (subtitleSize?.value || 14) + "px",
-        textAlign: subtitleAlign?.value, // ✅ User controlled only
-        color: subtitleColor?.value || "#333",
-        background: subtitleBg?.value || "transparent",
-        fontWeight: "500",
-        margin: "4px 0 10px",
-        wordBreak: "break-word",
-        display: pSubtitle.textContent ? "block" : "none",
-      });
-    }
-
-    // ---------- Image ----------
-    if (pImage) {
-      if (uploadedMainData) {
-        const pos = imagePosition?.value || "center";
-        let style =
-          "max-width:100%;display:block;margin:8px auto;border-radius:10px;object-fit:cover;";
-        if (pos === "left")
-          style =
-            "max-width:100%;display:block;margin:8px auto 8px 0;border-radius:10px;object-fit:cover;";
-        if (pos === "right")
-          style =
-            "max-width:100%;display:block;margin:8px 0 8px auto;border-radius:10px;object-fit:cover;";
-        pImage.innerHTML = `<img src="${uploadedMainData}" alt="main" style="${style}">`;
-      } else pImage.innerHTML = "";
-    }
-
-    // ---------- Message ----------
-    if (pMessage) {
-      pMessage.innerHTML = (messageEl?.value || "").replace(/\n/g, "<br>");
-      safeSetStyle(pMessage, {
-        fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (messageSize?.value || 12) + "px",
-        textAlign: contentAlign?.value || "center",
-        color: messageColor?.value || "#111",
-        background: messageBg?.value || "transparent",
-        marginTop: "10px",
-        wordBreak: "break-word",
-      });
-    }
-
-    // ---------- QR Code (User Aligned, Single Instance) ----------
-    const qrValue = document.getElementById("qrText")?.value?.trim();
-    const qrAlign = qrAlignEl?.value || "left";
-    if (pQR) {
-      pQR.innerHTML = "";
-      if (qrValue && typeof QRCode !== "undefined") {
-        const qrContainer = document.createElement("div");
-        qrContainer.style.textAlign = qrAlign;
-        qrContainer.style.marginTop = "12px";
-
-        const qrDiv = document.createElement("div");
-        qrDiv.id = "qrPreview";
-        qrContainer.appendChild(qrDiv);
-        pQR.appendChild(qrContainer);
-
-        new QRCode(qrDiv, {
-          text: qrValue,
-          width: 70,
-          height: 70,
-          colorDark: "#000",
-          colorLight: "#fff",
-          correctLevel: QRCode.CorrectLevel.H,
-        });
-      }
-    }
-
-    // ---------- Footer: Date + Logo + App Name ----------
-    previewCard.querySelectorAll(".ak-footer").forEach(el => el.remove());
+    // Footer
     const footer = document.createElement("div");
     footer.className = "ak-footer";
-    footer.style.position = "absolute";
-    footer.style.bottom = "6px";
-    footer.style.left = "10px";
-    footer.style.right = "10px";
-    footer.style.display = "flex";
-    footer.style.alignItems = "center";
-    footer.style.justifyContent = "space-between";
-    footer.style.fontSize = "10px";
-    footer.style.opacity = "0.7";
-    footer.style.color = "#333";
+    safeSetStyle(footer, {
+      display: "flex", justifyContent: "space-between", alignItems: "center",
+      position: "absolute", bottom: "6px", left: "10px", right: "10px",
+      fontSize: "10px", opacity: "0.7", color: "#333"
+    });
 
-    // Date
     const now = new Date();
-    const formatted = now
-      .toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      })
-      .replace(",", "");
-    const dateSpan = document.createElement("span");
-    dateSpan.textContent = formatted;
-
-    // Logo + App name
-    const logoGroup = document.createElement("div");
-    logoGroup.style.display = "flex";
-    logoGroup.style.alignItems = "center";
-    logoGroup.style.gap = "4px";
-
-    const logoImg = document.createElement("img");
-    logoImg.src = "logo.png";
-    logoImg.style.width = "16px";
-    logoImg.style.height = "16px";
-    logoImg.style.borderRadius = "4px";
-
-    const logoText = document.createElement("span");
-    logoText.textContent = "AksharaChitra";
-    logoText.style.fontStyle = "italic";
-
-    logoGroup.appendChild(logoImg);
-    logoGroup.appendChild(logoText);
-
-    footer.appendChild(dateSpan);
-    footer.appendChild(logoGroup);
+    const dateText = now.toLocaleString("en-IN", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }).replace(",", "");
+    footer.innerHTML = `<span>${dateText}</span><div style="display:flex;align-items:center;gap:4px;"><img src="logo.png" style="width:16px;height:16px;border-radius:4px;"><span style="font-style:italic;">AksharaChitra</span></div>`;
     previewCard.appendChild(footer);
   }
 
-  // ---------------------------------------------
-  // 🔄 Live-update preview on any input change
-  // ---------------------------------------------
-  [
-    titleEl, subtitleEl, messageEl,
-    titleSize, subtitleSize, messageSize,
-    titleAlign, subtitleAlign, contentAlign,
-    titleColor, subtitleColor, messageColor,
-    titleBg, subtitleBg, messageBg,
-    fontFamily, imagePosition
-  ].forEach((el) => { if (el) on(el, "input", renderPreview); });
-
-  // ---------------------------------------------
-  // 📦 Template presets (Quick-fill)
-  // ---------------------------------------------
-  const templateSelect = $("templateSelect");
-  if (templateSelect) {
-    const templates = {
-      news:       { title: "📰 Breaking News", subtitle: "", message: "Write your update here..." },
-      birthday:   { title: "🎂 Happy Birthday!", subtitle: "Best Wishes", message: "Many Happy Returns of the Day!" },
-      devotional: { title: "🕉 శుభ దినం", subtitle: "", message: "May divine blessings be with you 🙏" },
-      business:   { title: "🏢 Business Update", subtitle: "", message: "Contact us at +91 99999 99999" },
-      invitation: { title: "💌 Invitation", subtitle: "", message: "Venue • Date • Time" },
-      quote:      { title: "💬 Quote of the Day", subtitle: "", message: "Believe in yourself ✨" },
-    };
-    on(templateSelect, "change", () => {
-      const v = templateSelect.value;
-      if (templates[v]) {
-        if (titleEl)    titleEl.value    = templates[v].title;
-        if (subtitleEl) subtitleEl.value = templates[v].subtitle;
-        if (messageEl)  messageEl.value  = templates[v].message;
-        renderPreview();
-      }
-    });
-  }
-
-  // ---------------------------------------------
-  // 🗣️ Language placeholder logic
-  // ---------------------------------------------
-  const LANG = {
-    en: { title: "Title", subtitle: "Subtitle", message: "Type your message..." },
-    te: { title: "శీర్షిక", subtitle: "ఉపశీర్షిక", message: "సందేశం రాయండి..." },
-    hi: { title: "शीर्षक", subtitle: "उपशीर्षक", message: "अपना संदेश लिखें..." },
-    ta: { title: "தலைப்பு", subtitle: "துணைத் தலைப்பு", message: "உங்கள் செய்தியை எழுதுங்கள்..." },
-    kn: { title: "ಶೀರ್ಷಿಕೆ", subtitle: "ಉಪಶೀರ್ಷಿಕೆ", message: "ನಿಮ್ಮ ಸಂದೇಶವನ್ನು ಬರೆಯಿರಿ..." },
-    ml: { title: "ശീർഷകം", subtitle: "ഉപശീർഷകം", message: "താങ്കളുടെ സന്ദേശം അടിക്കൊള്ളുക..." },
-    or: { title: "ଶୀର୍ଷକ", subtitle: "ଉପଶୀର୍ଷକ", message: "ଆପଣଙ୍କ ସନ୍ଦେଶ ଲେଖନ୍ତୁ..." },
-    sa: { title: "शीर्षकम्", subtitle: "उपशीर्षकम्", message: "सन्देशं लिखतु..." },
-  };
-  if (languageSelect) {
-    on(languageSelect, "change", () => {
-      const val = languageSelect.value;
-      const L = LANG[val] || LANG.en;
-      if (titleEl)    titleEl.placeholder    = L.title;
-      if (subtitleEl) subtitleEl.placeholder = L.subtitle;
-      if (messageEl)  messageEl.placeholder  = L.message;
-    });
-  }
-
-  // ---------------------------------------------
-  // 🚀 Initial render on load
-  // ---------------------------------------------
+  // Live update
+  [titleEl, subtitleEl, messageEl, titleSize, subtitleSize, messageSize, titleAlign,
+   subtitleAlign, contentAlign, titleColor, subtitleColor, messageColor, titleBg,
+   subtitleBg, messageBg, fontFamily, imagePosition].forEach(e => on(e, "input", renderPreview));
   renderPreview();
 
-  // 🚧 End of Part 2 — Next: Image Generation, Save, Gallery & Share
-/* ==========================================================
-   🌸 AksharaChitra — v13 Final
-   Part 3 of 4 — Image Generation, Save, Gallery & Share
-   ========================================================== */
-
+  // ✅ Generate Image (Fixed Footer)
   async function generateImage({ download = false } = {}) {
-    if (!previewCard) return alert("Preview not found");
-    if (typeof html2canvas === "undefined") return alert("html2canvas not loaded");
-
-    const width = 1200;
-    const height = Math.round(width * 9 / 16);
-    const scale = Math.min(3, window.devicePixelRatio || 2);
-
-    const originalWidth = previewCard.style.width;
-    const originalHeight = previewCard.style.height;
-    const prevPadding = previewCard.style.padding;
-
-    previewCard.style.width = width + "px";
-    previewCard.style.height = height + "px";
-    previewCard.style.padding = "8px 14px 10px 14px";
-
-    const overlay = document.createElement("div");
-    Object.assign(overlay.style, {
-      position: "fixed",
-      inset: 0,
-      background: "rgba(255,255,255,0.7)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 9999,
-      fontFamily: "Montserrat, sans-serif",
-      fontSize: "1.1rem",
-      color: "#1e88e5",
-      fontWeight: "600",
-    });
-    overlay.textContent = "⏳ Generating Poster...";
+    if (!previewCard) return alert("Preview missing");
+    const width = 1200, height = Math.round(width * 9 / 16), scale = Math.min(3, window.devicePixelRatio || 2);
+    const origW = previewCard.style.width, origH = previewCard.style.height, origPad = previewCard.style.padding;
+    previewCard.style.width = width + "px"; previewCard.style.height = height + "px"; previewCard.style.padding = "8px 14px 10px";
+    const overlay = Object.assign(document.createElement("div"), { textContent: "⏳ Generating Poster..." });
+    Object.assign(overlay.style, { position: "fixed", inset: 0, background: "rgba(255,255,255,0.7)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Montserrat", color: "#1e88e5", fontWeight: "600", zIndex: 9999 });
     document.body.appendChild(overlay);
-
     try {
       await new Promise(r => setTimeout(r, 300));
-
-      // Capture DOM (includes QR + alignment from user)
-      const canvas = await html2canvas(previewCard, {
-        scale,
-        width,
-        height,
-        useCORS: true,
-        backgroundColor: null,
-        allowTaint: true,
-      });
-
-      const ctx = canvas.getContext("2d");
-
-      // ======================================================
-      // 🕒 FOOTER — Date/Time + Logo + App Name
-      // ======================================================
-      try {
-        const now = new Date();
-        const formattedDate = now.toLocaleString("en-IN", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        }).replace(",", "");
-
-        const dateText = formattedDate;
-        const appName = "AksharaChitra";
-
-        ctx.beginPath();
-        ctx.strokeStyle = "rgba(0,0,0,0.25)";
-        ctx.lineWidth = 1 * scale;
-        ctx.moveTo(10 * scale, canvas.height - 50 * scale);
-        ctx.lineTo(canvas.width - 10 * scale, canvas.height - 50 * scale);
-        ctx.stroke();
-
-        const fontSize = Math.max(9, Math.round(9 * scale));
-        ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-        ctx.textBaseline = "alphabetic";
-        ctx.fillStyle = "#222";
-
-        ctx.textAlign = "left";
-        ctx.fillText(dateText, 16 * scale, canvas.height - 20 * scale);
-
-        const logoImg = new Image();
-        logoImg.src = "logo.png";
-        await new Promise(res => (logoImg.onload = res, logoImg.onerror = res));
-        const logoSize = 22 * scale;
-        const logoY = canvas.height - 38 * scale;
-        const textWidth = ctx.measureText(appName).width;
-
-        ctx.textAlign = "right";
-        ctx.fillText(appName, canvas.width - 16 * scale, canvas.height - 20 * scale);
-        const logoX = canvas.width - (textWidth + 40 * scale);
-        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-      } catch (e) {
-        console.warn("⚠️ Footer draw failed:", e);
-      }
-
-      // ======================================================
-      // 📸 EXPORT PNG
-      // ======================================================
+      const canvas = await html2canvas(previewCard, { scale, useCORS: true, backgroundColor: null });
       const dataUrl = canvas.toDataURL("image/png");
       if (download) {
-        const fname = formatFilename(titleEl?.value || "AksharaChitra", width, height);
         const a = document.createElement("a");
         a.href = dataUrl;
-        a.download = fname;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        a.download = formatFilename(titleEl?.value, width, height);
+        document.body.appendChild(a); a.click(); a.remove();
       }
-
-      previewCard.style.width = originalWidth;
-      previewCard.style.height = originalHeight;
-      previewCard.style.padding = prevPadding;
       overlay.remove();
+      previewCard.style.width = origW; previewCard.style.height = origH; previewCard.style.padding = origPad;
       return dataUrl;
-
-    } catch (err) {
-      console.error("generateImage error", err);
+    } catch (e) {
+      console.error("generateImage error", e);
       overlay.remove();
-      previewCard.style.width = originalWidth;
-      previewCard.style.height = originalHeight;
-      previewCard.style.padding = prevPadding;
+      previewCard.style.width = origW; previewCard.style.height = origH; previewCard.style.padding = origPad;
       return null;
     }
   }
 
-  // ✅ Buttons (no confirm, direct actions)
-  if (generateBtn)
-    on(generateBtn, "click", async () => {
-      await generateImage({ download: false });
-    });
+  on(generateBtn, "click", () => generateImage());
+  on(downloadBtn, "click", () => generateImage({ download: true }));
 
-  if (downloadBtn)
-    on(downloadBtn, "click", async () => {
-      await generateImage({ download: true });
-    });
-
-
-  // ---------------------------------------------
-  // 📤 Native Share API + WhatsApp fallback
-  // ---------------------------------------------
-  if (shareBtn) on(shareBtn, "click", async () => {
-    try {
-      const dataUrl = await generateImage({ download: false });
-      if (!dataUrl) return;
-      const resp = await fetch(dataUrl);
-      const blob = await resp.blob();
-      const file = new File([blob], formatFilename(titleEl?.value, previewCard.clientWidth, previewCard.clientHeight), { type: blob.type });
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "AksharaChitra Poster", text: "Created with AksharaChitra" });
-      } else {
-        alert("Native share not supported — downloading instead.");
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = formatFilename(titleEl?.value, previewCard.clientWidth, previewCard.clientHeight);
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      }
-    } catch (err) {
-      console.error("Share error", err);
-      alert("Share failed.");
-    }
+  // 🧹 Clear all
+  on(clearBtn, "click", () => {
+    if (!confirm("Clear all fields?")) return;
+    [titleEl, subtitleEl, messageEl].forEach(e => e.value = "");
+    uploadedMainData = uploadedLogoData = "";
+    $("qrText").value = ""; pQR.innerHTML = "";
+    renderPreview();
   });
 
-  // WhatsApp info share (text)
-  if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", () => {
-  const features = [
-    "🖋️ Customize Title, Subtitle & Message",
-    "🌐 Supports Indian Languages",
-    "🖼️ Upload & Crop Images",
-    "🔖 Add Logo / Watermark",
-    "📅 Auto or Custom Date",
-    "💾 Offline Save (IndexedDB)",
-    "📤 Quick Social Share",
-    "🌙 Dark Mode Anytime",
-    "⚡ PWA — Works Fully Offline"
-  ].map(f => `• ${f}`).join("\n");
+  // 📤 WhatsApp Share (with fonts overview)
+  on(shareWhatsAppBtn, "click", () => {
+    const features = [
+      "🖋️ Customize Title, Subtitle & Message",
+      "🌐 Supports 8+ Indian Languages",
+      "🖼️ Upload & Crop Images",
+      "📅 Auto or Custom Date",
+      "💾 Offline Save (IndexedDB)",
+      "📤 Quick WhatsApp Share"
+    ].map(f => `• ${f}`).join("\n");
 
-  const fontsOverview = [
-    "🇬🇧 English (7): Montserrat, Poppins, Roboto, Open Sans, Lato, Playfair Display, Oswald",
-    "🇮🇳 తెలుగు (6): Noto Sans Telugu, NTR, Ramabhadra, Gurajada, Gidugu, Mandali",
-    "🇮🇳 हिंदी (3): Noto Serif Devanagari, Hind, Karma",
-    "🕉️ संस्कृतम् (2): Tiro Devanagari Sanskrit, Noto Serif Devanagari",
-    "🇮🇳 தமிழ் (2): Noto Sans Tamil, Tiro Tamil",
-    "🇮🇳 ಕನ್ನಡ (1): Noto Sans Kannada",
-    "🇮🇳 മലയാളം (1): Noto Sans Malayalam",
-    "🇮🇳 ଓଡ଼ିଆ (1): Noto Sans Oriya",
-  ].map(f => `• ${f}`).join("\n");
+    const fonts = [
+      "🇬🇧 English (7): Montserrat, Poppins, Roboto, Oswald, Lato, Playfair Display, Open Sans",
+      "🇮🇳 తెలుగు (6): NTR, Ramabhadra, Gurajada, Mandali, Gidugu, Noto Sans Telugu",
+      "🇮🇳 हिंदी / संस्कृतम् (5): Noto Serif Devanagari, Hind, Karma, Tiro Devanagari Sanskrit",
+      "🇮🇳 தமிழ் / ಕನ್ನಡ / മലയാളം / ଓଡ଼ିଆ – Native Unicode Fonts"
+    ].map(f => `• ${f}`).join("\n");
 
-  const message = 
-`🌸 *AksharaChitra — Create Multilingual Posters Offline* 🎨
+    const msg = `🌸 *AksharaChitra — Create Multilingual Posters Offline* 🎨
 
-✨ *Top Features:*
+✨ *Features:*
 ${features}
 
-🌏 *Supported Languages & Fonts:*
-${fontsOverview}
+🔤 *Fonts & Languages:*
+${fonts}
 
-🖋️ *Total Fonts:* 23   |   🌐 *Languages:* 8+
-🔤 All fonts are Google Fonts — Unicode & Offline Ready
+🖋️ *Total Fonts:* 23  |  🌐 *Languages:* 8+
+❤️ Made by *Sandeep Miriyala*
+🔗 https://aksharachitra.netlify.app`;
 
-🔗 https://aksharachitra.netlify.app
-Made with  by Sandeep Miriyala`;
-
-  window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
-});
-
-
-  // ---------------------------------------------
-  // 💾 Save to IndexedDB (My Creations)
-  // ---------------------------------------------
-  if (saveBtn) on(saveBtn, "click", async () => {
-    try {
-      const dataUrl = await generateImage({ download: false });
-      if (!dataUrl) return;
-      const rec = { title: (titleEl?.value || "Untitled"), dataUrl, ts: Date.now() };
-      await saveToDB(rec);
-      alert("Saved to My Creations (offline).");
-      const gallerySection = $("gallery");
-      if (gallerySection && gallerySection.classList.contains("active")) renderIndexedGallery();
-    } catch (err) {
-      console.error("Save failed", err);
-      alert("Save failed.");
-    }
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
   });
 
-  // ---------------------------------------------
-  // 🖼️ Gallery rendering (IndexedDB)
-  // ---------------------------------------------
-  async function renderIndexedGallery({ sortBy = "newest", filter = "" } = {}) {
-    if (!galleryGrid) return;
-    galleryGrid.innerHTML = `<p class="muted">Loading...</p>`;
-    const all = await getAllFromDB();
-    let list = all || [];
-    if (filter.trim()) {
-      const f = filter.toLowerCase();
-      list = list.filter(x => (x.title || "").toLowerCase().includes(f));
-    }
-    if (sortBy === "newest") list.sort((a, b) => b.ts - a.ts);
-    else if (sortBy === "oldest") list.sort((a, b) => a.ts - b.ts);
-    else if (sortBy === "name-asc") list.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
-    else if (sortBy === "name-desc") list.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
+  // 📅 Footer Version + Year
+  const yr = $("year"), versionEl = $("version");
+  if (yr) yr.textContent = new Date().getFullYear();
+  if (versionEl) versionEl.textContent = "v15.7 Stable";
 
-    if (!list.length) {
-      galleryGrid.innerHTML = `<p class="muted">No creations yet. Save one to appear here.</p>`;
-      return;
-    }
-
-    // Controls
-    const controls = document.createElement("div");
-    controls.style.display = "flex";
-    controls.style.flexWrap = "wrap";
-    controls.style.gap = "8px";
-    controls.style.marginBottom = "12px";
-
-    const sortSel = document.createElement("select");
-    sortSel.innerHTML = `
-      <option value="newest">Sort: Newest</option>
-      <option value="oldest">Sort: Oldest</option>
-      <option value="name-asc">Sort: A → Z</option>
-      <option value="name-desc">Sort: Z → A</option>`;
-    sortSel.value = sortBy;
-    const filterInput = document.createElement("input");
-    filterInput.placeholder = "Filter by title...";
-    filterInput.style.padding = "8px";
-    filterInput.style.minWidth = "180px";
-    sortSel.addEventListener("change", () => renderIndexedGallery({ sortBy: sortSel.value, filter: filterInput.value }));
-    filterInput.addEventListener("input", () => renderIndexedGallery({ sortBy: sortSel.value, filter: filterInput.value }));
-
-    controls.appendChild(sortSel);
-    controls.appendChild(filterInput);
-    galleryGrid.innerHTML = "";
-    galleryGrid.appendChild(controls);
-
-    const grid = document.createElement("div");
-    grid.style.display = "grid";
-    grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(200px, 1fr))";
-    grid.style.gap = "12px";
-
-    list.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "gallery-item";
-      safeSetStyle(card, { borderRadius: "10px", overflow: "hidden", boxShadow: "0 6px 18px rgba(0,0,0,0.06)", background: "#fff" });
-
-      const img = document.createElement("img");
-      img.src = item.dataUrl;
-      img.alt = item.title;
-      safeSetStyle(img, { width: "100%", display: "block", height: "140px", objectFit: "cover" });
-
-      const meta = document.createElement("div");
-      safeSetStyle(meta, { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px" });
-
-      const left = document.createElement("div");
-      safeSetStyle(left, { display: "flex", flexDirection: "column", gap: "4px" });
-      const ttl = document.createElement("div");
-      ttl.textContent = item.title || "Untitled";
-      ttl.style.fontWeight = "700";
-      const dt = document.createElement("div");
-      dt.textContent = new Date(item.ts).toLocaleString();
-      safeSetStyle(dt, { fontSize: "0.85rem", opacity: "0.7" });
-      left.appendChild(ttl);
-      left.appendChild(dt);
-
-      const actions = document.createElement("div");
-      safeSetStyle(actions, { display: "flex", flexDirection: "column", gap: "6px", alignItems: "flex-end" });
-
-      // Share button
-      const shareBtnCard = document.createElement("button");
-      shareBtnCard.className = "btn ghost";
-      shareBtnCard.textContent = "Share";
-      shareBtnCard.addEventListener("click", async () => {
-        try {
-          const resp = await fetch(item.dataUrl);
-          const blob = await resp.blob();
-          const file = new File([blob], `${(item.title || "poster").replace(/\s+/g, "_")}.png`, { type: blob.type });
-          if (navigator.canShare?.({ files: [file] })) {
-            await navigator.share({ files: [file], title: item.title || "AksharaChitra Poster" });
-          } else {
-            const txt = `Poster: ${item.title}\nCreated: ${new Date(item.ts).toLocaleString()}\nGenerated with AksharaChitra`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank");
-          }
-        } catch (err) { alert("Share failed"); }
-      });
-
-      // Download button
-      const downloadBtnCard = document.createElement("button");
-      downloadBtnCard.className = "btn";
-      downloadBtnCard.textContent = "⬇";
-      downloadBtnCard.addEventListener("click", () => {
-        const a = document.createElement("a");
-        a.href = item.dataUrl;
-        a.download = `${(item.title || "poster").replace(/[^\w\- ]/g, "").slice(0, 40)}.png`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      });
-
-      // Delete button
-      const delBtn = document.createElement("button");
-      delBtn.className = "delete-btn";
-      delBtn.textContent = "🗑️";
-      delBtn.title = "Delete";
-      delBtn.addEventListener("click", async () => {
-        if (!confirm("Delete this poster?")) return;
-        await deleteFromDB(item.id);
-        renderIndexedGallery({ sortBy: sortSel.value, filter: filterInput.value });
-      });
-
-      actions.append(shareBtnCard, downloadBtnCard, delBtn);
-      meta.append(left, actions);
-      card.append(img, meta);
-      grid.appendChild(card);
-    });
-    galleryGrid.appendChild(grid);
-  }
-
-  // 🚧 End of Part 3 — Next: Voice Input, TTS, PWA, Autosave, Final Init
-/* ==========================================================
-   🌸 AksharaChitra — v13 Final
-   Part 4 of 4 — PWA, Voice Input, Autosave, Final Init
-   ========================================================== */
-
-  // ---------------------------------------------
-  // 📲 Progressive Web App (Install Prompt)
-  // ---------------------------------------------
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    if (installBtn) installBtn.classList.add("show");
-    if (installBtnHeader) installBtnHeader.classList.add("show");
-  });
-
-  [installBtn, installBtnHeader].forEach(b => {
-    if (!b) return;
-    on(b, "click", async () => {
-      if (!deferredPrompt) { alert("Install not available right now."); return; }
-      try {
-        deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        if (choice && choice.outcome === "accepted") console.log("PWA installed.");
-        deferredPrompt = null;
-        b.classList.remove("show");
-      } catch (e) {
-        console.warn("Install prompt failed", e);
-      }
-    });
-  });
-
-  // ---------------------------------------------
-  // 🎙️ Speech Recognition (Voice to Text)
-  // ---------------------------------------------
-  const startVoiceBtn = $("startVoice"),
-        stopVoiceBtn  = $("stopVoice");
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (SR && startVoiceBtn && stopVoiceBtn && messageEl) {
-    const recog = new SR();
-    recog.continuous = false;
-    recog.interimResults = false;
-    recog.lang = "en-IN";
-
-    on(startVoiceBtn, "click", () => {
-      try { recog.start(); startVoiceBtn.classList.add("listening"); } catch (e) {}
-    });
-    on(stopVoiceBtn, "click", () => {
-      try { recog.stop(); startVoiceBtn.classList.remove("listening"); } catch (e) {}
-    });
-    recog.onresult = (ev) => {
-      const t = ev.results[0][0].transcript;
-      messageEl.value = (messageEl.value ? (messageEl.value + " ") : "") + t;
-      renderPreview();
-    };
-    recog.onend = () => { startVoiceBtn.classList.remove("listening"); };
-  }
-
-  // ---------------------------------------------
-  // 🔊 Text to Speech (Read aloud content)
-  // ---------------------------------------------
-  const startSpeakBtn = $("startSpeak"),
-        stopSpeakBtn  = $("stopSpeak");
-  const synth = window.speechSynthesis;
-
-  if (startSpeakBtn && stopSpeakBtn && synth) {
-    on(startSpeakBtn, "click", () => {
-      const fullText = [
-        titleEl?.value,
-        subtitleEl?.value,
-        messageEl?.value
-      ].filter(Boolean).join(". ");
-      if (!fullText) return;
-
-      const ut = new SpeechSynthesisUtterance(fullText);
-      const langMap = {
-        en: "en-IN", te: "te-IN", hi: "hi-IN", ta: "ta-IN",
-        kn: "kn-IN", ml: "ml-IN", or: "or-IN", sa: "sa-IN"
-      };
-      ut.lang = langMap[languageSelect?.value] || "en-IN";
-      ut.rate = 0.95;
-      ut.pitch = 1.0;
-      synth.speak(ut);
-    });
-    on(stopSpeakBtn, "click", () => synth.cancel());
-  }
-
- // ---------------------------------------------
-// 🧹 Clear All Fields (Full Reset including QR)
-// ---------------------------------------------
-if (clearBtn) on(clearBtn, "click", () => {
-  if (!confirm("Clear all fields?")) return;
-
-  // Clear text fields
-  [titleEl, subtitleEl, messageEl].forEach(e => { if (e) e.value = ""; });
-
-  // Clear uploaded images
-  uploadedMainData = "";
-  uploadedLogoData = "";
-
-  // Clear QR code input and preview
-  const qrInput = document.getElementById("qrText");
-  if (qrInput) qrInput.value = "";
-  const qrPreview = document.getElementById("qrPreview");
-  if (qrPreview) qrPreview.innerHTML = "";
-  if (pQR) pQR.innerHTML = "";
-if (fontFamily) fontFamily.selectedIndex = 0;
-if (templateSelect) templateSelect.selectedIndex = 0;
-if (titleAlign) titleAlign.value = "center";
-if (subtitleAlign) subtitleAlign.value = "center";
-if (contentAlign) contentAlign.value = "center";
-  updatePosterDateFromOption();
-  // Reset preview
-  renderPreview();
+  console.log("✅ AksharaChitra v15.7 loaded successfully!");
 });
-
-
-  // ---------------------------------------------
-  // ⬆️ Go-Top Button
-  // ---------------------------------------------
-  if (goTopBtn) {
-    on(goTopBtn, "click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    window.addEventListener("scroll", () => {
-      goTopBtn.style.display = window.scrollY > 300 ? "block" : "none";
-    });
-  }
-
-  // ---------------------------------------------
-  // 💾 Autosave + Restore
-  // ---------------------------------------------
-  setInterval(() => {
-    try {
-      const state = {
-        title: titleEl?.value || "",
-        subtitle: subtitleEl?.value || "",
-        message: messageEl?.value || "",
-        ts: Date.now()
-      };
-      localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state));
-    } catch {}
-  }, 4000);
-
-  try {
-    const saved = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "null");
-    if (saved) {
-      if (titleEl)    titleEl.value    = saved.title || "";
-      if (subtitleEl) subtitleEl.value = saved.subtitle || "";
-      if (messageEl)  messageEl.value  = saved.message || "";
-      renderPreview();
-    }
-  } catch {}
-
-  // ---------------------------------------------
-  // 🕐 Footer Year
-  // ---------------------------------------------
-  const yr = $("year");// 🕐 Footer Year + Version Display
-
-if (yr) yr.textContent = new Date().getFullYear();
-
-const versionEl = document.getElementById("version");
-if (versionEl) versionEl.textContent = "v15.6 Stable";  // Update version here
-
-
-  // ---------------------------------------------
-  // 🌟 Final Exposure (for debugging)
-  // ---------------------------------------------
-  window.ak = {
-    renderPreview,
-    generateImage,
-    renderIndexedGallery,
-    saveToDB,
-    deleteFromDB
-  };
-  // ✅ All features loaded
-  console.log("✅ AksharaChitra v13 loaded successfully!");
-
-});
-  
