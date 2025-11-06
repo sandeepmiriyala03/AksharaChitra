@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         installBtn = $("installBtn"),
         installBtnHeader = $("installBtnHeader"),
         shareWhatsAppBtn = $("shareWhatsAppBtn"),
-        posterSizeSelect = $("posterSize");
+   
 
   // Text controls
   const titleSize = $("titleSize"),
@@ -468,44 +468,30 @@ document.addEventListener("DOMContentLoaded", () => {
    🌸 AksharaChitra — v13 Final
    Part 3 of 4 — Image Generation, Save, Gallery & Share
    ========================================================== */
-async function generateImage({ download = false, userTimestamp = null } = {}) {
-  if (!previewCard) { alert("Preview not found"); return null; }
-  if (typeof html2canvas === "undefined") {
-    alert("html2canvas not loaded");
-    return null;
-  }
 
-  // 🔹 Detect device type
+async function generateImage({ download = false } = {}) {
+  if (!previewCard) return alert("Preview not found");
+  if (typeof html2canvas === "undefined") return alert("html2canvas not loaded");
+
+  // Detect device
   const isMobile = window.innerWidth <= 768;
 
-  // 🔹 Read user-selected output size
-  let width = 1080, height = 1080; // default square
-  if (posterSizeSelect && posterSizeSelect.value) {
-    const [w, h] = posterSizeSelect.value.split("x").map(Number);
-    if (!isNaN(w) && !isNaN(h)) {
-      width = w;
-      height = h;
-    }
-  } else if (isMobile) {
-    width = 720;
-    height = 1280;
-  }
-
-  // 🔹 Scale for high-quality rendering
+  // Fixed 16:9 layout (Horizontal)
+  const width = isMobile ? 1080 : 1200;
+  const height = Math.round(width * 9 / 16);
   const scale = isMobile ? 2 : Math.min(3, window.devicePixelRatio || 2);
 
-  // 🔹 Remember original preview size + padding
+  // Backup
   const originalWidth = previewCard.style.width;
   const originalHeight = previewCard.style.height;
   const prevPadding = previewCard.style.padding;
 
-  // 🔹 Apply selected output size + reduce top gap
+  // Apply
   previewCard.style.width = width + "px";
   previewCard.style.height = height + "px";
-  previewCard.style.paddingTop = "8px";
-  previewCard.style.paddingBottom = "14px";
+  previewCard.style.padding = "10px 12px";
 
-  // 🔹 Add temporary overlay (progress)
+  // Loading overlay
   const overlay = document.createElement("div");
   Object.assign(overlay.style, {
     position: "fixed",
@@ -524,7 +510,7 @@ async function generateImage({ download = false, userTimestamp = null } = {}) {
   document.body.appendChild(overlay);
 
   try {
-    // 🔹 Generate canvas
+    // Capture
     const canvas = await html2canvas(previewCard, {
       scale,
       width,
@@ -532,72 +518,103 @@ async function generateImage({ download = false, userTimestamp = null } = {}) {
       useCORS: true,
       backgroundColor: null,
       allowTaint: true,
-      imageTimeout: 0,
-      logging: false,
     });
+    const ctx = canvas.getContext("2d");
 
-    // ======================================================
-    // 🕒 Draw Footer (Date + Site + Author)
-    // ======================================================
+    // ===== QR CODE (bottom-left small) =====
     try {
-      const ctx = canvas.getContext("2d");
+      const qrInput = document.getElementById("qrText");
+      const qrValue = qrInput?.value?.trim();
+      if (qrValue && typeof QRCode !== "undefined") {
+        const temp = document.createElement("div");
+        new QRCode(temp, {
+          text: qrValue,
+          width: 70,
+          height: 70,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+        const qrImg = temp.querySelector("img") || temp.querySelector("canvas");
+        if (qrImg) {
+          await new Promise(r => setTimeout(r, 200));
+          const tmp = new Image();
+          tmp.src = qrImg.src || qrImg.toDataURL("image/png");
+          await new Promise(res => tmp.onload = res);
+          const qrSize = 60 * scale;
+          ctx.drawImage(tmp, 20 * scale, canvas.height - qrSize - 70 * scale, qrSize, qrSize);
+        }
+      }
+    } catch (qrErr) {
+      console.warn("⚠️ QR render failed:", qrErr);
+    }
 
-      // Always generate formatted timestamp
-      const now = userTimestamp ? new Date(userTimestamp) : new Date();
-      const options = {
+    // ===== FOOTER LINE + DATE + WEBSITE =====
+    try {
+      const now = new Date();
+      const formattedDate = now.toLocaleString("en-IN", {
         day: "2-digit",
         month: "short",
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
-      };
-      const formattedDate = now.toLocaleString("en-IN", options);
-
-      // Ensure we always have a visible date text
-      const dateText = posterDate?.trim()
-        ? posterDate
-        : formattedDate;
-
+      });
+      const dateText = formattedDate;
       const siteText = "aksharachitra.netlify.app";
-      const authorText = "Made with ❤️ by Sandeep Miriyala";
+      const madeText = "✨ Made using AksharaChitra";
 
+      // Separator line
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(0,0,0,0.25)";
+      ctx.lineWidth = 1 * scale;
+      ctx.moveTo(10 * scale, canvas.height - 50 * scale);
+      ctx.lineTo(canvas.width - 10 * scale, canvas.height - 50 * scale);
+      ctx.stroke();
+
+      // Footer font
       const fontSize = Math.max(9, Math.round(9 * scale));
       ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-      ctx.fillStyle = "rgba(0,0,0,0.7)";
       ctx.textBaseline = "alphabetic";
+      ctx.fillStyle = "#222";
 
-      // Left - Date
+      // Left — Date + Time
       ctx.textAlign = "left";
-      ctx.fillText(dateText, 14 * scale, canvas.height - 18 * scale);
+      ctx.fillText(dateText, 16 * scale, canvas.height - 20 * scale);
 
-      // Center - Author
+      // Right — Site + Tagline
       ctx.textAlign = "center";
-      ctx.fillText(authorText, canvas.width / 2, canvas.height - 8 * scale);
+      ctx.fillText(`${siteText}  |  ${madeText}`, canvas.width - 16 * scale, canvas.height - 20 * scale);
 
-      // Right - Site
-      ctx.textAlign = "right";
-      ctx.fillText(siteText, canvas.width - 14 * scale, canvas.height - 18 * scale);
+      // Optional small logo (right side)
+      const logoImg = new Image();
+      logoImg.src = "logo.png"; // ensure logo.png exists in your project
+      await new Promise(res => (logoImg.onload = res, logoImg.onerror = res));
+      const logoSize = 22 * scale;
+      ctx.drawImage(
+        logoImg,
+        canvas.width - (ctx.measureText(`${siteText}  |  ${madeText}`).width + 45 * scale),
+        canvas.height - 38 * scale,
+        logoSize,
+        logoSize
+      );
     } catch (e) {
-      console.warn("⚠️ Footer text draw failed:", e);
+      console.warn("⚠️ Footer draw failed:", e);
     }
 
-    // 🔹 Convert to PNG
+    // ===== EXPORT PNG =====
     const dataUrl = canvas.toDataURL("image/png");
-
-    // 🔹 Optional download
     if (download) {
-      const fname = formatFilename(titleEl?.value, width, height);
+      const fname = formatFilename(titleEl?.value || "AksharaChitra", width, height);
       const a = document.createElement("a");
       a.href = dataUrl;
       a.download = fname;
       document.body.appendChild(a);
       a.click();
       a.remove();
-      alert(`✅ Poster saved: ${fname}`);
     }
 
-    // ✅ Cleanup
+    // Cleanup
     previewCard.style.width = originalWidth;
     previewCard.style.height = originalHeight;
     previewCard.style.padding = prevPadding;
@@ -607,7 +624,6 @@ async function generateImage({ download = false, userTimestamp = null } = {}) {
   } catch (err) {
     console.error("generateImage error", err);
     overlay.remove();
-    alert("⚠️ Poster generation failed. Check console.");
     previewCard.style.width = originalWidth;
     previewCard.style.height = originalHeight;
     previewCard.style.padding = prevPadding;
@@ -615,19 +631,17 @@ async function generateImage({ download = false, userTimestamp = null } = {}) {
   }
 }
 
-  // Buttons
-  if (generateBtn) on(generateBtn, "click", async () => { await generateImage({ download: false }); });
-  if (downloadBtn) on(downloadBtn, "click", async () => {
-    let userChoice = null;
-    if (confirm("Set custom watermark timestamp? (Cancel = current)")) {
-      const custom = prompt("Enter date/time (YYYY-MM-DD HH:MM) or leave blank", "");
-      if (custom) {
-        const parsed = new Date(custom);
-        if (!isNaN(parsed.getTime())) userChoice = parsed;
-      }
-    }
-    await generateImage({ download: true, userTimestamp: userChoice ?? null });
+// ✅ Buttons (no confirm, direct actions)
+if (generateBtn)
+  on(generateBtn, "click", async () => {
+    await generateImage({ download: false });
   });
+
+if (downloadBtn)
+  on(downloadBtn, "click", async () => {
+    await generateImage({ download: true });
+  });
+
 
   // ---------------------------------------------
   // 📤 Native Share API + WhatsApp fallback
@@ -973,62 +987,6 @@ async function generateImage({ download = false, userTimestamp = null } = {}) {
   // ✅ All features loaded
   console.log("✅ AksharaChitra v13 loaded successfully!");
 
-  // 🌸 Auto-adjust poster size based on device
-
-const outputLabel = document.getElementById("outputSizeLabel");
-const ratioBox = document.getElementById("ratioPreviewBox");
-const ratioInner = ratioBox?.querySelector(".ratio-inner");
-const ratioSample = ratioInner?.querySelector(".ratio-poster-sample");
-const ratioText = ratioInner?.querySelector("span");
-
-function updateRatioPreview() {
-  const opt = posterSizeSelect.options[posterSizeSelect.selectedIndex];
-  const ratio = opt.dataset.ratio || "1:1";
-  const color = opt.dataset.color || "#1e88e5";
-  const label = opt.textContent.trim();
-
-  // Update label
-  outputLabel.textContent = `📐 Selected: ${label}`;
-  outputLabel.style.color = color;
-  ratioBox.style.borderColor = color;
-  ratioInner.style.borderColor = color;
-  ratioInner.style.backgroundColor = color + "15";
-  ratioText.textContent = ratio;
-
-  // Adjust mini poster size
-  if (ratioSample) {
-    if (ratio === "1:1") {
-      ratioSample.style.width = "70%";
-      ratioSample.style.height = "70%";
-    } else if (ratio === "9:16") {
-      ratioSample.style.width = "50%";
-      ratioSample.style.height = "80%";
-    } else if (ratio === "16:9") {
-      ratioSample.style.width = "80%";
-      ratioSample.style.height = "50%";
-    }
-  }
-}
-
-// 🌸 Device-based default selection
-function setDefaultPosterSize() {
-  const isMobile = window.innerWidth <= 768;
-  if (isMobile) {
-    // Default to 9:16 for phones (story/WhatsApp)
-    posterSizeSelect.value = "1080x1920";
-  } else {
-    // Default to 1:1 for desktops
-    posterSizeSelect.value = "1080x1080";
-  }
-  updateRatioPreview();
-}
-
-// Listen for manual changes
-posterSizeSelect?.addEventListener("change", updateRatioPreview);
-
-// Initialize on load
-setDefaultPosterSize();
-window.addEventListener("resize", setDefaultPosterSize);
 
 });
 
