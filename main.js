@@ -939,16 +939,30 @@ document.addEventListener("DOMContentLoaded", () => {
     on(stopSpeakBtn, "click", () => synth.cancel());
   }
 
-  // ---------------------------------------------
-  // 🧹 Clear All Fields
-  // ---------------------------------------------
-  if (clearBtn) on(clearBtn, "click", () => {
-    if (!confirm("Clear all fields?")) return;
-    [titleEl, subtitleEl, messageEl].forEach(e => { if (e) e.value = ""; });
-    uploadedMainData = "";
-    uploadedLogoData = "";
-    renderPreview();
-  });
+ // ---------------------------------------------
+// 🧹 Clear All Fields (Full Reset including QR)
+// ---------------------------------------------
+if (clearBtn) on(clearBtn, "click", () => {
+  if (!confirm("Clear all fields?")) return;
+
+  // Clear text fields
+  [titleEl, subtitleEl, messageEl].forEach(e => { if (e) e.value = ""; });
+
+  // Clear uploaded images
+  uploadedMainData = "";
+  uploadedLogoData = "";
+
+  // Clear QR code input and preview
+  const qrInput = document.getElementById("qrText");
+  if (qrInput) qrInput.value = "";
+  const qrPreview = document.getElementById("qrPreview");
+  if (qrPreview) qrPreview.innerHTML = "";
+  if (pQR) pQR.innerHTML = "";
+
+  // Reset preview
+  renderPreview();
+});
+
 
   // ---------------------------------------------
   // ⬆️ Go-Top Button
