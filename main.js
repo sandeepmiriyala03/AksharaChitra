@@ -958,7 +958,12 @@ if (clearBtn) on(clearBtn, "click", () => {
   const qrPreview = document.getElementById("qrPreview");
   if (qrPreview) qrPreview.innerHTML = "";
   if (pQR) pQR.innerHTML = "";
-
+if (fontFamily) fontFamily.selectedIndex = 0;
+if (templateSelect) templateSelect.selectedIndex = 0;
+if (titleAlign) titleAlign.value = "center";
+if (subtitleAlign) subtitleAlign.value = "center";
+if (contentAlign) contentAlign.value = "center";
+  updatePosterDateFromOption();
   // Reset preview
   renderPreview();
 });
