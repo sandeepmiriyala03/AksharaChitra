@@ -291,23 +291,30 @@
 
 
           <!-- 📏 Poster Size / Ratio -->
-          <div class="group">
-            <label>📏 Output Size (Social Media Format)</label>
-            <select id="posterSize">
-              <option value="1080x1080">🟩 Instagram / Square (1080 × 1080)</option>
-              <option value="1080x1920">📱 Story / WhatsApp Status (1080 × 1920)</option>
-              <option value="1200x630">💬 Facebook / LinkedIn (1200 × 630)</option>
-              <option value="1280x720">🎥 Twitter / YouTube (1280 × 720)</option>
-              <option value="2480x3508">🖨️ A4 Print (2480 × 3508)</option>
-            </select>
-            <p class="muted small">💡 Choose the perfect size for your post or story</p>
-          </div>
+       <div class="group">
+  <label>📏 Output Size (Social Media Format)</label>
+  <select id="posterSize">
+    <option value="1080x1080" data-color="#43a047" data-ratio="1:1">🟩 Instagram / Square (1080×1080)</option>
+    <option value="1080x1920" data-color="#1e88e5" data-ratio="9:16">📱 Story / WhatsApp (1080×1920)</option>
+    <option value="1280x720" data-color="#8e24aa" data-ratio="16:9">🎥 YouTube / Twitter (1280×720)</option>
+  </select>
+
+  <p id="outputSizeLabel" class="muted small">📐 Selected: Default</p>
+  <div id="ratioPreviewBox" class="ratio-box">
+    <div class="ratio-inner">
+      <div class="ratio-poster-sample"></div>
+      <span>1:1</span>
+    </div>
+  </div>
+</div>
+
+
 
           <!-- ⚙️ Actions -->
           <div class="actions">
             <button id="clearBtn" class="btn ghost">🧹 Clear</button>
             <button id="saveBtn" class="btn">💾 Save</button>
-            <button id="generateBtn" class="btn primary">🖼 Generate</button>
+            <button id="generateBtn" class="btn primary"> Generate</button>
           </div>
           <div class="row">
             <button id="downloadBtn" class="btn">⬇ Download</button>
@@ -391,6 +398,8 @@
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js" defer></script>
+
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
 </body>

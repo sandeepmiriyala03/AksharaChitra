@@ -376,7 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
       bottom: "8px",
       left: "10px",
       fontSize: "10px",
-      opacity: "0.85",
+      opacity: "0.6",
       color: "#333",
     });
 
@@ -468,82 +468,101 @@ document.addEventListener("DOMContentLoaded", () => {
    🌸 AksharaChitra — v13 Final
    Part 3 of 4 — Image Generation, Save, Gallery & Share
    ========================================================== */
-
-  // ---------------------------------------------
-  // 🖼️ Generate poster image with html2canvas
-  // ---------------------------------------------
-// 🖼️ Generate poster image with html2canvas
-async function generateImage({ download = false, userTimestamp = null } = {}) {
+   async function generateImage({ download = false, userTimestamp = null } = {}) {
   if (!previewCard) { alert("Preview not found"); return null; }
   if (typeof html2canvas === "undefined") {
     alert("html2canvas not loaded");
     return null;
   }
 
-  // ✅ Auto-adjust poster size for mobile users
+  // 🔹 Detect device type
   const isMobile = window.innerWidth <= 768;
-  let width = previewCard.clientWidth;
-  let height = previewCard.clientHeight;
 
-  // If mobile, keep within 1080px height for faster and cleaner rendering
-  if (isMobile) {
-    const ratio = previewCard.clientWidth / previewCard.clientHeight;
-    width = 720;                     // standard HD width
-    height = Math.round(width / ratio);
-    if (height > 1080) height = 1080; // keep poster height reasonable
-  } else if (posterSizeSelect && posterSizeSelect.value) {
+  // 🔹 Read user-selected output size
+  let width = 1080, height = 1080; // default square
+  if (posterSizeSelect && posterSizeSelect.value) {
     const [w, h] = posterSizeSelect.value.split("x").map(Number);
-    if (!isNaN(w) && !isNaN(h)) { width = w; height = h; }
+    if (!isNaN(w) && !isNaN(h)) {
+      width = w;
+      height = h;
+    }
+  } else if (isMobile) {
+    width = 720;
+    height = 1280;
   }
 
-  // Temporarily apply chosen size
-  const originalWidthStyle = previewCard.style.width || "";
-  const originalHeightStyle = previewCard.style.height || "";
+  // 🔹 Scale for high-quality rendering
+  const scale = isMobile ? 2 : Math.min(3, window.devicePixelRatio || 2);
+
+  // 🔹 Remember original preview size
+  const originalWidth = previewCard.style.width;
+  const originalHeight = previewCard.style.height;
+
+  // 🔹 Apply selected output size
   previewCard.style.width = width + "px";
   previewCard.style.height = height + "px";
 
-  // Slightly reduced scale on mobile for speed
-  const scale = isMobile ? 2 : Math.max(2, Math.min(4, window.devicePixelRatio || 2));
+  // 🔹 Add temporary overlay (progress)
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed",
+    inset: 0,
+    background: "rgba(255,255,255,0.7)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999,
+    fontFamily: "Montserrat, sans-serif",
+    fontSize: "1.1rem",
+    color: "#1e88e5",
+    fontWeight: "600",
+  });
+  overlay.textContent = "⏳ Generating Poster...";
+  document.body.appendChild(overlay);
 
   try {
-    const rect = previewCard.getBoundingClientRect();
+    // 🔹 Generate canvas
     const canvas = await html2canvas(previewCard, {
       scale,
-      width: Math.round(rect.width),
-      height: Math.round(rect.height),
+      width,
+      height,
       useCORS: true,
       backgroundColor: null,
       allowTaint: true,
+      imageTimeout: 0,
+      logging: false,
     });
 
-    // Watermark + date (your latest version)
-    try {
-      const ctx = canvas.getContext("2d");
-      const now = userTimestamp ? new Date(userTimestamp) : new Date();
-      const options = {
-        day: "numeric", month: "short", year: "numeric",
-        hour: "2-digit", minute: "2-digit", hour12: true,
-      };
-      const formatted = now.toLocaleString("en-IN", options);
-      const dateText = ` ${posterDate || formatted}`;
-      const siteText = "aksharachitra.netlify.app";
+    // 🔹 Draw footer details (date, site, author)
+    const ctx = canvas.getContext("2d");
+    const now = userTimestamp ? new Date(userTimestamp) : new Date();
+    const options = {
+      day: "numeric", month: "short", year: "numeric",
+      hour: "2-digit", minute: "2-digit", hour12: true,
+    };
+    const formatted = now.toLocaleString("en-IN", options);
+    const dateText = ` ${posterDate || formatted}`;
+    const siteText = "aksharachitra.netlify.app";
+    const authorText = "Made with ❤️ by Sandeep Miriyala";
 
-      const fontSize = Math.max(9, Math.round(9 * scale));
-      ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-      ctx.fillStyle = "rgba(0,0,0,0.5)";
-      ctx.textBaseline = "bottom";
+    const fontSize = Math.max(10, Math.round(9 * scale));
+    ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
+    ctx.fillStyle = "rgba(0,0,0,0.6)";
+    ctx.textBaseline = "bottom";
 
-      ctx.textAlign = "left";
-      ctx.fillText(dateText, 14 * scale, canvas.height - 12 * scale);
+    ctx.textAlign = "left";
+    ctx.fillText(dateText, 16 * scale, canvas.height - 18 * scale);
 
-      ctx.textAlign = "right";
-      ctx.fillText(siteText, canvas.width - 14 * scale, canvas.height - 12 * scale);
-    } catch (e) {
-      console.warn("Watermark draw failed", e);
-    }
+    ctx.textAlign = "right";
+    ctx.fillText(siteText, canvas.width - 16 * scale, canvas.height - 18 * scale);
 
+    ctx.textAlign = "center";
+    ctx.fillText(authorText, canvas.width / 2, canvas.height - 6 * scale);
+
+    // 🔹 Convert to PNG
     const dataUrl = canvas.toDataURL("image/png");
 
+    // 🔹 Optional download
     if (download) {
       const fname = formatFilename(titleEl?.value, width, height);
       const a = document.createElement("a");
@@ -552,21 +571,25 @@ async function generateImage({ download = false, userTimestamp = null } = {}) {
       document.body.appendChild(a);
       a.click();
       a.remove();
-      alert(`Saved: ${fname}`);
+      alert(`✅ Poster saved: ${fname}`);
     }
 
-    // Restore preview styles
-    previewCard.style.width = originalWidthStyle;
-    previewCard.style.height = originalHeightStyle;
+    // ✅ Cleanup
+    previewCard.style.width = originalWidth;
+    previewCard.style.height = originalHeight;
+    overlay.remove();
+
     return dataUrl;
   } catch (err) {
     console.error("generateImage error", err);
-    alert("Failed to generate image. Check console.");
-    previewCard.style.width = originalWidthStyle;
-    previewCard.style.height = originalHeightStyle;
+    overlay.remove();
+    alert("⚠️ Poster generation failed. Check console.");
+    previewCard.style.width = originalWidth;
+    previewCard.style.height = originalHeight;
     return null;
   }
 }
+
 
 
   // Buttons
@@ -926,5 +949,63 @@ async function generateImage({ download = false, userTimestamp = null } = {}) {
 
   // ✅ All features loaded
   console.log("✅ AksharaChitra v13 loaded successfully!");
+
+  // 🌸 Auto-adjust poster size based on device
+
+const outputLabel = document.getElementById("outputSizeLabel");
+const ratioBox = document.getElementById("ratioPreviewBox");
+const ratioInner = ratioBox?.querySelector(".ratio-inner");
+const ratioSample = ratioInner?.querySelector(".ratio-poster-sample");
+const ratioText = ratioInner?.querySelector("span");
+
+function updateRatioPreview() {
+  const opt = posterSizeSelect.options[posterSizeSelect.selectedIndex];
+  const ratio = opt.dataset.ratio || "1:1";
+  const color = opt.dataset.color || "#1e88e5";
+  const label = opt.textContent.trim();
+
+  // Update label
+  outputLabel.textContent = `📐 Selected: ${label}`;
+  outputLabel.style.color = color;
+  ratioBox.style.borderColor = color;
+  ratioInner.style.borderColor = color;
+  ratioInner.style.backgroundColor = color + "15";
+  ratioText.textContent = ratio;
+
+  // Adjust mini poster size
+  if (ratioSample) {
+    if (ratio === "1:1") {
+      ratioSample.style.width = "70%";
+      ratioSample.style.height = "70%";
+    } else if (ratio === "9:16") {
+      ratioSample.style.width = "50%";
+      ratioSample.style.height = "80%";
+    } else if (ratio === "16:9") {
+      ratioSample.style.width = "80%";
+      ratioSample.style.height = "50%";
+    }
+  }
+}
+
+// 🌸 Device-based default selection
+function setDefaultPosterSize() {
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    // Default to 9:16 for phones (story/WhatsApp)
+    posterSizeSelect.value = "1080x1920";
+  } else {
+    // Default to 1:1 for desktops
+    posterSizeSelect.value = "1080x1080";
+  }
+  updateRatioPreview();
+}
+
+// Listen for manual changes
+posterSizeSelect?.addEventListener("change", updateRatioPreview);
+
+// Initialize on load
+setDefaultPosterSize();
+window.addEventListener("resize", setDefaultPosterSize);
+
 });
 
