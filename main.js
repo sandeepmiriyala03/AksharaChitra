@@ -468,7 +468,7 @@ document.addEventListener("DOMContentLoaded", () => {
    🌸 AksharaChitra — v13 Final
    Part 3 of 4 — Image Generation, Save, Gallery & Share
    ========================================================== */
-   async function generateImage({ download = false, userTimestamp = null } = {}) {
+async function generateImage({ download = false, userTimestamp = null } = {}) {
   if (!previewCard) { alert("Preview not found"); return null; }
   if (typeof html2canvas === "undefined") {
     alert("html2canvas not loaded");
@@ -494,13 +494,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Scale for high-quality rendering
   const scale = isMobile ? 2 : Math.min(3, window.devicePixelRatio || 2);
 
-  // 🔹 Remember original preview size
+  // 🔹 Remember original preview size + padding
   const originalWidth = previewCard.style.width;
   const originalHeight = previewCard.style.height;
+  const prevPadding = previewCard.style.padding;
 
-  // 🔹 Apply selected output size
+  // 🔹 Apply selected output size + reduce top gap
   previewCard.style.width = width + "px";
   previewCard.style.height = height + "px";
+  previewCard.style.paddingTop = "8px";
+  previewCard.style.paddingBottom = "14px";
 
   // 🔹 Add temporary overlay (progress)
   const overlay = document.createElement("div");
@@ -533,31 +536,51 @@ document.addEventListener("DOMContentLoaded", () => {
       logging: false,
     });
 
-    // 🔹 Draw footer details (date, site, author)
-    const ctx = canvas.getContext("2d");
-    const now = userTimestamp ? new Date(userTimestamp) : new Date();
-    const options = {
-      day: "numeric", month: "short", year: "numeric",
-      hour: "2-digit", minute: "2-digit", hour12: true,
-    };
-    const formatted = now.toLocaleString("en-IN", options);
-    const dateText = ` ${posterDate || formatted}`;
-    const siteText = "aksharachitra.netlify.app";
-    const authorText = "Made with ❤️ by Sandeep Miriyala";
+    // ======================================================
+    // 🕒 Draw Footer (Date + Site + Author)
+    // ======================================================
+    try {
+      const ctx = canvas.getContext("2d");
 
-    const fontSize = Math.max(10, Math.round(9 * scale));
-    ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-    ctx.fillStyle = "rgba(0,0,0,0.6)";
-    ctx.textBaseline = "bottom";
+      // Always generate formatted timestamp
+      const now = userTimestamp ? new Date(userTimestamp) : new Date();
+      const options = {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      };
+      const formattedDate = now.toLocaleString("en-IN", options);
 
-    ctx.textAlign = "left";
-    ctx.fillText(dateText, 16 * scale, canvas.height - 18 * scale);
+      // Ensure we always have a visible date text
+      const dateText = posterDate?.trim()
+        ? posterDate
+        : formattedDate;
 
-    ctx.textAlign = "right";
-    ctx.fillText(siteText, canvas.width - 16 * scale, canvas.height - 18 * scale);
+      const siteText = "aksharachitra.netlify.app";
+      const authorText = "Made with ❤️ by Sandeep Miriyala";
 
-    ctx.textAlign = "center";
-    ctx.fillText(authorText, canvas.width / 2, canvas.height - 6 * scale);
+      const fontSize = Math.max(9, Math.round(9 * scale));
+      ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
+      ctx.fillStyle = "rgba(0,0,0,0.7)";
+      ctx.textBaseline = "alphabetic";
+
+      // Left - Date
+      ctx.textAlign = "left";
+      ctx.fillText(dateText, 14 * scale, canvas.height - 18 * scale);
+
+      // Center - Author
+      ctx.textAlign = "center";
+      ctx.fillText(authorText, canvas.width / 2, canvas.height - 8 * scale);
+
+      // Right - Site
+      ctx.textAlign = "right";
+      ctx.fillText(siteText, canvas.width - 14 * scale, canvas.height - 18 * scale);
+    } catch (e) {
+      console.warn("⚠️ Footer text draw failed:", e);
+    }
 
     // 🔹 Convert to PNG
     const dataUrl = canvas.toDataURL("image/png");
@@ -577,6 +600,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ✅ Cleanup
     previewCard.style.width = originalWidth;
     previewCard.style.height = originalHeight;
+    previewCard.style.padding = prevPadding;
     overlay.remove();
 
     return dataUrl;
@@ -586,11 +610,10 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("⚠️ Poster generation failed. Check console.");
     previewCard.style.width = originalWidth;
     previewCard.style.height = originalHeight;
+    previewCard.style.padding = prevPadding;
     return null;
   }
 }
-
-
 
   // Buttons
   if (generateBtn) on(generateBtn, "click", async () => { await generateImage({ download: false }); });
