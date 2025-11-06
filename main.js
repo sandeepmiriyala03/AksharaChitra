@@ -1007,8 +1007,13 @@ if (contentAlign) contentAlign.value = "center";
   // ---------------------------------------------
   // 🕐 Footer Year
   // ---------------------------------------------
-  const yr = $("year");
-  if (yr) yr.textContent = new Date().getFullYear();
+  const yr = $("year");// 🕐 Footer Year + Version Display
+
+if (yr) yr.textContent = new Date().getFullYear();
+
+const versionEl = document.getElementById("version");
+if (versionEl) versionEl.textContent = "v15.6 Stable";  // Update version here
+
 
   // ---------------------------------------------
   // 🌟 Final Exposure (for debugging)
