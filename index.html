@@ -18,6 +18,30 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&family=NTR&family=Ramabhadra&family=Gurajada&family=Gidugu&family=Noto+Serif+Devanagari:wght@500&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?
+family=Montserrat:wght@400;600;700&
+family=Poppins:wght@400;600&
+family=Roboto:wght@400;700&
+family=Open+Sans:wght@400;700&
+family=Lato:wght@400;700&
+family=Playfair+Display:wght@400;700&
+family=Oswald:wght@400;700&
+family=Noto+Sans+Telugu:wght@400;700&
+family=NTR&family=Ramabhadra&
+family=Gurajada&family=Gidugu&
+family=Mandali&
+family=Noto+Serif+Devanagari:wght@400;700&
+family=Tiro+Devanagari+Sanskrit&
+family=Hind:wght@400;600&
+family=Karma:wght@400;600&
+family=Baloo+2&
+family=Tiro+Tamil&
+family=Noto+Sans+Malayalam&
+family=Noto+Sans+Kannada&
+family=Noto+Sans+Tamil&display=swap" 
+rel="stylesheet">
+
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -251,6 +275,17 @@
             <label>🧾 QR Code (optional)</label>
             <input id="qrText" placeholder="Enter URL or text" />
           </div>
+        <div class="row">
+        <label>Align</label>
+        <select id="qrAlign">
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+          <option value="justify">Justify</option>
+        </select>
+      </div>
+
+
 
           <!-- 📅 Date -->
           <div class="group">
@@ -262,19 +297,41 @@
             </select>
             <input type="date" id="customDate" class="hidden" />
           </div>
-
           <!-- ✍️ Font -->
           <div class="group">
             <label>✍️ Font Family</label>
-            <select id="fontFamily">
-              <option>Montserrat</option>
-              <option>Noto Sans Telugu</option>
-              <option>NTR</option>
-              <option>Ramabhadra</option>
-              <option>Gurajada</option>
-              <option>Gidugu</option>
-              <option>Noto Serif Devanagari</option>
-            </select>
+           <select id="fontFamily">
+  <!-- 🌐 English / Latin Fonts -->
+  <option>Montserrat</option>
+  <option>Poppins</option>
+  <option>Roboto</option>
+  <option>Open Sans</option>
+  <option>Lato</option>
+  <option>Playfair Display</option>
+  <option>Oswald</option>
+
+  <!-- 🇮🇳 Telugu Fonts -->
+  <option>Noto Sans Telugu</option>
+  <option>NTR</option>
+  <option>Ramabhadra</option>
+  <option>Gurajada</option>
+  <option>Gidugu</option>
+  <option>Mandali</option>
+
+  <!-- 🪶 Devanagari (Hindi, Sanskrit) -->
+  <option>Noto Serif Devanagari</option>
+  <option>Tiro Devanagari Sanskrit</option>
+  <option>Hind</option>
+  <option>Karma</option>
+
+  <!-- 🌺 Multi-Script / Decorative -->
+  <option>Baloo 2</option>
+  <option>Tiro Tamil</option>
+  <option>Noto Sans Malayalam</option>
+  <option>Noto Sans Kannada</option>
+  <option>Noto Sans Tamil</option>
+</select>
+
           </div>
           <!-- 🎙️ Voice Input -->
           <div class="group">

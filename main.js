@@ -1,12 +1,9 @@
 /* ==========================================================
-   🌸 AksharaChitra — main.js (v13 Final)
+   🌸 AksharaChitra — main.js (v15.6 Stable)
    ----------------------------------------------------------
-   Full-featured Poster Builder (Offline + IndexedDB + PWA)
+   Features: User Alignment Controls • QR Fix • Responsive Padding
    ----------------------------------------------------------
-   Sections:
-   1️⃣ Core DOM setup & utilities
-   2️⃣ IndexedDB (My Creations)
-   3️⃣ Cropper.js integration
+   Built & Maintained by: Sandeep Miriyala
    ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,7 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔧 Small DOM helpers
   // ---------------------------------------------
   const $ = (id) => document.getElementById(id);
-  const on = (el, ev, fn) => { if (el) el.addEventListener(ev, fn); };
+  const on = (el, ev, fn) => {
+    if (!el || typeof el.addEventListener !== "function") return;
+    el.addEventListener(ev, fn);
+  };
+
   const qsAll = (sel) => Array.from(document.querySelectorAll(sel));
 
   // ---------------------------------------------
@@ -42,8 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         customDate = $("customDate"),
         installBtn = $("installBtn"),
         installBtnHeader = $("installBtnHeader"),
-        shareWhatsAppBtn = $("shareWhatsAppBtn"),
-   
+        shareWhatsAppBtn = $("shareWhatsAppBtn");
 
   // Text controls
   const titleSize = $("titleSize"),
@@ -74,13 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------------------------
   // ⚙️ State variables
   // ---------------------------------------------
-      let cropper = null;
-    let cropTarget = null; // "main" | "logo"
-    let uploadedMainData = "";
-    let uploadedLogoData = "";
-    let posterDate = "";
-    let deferredPrompt = null;
-    const AUTOSAVE_KEY = "ak_autosave_v13";
+  let cropper = null;
+  let cropTarget = null; // "main" | "logo"
+  let uploadedMainData = "";
+  let uploadedLogoData = "";
+  let posterDate = "";
+  let deferredPrompt = null;
+  const AUTOSAVE_KEY = "ak_autosave_v13";
 
   // ---------------------------------------------
   // 💾 IndexedDB setup
@@ -290,19 +290,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🪶 Render Preview — updates instantly when user edits
   // ---------------------------------------------
   function renderPreview() {
+    // Guard: require previewCard
     if (!previewCard) return;
+
+    const qrAlignEl = document.getElementById("qrAlign");
+    if (qrAlignEl) on(qrAlignEl, "change", renderPreview);
+
     previewCard.style.position = "relative";
     previewCard.style.overflow = "hidden";
-    previewCard.style.padding = "18px";
+    previewCard.style.padding = window.innerWidth < 480 ? "8px" : "12px";
+
     previewCard.style.borderRadius = "12px";
     previewCard.style.background = (messageBg && messageBg.value) || "#fff";
 
-    // ---------- small logo ----------
+    // ---------- Small Logo ----------
     if (pSmallLogo) {
       pSmallLogo.innerHTML = uploadedLogoData
         ? `<img src="${uploadedLogoData}" alt="logo"
-               style="width:60px;height:60px;border-radius:8px;
-                      display:block;margin:8px auto;">`
+               style="width:55px;height:55px;border-radius:8px;
+                      display:block;margin:6px auto;">`
         : "";
     }
 
@@ -311,12 +317,12 @@ document.addEventListener("DOMContentLoaded", () => {
       pTitle.textContent = titleEl?.value || "";
       safeSetStyle(pTitle, {
         fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (titleSize?.value || 24) + "px",
-        textAlign: titleAlign?.value || "center",
+        fontSize: (titleSize?.value || 16) + "px",
+        textAlign: titleAlign?.value, // ✅ User controlled only
         color: titleColor?.value || "#111",
         background: titleBg?.value || "transparent",
         fontWeight: "700",
-        margin: "8px 0 6px",
+        margin: "6px 0 4px",
         wordBreak: "break-word",
         display: pTitle.textContent ? "block" : "none",
       });
@@ -327,8 +333,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pSubtitle.textContent = subtitleEl?.value || "";
       safeSetStyle(pSubtitle, {
         fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (subtitleSize?.value || 18) + "px",
-        textAlign: subtitleAlign?.value || "center",
+        fontSize: (subtitleSize?.value || 14) + "px",
+        textAlign: subtitleAlign?.value, // ✅ User controlled only
         color: subtitleColor?.value || "#333",
         background: subtitleBg?.value || "transparent",
         fontWeight: "500",
@@ -342,61 +348,110 @@ document.addEventListener("DOMContentLoaded", () => {
     if (pImage) {
       if (uploadedMainData) {
         const pos = imagePosition?.value || "center";
-        let style = "max-width:100%;display:block;margin:10px auto;border-radius:10px;object-fit:cover;";
-        if (pos === "left")  style = "max-width:100%;display:block;margin:10px auto 10px 0;border-radius:10px;object-fit:cover;";
-        if (pos === "right") style = "max-width:100%;display:block;margin:10px 0 10px auto;border-radius:10px;object-fit:cover;";
+        let style =
+          "max-width:100%;display:block;margin:8px auto;border-radius:10px;object-fit:cover;";
+        if (pos === "left")
+          style =
+            "max-width:100%;display:block;margin:8px auto 8px 0;border-radius:10px;object-fit:cover;";
+        if (pos === "right")
+          style =
+            "max-width:100%;display:block;margin:8px 0 8px auto;border-radius:10px;object-fit:cover;";
         pImage.innerHTML = `<img src="${uploadedMainData}" alt="main" style="${style}">`;
       } else pImage.innerHTML = "";
     }
 
-    // ---------- Message / Content ----------
+    // ---------- Message ----------
     if (pMessage) {
       pMessage.innerHTML = (messageEl?.value || "").replace(/\n/g, "<br>");
       safeSetStyle(pMessage, {
         fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (messageSize?.value || 16) + "px",
+        fontSize: (messageSize?.value || 12) + "px",
         textAlign: contentAlign?.value || "center",
         color: messageColor?.value || "#111",
         background: messageBg?.value || "transparent",
-        marginTop: "12px",
+        marginTop: "10px",
         wordBreak: "break-word",
       });
     }
 
-    // ---------- Created Date (bottom-left) ----------
-    let createdDateEl = previewCard.querySelector(".ak-created-date");
-    if (!createdDateEl) {
-      createdDateEl = document.createElement("div");
-      createdDateEl.className = "ak-created-date";
-      previewCard.appendChild(createdDateEl);
-    }
-    createdDateEl.textContent = posterDate ? ` ${posterDate}` : "";
-    safeSetStyle(createdDateEl, {
-      position: "absolute",
-      bottom: "8px",
-      left: "10px",
-      fontSize: "10px",
-      opacity: "0.6",
-      color: "#333",
-    });
+    // ---------- QR Code (User Aligned, Single Instance) ----------
+    const qrValue = document.getElementById("qrText")?.value?.trim();
+    const qrAlign = qrAlignEl?.value || "left";
+    if (pQR) {
+      pQR.innerHTML = "";
+      if (qrValue && typeof QRCode !== "undefined") {
+        const qrContainer = document.createElement("div");
+        qrContainer.style.textAlign = qrAlign;
+        qrContainer.style.marginTop = "12px";
 
-    // ---------- Watermark (bottom-right) ----------
-    let watermarkEl = previewCard.querySelector(".ak-watermark");
-    if (!watermarkEl) {
-      watermarkEl = document.createElement("div");
-      watermarkEl.className = "ak-watermark";
-      previewCard.appendChild(watermarkEl);
+        const qrDiv = document.createElement("div");
+        qrDiv.id = "qrPreview";
+        qrContainer.appendChild(qrDiv);
+        pQR.appendChild(qrContainer);
+
+        new QRCode(qrDiv, {
+          text: qrValue,
+          width: 70,
+          height: 70,
+          colorDark: "#000",
+          colorLight: "#fff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+      }
     }
-    watermarkEl.textContent = "aksharachitra.netlify.app";
-    safeSetStyle(watermarkEl, {
-      position: "absolute",
-      bottom: "8px",
-      right: "10px",
-      fontSize: "10px",
-      opacity: "0.6",
-      color: "#000",
-      fontStyle: "italic",
-    });
+
+    // ---------- Footer: Date + Logo + App Name ----------
+    previewCard.querySelectorAll(".ak-footer").forEach(el => el.remove());
+    const footer = document.createElement("div");
+    footer.className = "ak-footer";
+    footer.style.position = "absolute";
+    footer.style.bottom = "6px";
+    footer.style.left = "10px";
+    footer.style.right = "10px";
+    footer.style.display = "flex";
+    footer.style.alignItems = "center";
+    footer.style.justifyContent = "space-between";
+    footer.style.fontSize = "10px";
+    footer.style.opacity = "0.7";
+    footer.style.color = "#333";
+
+    // Date
+    const now = new Date();
+    const formatted = now
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+      .replace(",", "");
+    const dateSpan = document.createElement("span");
+    dateSpan.textContent = formatted;
+
+    // Logo + App name
+    const logoGroup = document.createElement("div");
+    logoGroup.style.display = "flex";
+    logoGroup.style.alignItems = "center";
+    logoGroup.style.gap = "4px";
+
+    const logoImg = document.createElement("img");
+    logoImg.src = "logo.png";
+    logoImg.style.width = "16px";
+    logoImg.style.height = "16px";
+    logoImg.style.borderRadius = "4px";
+
+    const logoText = document.createElement("span");
+    logoText.textContent = "AksharaChitra";
+    logoText.style.fontStyle = "italic";
+
+    logoGroup.appendChild(logoImg);
+    logoGroup.appendChild(logoText);
+
+    footer.appendChild(dateSpan);
+    footer.appendChild(logoGroup);
+    previewCard.appendChild(footer);
   }
 
   // ---------------------------------------------
@@ -469,178 +524,141 @@ document.addEventListener("DOMContentLoaded", () => {
    Part 3 of 4 — Image Generation, Save, Gallery & Share
    ========================================================== */
 
-async function generateImage({ download = false } = {}) {
-  if (!previewCard) return alert("Preview not found");
-  if (typeof html2canvas === "undefined") return alert("html2canvas not loaded");
+  async function generateImage({ download = false } = {}) {
+    if (!previewCard) return alert("Preview not found");
+    if (typeof html2canvas === "undefined") return alert("html2canvas not loaded");
 
-  // Detect device
-  const isMobile = window.innerWidth <= 768;
+    const width = 1200;
+    const height = Math.round(width * 9 / 16);
+    const scale = Math.min(3, window.devicePixelRatio || 2);
 
-  // Fixed 16:9 layout (Horizontal)
-  const width = isMobile ? 1080 : 1200;
-  const height = Math.round(width * 9 / 16);
-  const scale = isMobile ? 2 : Math.min(3, window.devicePixelRatio || 2);
+    const originalWidth = previewCard.style.width;
+    const originalHeight = previewCard.style.height;
+    const prevPadding = previewCard.style.padding;
 
-  // Backup
-  const originalWidth = previewCard.style.width;
-  const originalHeight = previewCard.style.height;
-  const prevPadding = previewCard.style.padding;
+    previewCard.style.width = width + "px";
+    previewCard.style.height = height + "px";
+    previewCard.style.padding = "8px 14px 10px 14px";
 
-  // Apply
-  previewCard.style.width = width + "px";
-  previewCard.style.height = height + "px";
-  previewCard.style.padding = "10px 12px";
-
-  // Loading overlay
-  const overlay = document.createElement("div");
-  Object.assign(overlay.style, {
-    position: "fixed",
-    inset: 0,
-    background: "rgba(255,255,255,0.7)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 9999,
-    fontFamily: "Montserrat, sans-serif",
-    fontSize: "1.1rem",
-    color: "#1e88e5",
-    fontWeight: "600",
-  });
-  overlay.textContent = "⏳ Generating Poster...";
-  document.body.appendChild(overlay);
-
-  try {
-    // Capture
-    const canvas = await html2canvas(previewCard, {
-      scale,
-      width,
-      height,
-      useCORS: true,
-      backgroundColor: null,
-      allowTaint: true,
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(255,255,255,0.7)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 9999,
+      fontFamily: "Montserrat, sans-serif",
+      fontSize: "1.1rem",
+      color: "#1e88e5",
+      fontWeight: "600",
     });
-    const ctx = canvas.getContext("2d");
+    overlay.textContent = "⏳ Generating Poster...";
+    document.body.appendChild(overlay);
 
-    // ===== QR CODE (bottom-left small) =====
     try {
-      const qrInput = document.getElementById("qrText");
-      const qrValue = qrInput?.value?.trim();
-      if (qrValue && typeof QRCode !== "undefined") {
-        const temp = document.createElement("div");
-        new QRCode(temp, {
-          text: qrValue,
-          width: 70,
-          height: 70,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H,
-        });
-        const qrImg = temp.querySelector("img") || temp.querySelector("canvas");
-        if (qrImg) {
-          await new Promise(r => setTimeout(r, 200));
-          const tmp = new Image();
-          tmp.src = qrImg.src || qrImg.toDataURL("image/png");
-          await new Promise(res => tmp.onload = res);
-          const qrSize = 60 * scale;
-          ctx.drawImage(tmp, 20 * scale, canvas.height - qrSize - 70 * scale, qrSize, qrSize);
-        }
-      }
-    } catch (qrErr) {
-      console.warn("⚠️ QR render failed:", qrErr);
-    }
+      await new Promise(r => setTimeout(r, 300));
 
-    // ===== FOOTER LINE + DATE + WEBSITE =====
-    try {
-      const now = new Date();
-      const formattedDate = now.toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
+      // Capture DOM (includes QR + alignment from user)
+      const canvas = await html2canvas(previewCard, {
+        scale,
+        width,
+        height,
+        useCORS: true,
+        backgroundColor: null,
+        allowTaint: true,
       });
-      const dateText = formattedDate;
-      const siteText = "aksharachitra.netlify.app";
-      const madeText = "✨ Made using AksharaChitra";
 
-      // Separator line
-      ctx.beginPath();
-      ctx.strokeStyle = "rgba(0,0,0,0.25)";
-      ctx.lineWidth = 1 * scale;
-      ctx.moveTo(10 * scale, canvas.height - 50 * scale);
-      ctx.lineTo(canvas.width - 10 * scale, canvas.height - 50 * scale);
-      ctx.stroke();
+      const ctx = canvas.getContext("2d");
 
-      // Footer font
-      const fontSize = Math.max(9, Math.round(9 * scale));
-      ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-      ctx.textBaseline = "alphabetic";
-      ctx.fillStyle = "#222";
+      // ======================================================
+      // 🕒 FOOTER — Date/Time + Logo + App Name
+      // ======================================================
+      try {
+        const now = new Date();
+        const formattedDate = now.toLocaleString("en-IN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }).replace(",", "");
 
-      // Left — Date + Time
-      ctx.textAlign = "left";
-      ctx.fillText(dateText, 16 * scale, canvas.height - 20 * scale);
+        const dateText = formattedDate;
+        const appName = "AksharaChitra";
 
-      // Right — Site + Tagline
-      ctx.textAlign = "center";
-      ctx.fillText(`${siteText}  |  ${madeText}`, canvas.width - 16 * scale, canvas.height - 20 * scale);
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(0,0,0,0.25)";
+        ctx.lineWidth = 1 * scale;
+        ctx.moveTo(10 * scale, canvas.height - 50 * scale);
+        ctx.lineTo(canvas.width - 10 * scale, canvas.height - 50 * scale);
+        ctx.stroke();
 
-      // Optional small logo (right side)
-      const logoImg = new Image();
-      logoImg.src = "logo.png"; // ensure logo.png exists in your project
-      await new Promise(res => (logoImg.onload = res, logoImg.onerror = res));
-      const logoSize = 22 * scale;
-      ctx.drawImage(
-        logoImg,
-        canvas.width - (ctx.measureText(`${siteText}  |  ${madeText}`).width + 45 * scale),
-        canvas.height - 38 * scale,
-        logoSize,
-        logoSize
-      );
-    } catch (e) {
-      console.warn("⚠️ Footer draw failed:", e);
+        const fontSize = Math.max(9, Math.round(9 * scale));
+        ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
+        ctx.textBaseline = "alphabetic";
+        ctx.fillStyle = "#222";
+
+        ctx.textAlign = "left";
+        ctx.fillText(dateText, 16 * scale, canvas.height - 20 * scale);
+
+        const logoImg = new Image();
+        logoImg.src = "logo.png";
+        await new Promise(res => (logoImg.onload = res, logoImg.onerror = res));
+        const logoSize = 22 * scale;
+        const logoY = canvas.height - 38 * scale;
+        const textWidth = ctx.measureText(appName).width;
+
+        ctx.textAlign = "right";
+        ctx.fillText(appName, canvas.width - 16 * scale, canvas.height - 20 * scale);
+        const logoX = canvas.width - (textWidth + 40 * scale);
+        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+      } catch (e) {
+        console.warn("⚠️ Footer draw failed:", e);
+      }
+
+      // ======================================================
+      // 📸 EXPORT PNG
+      // ======================================================
+      const dataUrl = canvas.toDataURL("image/png");
+      if (download) {
+        const fname = formatFilename(titleEl?.value || "AksharaChitra", width, height);
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = fname;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+
+      previewCard.style.width = originalWidth;
+      previewCard.style.height = originalHeight;
+      previewCard.style.padding = prevPadding;
+      overlay.remove();
+      return dataUrl;
+
+    } catch (err) {
+      console.error("generateImage error", err);
+      overlay.remove();
+      previewCard.style.width = originalWidth;
+      previewCard.style.height = originalHeight;
+      previewCard.style.padding = prevPadding;
+      return null;
     }
-
-    // ===== EXPORT PNG =====
-    const dataUrl = canvas.toDataURL("image/png");
-    if (download) {
-      const fname = formatFilename(titleEl?.value || "AksharaChitra", width, height);
-      const a = document.createElement("a");
-      a.href = dataUrl;
-      a.download = fname;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
-
-    // Cleanup
-    previewCard.style.width = originalWidth;
-    previewCard.style.height = originalHeight;
-    previewCard.style.padding = prevPadding;
-    overlay.remove();
-
-    return dataUrl;
-  } catch (err) {
-    console.error("generateImage error", err);
-    overlay.remove();
-    previewCard.style.width = originalWidth;
-    previewCard.style.height = originalHeight;
-    previewCard.style.padding = prevPadding;
-    return null;
   }
-}
 
-// ✅ Buttons (no confirm, direct actions)
-if (generateBtn)
-  on(generateBtn, "click", async () => {
-    await generateImage({ download: false });
-  });
+  // ✅ Buttons (no confirm, direct actions)
+  if (generateBtn)
+    on(generateBtn, "click", async () => {
+      await generateImage({ download: false });
+    });
 
-if (downloadBtn)
-  on(downloadBtn, "click", async () => {
-    await generateImage({ download: true });
-  });
+  if (downloadBtn)
+    on(downloadBtn, "click", async () => {
+      await generateImage({ download: true });
+    });
 
 
   // ---------------------------------------------
@@ -983,10 +1001,8 @@ if (downloadBtn)
     saveToDB,
     deleteFromDB
   };
-
   // ✅ All features loaded
   console.log("✅ AksharaChitra v13 loaded successfully!");
 
-
 });
-
+  
