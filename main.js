@@ -690,18 +690,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // WhatsApp info share (text)
   if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", () => {
-    const features = [
-      "🖋️ Customize Title, Subtitle & Message",
-      "🌐 Supports Indian Languages",
-      "🖼️ Upload & Crop Images",
-      "🔖 Add Logo / Watermark",
-      "📅 Auto or Custom Date",
-      "💾 Offline Save (IndexedDB)",
-      "📤 Quick Social Share",
-    ].map(f => `• ${f}`).join("\n");
-    const message = `🌸 AksharaChitra — Create Multilingual Posters Offline 🎨\n\nTop Features:\n${features}\n\nhttps://aksharachitra.netlify.app\nMade with ❤️ by Sandeep Miriyala`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
-  });
+  const features = [
+    "🖋️ Customize Title, Subtitle & Message",
+    "🌐 Supports Indian Languages",
+    "🖼️ Upload & Crop Images",
+    "🔖 Add Logo / Watermark",
+    "📅 Auto or Custom Date",
+    "💾 Offline Save (IndexedDB)",
+    "📤 Quick Social Share",
+    "🌙 Dark Mode Anytime",
+    "⚡ PWA — Works Fully Offline"
+  ].map(f => `• ${f}`).join("\n");
+
+  const fontsOverview = [
+    "🇬🇧 English (7): Montserrat, Poppins, Roboto, Open Sans, Lato, Playfair Display, Oswald",
+    "🇮🇳 తెలుగు (6): Noto Sans Telugu, NTR, Ramabhadra, Gurajada, Gidugu, Mandali",
+    "🇮🇳 हिंदी (3): Noto Serif Devanagari, Hind, Karma",
+    "🕉️ संस्कृतम् (2): Tiro Devanagari Sanskrit, Noto Serif Devanagari",
+    "🇮🇳 தமிழ் (2): Noto Sans Tamil, Tiro Tamil",
+    "🇮🇳 ಕನ್ನಡ (1): Noto Sans Kannada",
+    "🇮🇳 മലയാളം (1): Noto Sans Malayalam",
+    "🇮🇳 ଓଡ଼ିଆ (1): Noto Sans Oriya",
+  ].map(f => `• ${f}`).join("\n");
+
+  const message = 
+`🌸 *AksharaChitra — Create Multilingual Posters Offline* 🎨
+
+✨ *Top Features:*
+${features}
+
+🌏 *Supported Languages & Fonts:*
+${fontsOverview}
+
+🖋️ *Total Fonts:* 23   |   🌐 *Languages:* 8+
+🔤 All fonts are Google Fonts — Unicode & Offline Ready
+
+🔗 https://aksharachitra.netlify.app
+Made with  by Sandeep Miriyala`;
+
+  window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+});
+
 
   // ---------------------------------------------
   // 💾 Save to IndexedDB (My Creations)
