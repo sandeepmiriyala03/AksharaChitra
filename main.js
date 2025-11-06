@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
       createdDateEl.className = "ak-created-date";
       previewCard.appendChild(createdDateEl);
     }
-    createdDateEl.textContent = posterDate ? `📅 ${posterDate}` : "";
+    createdDateEl.textContent = posterDate ? ` ${posterDate}` : "";
     safeSetStyle(createdDateEl, {
       position: "absolute",
       bottom: "8px",
@@ -472,90 +472,102 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------------------------
   // 🖼️ Generate poster image with html2canvas
   // ---------------------------------------------
-  async function generateImage({ download = false, userTimestamp = null } = {}) {
-    if (!previewCard) { alert("Preview not found"); return null; }
-    if (typeof html2canvas === "undefined") {
-      alert("html2canvas not loaded");
-      return null;
-    }
-
-    // Determine output size (based on preview or dropdown)
-    let width = previewCard.clientWidth;
-    let height = previewCard.clientHeight;
-    if (posterSizeSelect && posterSizeSelect.value) {
-      const [w, h] = posterSizeSelect.value.split("x").map(Number);
-      if (!isNaN(w) && !isNaN(h)) { width = w; height = h; }
-    }
-
-    // Temporarily apply chosen size
-    const originalWidthStyle = previewCard.style.width || "";
-    const originalHeightStyle = previewCard.style.height || "";
-    previewCard.style.width = width + "px";
-    previewCard.style.height = height + "px";
-
-    const scale = Math.max(2, Math.min(4, window.devicePixelRatio || 2));
-    try {
-      const rect = previewCard.getBoundingClientRect();
-      const canvas = await html2canvas(previewCard, {
-        scale,
-        width: Math.round(rect.width),
-        height: Math.round(rect.height),
-        useCORS: true,
-        backgroundColor: null,
-        allowTaint: true,
-      });
-
-      // Draw watermark + date on canvas
-      try {
-        const ctx = canvas.getContext("2d");
-        const now = userTimestamp ? new Date(userTimestamp) : new Date();
-        const options = {
-          day: "numeric", month: "short", year: "numeric",
-          hour: "2-digit", minute: "2-digit", hour12: true,
-        };
-        const formatted = now.toLocaleString("en-IN", options);
-        const dateText = `📅 ${posterDate || formatted}`;
-        const siteText = "aksharachitra.netlify.app";
-
-        const fontSize = Math.max(12, Math.round(13 * scale));
-        ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-        ctx.fillStyle = "rgba(0,0,0,0.6)";
-        ctx.textBaseline = "bottom";
-
-        ctx.textAlign = "left";
-        ctx.fillText(dateText, 16 * scale, canvas.height - 16 * scale);
-
-        ctx.textAlign = "right";
-        ctx.fillText(siteText, canvas.width - 16 * scale, canvas.height - 16 * scale);
-      } catch (e) {
-        console.warn("Watermark draw failed", e);
-      }
-
-      const dataUrl = canvas.toDataURL("image/png");
-
-      if (download) {
-        const fname = formatFilename(titleEl?.value, width, height);
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = fname;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        alert(`Saved: ${fname}`);
-      }
-
-      // restore preview styles
-      previewCard.style.width = originalWidthStyle;
-      previewCard.style.height = originalHeightStyle;
-      return dataUrl;
-    } catch (err) {
-      console.error("generateImage error", err);
-      alert("Failed to generate image. Check console.");
-      previewCard.style.width = originalWidthStyle;
-      previewCard.style.height = originalHeightStyle;
-      return null;
-    }
+// 🖼️ Generate poster image with html2canvas
+async function generateImage({ download = false, userTimestamp = null } = {}) {
+  if (!previewCard) { alert("Preview not found"); return null; }
+  if (typeof html2canvas === "undefined") {
+    alert("html2canvas not loaded");
+    return null;
   }
+
+  // ✅ Auto-adjust poster size for mobile users
+  const isMobile = window.innerWidth <= 768;
+  let width = previewCard.clientWidth;
+  let height = previewCard.clientHeight;
+
+  // If mobile, keep within 1080px height for faster and cleaner rendering
+  if (isMobile) {
+    const ratio = previewCard.clientWidth / previewCard.clientHeight;
+    width = 720;                     // standard HD width
+    height = Math.round(width / ratio);
+    if (height > 1080) height = 1080; // keep poster height reasonable
+  } else if (posterSizeSelect && posterSizeSelect.value) {
+    const [w, h] = posterSizeSelect.value.split("x").map(Number);
+    if (!isNaN(w) && !isNaN(h)) { width = w; height = h; }
+  }
+
+  // Temporarily apply chosen size
+  const originalWidthStyle = previewCard.style.width || "";
+  const originalHeightStyle = previewCard.style.height || "";
+  previewCard.style.width = width + "px";
+  previewCard.style.height = height + "px";
+
+  // Slightly reduced scale on mobile for speed
+  const scale = isMobile ? 2 : Math.max(2, Math.min(4, window.devicePixelRatio || 2));
+
+  try {
+    const rect = previewCard.getBoundingClientRect();
+    const canvas = await html2canvas(previewCard, {
+      scale,
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+      useCORS: true,
+      backgroundColor: null,
+      allowTaint: true,
+    });
+
+    // Watermark + date (your latest version)
+    try {
+      const ctx = canvas.getContext("2d");
+      const now = userTimestamp ? new Date(userTimestamp) : new Date();
+      const options = {
+        day: "numeric", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit", hour12: true,
+      };
+      const formatted = now.toLocaleString("en-IN", options);
+      const dateText = ` ${posterDate || formatted}`;
+      const siteText = "aksharachitra.netlify.app";
+
+      const fontSize = Math.max(9, Math.round(9 * scale));
+      ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
+      ctx.textBaseline = "bottom";
+
+      ctx.textAlign = "left";
+      ctx.fillText(dateText, 14 * scale, canvas.height - 12 * scale);
+
+      ctx.textAlign = "right";
+      ctx.fillText(siteText, canvas.width - 14 * scale, canvas.height - 12 * scale);
+    } catch (e) {
+      console.warn("Watermark draw failed", e);
+    }
+
+    const dataUrl = canvas.toDataURL("image/png");
+
+    if (download) {
+      const fname = formatFilename(titleEl?.value, width, height);
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = fname;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      alert(`Saved: ${fname}`);
+    }
+
+    // Restore preview styles
+    previewCard.style.width = originalWidthStyle;
+    previewCard.style.height = originalHeightStyle;
+    return dataUrl;
+  } catch (err) {
+    console.error("generateImage error", err);
+    alert("Failed to generate image. Check console.");
+    previewCard.style.width = originalWidthStyle;
+    previewCard.style.height = originalHeightStyle;
+    return null;
+  }
+}
+
 
   // Buttons
   if (generateBtn) on(generateBtn, "click", async () => { await generateImage({ download: false }); });
