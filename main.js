@@ -939,9 +939,7 @@ document.addEventListener("DOMContentLoaded", () => {
     on(stopSpeakBtn, "click", () => synth.cancel());
   }
 
-  // ---------------------------------------------
-  // 🧹 Clear All Fields
-  // ---------------------------------------------
+
   // ---------------------------------------------
 // 🧹 Clear All Fields (Full Reset — No Alert Popup)
 // ---------------------------------------------
@@ -962,7 +960,8 @@ if (clearBtn) on(clearBtn, "click", () => {
   [titleAlign, subtitleAlign, contentAlign].forEach(e => { if (e) e.value = "center"; });
 
   // 🔹 Colors & backgrounds
-  [titleColor, subtitleColor, messageColor].forEach(e => { if (e) e.value = "#000000"; });
+[titleColor, subtitleColor, messageColor].forEach(e => { if (e) e.value = "#FFFFFF"; });
+
   [titleBg, subtitleBg, messageBg].forEach(e => { if (e) e.value = "transparent"; });
 
   // 🔹 Font family
