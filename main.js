@@ -289,170 +289,173 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------------------------
   // 🪶 Render Preview — updates instantly when user edits
   // ---------------------------------------------
-  function renderPreview() {
-    // Guard: require previewCard
-    if (!previewCard) return;
+ function renderPreview() {
+  // Guard: require previewCard
+  if (!previewCard) return;
 
-    const qrAlignEl = document.getElementById("qrAlign");
-    if (qrAlignEl) on(qrAlignEl, "change", renderPreview);
+  const qrAlignEl = document.getElementById("qrAlign");
+  if (qrAlignEl) on(qrAlignEl, "change", renderPreview);
 
-    previewCard.style.position = "relative";
-    previewCard.style.overflow = "hidden";
-    previewCard.style.padding = window.innerWidth < 480 ? "8px" : "12px";
+  // Base preview card styles
+  previewCard.style.position = "relative";
+  previewCard.style.overflow = "hidden";
+  previewCard.style.padding = window.innerWidth < 480 ? "8px" : "12px";
+  previewCard.style.borderRadius = "12px";
+  previewCard.style.background = (messageBg && messageBg.value) || "#fff";
 
-    previewCard.style.borderRadius = "12px";
-    previewCard.style.background = (messageBg && messageBg.value) || "#fff";
-
-    // ---------- Small Logo ----------
-    if (pSmallLogo) {
-      pSmallLogo.innerHTML = uploadedLogoData
-        ? `<img src="${uploadedLogoData}" alt="logo"
-               style="width:55px;height:55px;border-radius:8px;
-                      display:block;margin:6px auto;">`
-        : "";
-    }
-
-    // ---------- Title ----------
-    if (pTitle) {
-      pTitle.textContent = titleEl?.value || "";
-      safeSetStyle(pTitle, {
-        fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (titleSize?.value || 16) + "px",
-        textAlign: titleAlign?.value, // ✅ User controlled only
-        color: titleColor?.value || "#111",
-        background: titleBg?.value || "transparent",
-        fontWeight: "700",
-        margin: "6px 0 4px",
-        wordBreak: "break-word",
-        display: pTitle.textContent ? "block" : "none",
-      });
-    }
-
-    // ---------- Subtitle ----------
-    if (pSubtitle) {
-      pSubtitle.textContent = subtitleEl?.value || "";
-      safeSetStyle(pSubtitle, {
-        fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (subtitleSize?.value || 14) + "px",
-        textAlign: subtitleAlign?.value, // ✅ User controlled only
-        color: subtitleColor?.value || "#333",
-        background: subtitleBg?.value || "transparent",
-        fontWeight: "500",
-        margin: "4px 0 10px",
-        wordBreak: "break-word",
-        display: pSubtitle.textContent ? "block" : "none",
-      });
-    }
-
-    // ---------- Image ----------
-    if (pImage) {
-      if (uploadedMainData) {
-        const pos = imagePosition?.value || "center";
-        let style =
-          "max-width:100%;display:block;margin:8px auto;border-radius:10px;object-fit:cover;";
-        if (pos === "left")
-          style =
-            "max-width:100%;display:block;margin:8px auto 8px 0;border-radius:10px;object-fit:cover;";
-        if (pos === "right")
-          style =
-            "max-width:100%;display:block;margin:8px 0 8px auto;border-radius:10px;object-fit:cover;";
-        pImage.innerHTML = `<img src="${uploadedMainData}" alt="main" style="${style}">`;
-      } else pImage.innerHTML = "";
-    }
-
-    // ---------- Message ----------
-    if (pMessage) {
-      pMessage.innerHTML = (messageEl?.value || "").replace(/\n/g, "<br>");
-      safeSetStyle(pMessage, {
-        fontFamily: fontFamily?.value || "Montserrat, sans-serif",
-        fontSize: (messageSize?.value || 12) + "px",
-        textAlign: contentAlign?.value || "center",
-        color: messageColor?.value || "#111",
-        background: messageBg?.value || "transparent",
-        marginTop: "10px",
-        wordBreak: "break-word",
-      });
-    }
-
-    // ---------- QR Code (User Aligned, Single Instance) ----------
-    const qrValue = document.getElementById("qrText")?.value?.trim();
-    const qrAlign = qrAlignEl?.value || "left";
-    if (pQR) {
-      pQR.innerHTML = "";
-      if (qrValue && typeof QRCode !== "undefined") {
-        const qrContainer = document.createElement("div");
-        qrContainer.style.textAlign = qrAlign;
-        qrContainer.style.marginTop = "12px";
-
-        const qrDiv = document.createElement("div");
-        qrDiv.id = "qrPreview";
-        qrContainer.appendChild(qrDiv);
-        pQR.appendChild(qrContainer);
-
-        new QRCode(qrDiv, {
-          text: qrValue,
-          width: 70,
-          height: 70,
-          colorDark: "#000",
-          colorLight: "#fff",
-          correctLevel: QRCode.CorrectLevel.H,
-        });
-      }
-    }
-
-    // ---------- Footer: Date + Logo + App Name ----------
-    previewCard.querySelectorAll(".ak-footer").forEach(el => el.remove());
-    const footer = document.createElement("div");
-    footer.className = "ak-footer";
-    footer.style.position = "absolute";
-    footer.style.bottom = "6px";
-    footer.style.left = "10px";
-    footer.style.right = "10px";
-    footer.style.display = "flex";
-    footer.style.alignItems = "center";
-    footer.style.justifyContent = "space-between";
-    footer.style.fontSize = "10px";
-    footer.style.opacity = "0.7";
-    footer.style.color = "#333";
-
-    // Date
-    const now = new Date();
-    const formatted = now
-      .toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      })
-      .replace(",", "");
-    const dateSpan = document.createElement("span");
-    dateSpan.textContent = formatted;
-
-    // Logo + App name
-    const logoGroup = document.createElement("div");
-    logoGroup.style.display = "flex";
-    logoGroup.style.alignItems = "center";
-    logoGroup.style.gap = "4px";
-
-    const logoImg = document.createElement("img");
-    logoImg.src = "logo.png";
-    logoImg.style.width = "16px";
-    logoImg.style.height = "16px";
-    logoImg.style.borderRadius = "4px";
-
-    const logoText = document.createElement("span");
-    logoText.textContent = "AksharaChitra";
-    logoText.style.fontStyle = "italic";
-
-    logoGroup.appendChild(logoImg);
-    logoGroup.appendChild(logoText);
-
-    footer.appendChild(dateSpan);
-    footer.appendChild(logoGroup);
-    previewCard.appendChild(footer);
+  // ---------- Small Logo ----------
+  if (pSmallLogo) {
+    pSmallLogo.innerHTML = uploadedLogoData
+      ? `<img src="${uploadedLogoData}" alt="logo"
+             style="width:55px;height:55px;border-radius:8px;
+                    display:block;margin:6px auto;">`
+      : "";
   }
+
+  // ---------- Title ----------
+  if (pTitle) {
+    pTitle.textContent = titleEl?.value || "";
+    safeSetStyle(pTitle, {
+      fontFamily: fontFamily?.value || "Montserrat, sans-serif",
+      fontSize: (titleSize?.value || 16) + "px",
+      textAlign: titleAlign?.value || "center",
+      color: titleColor?.value || "#FFFFFF", // ✅ default white
+      background: titleBg?.value || "transparent",
+      fontWeight: "700",
+      margin: "6px 0 4px",
+      wordBreak: "break-word",
+      display: pTitle.textContent ? "block" : "none",
+    });
+  }
+
+  // ---------- Subtitle ----------
+  if (pSubtitle) {
+    pSubtitle.textContent = subtitleEl?.value || "";
+    safeSetStyle(pSubtitle, {
+      fontFamily: fontFamily?.value || "Montserrat, sans-serif",
+      fontSize: (subtitleSize?.value || 14) + "px",
+      textAlign: subtitleAlign?.value || "center",
+      color: subtitleColor?.value || "#FFFFFF", // ✅ default white
+      background: subtitleBg?.value || "transparent",
+      fontWeight: "500",
+      margin: "4px 0 10px",
+      wordBreak: "break-word",
+      display: pSubtitle.textContent ? "block" : "none",
+    });
+  }
+
+  // ---------- Image ----------
+  if (pImage) {
+    if (uploadedMainData) {
+      const pos = imagePosition?.value || "center";
+      let style =
+        "max-width:100%;display:block;margin:8px auto;border-radius:10px;object-fit:cover;";
+      if (pos === "left")
+        style =
+          "max-width:100%;display:block;margin:8px auto 8px 0;border-radius:10px;object-fit:cover;";
+      if (pos === "right")
+        style =
+          "max-width:100%;display:block;margin:8px 0 8px auto;border-radius:10px;object-fit:cover;";
+      pImage.innerHTML = `<img src="${uploadedMainData}" alt="main" style="${style}">`;
+    } else {
+      pImage.innerHTML = "";
+    }
+  }
+
+  // ---------- Message ----------
+  if (pMessage) {
+    pMessage.innerHTML = (messageEl?.value || "").replace(/\n/g, "<br>");
+    safeSetStyle(pMessage, {
+      fontFamily: fontFamily?.value || "Montserrat, sans-serif",
+      fontSize: (messageSize?.value || 12) + "px",
+      textAlign: contentAlign?.value || "center",
+      color: messageColor?.value || "#FFFFFF", // ✅ default white
+      background: messageBg?.value || "transparent",
+      marginTop: "10px",
+      wordBreak: "break-word",
+    });
+  }
+
+  // ---------- QR Code ----------
+  const qrValue = document.getElementById("qrText")?.value?.trim();
+  const qrAlign = qrAlignEl?.value || "left";
+  if (pQR) {
+    pQR.innerHTML = "";
+    if (qrValue && typeof QRCode !== "undefined") {
+      const qrContainer = document.createElement("div");
+      qrContainer.style.textAlign = qrAlign;
+      qrContainer.style.marginTop = "12px";
+
+      const qrDiv = document.createElement("div");
+      qrDiv.id = "qrPreview";
+      qrContainer.appendChild(qrDiv);
+      pQR.appendChild(qrContainer);
+
+      new QRCode(qrDiv, {
+        text: qrValue,
+        width: 70,
+        height: 70,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    }
+  }
+
+  // ---------- Footer ----------
+  previewCard.querySelectorAll(".ak-footer").forEach(el => el.remove());
+  const footer = document.createElement("div");
+  footer.className = "ak-footer";
+  footer.style.position = "absolute";
+  footer.style.bottom = "6px";
+  footer.style.left = "10px";
+  footer.style.right = "10px";
+  footer.style.display = "flex";
+  footer.style.alignItems = "center";
+  footer.style.justifyContent = "space-between";
+  footer.style.fontSize = "10px";
+  footer.style.opacity = "0.7";
+  footer.style.color = "#FFFFFF"; // ✅ footer text white to match theme
+
+  // Date
+  const now = new Date();
+  const formatted = now
+    .toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .replace(",", "");
+  const dateSpan = document.createElement("span");
+  dateSpan.textContent = formatted;
+
+  // Logo + App name
+  const logoGroup = document.createElement("div");
+  logoGroup.style.display = "flex";
+  logoGroup.style.alignItems = "center";
+  logoGroup.style.gap = "4px";
+
+  const logoImg = document.createElement("img");
+  logoImg.src = "logo.png";
+  logoImg.style.width = "16px";
+  logoImg.style.height = "16px";
+  logoImg.style.borderRadius = "4px";
+
+  const logoText = document.createElement("span");
+  logoText.textContent = "AksharaChitra";
+  logoText.style.fontStyle = "italic";
+
+  logoGroup.appendChild(logoImg);
+  logoGroup.appendChild(logoText);
+
+  footer.appendChild(dateSpan);
+  footer.appendChild(logoGroup);
+  previewCard.appendChild(footer);
+}
+
 
   // ---------------------------------------------
   // 🔄 Live-update preview on any input change
@@ -943,6 +946,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------------------------
 // 🧹 Clear All Fields (Full Reset — No Alert Popup)
 // ---------------------------------------------
+// ---------------------------------------------
+// 🧹 Clear All Fields (Full Reset — No Alert Popup)
+// ---------------------------------------------
 if (clearBtn) on(clearBtn, "click", () => {
   if (!confirm("Clear all fields and reset settings?")) return;
 
@@ -959,15 +965,15 @@ if (clearBtn) on(clearBtn, "click", () => {
   // 🔹 Alignment dropdowns
   [titleAlign, subtitleAlign, contentAlign].forEach(e => { if (e) e.value = "center"; });
 
-  // 🔹 Colors & backgrounds
-[titleColor, subtitleColor, messageColor].forEach(e => { if (e) e.value = "#FFFFFF"; });
-
+  // 🔹 Colors & backgrounds (set white + transparent)
+  [titleColor, subtitleColor, messageColor].forEach(e => { if (e) e.value = "#FFFFFF"; });
   [titleBg, subtitleBg, messageBg].forEach(e => { if (e) e.value = "transparent"; });
 
-  // 🔹 Font family
-  if (fontFamily) fontFamily.value = "Montserrat, sans-serif";
+  // 🔹 Force preview to white immediately
+  [pTitle, pSubtitle, pMessage].forEach(el => { if (el) el.style.color = "#FFFFFF"; });
 
-  // 🔹 Image position
+  // 🔹 Font family & image position
+  if (fontFamily) fontFamily.value = "Montserrat, sans-serif";
   if (imagePosition) imagePosition.value = "center";
 
   // 🔹 Language selector
@@ -978,21 +984,19 @@ if (clearBtn) on(clearBtn, "click", () => {
   if (customDate) customDate.value = "";
   posterDate = "";
 
-  // 🔹 Template select
+  // 🔹 Template select & QR
   const templateSelect = $("templateSelect");
   if (templateSelect) templateSelect.value = "";
-
-  // 🔹 QR code
   const qrText = $("qrText");
   if (qrText) qrText.value = "";
 
   // 🔹 Remove autosave cache
   try { localStorage.removeItem(AUTOSAVE_KEY); } catch {}
 
-  // 🔹 Refresh preview
-  renderPreview();
+  // 🔹 Refresh preview (delay ensures white update applies)
+  setTimeout(renderPreview, 100);
 
-  // 🔹 ✅ Show smooth toast message (instead of alert)
+  // 🔹 ✅ Toast message
   const msg = document.createElement("div");
   msg.textContent = "✅ All fields and settings have been reset!";
   Object.assign(msg.style, {
@@ -1018,6 +1022,7 @@ if (clearBtn) on(clearBtn, "click", () => {
     setTimeout(() => msg.remove(), 600);
   }, 2500);
 });
+
 
 
   // ---------------------------------------------
