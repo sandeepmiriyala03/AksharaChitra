@@ -301,7 +301,10 @@ document.addEventListener("DOMContentLoaded", () => {
   previewCard.style.overflow = "hidden";
   previewCard.style.padding = window.innerWidth < 480 ? "8px" : "12px";
   previewCard.style.borderRadius = "12px";
-  previewCard.style.background = (messageBg && messageBg.value) || "#fff";
+previewCard.style.background = (messageBg?.value && messageBg.value !== "transparent")
+  ? messageBg.value
+  : "#FFFFFF"; // ✅ always white by default
+
 
   // ---------- Small Logo ----------
   if (pSmallLogo) {
@@ -415,7 +418,8 @@ document.addEventListener("DOMContentLoaded", () => {
   footer.style.justifyContent = "space-between";
   footer.style.fontSize = "10px";
   footer.style.opacity = "0.7";
-  footer.style.color = "#FFFFFF"; // ✅ footer text white to match theme
+  footer.style.color = "#000000"; // ✅ footer text white to match theme
+  
 
   // Date
   const now = new Date();
@@ -942,12 +946,8 @@ document.addEventListener("DOMContentLoaded", () => {
     on(stopSpeakBtn, "click", () => synth.cancel());
   }
 
-
-  // ---------------------------------------------
-// 🧹 Clear All Fields (Full Reset — No Alert Popup)
 // ---------------------------------------------
-// ---------------------------------------------
-// 🧹 Clear All Fields (Full Reset — No Alert Popup)
+// 🧹 Clear All Fields (Full Reset — All Text Black, White Background)
 // ---------------------------------------------
 if (clearBtn) on(clearBtn, "click", () => {
   if (!confirm("Clear all fields and reset settings?")) return;
@@ -955,48 +955,57 @@ if (clearBtn) on(clearBtn, "click", () => {
   // 🔹 Text fields
   [titleEl, subtitleEl, messageEl].forEach(e => { if (e) e.value = ""; });
 
-  // 🔹 Image data
+  // 🔹 Image data reset
   uploadedMainData = "";
   uploadedLogoData = "";
 
-  // 🔹 Size controls
-  [titleSize, subtitleSize, messageSize].forEach(e => { if (e) e.value = ""; });
+  // 🧼 Reset file inputs to allow re-upload of same file
+  if (imageUpload) imageUpload.value = "";
+  if (smallLogoUpload) smallLogoUpload.value = "";
 
-  // 🔹 Alignment dropdowns
+  // 🔹 Safely destroy cropper (if open)
+  try { if (cropper) cropper.destroy(); } catch {}
+  cropper = null;
+  cropTarget = null;
+  if (cropModal) cropModal.classList.add("hidden");
+
+  // 🔹 Size & alignment reset
+  [titleSize, subtitleSize, messageSize].forEach(e => { if (e) e.value = ""; });
   [titleAlign, subtitleAlign, contentAlign].forEach(e => { if (e) e.value = "center"; });
 
-  // 🔹 Colors & backgrounds (set white + transparent)
-  [titleColor, subtitleColor, messageColor].forEach(e => { if (e) e.value = "#FFFFFF"; });
-  [titleBg, subtitleBg, messageBg].forEach(e => { if (e) e.value = "transparent"; });
+  // 🔹 Colors (ALL BLACK) + Backgrounds (ALL WHITE)
+  [titleColor, subtitleColor, messageColor].forEach(e => { if (e) e.value = "#000000"; });
+  [titleBg, subtitleBg, messageBg].forEach(e => { if (e) e.value = "#FFFFFF"; });
 
-  // 🔹 Force preview to white immediately
-  [pTitle, pSubtitle, pMessage].forEach(el => { if (el) el.style.color = "#FFFFFF"; });
+  // ✅ Force preview card background to white
+  if (previewCard) previewCard.style.background = "#FFFFFF";
 
-  // 🔹 Font family & image position
+  // 🔹 Immediately apply black text
+  [pTitle, pSubtitle, pMessage].forEach(el => { if (el) el.style.color = "#000000"; });
+
+  // 🔹 Font & image position defaults
   if (fontFamily) fontFamily.value = "Montserrat, sans-serif";
   if (imagePosition) imagePosition.value = "center";
 
-  // 🔹 Language selector
+  // 🔹 Language reset
   if (languageSelect) languageSelect.value = "en";
 
-  // 🔹 Date options
+  // 🔹 Date + QR + Template reset
   if (posterDateOption) posterDateOption.value = "";
   if (customDate) customDate.value = "";
   posterDate = "";
-
-  // 🔹 Template select & QR
-  const templateSelect = $("templateSelect");
-  if (templateSelect) templateSelect.value = "";
   const qrText = $("qrText");
   if (qrText) qrText.value = "";
+  const templateSelect = $("templateSelect");
+  if (templateSelect) templateSelect.value = "";
 
   // 🔹 Remove autosave cache
   try { localStorage.removeItem(AUTOSAVE_KEY); } catch {}
 
-  // 🔹 Refresh preview (delay ensures white update applies)
-  setTimeout(renderPreview, 100);
+  // 🔹 Refresh preview (apply clean state)
+  setTimeout(renderPreview, 120);
 
-  // 🔹 ✅ Toast message
+  // ✅ Toast Message
   const msg = document.createElement("div");
   msg.textContent = "✅ All fields and settings have been reset!";
   Object.assign(msg.style, {
@@ -1022,8 +1031,6 @@ if (clearBtn) on(clearBtn, "click", () => {
     setTimeout(() => msg.remove(), 600);
   }, 2500);
 });
-
-
 
   // ---------------------------------------------
   // ⬆️ Go-Top Button
