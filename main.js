@@ -489,9 +489,12 @@ async function generateImage({ download = false } = {}) {
     return null;
   }
 
-  const width = 1200;
-  const height = Math.round(width * 9 / 16);
-  const scale = Math.min(3, window.devicePixelRatio || 2);
+ // ✅ Responsive poster width & height (based on user device)
+      const deviceWidth = window.innerWidth || 800;
+      const width = Math.min(1200, Math.max(600, deviceWidth * 1.5));
+      const height = Math.round(width * 9 / 16);
+      const scale = Math.min(3, window.devicePixelRatio || 2);
+
 
   // Save original styles
   const originalWidth = previewCard.style.width;
