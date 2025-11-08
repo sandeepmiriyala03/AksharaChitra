@@ -457,186 +457,193 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // initial render
   renderPreview();
+// ---------------------------------------------
+// 🖼️ Final Image Generation (v3.9 — White Footer + Black Dotted Divider)
+// ---------------------------------------------
+async function generateImage({ download = false } = {}) {
+  if (!previewCard) {
+    alert("Preview not found");
+    return null;
+  }
 
-  // ---------------------------------------------
-  // 🖼️ Image generation (fixed)
-  // ---------------------------------------------
-  async function generateImage({ download = false } = {}) {
-    if (!previewCard) { alert("Preview not found"); return null; }
-
-    // ensure html2canvas present
-    if (typeof html2canvas === "undefined") {
-      // dynamic load (best-effort)
-      try {
-        await new Promise((resolve, reject) => {
-          const s = document.createElement("script");
-          s.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-          s.onload = resolve; s.onerror = reject; document.head.appendChild(s);
-        });
-      } catch (e) {
-        alert("html2canvas not available. Please check your network.");
-        return null;
-      }
-    }
-
-    // title validation (only title required per your last note)
-    const titleText = titleEl?.value?.trim() || "";
-    if (!titleText) { showToast("⚠️ Please enter a title before generating your poster!", "#E53935"); return null; }
-
-    const width = 1200;
-    const height = Math.round(width * 9 / 16);
-    const scale = Math.min(3, window.devicePixelRatio || 2);
-
-    const originalWidth = previewCard.style.width;
-    const originalHeight = previewCard.style.height;
-    const prevPadding = previewCard.style.padding;
-
-    // hide live footer to prevent duplicate date/time
-    const htmlFooter = previewCard.querySelector(".ak-footer");
-    const footerWasHidden = htmlFooter && htmlFooter.style.display === "none";
-    if (htmlFooter) htmlFooter.style.display = "none";
-
-    // prepare preview for full capture
-    previewCard.style.width = width + "px";
-    previewCard.style.height = height + "px";
-    previewCard.style.padding = "10px 20px 12px 20px";
-    previewCard.style.overflow = "visible";
-
-    // overlay
-    const overlay = document.createElement("div");
-    Object.assign(overlay.style, {
-      position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      zIndex: 9999, color: "#fff", fontFamily: "Montserrat, sans-serif",
-      fontSize: "1.1rem", fontWeight: "600"
-    });
-    overlay.textContent = "⏳ Generating Poster...";
-    document.body.appendChild(overlay);
-
-    function restorePreview() {
-      if (htmlFooter && !footerWasHidden) htmlFooter.style.display = "flex";
-      previewCard.style.width = originalWidth;
-      previewCard.style.height = originalHeight;
-      previewCard.style.padding = prevPadding;
-      previewCard.style.overflow = "hidden";
-      overlay.remove();
-    }
-
+  // ✅ Ensure html2canvas loaded
+  if (typeof html2canvas === "undefined") {
     try {
-      await new Promise(r => setTimeout(r, 120)); // allow DOM settle
-
-      // capture canvas (wider windowWidth to avoid right-side black)
-      const canvas = await html2canvas(previewCard, {
-        scale,
-        width: width + 30,
-        height,
-        scrollX: 0,
-        scrollY: 0,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        allowTaint: true,
-        windowWidth: width + 60,
+      await new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
       });
-
-      const ctx = canvas.getContext("2d");
-
-      // draw footer gradient + text + logo on canvas
-      const footerHeightPx = 60 * scale;
-      const grad = ctx.createLinearGradient(0, canvas.height - footerHeightPx, canvas.width, canvas.height);
-      grad.addColorStop(0, "#b71c1c"); // deep red
-      grad.addColorStop(1, "#f44336"); // coral red
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, canvas.height - footerHeightPx, canvas.width, footerHeightPx);
-
-      // divider (subtle)
-      ctx.beginPath();
-      ctx.strokeStyle = "rgba(255,255,255,0.35)";
-      ctx.lineWidth = 1 * scale;
-      ctx.moveTo(12 * scale, canvas.height - footerHeightPx);
-      ctx.lineTo(canvas.width - 12 * scale, canvas.height - footerHeightPx);
-      ctx.stroke();
-
-      // text style (white)
-      const fontSize = Math.max(10, Math.round(10 * scale));
-      ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-      ctx.textBaseline = "alphabetic";
-      ctx.fillStyle = "#ffffff";
-
-      const now = new Date();
-      const formattedDate = now.toLocaleString("en-IN", {
-        day: "2-digit", month: "2-digit", year: "2-digit",
-        hour: "2-digit", minute: "2-digit", hour12: true
-      }).replace(",", "");
-      const dateText = formattedDate;
-      const appName = "AksharaChitra";
-      const footerY = canvas.height - 20 * scale;
-
-      ctx.textAlign = "left";
-      ctx.fillText(dateText, 20 * scale, footerY);
-
-      ctx.textAlign = "right";
-      ctx.fillText(appName, canvas.width - 20 * scale, footerY);
-
-      // logo (try absolute root path)
-      const logoPath = (window.location.origin || "") + "/logo.png";
-      const logoImg = new Image();
-      logoImg.crossOrigin = "anonymous";
-      logoImg.src = logoPath;
-
-      await new Promise(resolve => {
-        let done = false;
-        const finish = () => { if (!done) { done = true; resolve(); } };
-        logoImg.onload = finish;
-        logoImg.onerror = finish;
-        setTimeout(finish, 1200);
-      });
-
-      const textWidth = ctx.measureText(appName).width;
-      const logoSize = 24 * scale;
-      const logoX = canvas.width - (textWidth + 50 * scale);
-      const logoY = canvas.height - 43 * scale;
-
-      if (logoImg.complete && logoImg.naturalWidth > 0) {
-        try { ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize); } catch (e) { /* ignore draw errors */ }
-      } else {
-        // fallback small accent circle
-        ctx.beginPath();
-        ctx.arc(canvas.width - (textWidth + 36 * scale), footerY - 8 * scale, 5 * scale, 0, Math.PI * 2);
-        ctx.fillStyle = "#ff8a80";
-        ctx.fill();
-      }
-
-      // final data URL
-      const dataUrl = canvas.toDataURL("image/png");
-
-      // validate not empty (optional): ensure image size > small thresh
-      if (!dataUrl || dataUrl.length < 30000) {
-        showToast("⚠️ Generated image looks empty — add content and try again.", "#E53935");
-        restorePreview();
-        return null;
-      }
-
-      // download if requested, with datetime in filename
-      if (download) {
-        const fname = `${(titleText || "AksharaChitra").replace(/[^\w\- ]/g, "")}_${formattedDate.replace(/[/: ]/g, "_")}.png`;
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = fname;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        showToast("✅ Poster downloaded", "#43A047");
-      }
-
-      restorePreview();
-      return dataUrl;
-    } catch (err) {
-      console.error("generateImage error", err);
-      showToast("❌ Failed to generate poster", "#E53935");
-      restorePreview();
+    } catch {
+      alert("❌ html2canvas failed to load. Check your internet.");
       return null;
     }
   }
+
+  // ✅ Validate input
+  const titleText = titleEl?.value?.trim() || "";
+  if (!titleText) {
+    showToast("⚠️ Please enter a title before generating your poster!", "#E53935");
+    return null;
+  }
+
+  const width = 1200;
+  const height = Math.round(width * 9 / 16);
+  const scale = Math.min(3, window.devicePixelRatio || 2);
+
+  // Save original styles
+  const originalWidth = previewCard.style.width;
+  const originalHeight = previewCard.style.height;
+  const prevPadding = previewCard.style.padding;
+
+  // Hide any visible footer
+  const htmlFooter = previewCard.querySelector(".ak-footer");
+  const footerWasHidden = htmlFooter && htmlFooter.style.display === "none";
+  if (htmlFooter) htmlFooter.style.display = "none";
+
+  // Expand preview for full render
+  previewCard.style.width = width + "px";
+  previewCard.style.height = height + "px";
+  previewCard.style.padding = "20px 30px 24px 30px";
+  previewCard.style.overflow = "visible";
+
+  // Overlay
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed",
+    inset: 0,
+    background: "rgba(0,0,0,0.6)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999,
+    color: "#fff",
+    fontFamily: "Montserrat, sans-serif",
+    fontSize: "1.1rem",
+    fontWeight: "600"
+  });
+  overlay.textContent = "⏳ Generating Poster...";
+  document.body.appendChild(overlay);
+
+  function restorePreview() {
+    if (htmlFooter && !footerWasHidden) htmlFooter.style.display = "flex";
+    previewCard.style.width = originalWidth;
+    previewCard.style.height = originalHeight;
+    previewCard.style.padding = prevPadding;
+    previewCard.style.overflow = "hidden";
+    overlay.remove();
+  }
+
+  try {
+    await new Promise(r => setTimeout(r, 150));
+
+    // Capture the current preview
+    const baseCanvas = await html2canvas(previewCard, {
+      scale,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      allowTaint: true,
+    });
+
+    // New canvas with footer
+    const footerHeightPx = 40 * scale;
+    const finalCanvas = document.createElement("canvas");
+    finalCanvas.width = baseCanvas.width;
+    finalCanvas.height = baseCanvas.height + footerHeightPx;
+
+    const ctx = finalCanvas.getContext("2d");
+    ctx.drawImage(baseCanvas, 0, 0);
+
+    // ---------------------------------------------
+    // ⚫ Footer Section (Black Background)
+    // ---------------------------------------------
+    const footerTop = baseCanvas.height;
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, footerTop, finalCanvas.width, footerHeightPx);
+    // ---------------------------------------------
+    // ✍️ Footer Text (Light Gray)
+    // ---------------------------------------------
+    const fontSize = Math.max(10, Math.round(12 * scale));
+    ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
+    ctx.textBaseline = "bottom";
+    ctx.fillStyle = "#e0e0e0"; // soft white-gray text
+
+    const now = new Date();
+    const formattedDate = now
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+      .replace(",", "");
+
+    const appName = "AksharaChitra";
+    const footerY = finalCanvas.height - 10 * scale;
+
+    ctx.textAlign = "left";
+    ctx.fillText(formattedDate, 24 * scale, footerY);
+    ctx.textAlign = "right";
+    ctx.fillText(appName, finalCanvas.width - 24 * scale, footerY);
+    const logoImg = new Image();
+    logoImg.crossOrigin = "anonymous";
+    logoImg.src = (window.location.origin || "") + "/logo.png";
+    await new Promise(resolve => {
+      const done = () => resolve();
+      logoImg.onload = done;
+      logoImg.onerror = done;
+      setTimeout(done, 800);
+    });
+    const textWidth = ctx.measureText(appName).width;
+    const logoSize = 16 * scale;
+    const logoX = finalCanvas.width - (textWidth + 40 * scale);
+    const logoY = footerY - 14 * scale;
+    if (logoImg.complete && logoImg.naturalWidth > 0) {
+      ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+    } else {
+      ctx.beginPath();
+      ctx.arc(finalCanvas.width - (textWidth + 30 * scale), footerY - 7 * scale, 3 * scale, 0, 2 * Math.PI);
+      ctx.fillStyle = "#f44336"; // red accent dot
+      ctx.fill();
+    }
+
+    // ---------------------------------------------
+    // 🖼️ Export Image
+    // ---------------------------------------------
+    const dataUrl = finalCanvas.toDataURL("image/png");
+    if (!dataUrl || dataUrl.length < 30000) {
+      showToast("⚠️ Generated image seems empty — please add content.", "#E53935");
+      restorePreview();
+      return null;
+    }
+
+    // ✅ Auto Download
+    if (download) {
+      const fname = `${(titleText || "AksharaChitra")
+        .replace(/[^\w\- ]/g, "")}_${formattedDate.replace(/[/: ]/g, "_")}.png`;
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = fname;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showToast("✅ Poster downloaded successfully!", "#43A047");
+    }
+
+    restorePreview();
+    return dataUrl;
+  } catch (err) {
+    console.error("❌ generateImage error", err);
+    showToast("❌ Failed to generate poster", "#E53935");
+    restorePreview();
+    return null;
+  }
+}
+
 
   // ---------------------------------------------
   // Buttons wiring
