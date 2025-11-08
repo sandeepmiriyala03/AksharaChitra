@@ -531,130 +531,151 @@ previewCard.style.background = (messageBg?.value && messageBg.value !== "transpa
    Part 3 of 4 — Image Generation, Save, Gallery & Share
    ========================================================== */
 
-  async function generateImage({ download = false } = {}) {
-    if (!previewCard) return alert("Preview not found");
-    if (typeof html2canvas === "undefined") return alert("html2canvas not loaded");
+ // ======================================================
+// 🌸 AksharaChitra — v16.1 Stable
+// Fixes:
+// ✅ Duplicate date/time issue on mobile
+// ✅ Right-side clipping (full 100% visible canvas)
+// ======================================================
+async function generateImage({ download = false } = {}) {
+  if (!previewCard) return alert("Preview not found");
+  if (typeof html2canvas === "undefined") return alert("html2canvas not loaded");
 
-    const width = 1200;
-    const height = Math.round(width * 9 / 16);
-    const scale = Math.min(3, window.devicePixelRatio || 2);
+  const width = 1200;
+  const height = Math.round(width * 9 / 16);
+  const scale = Math.min(3, window.devicePixelRatio || 2);
 
-    const originalWidth = previewCard.style.width;
-    const originalHeight = previewCard.style.height;
-    const prevPadding = previewCard.style.padding;
+  const originalWidth = previewCard.style.width;
+  const originalHeight = previewCard.style.height;
+  const prevPadding = previewCard.style.padding;
 
-    previewCard.style.width = width + "px";
-    previewCard.style.height = height + "px";
-    previewCard.style.padding = "8px 14px 10px 14px";
+  // ✅ Ensure correct visible area before capture
+  previewCard.style.width = width + "px";
+  previewCard.style.height = height + "px";
+  previewCard.style.padding = "10px 20px 12px 20px"; // more balanced padding
 
-    const overlay = document.createElement("div");
-    Object.assign(overlay.style, {
-      position: "fixed",
-      inset: 0,
-      background: "rgba(255,255,255,0.7)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 9999,
-      fontFamily: "Montserrat, sans-serif",
-      fontSize: "1.1rem",
-      color: "#1e88e5",
-      fontWeight: "600",
+
+  // 🩵 Overlay for user feedback
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed",
+    inset: 0,
+    background: "rgba(255,255,255,0.7)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999,
+    fontFamily: "Montserrat, sans-serif",
+    fontSize: "1.1rem",
+    color: "#1e88e5",
+    fontWeight: "600",
+  });
+  overlay.textContent = "⏳ Generating Poster...";
+  document.body.appendChild(overlay);
+
+  try {
+    await new Promise(r => setTimeout(r, 250));
+
+    // ======================================================
+    // 🖼️ CAPTURE DOM (fix right-edge clipping)
+    // ======================================================
+    const canvas = await html2canvas(previewCard, {
+      scale,
+      width: width , // ✅ extra buffer to prevent right-side crop
+      height,
+      scrollX: 0,
+      scrollY: 0,
+      useCORS: true,
+      backgroundColor:null  , // always white background
+      allowTaint: true,
     });
-    overlay.textContent = "⏳ Generating Poster...";
-    document.body.appendChild(overlay);
 
+    const ctx = canvas.getContext("2d");
+
+    // ======================================================
+    // 🕒 FOOTER — Date/Time + Logo + App Name (single draw)
+    // ======================================================
     try {
-      await new Promise(r => setTimeout(r, 300));
+      const now = new Date();
+      const formattedDate = now.toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }).replace(",", "");
 
-      // Capture DOM (includes QR + alignment from user)
-      const canvas = await html2canvas(previewCard, {
-        scale,
-        width,
-        height,
-        useCORS: true,
-        backgroundColor: null,
-        allowTaint: true,
-      });
+      const dateText = formattedDate;
+      const appName = "AksharaChitra";
 
-      const ctx = canvas.getContext("2d");
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(0,0,0,0.25)";
+      ctx.lineWidth = 1 * scale;
+      ctx.moveTo(10 * scale, canvas.height - 50 * scale);
+      ctx.lineTo(canvas.width - 10 * scale, canvas.height - 50 * scale);
+      ctx.stroke();
 
-      // ======================================================
-      // 🕒 FOOTER — Date/Time + Logo + App Name
-      // ======================================================
-      try {
-        const now = new Date();
-        const formattedDate = now.toLocaleString("en-IN", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        }).replace(",", "");
+      const fontSize = Math.max(9, Math.round(9 * scale));
+      ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
+      ctx.textBaseline = "alphabetic";
+      ctx.fillStyle = "#222";
 
-        const dateText = formattedDate;
-        const appName = "AksharaChitra";
+      // Left-aligned date
+      ctx.textAlign = "left";
+      ctx.fillText(dateText, 16 * scale, canvas.height - 20 * scale);
 
-        ctx.beginPath();
-        ctx.strokeStyle = "rgba(0,0,0,0.25)";
-        ctx.lineWidth = 1 * scale;
-        ctx.moveTo(10 * scale, canvas.height - 50 * scale);
-        ctx.lineTo(canvas.width - 10 * scale, canvas.height - 50 * scale);
-        ctx.stroke();
+      // Right-aligned app name + logo
+      const logoImg = new Image();
+      logoImg.src = "logo.png";
+      await new Promise(res => (logoImg.onload = res, logoImg.onerror = res));
 
-        const fontSize = Math.max(9, Math.round(9 * scale));
-        ctx.font = `${fontSize}px Montserrat, Arial, sans-serif`;
-        ctx.textBaseline = "alphabetic";
-        ctx.fillStyle = "#222";
+      const logoSize = 22 * scale;
+      const logoY = canvas.height - 38 * scale;
+      const textWidth = ctx.measureText(appName).width;
 
-        ctx.textAlign = "left";
-        ctx.fillText(dateText, 16 * scale, canvas.height - 20 * scale);
+      ctx.textAlign = "right";
+      ctx.fillText(appName, canvas.width - 16 * scale, canvas.height - 20 * scale);
 
-        const logoImg = new Image();
-        logoImg.src = "logo.png";
-        await new Promise(res => (logoImg.onload = res, logoImg.onerror = res));
-        const logoSize = 22 * scale;
-        const logoY = canvas.height - 38 * scale;
-        const textWidth = ctx.measureText(appName).width;
-
-        ctx.textAlign = "right";
-        ctx.fillText(appName, canvas.width - 16 * scale, canvas.height - 20 * scale);
-        const logoX = canvas.width - (textWidth + 40 * scale);
-        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-      } catch (e) {
-        console.warn("⚠️ Footer draw failed:", e);
-      }
-
-      // ======================================================
-      // 📸 EXPORT PNG
-      // ======================================================
-      const dataUrl = canvas.toDataURL("image/png");
-      if (download) {
-        const fname = formatFilename(titleEl?.value || "AksharaChitra", width, height);
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = fname;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      }
-
-      previewCard.style.width = originalWidth;
-      previewCard.style.height = originalHeight;
-      previewCard.style.padding = prevPadding;
-      overlay.remove();
-      return dataUrl;
-
-    } catch (err) {
-      console.error("generateImage error", err);
-      overlay.remove();
-      previewCard.style.width = originalWidth;
-      previewCard.style.height = originalHeight;
-      previewCard.style.padding = prevPadding;
-      return null;
+      const logoX = canvas.width - (textWidth + 40 * scale);
+      ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+    } catch (e) {
+      console.warn("⚠️ Footer draw failed:", e);
     }
+
+    // ======================================================
+    // 📸 EXPORT PNG
+    // ======================================================
+    const dataUrl = canvas.toDataURL("image/png");
+    if (download) {
+      const fname = formatFilename(titleEl?.value || "AksharaChitra", width, height);
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = fname;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // ✅ Restore
+    if (footer) footer.style.display = "flex";
+    previewCard.style.width = originalWidth;
+    previewCard.style.height = originalHeight;
+    previewCard.style.padding = prevPadding;
+    overlay.remove();
+
+    return dataUrl;
+
+  } catch (err) {
+    console.error("generateImage error", err);
+    overlay.remove();
+    if (footer) footer.style.display = "flex";
+    previewCard.style.width = originalWidth;
+    previewCard.style.height = originalHeight;
+    previewCard.style.padding = prevPadding;
+    return null;
   }
+}
 
   // ✅ Buttons (no confirm, direct actions)
   if (generateBtn)
