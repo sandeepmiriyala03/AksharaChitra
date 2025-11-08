@@ -658,6 +658,16 @@ body.dark .ak-watermark {
     border-radius: 10px;
   }
 }
+#installBtn.show,
+#installBtnHeader.show {
+  display: flex !important;
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 
 /* ====== END OF AksharaChitra CSS ====== */

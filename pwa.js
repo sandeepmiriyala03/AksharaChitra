@@ -1,100 +1,142 @@
 /* ==========================================================
-   🌸 AksharaChitra v2.6 — Progressive Web App (pwa.js)
-   Full PWA Handling • Multi-button Support • Toast Feedback
+   🌸 AksharaChitra v3.1 — Progressive Web App (pwa.js)
+   ----------------------------------------------------------
+   Features:
+   ✅ Service Worker Registration
+   ✅ Dual Install Buttons (Header + FAB)
+   ✅ Reliable Install Prompt Handling
+   ✅ Spinner + Toast Feedback
+   ✅ iOS Add-to-Home Guidance
+   ✅ Fallback Install Visibility Patch
    ========================================================== */
 
 // ---- 1️⃣ Register the Service Worker ----
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register('service-worker.js')
-      .then(reg => console.log('[PWA] Service Worker registered:', reg.scope))
-      .catch(err => console.warn('[PWA] SW registration failed:', err));
+      .register("service-worker.js")
+      .then((reg) => console.log("[PWA] Service Worker registered:", reg.scope))
+      .catch((err) => console.warn("[PWA] SW registration failed:", err));
   });
 } else {
-  console.warn('[PWA] Service workers not supported in this browser.');
+  console.warn("[PWA] Service workers not supported in this browser.");
 }
 
-// ---- 2️⃣ Handle Install Prompt (for both buttons) ----
+// ---- 2️⃣ Install Buttons Setup ----
 let deferredPrompt = null;
 const installBtns = [
-  document.getElementById('installBtn'),
-  document.getElementById('installBtnHeader')
+  document.getElementById("installBtn"),
+  document.getElementById("installBtnHeader"),
 ].filter(Boolean);
 
-window.addEventListener('beforeinstallprompt', (event) => {
+// Hide initially
+installBtns.forEach((btn) => (btn.style.display = "none"));
+
+// ---- 3️⃣ Capture Install Prompt ----
+window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
   deferredPrompt = event;
+  console.log("[PWA] beforeinstallprompt event captured ✅");
 
-  // Show install buttons
-  installBtns.forEach(btn => btn.classList.add('show'));
-  console.log('[PWA] Install prompt captured and ready');
+  // Show both install buttons with animation
+  installBtns.forEach((btn) => {
+    btn.style.display = "flex";
+    btn.classList.add("show", "pulse");
+  });
+
+  showInstallToast("📲 App ready to install! Tap the install icon.");
 });
 
-installBtns.forEach(btn => {
-  btn.addEventListener('click', async () => {
+// ---- 4️⃣ Handle Install Button Click ----
+installBtns.forEach((btn) => {
+  btn.addEventListener("click", async () => {
     if (!deferredPrompt) {
-      alert('📲 App install not available yet. Please refresh or open in Chrome.');
+      showInstallToast("⚠️ Install not available yet. Try again shortly.");
       return;
     }
 
-    deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
+    btn.innerHTML = "⏳ Installing...";
+    btn.disabled = true;
 
-    if (choiceResult.outcome === 'accepted') {
-      console.log('[PWA] User accepted install');
-      showInstallToast('🎉 AksharaChitra installed successfully!');
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      console.log("[PWA] User accepted install ✅");
+      showInstallToast("🎉 AksharaChitra installed successfully!");
     } else {
-      console.log('[PWA] User dismissed install');
+      console.log("[PWA] User dismissed install ❌");
+      showInstallToast("❌ Install canceled.");
     }
 
-    // Hide buttons post prompt
-    installBtns.forEach(b => b.classList.remove('show'));
+    btn.innerHTML = "📲";
+    btn.disabled = false;
+
+    // Hide all buttons
+    installBtns.forEach((b) => (b.style.display = "none"));
     deferredPrompt = null;
   });
 });
 
-// ---- 3️⃣ When installed ----
-window.addEventListener('appinstalled', () => {
-  console.log('[PWA] App installed successfully ✅');
-  installBtns.forEach(b => b.classList.remove('show'));
-  showInstallToast('✅ AksharaChitra installed! Use it offline anytime.');
+// ---- 5️⃣ Installed Event ----
+window.addEventListener("appinstalled", () => {
+  console.log("[PWA] App installed successfully ✅");
+  installBtns.forEach((b) => (b.style.display = "none"));
+  showInstallToast("✅ Installed! Open AksharaChitra from your home screen.");
 });
 
-// ---- 4️⃣ If running standalone (already installed) ----
-if (window.matchMedia('(display-mode: standalone)').matches) {
-  installBtns.forEach(b => b.classList.remove('show'));
-  console.log('[PWA] App running in standalone mode');
+// ---- 6️⃣ Standalone Mode (Hide Buttons) ----
+if (window.matchMedia("(display-mode: standalone)").matches) {
+  installBtns.forEach((b) => (b.style.display = "none"));
+  console.log("[PWA] Running in standalone mode 🏠");
 }
 
-// ---- 5️⃣ Optional iOS Safari Detection ----
+// ---- 7️⃣ iOS Add-to-Home Guidance ----
 function isIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
-if (isIOS() && !window.matchMedia('(display-mode: standalone)').matches) {
-  showInstallToast('📲 On iPhone/iPad: Tap “Share” → “Add to Home Screen” to install.');
+if (isIOS() && !window.matchMedia("(display-mode: standalone)").matches) {
+  showInstallToast("📲 On iPhone/iPad: Tap “Share” → “Add to Home Screen”.");
 }
 
-// ---- 6️⃣ Helper: Toast Notification ----
+// ---- 8️⃣ Fallback Patch (Ensures Install Button Always Appears) ----
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    if (!window.matchMedia("(display-mode: standalone)").matches && !deferredPrompt) {
+      console.log("[PWA] Fallback: Forcing install buttons visible 🔄");
+      installBtns.forEach((btn) => {
+        btn.style.display = "flex";
+        btn.classList.add("show", "pulse");
+      });
+    }
+  }, 2500);
+});
+
+// ---- 9️⃣ Toast Utility ----
 function showInstallToast(msg) {
-  const toast = document.createElement('div');
+  const toast = document.createElement("div");
   toast.textContent = msg;
   Object.assign(toast.style, {
-    position: 'fixed',
-    bottom: '20px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    background: '#1e88e5',
-    color: '#fff',
-    padding: '10px 18px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.25)',
-    zIndex: '10000',
-    fontWeight: '600',
-    transition: 'opacity 0.5s ease',
+    position: "fixed",
+    bottom: "24px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    background: "linear-gradient(90deg, #1565c0, #1e88e5)",
+    color: "#fff",
+    padding: "10px 18px",
+    borderRadius: "8px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+    zIndex: "10000",
+    fontWeight: "600",
+    transition: "opacity 0.5s ease, transform 0.5s ease",
   });
+
   document.body.appendChild(toast);
 
-  setTimeout(() => (toast.style.opacity = '0'), 2500);
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translate(-50%, 20px)";
+  }, 2500);
+
   setTimeout(() => toast.remove(), 3200);
 }
