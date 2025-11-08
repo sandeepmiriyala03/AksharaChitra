@@ -645,46 +645,55 @@ document.addEventListener("DOMContentLoaded", () => {
   if (downloadBtn) on(downloadBtn, "click", async () => { await generateImage({ download: true }); });
 
   // ---------------------------------------------
-  // Share (native + fallback)
-  // ---------------------------------------------
-  if (shareBtn) on(shareBtn, "click", async () => {
-    try {
-      const dataUrl = await generateImage();
-      if (!dataUrl) return;
-      const resp = await fetch(dataUrl);
-      const blob = await resp.blob();
-      const file = new File([blob], "aksharachitra_poster.png", { type: blob.type });
+// 📤 Share (native + WhatsApp + fallback)
+// ---------------------------------------------
+async function sharePoster(isWhatsApp = false) {
+  try {
+    const dataUrl = await generateImage();
+    if (!dataUrl) return;
 
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "AksharaChitra Poster", text: "Created with AksharaChitra" });
-      } else {
-        // open whatsapp text fallback
-        window.open(`https://wa.me/?text=${encodeURIComponent("🌸 Created with AksharaChitra! 🎨 https://aksharachitra.netlify.app")}`, "_blank");
-      }
-    } catch (err) {
-      console.error("Share error", err);
-      showToast("❌ Share failed", "#E53935");
-    }
-  });
+    // convert to blob + file
+    const resp = await fetch(dataUrl);
+    const blob = await resp.blob();
+    const file = new File([blob], "AksharaChitra_Poster.png", { type: blob.type });
 
-  // explicit WhatsApp/share button (same logic)
-  if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", async () => {
-    try {
-      const dataUrl = await generateImage();
-      if (!dataUrl) return;
-      const resp = await fetch(dataUrl);
-      const blob = await resp.blob();
-      const file = new File([blob], "poster.png", { type: blob.type });
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "AksharaChitra Poster" });
-      } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent("🌸 Created with AksharaChitra! 🎨 https://aksharachitra.netlify.app")}`, "_blank");
-      }
-    } catch (err) {
-      console.error("WhatsApp share error", err);
-      showToast("❌ Share failed", "#E53935");
+    // ✅ Native share (works on Android, PWA, Chrome mobile)
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: "AksharaChitra Poster 🎨",
+        text: "Created with AksharaChitra — Multilingual Poster Maker 🌸",
+      });
+      showToast("✅ Shared successfully!", "#43A047");
+      return;
     }
-  });
+    // ⚠️ Fallback: download + open WhatsApp/text
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "AksharaChitra_Poster.png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    if (isWhatsApp) {
+      const msg = "🌸 Created with AksharaChitra! 🎨 Try it: https://aksharachitra.netlify.app";
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+      showToast("💬 Poster downloaded — WhatsApp opened!", "#1E88E5");
+    } else {
+      showToast("📩 Poster downloaded — share manually!", "#1E88E5");
+    }
+  } catch (err) {
+    console.error("Share failed:", err);
+    showToast("❌ Share failed", "#E53935");
+  }
+}
+
+// ---------------------------------------------
+// 🔗 Wire both share buttons
+// ---------------------------------------------
+if (shareBtn) on(shareBtn, "click", () => sharePoster(false));
+if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", () => sharePoster(true));
+
 
   // ---------------------------------------------
   // Save to IndexedDB
