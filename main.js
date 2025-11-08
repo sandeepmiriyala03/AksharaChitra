@@ -838,22 +838,6 @@ if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", () => sharePoster(true));
     galleryGrid.appendChild(grid);
   }
 
-  // ---------------------------------------------
-  // PWA install prompt
-  // ---------------------------------------------
-  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferredPrompt = e; if (installBtn) installBtn.classList.add("show"); if (installBtnHeader) installBtnHeader.classList.add("show"); });
-  [installBtn, installBtnHeader].forEach(b => {
-    if (!b) return;
-    on(b, "click", async () => {
-      if (!deferredPrompt) { alert("Install not available right now."); return; }
-      try {
-        deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        if (choice && choice.outcome === "accepted") console.log("PWA installed.");
-        deferredPrompt = null; b.classList.remove("show");
-      } catch (e) { console.warn("Install prompt failed", e); }
-    });
-  });
 
   // ---------------------------------------------
   // Voice recognition
