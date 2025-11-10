@@ -886,6 +886,95 @@ body.dark .ak-watermark {
     font-size: 0.9rem;
   }
 }
+/* 🌿 WhatsApp Share Button */
+#shareProjectBtn {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* 🖱️ Hover Effect (Desktop) */
+#shareProjectBtn:hover {
+  background-color: #1DA851;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 📱 Mobile Responsiveness */
+@media (max-width: 768px) {
+  #shareProjectBtn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 14px 0;
+    border-radius: 10px;
+  }
+}
+
+/* 🧭 Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #shareProjectBtn {
+    font-size: 1.05rem;
+    padding: 12px 18px;
+  }
+}
+
+/* 🖥️ Desktop */
+@media (min-width: 1025px) {
+  #shareProjectBtn {
+    font-size: 1.1rem;
+    padding: 12px 24px;
+  }
+}
+
+/* 🪔 Optional Floating Version (for All Sections) */
+#shareFloatingBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  z-index: 999;
+}
+
+/* 🌙 Hover for Floating Button */
+#shareFloatingBtn:hover {
+  background-color: #1DA851;
+  transform: scale(1.05);
+}
+
+/* 📱 Floating Button Resize (Mobile) */
+@media (max-width: 480px) {
+  #shareFloatingBtn {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
 
 
 

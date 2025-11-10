@@ -151,7 +151,7 @@ rel="stylesheet">
 
   <div class="cta-buttons">
     <button id="openCreateBtn" class="btn primary large">🎨 Start Creating</button>
-    
+      <button id="shareProjectBtn" class="btn ghost large">📢 Share AksharaChitra</button>
   </div>
 
   <p class="muted tip">💡 Tip: Try different languages to see how native fonts look instantly!</p>
@@ -544,7 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </p>
           <hr>
           <p>🌅 <strong>తిథి:</strong> ${panchang.Tithi.name}</p>
-          <p>🕰️ <strong>తిథి ప్రారంభం:</strong> ${panchang.Tithi.start.t}</p>
+          <p>🕰️ <strong>తిథి ప్రారంభం:</strong> ${panchang.Tithi.start}</p>
           <p>🔔 <strong>తిథి ముగింపు:</strong> ${panchang.Tithi.end}</p>
           <p>🌙 <strong>నక్షత్రం:</strong> ${panchang.Nakshatra.name}</p>
           <p>🌟 <strong>యోగం:</strong> ${panchang.Yoga.name}</p>
@@ -579,7 +579,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const footer = document.createElement("div");
         footer.className = "ak-footer";
         footer.style.position = "absolute";
-        footer.style.bottom = "8px";
+        footer.style.bottom = "6px";
         footer.style.left = "12px";
         footer.style.right = "12px";
         footer.style.display = "flex";
@@ -691,6 +691,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     omCircle.addEventListener("mouseleave", () => {
       omCircle.style.transform = "scale(1) rotate(0)";
+    });
+  }
+  const shareBtn = document.getElementById("shareProjectBtn");
+
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => {
+      const message = encodeURIComponent(
+`🌸 *AksharaChitra — Multilingual Poster Maker 🎨*
+
+Create, Save & Share beautiful posters *offline* in 8+ Indian languages — Telugu, Hindi, Sanskrit, Tamil, Kannada, Malayalam & more!
+
+✨ *Key Features:*
+🖋️ Title, Subtitle, and Message customization  
+🌐 Native language fonts  
+🖼️ Upload & Crop Images / Logos  
+🎙️ Voice Input + Text-to-Speech  
+💾 Offline Save (IndexedDB)  
+📤 Share on WhatsApp  
+🌙 Dark Mode + PWA Install  
+
+Made with ❤️ by *Sandeep Miriyala*  
+🔗 https://aksharachitra.netlify.app`
+      );
+
+      // Open WhatsApp share link
+      const whatsappURL = `https://wa.me/?text=${message}`;
+      window.open(whatsappURL, "_blank");
     });
   }
 });
