@@ -593,6 +593,30 @@ body.dark .ak-watermark {
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Ramaraja-Regular';
+  src: url('fonts/Ramaraja-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: 'RaviPrakash';
+  src: url('fonts/RaviPrakash.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TenaliRamakrishna-Regular';
+  src: url('fonts/TenaliRamakrishna-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TANA';
+  src: url('fonts/TANA.ttf') format('truetype');
+  font-display: swap;
+}
+
+
 
 /* 🌸 Poster Info Toggle Styles */
 .poster-info-container {
