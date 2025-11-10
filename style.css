@@ -685,4 +685,208 @@ body.dark .ak-watermark {
   100% { box-shadow: 0 0 0 rgba(30,136,229,0.5); }
 }
 
+/* ==========================================================
+   📅 Panchangam Section — Elegant Devotional Design (v3.0)
+   ----------------------------------------------------------
+   Theme: Warm Gold ✨ | Soft White 🌼 | Smooth Animations 🕉️
+   Responsive, Card-Based, Poster-Friendly Layout
+   Author: Sandeep Miriyala
+   ========================================================== */
+
+#panchangam {
+  padding: 2rem 1rem;
+  background: linear-gradient(180deg, #fffdf7 0%, #fff8e1 100%);
+  font-family: "Noto Sans Telugu", "Mandali", sans-serif;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+/* 🌸 Title */
+#panchangam h2 {
+  color: #b57f00;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 3px rgba(255, 215, 0, 0.4);
+}
+
+/* 🪔 Main Card Box */
+.panchangam-box {
+  max-width: 620px;
+  width: 100%;
+  background: #fffaf3;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1.5px solid #f9cc5c;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.panchangam-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* 🌼 Panchangam Content */
+.panchangam-card h3 {
+  font-size: 1.4rem;
+  color: #d17f00;
+  margin-bottom: 0.3rem;
+}
+
+.panchangam-card p {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  color: #4b3b2a;
+  line-height: 1.7;
+}
+
+.panchangam-card hr {
+  border: none;
+  border-top: 1.5px dashed #e0b84d;
+  margin: 0.8rem 0;
+}
+
+/* 📅 Date Line */
+.panchangam-card .date-line {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #5d4037;
+  margin-bottom: 1rem;
+}
+
+/* ✨ Blessing Line */
+.blessing {
+  margin-top: 0.8rem;
+  font-style: italic;
+  color: #7b5934;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  font-size: 0.95rem;
+}
+
+/* 🔆 Navigation Buttons */
+.panchang-nav {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.panchang-nav .btn {
+  margin: 0 0.4rem;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fff4d3;
+  border: 1px solid #f1c04c;
+  color: #6d4c00;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.panchang-nav .btn:hover {
+  background: #ffe48f;
+  color: #3e2800;
+  transform: translateY(-1px);
+}
+
+/* 🎨 Download Button Area */
+.panchang-actions {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.panchang-actions .btn.primary {
+  background: linear-gradient(90deg, #f9d776, #f6b93b);
+  border: none;
+  color: #4a2e00;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(255, 200, 50, 0.3);
+  transition: all 0.25s ease;
+}
+
+.panchang-actions .btn.primary:hover {
+  background: linear-gradient(90deg, #f7c947, #f5a623);
+  transform: translateY(-1px);
+}
+
+/* 🌿 Footer Devotional Note */
+#panchangam::after {
+  content: "🕉️ జయ శ్రీ రామ 🌿";
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #8d6e63;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+/* ✨ Fade-in Animation */
+.fade-in {
+  animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🌸 Loading Spinner */
+.loading-box {
+  text-align: center;
+  padding: 2rem 0;
+  color: #7b5e2d;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.loader {
+  border: 4px solid #f3e5ab;
+  border-top: 4px solid #c79d2f;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 10px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 📱 Responsive Layouts */
+@media (max-width: 768px) {
+  #panchangam h2 {
+    font-size: 1.5rem;
+  }
+  .panchangam-box {
+    padding: 1.2rem;
+  }
+  .panchangam-card p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #panchangam {
+    padding: 1rem;
+  }
+  .panchangam-box {
+    border-radius: 12px;
+  }
+  .panchangam-card h3 {
+    font-size: 1.2rem;
+  }
+  .panchangam-card p {
+    font-size: 0.9rem;
+  }
+}
+
+
+
 /* ====== END OF AksharaChitra CSS ====== */
