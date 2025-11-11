@@ -41,8 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
         languageSelect = $("language"),
         posterDateOption = $("posterDateOption"),
         customDate = $("customDate"),
-        installBtn = $("installBtn"),
-        installBtnHeader = $("installBtnHeader"),
         shareWhatsAppBtn = $("shareWhatsAppBtn"),
         // text controls
         titleSize = $("titleSize"),
@@ -418,7 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const templates = {
       news:       { title: "📰 Breaking News", subtitle: "", message: "Write your update here..." },
       birthday:   { title: "🎂 Happy Birthday!", subtitle: "Best Wishes", message: "Many Happy Returns of the Day!" },
-      devotional: { title: "🕉 శుభ దినం", subtitle: "", message: "May divine blessings be with you 🙏" },
+      devotional: { title: "🕉 Good Day", subtitle: "", message: "May divine blessings be with you 🙏" },
       business:   { title: "🏢 Business Update", subtitle: "", message: "Contact us at +91 99999 99999" },
       invitation: { title: "💌 Invitation", subtitle: "", message: "Venue • Date • Time" },
       quote:      { title: "💬 Quote of the Day", subtitle: "", message: "Believe in yourself ✨" },
@@ -847,38 +845,126 @@ if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", () => sharePoster(true));
 
     galleryGrid.appendChild(grid);
   }
+// =============================================================
+// 🌸 AksharaChitra — Universal Voice Typing + Read Aloud (v20)
+// -------------------------------------------------------------
+// ✅ Speech Typing (Chrome / Edge)
+// ✅ Auto Readback (All Browsers)
+// ✅ Graceful fallback for Safari / Firefox
+// =============================================================
 
+const startVoiceBtn = $("startVoice");
+const stopVoiceBtn = $("stopVoice");
 
-  // ---------------------------------------------
-  // Voice recognition
-  // ---------------------------------------------
-  const startVoiceBtn = $("startVoice"), stopVoiceBtn = $("stopVoice");
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (SR && startVoiceBtn && stopVoiceBtn && messageEl) {
-    const recog = new SR();
-    recog.continuous = false; recog.interimResults = false; recog.lang = "en-IN";
-    on(startVoiceBtn, "click", () => { try { recog.start(); startVoiceBtn.classList.add("listening"); } catch (e) {} });
-    on(stopVoiceBtn, "click", () => { try { recog.stop(); startVoiceBtn.classList.remove("listening"); } catch (e) {} });
-    recog.onresult = (ev) => { const t = ev.results[0][0].transcript; messageEl.value = (messageEl.value ? (messageEl.value + " ") : "") + t; renderPreview(); };
-    recog.onend = () => { startVoiceBtn.classList.remove("listening"); };
+const synth = window.speechSynthesis;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const langMap = {
+  en: "en-IN",
+  te: "te-IN",
+  hi: "hi-IN",
+  ta: "ta-IN",
+  kn: "kn-IN",
+  ml: "ml-IN",
+  or: "or-IN",
+  sa: "sa-IN"
+};
+
+// ---------------------------------------------
+// 🗣️ Speech Typing (if supported)
+// ---------------------------------------------
+let recog = null;
+let recognitionAvailable = !!SR;
+
+if (recognitionAvailable) {
+  recog = new SR();
+  recog.continuous = false;
+  recog.interimResults = false;
+
+  function updateLanguage() {
+    const selected = languageSelect?.value || "en";
+    recog.lang = langMap[selected] || "en-IN";
   }
 
-  // ---------------------------------------------
-  // Text to speech
-  // ---------------------------------------------
-  const startSpeakBtn = $("startSpeak"), stopSpeakBtn = $("stopSpeak");
-  const synth = window.speechSynthesis;
-  if (startSpeakBtn && stopSpeakBtn && synth) {
-    on(startSpeakBtn, "click", () => {
-      const fullText = [titleEl?.value, subtitleEl?.value, messageEl?.value].filter(Boolean).join(". ");
-      if (!fullText) return;
-      const ut = new SpeechSynthesisUtterance(fullText);
-      const langMap = { en: "en-IN", te: "te-IN", hi: "hi-IN", ta: "ta-IN", kn: "kn-IN", ml: "ml-IN", or: "or-IN", sa: "sa-IN" };
-      ut.lang = langMap[languageSelect?.value] || "en-IN";
-      ut.rate = 0.95; ut.pitch = 1.0; synth.speak(ut);
-    });
-    on(stopSpeakBtn, "click", () => synth.cancel());
+  if (languageSelect) on(languageSelect, "change", updateLanguage);
+  updateLanguage();
+
+  // 🎤 Start
+  on(startVoiceBtn, "click", () => {
+    try {
+      updateLanguage();
+      recog.start();
+      startVoiceBtn.classList.add("listening");
+      showToast(`🎤 Listening in ${languageSelect.value.toUpperCase()}...`, "#1E88E5");
+    } catch (err) {
+      console.error("Speech recognition error:", err);
+      showToast("❌ Speech recognition not supported here.", "#E53935");
+    }
+  });
+
+  // 🛑 Stop
+  on(stopVoiceBtn, "click", () => {
+    try { recog.stop(); } catch {}
+    startVoiceBtn.classList.remove("listening");
+    showToast("🛑 Stopped listening", "#E53935");
+  });
+
+  // ✅ Result
+  recog.onresult = (ev) => {
+    const transcript = ev.results[0][0].transcript.trim();
+    if (!transcript) return;
+
+    messageEl.value = (messageEl.value ? messageEl.value + " " : "") + transcript;
+    if (typeof renderPreview === "function") renderPreview();
+
+    readText(transcript, languageSelect.value);
+  };
+
+  recog.onend = () => startVoiceBtn.classList.remove("listening");
+
+} else {
+  // 🪶 Fallback for Safari / Firefox
+  startVoiceBtn.disabled = true;
+  stopVoiceBtn.disabled = true;
+  showToast("🎙️ Voice typing not supported in this browser.", "#F57C00");
+}
+
+// ---------------------------------------------
+// 🔊 Universal Text-to-Speech (All browsers)
+// ---------------------------------------------
+function readText(text, langCode = "en") {
+  if (!text) return;
+  if (!synth) {
+    alert("Speech synthesis not supported on this browser.");
+    return;
   }
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = langMap[langCode] || "en-IN";
+  utter.rate = 1.0;
+  utter.pitch = 1.0;
+
+  // Pick voice matching the language
+  const voices = synth.getVoices();
+  const match = voices.find(v => v.lang === utter.lang);
+  if (match) utter.voice = match;
+
+  synth.cancel();
+  synth.speak(utter);
+  showToast(`🔊 Speaking in ${langCode.toUpperCase()}...`, "#3949ab");
+}
+
+// 🔘 Optional button to read full message
+const readBtn = $("readMessageBtn");
+if (readBtn) {
+  on(readBtn, "click", () => readText(messageEl.value, languageSelect.value));
+}
+
+// Load voices (important for Safari)
+if (typeof speechSynthesis !== "undefined") {
+  speechSynthesis.onvoiceschanged = () => synth.getVoices();
+}
+
 
   // ---------------------------------------------
   // Clear all fields
