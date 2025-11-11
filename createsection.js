@@ -85,22 +85,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------------------- Font Map ----------------------
   const FONT_MAP = {
-   en: [
-    "Montserrat",
-    "Poppins",
-    "Roboto",
-    "Open Sans",
-    "Lato",
-    "Playfair Display",
-    "Oswald",
-    "Raleway",
-    "Inter",
-    "Bebas Neue",
-    "Nunito",
-    "Merriweather",
-    "Pacifico",
-    "Cinzel"
-  ],  te: ["Noto Sans Telugu", "NTR", "Ramabhadra", "Mandali", "Veturi", "Sirivennela", "Ramaneeya" ,"Ramaraja","RaviPrakash","TenaliRamakrishna-Regular"
+en: [
+  "Montserrat",
+  "Poppins",
+  "Roboto",
+  "Open Sans",
+  "Lato",
+  "Playfair Display",
+  "Oswald",
+  "Raleway",
+  "Inter",
+  "Bebas Neue",
+  "Nunito",
+  "Merriweather",
+  "Pacifico",
+  "Cinzel",
+  "Quicksand",
+  "Josefin Sans",
+  "DM Serif Display",
+  "Great Vibes",
+  "Lobster",
+  "Dancing Script",
+  "Comfortaa",
+  "Courgette",
+  "Righteous",
+  "Orbitron",
+  "Exo 2",
+  "Prompt",
+  "Ubuntu",
+  "Fira Sans",
+  "Source Sans Pro",
+  "Arvo"
+],
+
+    te: ["Noto Sans Telugu", "NTR", "Ramabhadra", "Mandali", "Veturi", "Sirivennela", "Ramaneeya" ,"Ramaraja","RaviPrakash","TenaliRamakrishna-Regular"
       ,"TANA","TimmanaRegular"
     ],
     hi: ["Noto Serif Devanagari", "Hind", "Karma"],
