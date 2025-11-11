@@ -616,6 +616,13 @@ body.dark .ak-watermark {
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'TimmanaRegular';
+  src: url('fonts/TimmanaRegular.ttf') format('truetype');
+  font-display: swap ;
+
+}
+
 
 
 /* 🌸 Poster Info Toggle Styles */
