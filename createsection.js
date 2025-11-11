@@ -84,50 +84,84 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ---------------------- Font Map ----------------------
-  const FONT_MAP = {
-en: [
-  "Montserrat",
-  "Poppins",
-  "Roboto",
-  "Open Sans",
-  "Lato",
-  "Playfair Display",
-  "Oswald",
-  "Raleway",
-  "Inter",
-  "Bebas Neue",
-  "Nunito",
-  "Merriweather",
-  "Pacifico",
-  "Cinzel",
-  "Quicksand",
-  "Josefin Sans",
-  "DM Serif Display",
-  "Great Vibes",
-  "Lobster",
-  "Dancing Script",
-  "Comfortaa",
-  "Courgette",
-  "Righteous",
-  "Orbitron",
-  "Exo 2",
-  "Prompt",
-  "Ubuntu",
-  "Fira Sans",
-  "Source Sans Pro",
-  "Arvo"
-],
+const FONT_MAP = {
+  en: [
+    "Arvo",
+    "Bebas Neue",
+    "Cinzel",
+    "Comfortaa",
+    "Courgette",
+    "DM Serif Display",
+    "Dancing Script",
+    "Exo 2",
+    "Fira Sans",
+    "Great Vibes",
+    "Inter",
+    "Josefin Sans",
+    "Lato",
+    "Lobster",
+    "Merriweather",
+    "Montserrat",
+    "Nunito",
+    "Open Sans",
+    "Orbitron",
+    "Oswald",
+    "Pacifico",
+    "Playfair Display",
+    "Poppins",
+    "Prompt",
+    "Quicksand",
+    "Raleway",
+    "Righteous",
+    "Roboto",
+    "Source Sans Pro",
+    "Ubuntu"
+  ],
 
-    te: ["Noto Sans Telugu", "NTR", "Ramabhadra", "Mandali", "Veturi", "Sirivennela", "Ramaneeya" ,"Ramaraja","RaviPrakash","TenaliRamakrishna-Regular"
-      ,"TANA","TimmanaRegular"
-    ],
-    hi: ["Noto Serif Devanagari", "Hind", "Karma"],
-    sa: ["Tiro Devanagari Sanskrit", "Noto Serif Devanagari"],
-    ta: ["Noto Sans Tamil", "Tiro Tamil"],
-    kn: ["Noto Sans Kannada"],
-    ml: ["Noto Sans Malayalam"],
-    or: ["Noto Sans Oriya"]
-  };
+  te: [
+    "Mandali",
+    "Noto Sans Telugu",
+    "NTR",
+    "Ramabhadra",
+    "Ramaneeya",
+    "Ramaraja",
+    "RaviPrakash",
+    "Sirivennela",
+    "TANA",
+    "TenaliRamakrishna-Regular",
+    "TimmanaRegular",
+    "Veturi"
+  ],
+
+  hi: [
+    "Hind",
+    "Karma",
+    "Noto Serif Devanagari"
+  ],
+
+  sa: [
+    "Noto Serif Devanagari",
+    "Tiro Devanagari Sanskrit"
+  ],
+
+  ta: [
+    "Noto Sans Tamil",
+    "Tiro Tamil"
+  ],
+
+  kn: [
+    "Noto Sans Kannada"
+  ],
+
+  ml: [
+    "Noto Sans Malayalam"
+  ],
+
+  or: [
+    "Noto Sans Oriya"
+  ]
+};
+
 
   // ---------------------- Sample Text ----------------------
   const SAMPLE_TEXT = {
