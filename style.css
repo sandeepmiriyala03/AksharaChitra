@@ -1006,6 +1006,58 @@ body.dark .ak-watermark {
   }
 }
 
+/* 🌸 AksharaChitra Share Button (v3.5) */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #1e88e5, #3949ab);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 3px 10px rgba(30, 136, 229, 0.3);
+  letter-spacing: 0.4px;
+}
+
+.share-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #3949ab, #1e88e5);
+  box-shadow: 0 6px 14px rgba(30, 136, 229, 0.45);
+}
+
+.share-btn:active {
+  transform: scale(0.98);
+}
+
+.share-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #fff;
+  padding: 2px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* 🌓 Dark Mode */
+body.dark .share-btn {
+  background: linear-gradient(90deg, #5c6bc0, #283593);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+}
+
+body.dark .share-btn:hover {
+  background: linear-gradient(90deg, #3f51b5, #1e88e5);
+  box-shadow: 0 5px 10px rgba(30,136,229,0.6);
+}
+
+body.dark .share-icon {
+  background: #0f1724;
+  box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+}
 
 
 

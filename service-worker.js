@@ -4,6 +4,7 @@ const FILES = [
   '/index.html',
   '/style.css',
   '/main.js',
+  '/createsection.js',
   '/pwa.js',
   '/manifest.json',
   '/logo.png',
