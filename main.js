@@ -79,66 +79,76 @@ document.addEventListener("DOMContentLoaded", () => {
   let deferredPrompt = null;
   const AUTOSAVE_KEY = "ak_autosave_v13";
 
-  // ---------------------------------------------
-  // 💾 IndexedDB setup (reliable)
-  // ---------------------------------------------
-  const DB_NAME = "ak_gallery_v13";
-  const STORE_NAME = "posters";
-  let db = null;
+// ====================================================
+// 💾 IndexedDB Setup — v3.1 (Stable, Persistent, Safe)
+// ====================================================
+const DB_NAME = "ak_gallery_v13";
+const STORE_NAME = "posters";
+let db = null;
 
-  async function openDB() {
-    return new Promise((resolve, reject) => {
-      if (db) return resolve(db);
-      const request = indexedDB.open(DB_NAME, 2); // bumped version to 2 intentionally
-      request.onupgradeneeded = (e) => {
-        const d = e.target.result;
-        if (d.objectStoreNames.contains(STORE_NAME)) {
-          try { d.deleteObjectStore(STORE_NAME); } catch {}
-        }
+async function openDB() {
+  return new Promise((resolve, reject) => {
+    if (db) return resolve(db);
+    const request = indexedDB.open(DB_NAME, 2);
+    request.onupgradeneeded = (e) => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE_NAME)) {
         const store = d.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
         store.createIndex("ts", "ts", { unique: false });
         store.createIndex("title", "title", { unique: false });
-        console.log("IndexedDB: store created/upgraded.");
-      };
-      request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-      request.onerror = (e) => { console.error("IndexedDB open failed:", e); reject(e); };
-    });
-  }
-
-  async function saveToDB(rec) {
-    await openDB();
-    return new Promise((resolve, reject) => {
-      try {
-        const tx = db.transaction(STORE_NAME, "readwrite");
-        const store = tx.objectStore(STORE_NAME);
-        store.add(rec);
-        tx.oncomplete = () => resolve();
-        tx.onabort = tx.onerror = (ev) => reject(ev);
-      } catch (err) {
-        reject(err);
+        console.log("✅ Created new object store:", STORE_NAME);
       }
-    });
-  }
+    };
+    request.onsuccess = (e) => {
+      db = e.target.result;
+      console.log("✅ IndexedDB opened successfully");
+      resolve(db);
+    };
+    request.onerror = (e) => {
+      console.error("❌ IndexedDB open failed:", e.target.error);
+      reject(e);
+    };
+  });
+}
 
-  async function getAllFromDB() {
-    await openDB();
-    return new Promise((res) => {
-      const tx = db.transaction(STORE_NAME, "readonly");
+async function saveToDB(rec) {
+  try {
+    const database = await openDB();
+    const tx = database.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    store.add(rec);
+    tx.oncomplete = () => console.log("✅ Saved:", rec.title);
+    tx.onerror = (err) => console.error("❌ Save error:", err);
+  } catch (err) {
+    console.error("❌ saveToDB() failed:", err);
+  }
+}
+
+async function getAllFromDB() {
+  try {
+    const database = await openDB();
+    return new Promise((resolve) => {
+      const tx = database.transaction(STORE_NAME, "readonly");
       const req = tx.objectStore(STORE_NAME).getAll();
-      req.onsuccess = () => res(req.result || []);
-      req.onerror = () => res([]);
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => resolve([]);
     });
+  } catch (err) {
+    console.error("❌ getAllFromDB failed:", err);
+    return [];
   }
+}
 
-  async function deleteFromDB(id) {
-    await openDB();
-    return new Promise((res) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).delete(id);
-      tx.oncomplete = () => res();
-      tx.onerror = () => res();
-    });
+async function deleteFromDB(id) {
+  try {
+    const database = await openDB();
+    const tx = database.transaction(STORE_NAME, "readwrite");
+    tx.objectStore(STORE_NAME).delete(id);
+    tx.oncomplete = () => console.log(`🗑️ Deleted poster id: ${id}`);
+  } catch (err) {
+    console.error("❌ deleteFromDB failed:", err);
   }
+}
 
   // ---------------------------------------------
   // 🧠 Helpers
