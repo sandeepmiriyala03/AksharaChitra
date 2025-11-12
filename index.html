@@ -467,64 +467,7 @@ rel="stylesheet">
 </body>
 <script defer>
 document.addEventListener("DOMContentLoaded", () => {
-  // ✨ Helper Functions
-  const qs = (sel) => document.querySelector(sel);
-  const qsAll = (sel) => document.querySelectorAll(sel);
-  const on = (el, evt, fn) => el?.addEventListener(evt, fn);
 
-  // 🔖 TAB SWITCHING
-  qsAll(".tab-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      // Remove active states
-      qsAll(".tab-btn").forEach((b) => b.classList.remove("active"));
-      qsAll(".tab-content").forEach((s) => s.classList.remove("active"));
-
-      // Add active state to clicked tab + section
-      btn.classList.add("active");
-      const target = btn.getAttribute("data-tab");
-      const section = document.getElementById(target);
-      if (section) section.classList.add("active");
-
-      // Render gallery when needed
-      if (target === "gallery" && typeof renderIndexedGallery === "function") {
-        setTimeout(renderIndexedGallery, 200);
-      }
-
-      // Smooth scroll to top
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      // Save active tab in localStorage
-      localStorage.setItem("activeTab", target);
-    });
-  });
-
-  // 🔄 Restore last open tab OR default to "home"
-  const lastTab = localStorage.getItem("activeTab") || "home";
-  const lastBtn = qs(`.tab-btn[data-tab="${lastTab}"]`);
-  const lastSection = qs(`#${lastTab}`);
-
-  // Make sure at least Home is visible on load
-  if (lastBtn && lastSection) {
-    lastBtn.classList.add("active");
-    lastSection.classList.add("active");
-  } else {
-    // Fallback safety (if home button exists)
-    const homeBtn = qs('.tab-btn[data-tab="home"]');
-    const homeSection = qs("#home");
-    if (homeBtn && homeSection) {
-      homeBtn.classList.add("active");
-      homeSection.classList.add("active");
-    }
-  }
-
-  // 🎨 “Start Creating” → Open Create Tab
-  const openCreateBtn = qs("#openCreateBtn");
-  if (openCreateBtn) {
-    openCreateBtn.addEventListener("click", () => {
-      const createBtn = qs('.tab-btn[data-tab="create"]');
-      if (createBtn) createBtn.click();
-    });
-  }
 
   // 💬 WhatsApp / Native Share Feature
   const shareBtn = qs("#shareProjectBtn");

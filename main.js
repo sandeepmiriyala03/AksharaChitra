@@ -150,6 +150,84 @@ async function deleteFromDB(id) {
   }
 }
 
+// ===========================================================
+// 🧭 AksharaChitra — Tab Navigation System (v18.3 Stable)
+// -----------------------------------------------------------
+// ✅ Keeps "Home" active on first load
+// ✅ Restores last open tab on reload
+// ✅ Auto-renders Gallery from IndexedDB (waits for DB ready)
+// ✅ Smooth scroll + Start-Create shortcut
+// ===========================================================
+
+const qs = (sel) => document.querySelector(sel);
+
+// 🔖 TAB SWITCHING
+qsAll(".tab-btn").forEach((btn) => {
+  on(btn, "click", async () => {
+    // Remove active states
+    qsAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+    qsAll(".tab-content").forEach((s) => s.classList.remove("active"));
+
+    // Activate clicked tab + section
+    btn.classList.add("active");
+    const target = btn.getAttribute("data-tab");
+    const section = document.getElementById(target);
+    if (section) section.classList.add("active");
+
+    // 🌸 Auto-render gallery (ensure DB ready first)
+    if (target === "gallery" && typeof renderIndexedGallery === "function") {
+      console.log("🖼 Loading My Creations from IndexedDB...");
+      await openDB(); // ensures DB ready before rendering
+      setTimeout(renderIndexedGallery, 200);
+    }
+
+    // Smooth scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Save last active tab
+    localStorage.setItem("activeTab", target);
+  });
+});
+
+// 🔄 Restore last open tab OR fallback to Home
+window.addEventListener("DOMContentLoaded", async () => {
+  const lastTab = localStorage.getItem("activeTab") || "home";
+  const lastBtn = qs(`.tab-btn[data-tab="${lastTab}"]`);
+  const lastSection = qs(`#${lastTab}`);
+
+  if (lastBtn && lastSection) {
+    lastBtn.classList.add("active");
+    lastSection.classList.add("active");
+
+    // If last opened was Gallery, render it again
+    if (lastTab === "gallery" && typeof renderIndexedGallery === "function") {
+      console.log("🖼 Restoring Gallery on reload...");
+      await openDB();
+      setTimeout(renderIndexedGallery, 400);
+    }
+  } else {
+    // Default fallback → Home
+    const homeBtn = qs('.tab-btn[data-tab="home"]');
+    const homeSection = qs("#home");
+    if (homeBtn && homeSection) {
+      homeBtn.classList.add("active");
+      homeSection.classList.add("active");
+    }
+  }
+});
+
+// 🎨 “Start Creating” → Jump directly to Create tab
+
+if (openCreateBtn) {
+  on(openCreateBtn, "click", () => {
+    const createBtn = qs('.tab-btn[data-tab="create"]');
+    if (createBtn) createBtn.click();
+  });
+}
+
+console.log("✅ Tab Navigation Initialized (v18.3 Stable)");
+
+
   // ---------------------------------------------
   // 🧠 Helpers
   // ---------------------------------------------
