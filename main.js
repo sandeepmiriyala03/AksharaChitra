@@ -172,22 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => { t.style.opacity = "0"; setTimeout(() => t.remove(), 600); }, 2200);
   }
 
-  // ---------------------------------------------
-  // 🧭 Tabs
-  // ---------------------------------------------
-  qsAll(".tab-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      qsAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      qsAll(".tab-content").forEach(s => s.classList.remove("active"));
-      btn.classList.add("active");
-      const target = btn.getAttribute("data-tab");
-      const sec = document.getElementById(target);
-      if (sec) sec.classList.add("active");
-      if (target === "gallery") setTimeout(renderIndexedGallery, 200);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  });
-  if (openCreateBtn) on(openCreateBtn, "click", () => { const createBtn = document.querySelector('.tab-btn[data-tab="create"]'); if (createBtn) createBtn.click(); });
+  
 
   // ---------------------------------------------
   // 🌙 Theme toggle

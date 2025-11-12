@@ -68,12 +68,9 @@ family=Noto+Sans+Tamil&
 display=swap" 
 rel="stylesheet">
 
-
-
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <!-- 🌸 Header -->
   <header class="topbar">
@@ -83,12 +80,8 @@ rel="stylesheet">
     </div>
     <nav class="nav">
       <button class="tab-btn active" data-tab="home">🏠 Home</button>
-         <button class="tab-btn" data-tab="about">🌿 About</button>
-
-      <button class="tab-btn" data-tab="create">🎨 Create</button>
-      <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
-      <button class="tab-btn" data-tab="help">📘 Help</button>
-      
+      <button class="tab-btn active" data-tab="create">🎨 Create</button>
+      <button class="tab-btn" data-tab="gallery">💾 My Creations</button> 
       <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
     </nav>
     <div class="right-controls">
@@ -96,156 +89,82 @@ rel="stylesheet">
       <button id="themeToggle" title="Toggle Theme">🌙</button>
     </div>
   </header>
-
   <!-- 🌈 MAIN CONTENT -->
   <main id="mainContent" class="content">
-<!-- 🌿 ABOUT -->
-<section id="about" class="tab-content about-section">
-  <style>
-    /* 🌿 AksharaChitra — Responsive About Section */
-    .about-section {
-      font-family: "Poppins", "Noto Sans Telugu", "Noto Sans Devanagari", sans-serif;
-      color: #222;
-      line-height: 1.6;
-      padding: 2rem 1.5rem;
-      background: linear-gradient(180deg, #fffef9, #f8f9fa);
-      border-radius: 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      max-width: 900px;
-      margin: 2rem auto;
-    }
+<section id="home" class="tab-content">
+  <div class="home-wrapper">
+    
+    <!-- 🌸 INTRO -->
+    <div class="about-intro fade-in">
+      <h2>Welcome to <span class="highlight">AksharaChitra</span></h2>
+      <h3 class="subtitle">Multilingual Art, Made Simple — <strong>Offline & Beautiful</strong></h3>
 
-    .about-section h2 {
-      font-size: 1.9rem;
-      text-align: center;
-      margin-bottom: 0.3rem;
-      color: #3c2a00;
-    }
+      <p>
+        <strong>AksharaChitra</strong> is a next-gen <strong>Multilingual Poster Maker</strong> that celebrates India's linguistic beauty through design.
+        Built as a <strong>Progressive Web App (PWA)</strong>, it works <strong>fully offline</strong> — creating posters in <strong>8+ Indian languages</strong> including Telugu, Hindi, Sanskrit, Tamil, Kannada, Malayalam & Odia.
+      </p>
 
-    .about-section .subtitle {
-      font-size: 1.1rem;
-      text-align: center;
-      color: #666;
-      margin-bottom: 1.5rem;
-      font-weight: 500;
-    }
+      <p>
+        🎨 <strong>Design made simple</strong>: personalize titles, subtitles, and messages; upload or crop images; add logos and QR codes; and even use <strong>voice input</strong> or <strong>text-to-speech</strong> — all without internet.
+      </p>
 
-    .about-section p {
-      font-size: 1rem;
-      margin-bottom: 1.2rem;
-      text-align: justify;
-    }
+      <p>
+        Powered by <strong>IndexedDB</strong>, <strong>CropperJS</strong>, and <strong>QRCodeJS</strong>, AksharaChitra runs 100% in your browser — making creativity <strong>inclusive, offline-friendly, and deeply Indian 🇮🇳</strong>.
+      </p>
+    </div>
 
-    .about-section strong {
-      color: #1a5276;
-    }
+    <hr class="divider" />
 
-    /* 🌸 Responsive Adjustments */
-    @media (min-width: 600px) {
-      .about-section {
-        padding: 2.5rem 3rem;
-      }
-      .about-section h2 {
-        font-size: 2.2rem;
-      }
-      .about-section p {
-        font-size: 1.05rem;
-      }
-    }
-
-    @media (min-width: 900px) {
-      .about-section {
-        max-width: 1000px;
-        padding: 3rem 4rem;
-      }
-      .about-section h2 {
-        font-size: 2.4rem;
-      }
-      .about-section .subtitle {
-        font-size: 1.25rem;
-      }
-    }
-  </style>
-
-  <h2>🌿 About AksharaChitra</h2>
-  <h3 class="subtitle">Multilingual Art, Made Simple</h3>
-
-  <p>
-    <strong>AksharaChitra</strong> is an offline <strong>Multilingual Poster Maker</strong> that celebrates the beauty of India’s diverse languages through digital design.
-    Built as a <strong>Progressive Web App (PWA)</strong>, it allows users to create, save, and share posters in <strong>8+ Indian languages</strong> — including Telugu, Hindi, Sanskrit, Tamil, Kannada, Malayalam, and Odia — with full native font support.
-  </p>
-
-  <p>
-    🎨 Designed for simplicity and accessibility, AksharaChitra enables everyone — from teachers and students to artists and small businesses — to express creativity in their mother tongue.
-    You can customize titles, subtitles, and messages; upload and crop images; add logos and QR codes; and even use <strong>voice input</strong> or <strong>text-to-speech</strong> — all without an internet connection.
-  </p>
-
-  <p>
-    Powered by modern web technologies like <strong>IndexedDB</strong>, <strong>CropperJS</strong>, <strong>QRCodeJS</strong>, and <strong>Google Fonts</strong>,
-    the app runs entirely in the browser and can be installed as an offline PWA on desktop or mobile devices.
-    Every element — from multilingual font rendering to poster sharing — has been thoughtfully crafted to make digital creativity <strong>inclusive, offline-friendly, and deeply Indian 🇮🇳</strong>.
-  </p>
-</section>
-
-
-
- <!-- 🏠 HOME -->
-<section id="home" class="tab-content active home-section">
-  <div class="home-container">
-
-    <!-- 🌍 LEFT: Language Font Preview -->
-    <div class="left-preview">
+    <!-- 🌍 FONT PREVIEW -->
+    <div class="font-preview-section fade-in">
       <h2>🌍 Multilingual Font Preview</h2>
-      <p class="muted small">Select a language below to see its native poster font style 👇</p>
-      <!-- 🔽 Language Selector -->
-      <select id="previewLangSelect" class="lang-select">
-        <option value="en">🇬🇧 English</option>
-        <option value="te">🇮🇳 తెలుగు (Telugu)</option>
-        <option value="hi">🇮🇳 हिंदी (Hindi)</option>
-        <option value="sa">🇮🇳 संस्कृतम् (Sanskrit)</option>
-        <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
-        <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
-        <option value="ml">🇮🇳 മലയാളം (Malayalam)</option>
-        <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
-      </select>
+      <p class="muted small">Select your language and preview native fonts 👇</p>
 
-      <!-- 🌈 Preview Grid -->
+      <div class="tts-control">
+        <!-- 🌐 Language Dropdown -->
+        <select id="previewLangSelect" class="lang-select compact">
+          <option value="en">🇬🇧 English</option>
+          <option value="te">🇮🇳 తెలుగు (Telugu)</option>
+          <option value="hi">🇮🇳 हिंदी (Hindi)</option>
+          <option value="sa">🇮🇳 संस्कृतम् (Sanskrit)</option>
+          <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+          <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
+          <option value="ml">🇮🇳 മലയാളം (Malayalam)</option>
+          <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
+        </select>
+      </div>
+
+      <p id="fontOutput">Select a language to preview sample text.</p>
+
       <div class="font-preview-grid" id="fontPreviewGrid">
         <div class="font-card" data-lang="en" style="font-family:'Montserrat';">
           🇬🇧 <strong>English</strong>
           <p class="font-sample">Create beautiful posters easily!</p>
         </div>
-
         <div class="font-card" data-lang="te" style="font-family:'NTR';">
           🇮🇳 <strong>తెలుగు</strong>
           <p class="font-sample">అందమైన పోస్టర్ సృష్టించండి 🎨</p>
         </div>
-
         <div class="font-card" data-lang="hi" style="font-family:'Noto Serif Devanagari';">
           🇮🇳 <strong>हिंदी</strong>
           <p class="font-sample">सुंदर पोस्टर बनाएँ 🌸</p>
         </div>
-
         <div class="font-card" data-lang="sa" style="font-family:'Noto Serif Devanagari';">
           🇮🇳 <strong>संस्कृतम्</strong>
           <p class="font-sample">सौन्दर्यमयं पोस्टरं निर्मियताम् 🕉️</p>
         </div>
-
         <div class="font-card" data-lang="ta" style="font-family:'Noto Sans Tamil';">
           🇮🇳 <strong>தமிழ்</strong>
           <p class="font-sample">அழகான போஸ்டரை உருவாக்குங்கள் 🎉</p>
         </div>
-
         <div class="font-card" data-lang="kn" style="font-family:'Noto Sans Kannada';">
           🇮🇳 <strong>ಕನ್ನಡ</strong>
           <p class="font-sample">ಅಂದವಾದ ಪೋಸ್ಟರ್ ರಚಿಸಿ 🌈</p>
         </div>
-
         <div class="font-card" data-lang="ml" style="font-family:'Noto Sans Malayalam';">
           🇮🇳 <strong>മലയാളം</strong>
           <p class="font-sample">അലങ്കാരമായ പോസ്റ്റർ സൃഷ്ടിക്കുക 🌺</p>
         </div>
-
         <div class="font-card" data-lang="or" style="font-family:'Noto Sans Oriya';">
           🇮🇳 <strong>ଓଡ଼ିଆ</strong>
           <p class="font-sample">ସୁନ୍ଦର ପୋଷ୍ଟର ତିଆରି କରନ୍ତୁ 💫</p>
@@ -253,55 +172,52 @@ rel="stylesheet">
       </div>
     </div>
 
-    <!-- 🚀 RIGHT: Features -->
-    <div class="right-features">
-  <h2>🚀 What You Can Do</h2>
+    <hr class="divider" />
 
-  <ul class="feature-list">
-    <li>🖋️ Customize <strong>Title, Subtitle & Message</strong> separately</li>
-    <li>🌐 Create posters in <strong>8+ Indian Languages</strong></li>
-    <li>🖼️ Upload, Crop, and Add Logos</li>
-    <li>📅 Choose <strong>Auto or Custom Date</strong></li>
-    <li>🎙️ Use <strong>Voice Input</strong> & Text-to-Speech</li>
-    <li>💾 Save Posters <strong>Offline</strong> (IndexedDB)</li>
-    <li>📤 Share on <strong>WhatsApp / Social Media</strong></li>
-    <li>🌙 Toggle <strong>Dark Mode</strong> anytime</li>
-    <li>⚡ <strong>PWA Ready</strong> — Install & Work Offline</li>
-  </ul>
+    <!-- 🚀 FEATURES -->
+    <div class="features-section fade-in">
+      <h2>🚀 What You Can Do</h2>
+      <ul class="feature-list">
+        <li>🖋️ Customize <strong>Title, Subtitle & Message</strong></li>
+        <li>🌐 Create posters in <strong>8+ Indian Languages</strong></li>
+        <li>🎙️ Use <strong>Voice Input</strong> & <strong>Text-to-Speech</strong></li>
+        <li>🖼️ Upload, Crop & Add Logos</li>
+        <li>💾 Save Offline (IndexedDB)</li>
+        <li>⚡ <strong>PWA Ready</strong> — Works fully Offline</li>
+      </ul>
 
-  <div class="cta-buttons">
-    <button id="openCreateBtn" class="btn primary large">🎨 Start Creating</button>
-     <button id="shareProjectBtn" class="share-btn">
-  <img src="/icons/icon-72x72.png" alt="AksharaChitra" class="share-icon">
-  <span>Share AksharaChitra</span>
-</button>
+      <div class="cta-buttons">
+        <button id="openCreateBtn" class="btn primary large pulse">🎨 Start Creating</button>
+        <button id="shareProjectBtn" class="share-btn">
+          <img src="/icons/icon-72x72.png" alt="AksharaChitra" class="share-icon" />
+          <span>Share AksharaChitra</span>
+        </button>
+      </div>
+    </div>
 
-  </div>
+    <hr class="divider" />
 
-  <p class="muted tip">💡 Tip: Try different languages to see how native fonts look instantly!</p>
+    <!-- 📘 HELP -->
+    <div class="help-section fade-in">
+      <h2>📘 Quick Help Guide</h2>
+      <ul class="help-list">
+        <li>🖋️ Edit Title, Subtitle, and Message easily.</li>
+        <li>🌐 Type in any supported Indian language.</li>
+        <li>🖼️ Upload & crop images or logos.</li>
+        <li>🎨 Choose from templates like <em>Devotional</em>, <em>Business</em>, <em>Invitation</em>.</li>
+        <li>💾 Save offline — access anytime in <em>My Creations</em>.</li>
+      </ul>
 
-  <!-- 🌏 Supported Languages & Fonts -->
-  <div class="supported-langs" style="margin-top:20px; background:#f8faff; border-radius:12px; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-    <h3 style="font-size:1rem; margin-bottom:8px;">🌏 Supported Languages & Fonts</h3>
-    <ul style="line-height:1.6; list-style:none; padding:0; font-size:0.95rem;">
-      <li>🇬🇧 <strong>English (28):</strong> Montserrat, Poppins, Roboto, Open Sans, Lato, Playfair Display, Oswald</li>
-      <li>🇮🇳 <strong>తెలుగు (12):</strong> Noto Sans Telugu, NTR, Ramabhadra, Gurajada, Gidugu, Mandali</li>
-      <li>🇮🇳 <strong>हिंदी (3):</strong> Noto Serif Devanagari, Hind, Karma</li>
-      <li>🕉️ <strong>संस्कृतम् (2):</strong> Tiro Devanagari Sanskrit, Noto Serif Devanagari</li>
-      <li>🇮🇳 <strong>தமிழ் (2):</strong> Noto Sans Tamil, Tiro Tamil</li>
-      <li>🇮🇳 <strong>ಕನ್ನಡ (1):</strong> Noto Sans Kannada</li>
-      <li>🇮🇳 <strong>മലയാളം (1):</strong> Noto Sans Malayalam</li>
-      <li>🇮🇳 <strong>ଓଡ଼ିଆ (1):</strong> Noto Sans Oriya</li>
-    </ul>
-    <p style="margin-top:6px; font-size:0.9rem; color:#333;">
-      🌐 <strong>Total Languages:</strong> 8 &nbsp; • &nbsp; 🖋️ <strong>Total Fonts:</strong> 52 
-      <br>🔤 All fonts are <strong>Google Fonts</strong> — fully Unicode & offline ready.
-    </p>
-  </div>
-</div>
-
+      <div class="tip-box">
+        💡 <strong>Tip:</strong> Works fully offline — your posters stay safe on your device!
+      </div>
+    </div>
   </div>
 </section>
+
+<!-- ✅ External CSS & JS -->
+<link rel="stylesheet" href="/Styles/home-section.css" />
+<script src="home-section.js" defer></script>
     <!-- 🎨 CREATE -->
     <section id="create" class="tab-content">
       <div class="editor">
@@ -431,8 +347,6 @@ rel="stylesheet">
         </select>
       </div>
 
-
-
           <!-- 📅 Date -->
           <div class="group">
             <label>📅 Poster Date</label>
@@ -448,34 +362,7 @@ rel="stylesheet">
             <label>✍️ Font Family</label>
            <select id="fontFamily">
   <!-- 🌐 English / Latin Fonts -->
-  <option>Montserrat</option>
-  <option>Poppins</option>
-  <option>Roboto</option>
-  <option>Open Sans</option>
-  <option>Lato</option>
-  <option>Playfair Display</option>
-  <option>Oswald</option>
-
-  <!-- 🇮🇳 Telugu Fonts -->
-  <option>Noto Sans Telugu</option>
-  <option>NTR</option>
-  <option>Ramabhadra</option>
-  <option>Gurajada</option>
-  <option>Gidugu</option>
-  <option>Mandali</option>
-
-  <!-- 🪶 Devanagari (Hindi, Sanskrit) -->
-  <option>Noto Serif Devanagari</option>
-  <option>Tiro Devanagari Sanskrit</option>
-  <option>Hind</option>
-  <option>Karma</option>
-
-  <!-- 🌺 Multi-Script / Decorative -->
-  <option>Baloo 2</option>
-  <option>Tiro Tamil</option>
-  <option>Noto Sans Malayalam</option>
-  <option>Noto Sans Kannada</option>
-  <option>Noto Sans Tamil</option>
+ 
 </select>
 
           </div>
@@ -537,79 +424,6 @@ rel="stylesheet">
       <div id="galleryGrid"></div>
     </section>
 
-<!-- 📘 HELP -->
-<section id="help" class="tab-content">
-  <h2 class="text-xl font-semibold mb-3">📘 Help & Quick Guide</h2>
-
-  <p class="muted mb-4">
-    Welcome to <strong>AksharaChitra</strong> — your offline multilingual poster maker! 🎨  
-    Follow these simple steps to create, save, and share your beautiful designs.
-  </p>
-
-  <!-- 🧭 Feature Overview -->
-  <ul class="help-list" style="line-height:1.8; list-style:none; padding:0;">
-    <li>🖋️ <strong>Customize</strong> — Edit the <em>Title</em>, <em>Subtitle</em>, and <em>Message</em> freely with your chosen colors, size, and fonts.</li>
-    <li>🌐 <strong>Multilingual Support</strong> — Type in English, తెలుగు, हिंदी, தமிழ், ಕನ್ನಡ, മലയാളം, or संस्कृतम् with native rendering.</li>
-    <li>🖼️ <strong>Images & Logos</strong> — Upload and crop main pictures or small logos using the built-in cropper tool.</li>
-    <li>🎨 <strong>Templates</strong> — Choose ready-made themes like <em>Birthday</em>, <em>Devotional</em>, <em>Invitation</em>, or <em>Business</em>.</li>
-    <li>📅 <strong>Poster Date</strong> — Automatically include today’s date or select a custom one for your poster footer.</li>
-    <li>🎙️ <strong>Voice & Speech</strong> — Use speech-to-text for quick typing, or have your text read aloud.</li>
-    <li>💾 <strong>Offline Save</strong> — Save your creations in <em>My Creations</em> even when offline (powered by IndexedDB).</li>
-    <li>📤 <strong>Share</strong> — Instantly share posters on WhatsApp or download as high-quality PNG files.</li>
-    <li>🌙 <strong>Dark Mode</strong> — Toggle light/dark themes anytime from the header.</li>
-    <li>⚡ <strong>PWA Ready</strong> — Install AksharaChitra on your device for full offline use.</li>
-  </ul>
-
-  <!-- 💡 Tip Box -->
-  <div class="tip-box" style="margin-top:16px; padding:12px; border-radius:8px; background:#f1f5ff;">
-    💡 <strong>Tip:</strong> Tap <em>“Create Poster”</em> to start, and use <em>“My Creations”</em> to revisit saved posters anytime!
-  </div>
-
-  <!-- 🌏 Language & Font Support -->
-  <h3 style="margin-top:24px;">🌏 Supported Languages & Fonts</h3>
-  <ul class="font-list" style="line-height:1.8; list-style:none; padding:0;">
-<ul class="font-list" style="line-height:1.8; list-style:none; padding:0;">
-  <li>🇬🇧 <strong>English (28):</strong> Montserrat, Poppins, Roboto, Open Sans, Lato, Playfair Display, Oswald...</li>
-
-  <li>🇮🇳 <strong>తెలుగు (10):</strong> 
-    Noto Sans Telugu, NTR, Ramabhadra, Mandali, Veturi, Sirivennela, Ramaneeya, Ramaraja, Ravi Prakash, Tenali Ramakrishna-Regular, TANA
-  </li>
-
-  <li>🇮🇳 <strong>हिंदी (3):</strong> 
-    Noto Serif Devanagari, Hind, Karma
-  </li>
-
-  <li>🕉️ <strong>संस्कृतम् (2):</strong> 
-    Tiro Devanagari Sanskrit, Noto Serif Devanagari
-  </li>
-
-  <li>🇮🇳 <strong>தமிழ் (2):</strong> 
-    Noto Sans Tamil, Tiro Tamil
-  </li>
-
-  <li>🇮🇳 <strong>ಕನ್ನಡ (1):</strong> 
-    Noto Sans Kannada
-  </li>
-
-  <li>🇮🇳 <strong>മലയാളം (1):</strong> 
-    Noto Sans Malayalam
-  </li>
-
-  <li>🇮🇳 <strong>ଓଡ଼ିଆ (1):</strong> 
-    Noto Sans Oriya
-  </li>
-</ul>
-
-<p style="margin-top:8px; font-weight:600;">
-  🌐 <strong>Total Languages:</strong> 8 &nbsp; • &nbsp; 🖋️ <strong>Total Fonts:</strong> 52 
-  <br>🔤 All fonts are <strong>Google / Native Unicode</strong> compatible and offline ready.
-</p>
-
-
-  <p style="margin-top:8px; font-weight:600;">
-    🌐 <strong>Total Languages:</strong> 8 &nbsp; • &nbsp; 🖋️ <strong>Total Fonts:</strong> 52
-  </p>
-</section>
     <!-- 💌 FEEDBACK -->
     <section id="feedback" class="tab-content">
       <h2> Feedback</h2>
@@ -649,17 +463,66 @@ rel="stylesheet">
   <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
-
+  <script src="/JS/homesection.js" defer></script>
 </body>
 <script defer>
 document.addEventListener("DOMContentLoaded", () => {
+  // ✨ Helper Functions
+  const qs = (sel) => document.querySelector(sel);
+  const qsAll = (sel) => document.querySelectorAll(sel);
+  const on = (el, evt, fn) => el?.addEventListener(evt, fn);
 
-  const shareBtn = document.getElementById("shareProjectBtn");
+  // 🔖 TAB SWITCHING
+  qsAll(".tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // Remove active state
+      qsAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+      qsAll(".tab-content").forEach((s) => s.classList.remove("active"));
 
+      // Add active state to clicked tab + section
+      btn.classList.add("active");
+      const target = btn.getAttribute("data-tab");
+      const section = document.getElementById(target);
+      if (section) section.classList.add("active");
+
+      // Render gallery when needed
+      if (target === "gallery" && typeof renderIndexedGallery === "function") {
+        setTimeout(renderIndexedGallery, 200);
+      }
+
+      // Smooth scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Save active tab in localStorage (for session restore)
+      localStorage.setItem("activeTab", target);
+    });
+  });
+
+  // Restore last open tab on reload
+  const lastTab = localStorage.getItem("activeTab");
+  if (lastTab) {
+    const lastBtn = qs(`.tab-btn[data-tab="${lastTab}"]`);
+    const lastSection = qs(`#${lastTab}`);
+    if (lastBtn && lastSection) {
+      lastBtn.classList.add("active");
+      lastSection.classList.add("active");
+    }
+  }
+
+  // 🎨 “Start Creating” → Open Create Tab
+  const openCreateBtn = qs("#openCreateBtn");
+  if (openCreateBtn) {
+    openCreateBtn.addEventListener("click", () => {
+      const createBtn = qs('.tab-btn[data-tab="create"]');
+      if (createBtn) createBtn.click();
+    });
+  }
+
+  // 💬 WhatsApp Share Feature
+  const shareBtn = qs("#shareProjectBtn");
   if (shareBtn) {
     shareBtn.addEventListener("click", () => {
-      const message = encodeURIComponent(
-`🌸 *AksharaChitra — Multilingual Poster Maker 🎨*
+      const message = `🌸 *AksharaChitra — Multilingual Poster Maker 🎨*
 
 Create, Save & Share beautiful posters *offline* in 8+ Indian languages — Telugu, Hindi, Sanskrit, Tamil, Kannada, Malayalam & more!
 
@@ -674,15 +537,27 @@ Create, Save & Share beautiful posters *offline* in 8+ Indian languages — Telu
 🖋️ *Supports 52 Beautiful Font Families.* ✨
 
 Made with ❤️ by *Sandeep Miriyala*  
-🔗 https://aksharachitra.netlify.app`
-      );
+🔗 https://aksharachitra.netlify.app`;
 
-      // Open WhatsApp share link
-      const whatsappURL = `https://wa.me/?text=${message}`;
-      window.open(whatsappURL, "_blank");
+      // 🌍 Prefer Web Share API (mobile native share)
+      if (navigator.share) {
+        navigator.share({
+          title: "AksharaChitra — Multilingual Poster Maker",
+          text: message,
+          url: "https://aksharachitra.netlify.app",
+        }).catch(() => {
+          // fallback if cancelled
+        });
+      } else {
+        // 💬 WhatsApp fallback
+        const encoded = encodeURIComponent(message);
+        const whatsappURL = `https://wa.me/?text=${encoded}`;
+        window.open(whatsappURL, "_blank");
+      }
     });
   }
+
+  console.log("✅ AksharaChitra main script initialized.");
 });
 </script>
-
 </html>
