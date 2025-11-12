@@ -1,12 +1,12 @@
 /* ==========================================================
-   🌸 AksharaChitra v3.4 — Progressive Web App (pwa.js)
+   🌸 AksharaChitra v3.5 — Progressive Web App (pwa.js)
    ----------------------------------------------------------
    ✅ Service Worker
    ✅ Install Buttons (Header + FAB)
-   ✅ Reliable Deferred Prompt Handling
-   ✅ Spinner Overlay on Load
+   ✅ Deferred Prompt Handling
+   ✅ Spinner Overlay
    ✅ Toasts + iOS Add-to-Home
-   ✅ Mobile-Safe Fallback (5s)
+   ✅ Opera + Safari Manual Install Fallback
    ========================================================== */
 
 // ---- 1️⃣ Loading Spinner Overlay ----
@@ -44,7 +44,7 @@ window.addEventListener("load", () => {
   setTimeout(() => {
     spinner.style.opacity = "0";
     setTimeout(() => spinner.remove(), 800);
-  }, 500); // fade out half second after window load
+  }, 500);
 });
 
 // ---- 2️⃣ Register Service Worker ----
@@ -86,7 +86,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
 // ---- 5️⃣ Button Click Handler ----
 installBtns.forEach((btn) => {
   btn.addEventListener("click", async () => {
-    if (btn.disabled) return; // prevent spam clicks
+    if (btn.disabled) return;
 
     if (!deferredPrompt && !window.__akInstallPromptReady) {
       showInstallToast("⏳ Preparing install prompt... please wait");
@@ -135,7 +135,7 @@ if (window.matchMedia("(display-mode: standalone)").matches) {
   console.log("[PWA] Running in standalone mode 🏠");
 }
 
-// ---- 8️⃣ iOS Add-to-Home ----
+// ---- 8️⃣ iOS Add-to-Home Message ----
 function isIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
@@ -145,7 +145,7 @@ if (isIOS() && !window.matchMedia("(display-mode: standalone)").matches) {
   }, 1200);
 }
 
-// ---- 9️⃣ Fallback (5 s grace) ----
+// ---- 9️⃣ Fallback (5s grace) ----
 window.addEventListener("load", () => {
   setTimeout(() => {
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
@@ -188,3 +188,77 @@ function showInstallToast(msg) {
   }, 2800);
   setTimeout(() => toast.remove(), 3400);
 }
+
+// ==========================================================
+//  🌐 Opera + iOS Safari Fallback for Manual Install
+// ==========================================================
+(function setupFallbackInstall() {
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  const isOpera = /Opera|OPR\//.test(ua);
+
+  const needsManualInstall =
+    (isIOS && isSafari) || isOpera || !("BeforeInstallPromptEvent" in window);
+
+  if (!needsManualInstall) return;
+
+  console.log("[PWA] Manual install mode for Safari / Opera 🧭");
+
+  installBtns.forEach((btn) => {
+    btn.style.display = "flex";
+    btn.classList.add("show", "pulse");
+    btn.disabled = false;
+    btn.addEventListener("click", showManualGuide);
+  });
+
+  function showManualGuide() {
+    const overlay = document.createElement("div");
+    overlay.setAttribute("role", "dialog");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.55)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 99999,
+      backdropFilter: "blur(4px)",
+    });
+
+    const card = document.createElement("div");
+    card.innerHTML = `
+      <div style="
+        background:#fff;
+        color:#111;
+        max-width:320px;
+        padding:20px 18px;
+        border-radius:12px;
+        font-family:Montserrat,sans-serif;
+        text-align:center;
+        box-shadow:0 6px 22px rgba(0,0,0,0.25);
+      ">
+        <h3 style="margin-bottom:10px;color:#1565c0;">Add AksharaChitra</h3>
+        <p style="font-size:0.95rem;line-height:1.5;">
+          ${isIOS
+            ? "On iPhone or iPad, tap <b>Share → Add to Home Screen</b>."
+            : "In Opera or Safari, open the browser menu → <b>Install App</b> or <b>Add to Home Screen</b>."}
+        </p>
+        <button id="closeGuideBtn" style="
+          margin-top:14px;
+          background:linear-gradient(90deg,#1565c0,#1e88e5);
+          color:#fff;
+          border:none;
+          padding:8px 16px;
+          border-radius:8px;
+          cursor:pointer;
+          font-weight:600;
+        ">Got it</button>
+      </div>`;
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+    document
+      .getElementById("closeGuideBtn")
+      .addEventListener("click", () => overlay.remove());
+  }
+})();
