@@ -217,7 +217,7 @@ rel="stylesheet">
 
 <!-- ✅ External CSS & JS -->
 <link rel="stylesheet" href="/Styles/home-section.css" />
-<script src="home-section.js" defer></script>
+<script src="/JS/homesection.js" defer></script>
     <!-- 🎨 CREATE -->
     <section id="create" class="tab-content">
       <div class="editor">
@@ -463,7 +463,7 @@ rel="stylesheet">
   <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
-  <script src="/JS/homesection.js" defer></script>
+
 </body>
 <script defer>
 document.addEventListener("DOMContentLoaded", () => {
@@ -475,7 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔖 TAB SWITCHING
   qsAll(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      // Remove active state
+      // Remove active states
       qsAll(".tab-btn").forEach((b) => b.classList.remove("active"));
       qsAll(".tab-content").forEach((s) => s.classList.remove("active"));
 
@@ -493,19 +493,27 @@ document.addEventListener("DOMContentLoaded", () => {
       // Smooth scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" });
 
-      // Save active tab in localStorage (for session restore)
+      // Save active tab in localStorage
       localStorage.setItem("activeTab", target);
     });
   });
 
-  // Restore last open tab on reload
-  const lastTab = localStorage.getItem("activeTab");
-  if (lastTab) {
-    const lastBtn = qs(`.tab-btn[data-tab="${lastTab}"]`);
-    const lastSection = qs(`#${lastTab}`);
-    if (lastBtn && lastSection) {
-      lastBtn.classList.add("active");
-      lastSection.classList.add("active");
+  // 🔄 Restore last open tab OR default to "home"
+  const lastTab = localStorage.getItem("activeTab") || "home";
+  const lastBtn = qs(`.tab-btn[data-tab="${lastTab}"]`);
+  const lastSection = qs(`#${lastTab}`);
+
+  // Make sure at least Home is visible on load
+  if (lastBtn && lastSection) {
+    lastBtn.classList.add("active");
+    lastSection.classList.add("active");
+  } else {
+    // Fallback safety (if home button exists)
+    const homeBtn = qs('.tab-btn[data-tab="home"]');
+    const homeSection = qs("#home");
+    if (homeBtn && homeSection) {
+      homeBtn.classList.add("active");
+      homeSection.classList.add("active");
     }
   }
 
@@ -518,7 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 💬 WhatsApp Share Feature
+  // 💬 WhatsApp / Native Share Feature
   const shareBtn = qs("#shareProjectBtn");
   if (shareBtn) {
     shareBtn.addEventListener("click", () => {
@@ -541,13 +549,13 @@ Made with ❤️ by *Sandeep Miriyala*
 
       // 🌍 Prefer Web Share API (mobile native share)
       if (navigator.share) {
-        navigator.share({
-          title: "AksharaChitra — Multilingual Poster Maker",
-          text: message,
-          url: "https://aksharachitra.netlify.app",
-        }).catch(() => {
-          // fallback if cancelled
-        });
+        navigator
+          .share({
+            title: "AksharaChitra — Multilingual Poster Maker",
+            text: message,
+            url: "https://aksharachitra.netlify.app",
+          })
+          .catch(() => {});
       } else {
         // 💬 WhatsApp fallback
         const encoded = encodeURIComponent(message);
@@ -557,7 +565,8 @@ Made with ❤️ by *Sandeep Miriyala*
     });
   }
 
-  console.log("✅ AksharaChitra main script initialized.");
+  console.log("✅ AksharaChitra main script initialized with Home auto-active.");
 });
 </script>
+
 </html>
