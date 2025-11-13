@@ -837,7 +837,7 @@ async function renderIndexedGallery({
  const totalBadge = document.createElement("div");
 totalBadge.setAttribute("aria-live", "polite");
 totalBadge.className = "gallery-total-badge";
-totalBadge.textContent = `📊 Total Creations: ${total}`;
+totalBadge.textContent = ` Total Creations: ${total}`;
 
 
   // Page size select (5,10,20,50)
