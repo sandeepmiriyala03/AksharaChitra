@@ -17,80 +17,48 @@
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+Telugu&family=NTR&family=Ramabhadra&family=Gurajada&family=Gidugu&family=Noto+Serif+Devanagari:wght@520&display=swap" rel="stylesheet">
-
- <link href="https://fonts.googleapis.com/css2?
-family=Montserrat:wght@400;600;700&
-family=Poppins:wght@400;600&
-family=Roboto:wght@400;700&
-family=Open+Sans:wght@400;700&
-family=Lato:wght@400;700&
-family=Playfair+Display:wght@400;700&
-family=Oswald:wght@400;700&
-family=Raleway:wght@400;700&
-family=Inter:wght@400;600;700&
-family=Bebas+Neue&
-family=Nunito:wght@400;700&
-family=Merriweather:wght@400;700&
-family=Pacifico&
-family=Cinzel:wght@400;700&
-family=Quicksand:wght@400;700&
-family=Josefin+Sans:wght@400;700&
-family=DM+Serif+Display&
-family=Great+Vibes&
-family=Lobster&
-family=Dancing+Script&
-family=Comfortaa:wght@400;700&
-family=Courgette&
-family=Righteous&
-family=Orbitron:wght@400;700&
-family=Exo+2:wght@400;700&
-family=Prompt:wght@400;700&
-family=Ubuntu:wght@400;700&
-family=Fira+Sans:wght@400;700&
-family=Source+Sans+Pro:wght@400;700&
-family=Arvo:wght@400;700&
-family=Noto+Sans+Telugu:wght@400;700&
-family=NTR&
-family=Ramabhadra&
-family=Gurajada&
-family=Gidugu&
-family=Mandali&
-family=Noto+Serif+Devanagari:wght@400;700&
-family=Tiro+Devanagari+Sanskrit&
-family=Hind:wght@400;600&
-family=Karma:wght@400;600&
-family=Baloo+2&
-family=Tiro+Tamil&
-family=Noto+Sans+Malayalam&
-family=Noto+Sans+Kannada&
-family=Noto+Sans+Tamil&
-display=swap" 
-rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&family=Oswald:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;600;700&family=Bebas+Neue&family=Nunito:wght@400;700&family=Merriweather:wght@400;700&family=Pacifico&family=Cinzel:wght@400;700&family=Quicksand:wght@400;700&family=Josefin+Sans:wght@400;700&family=DM+Serif+Display&family=Great+Vibes&family=Lobster&family=Dancing+Script&family=Comfortaa:wght@400;700&family=Courgette&family=Righteous&family=Orbitron:wght@400;700&family=Exo+2:wght@400;700&family=Prompt:wght@400;700&family=Ubuntu:wght@400;700&family=Fira+Sans:wght@400;700&family=Source+Sans+Pro:wght@400;700&family=Arvo:wght@400;700&family=Noto+Sans+Telugu:wght@400;700&family=NTR&family=Ramabhadra&family=Gurajada&family=Gidugu&family=Mandali&family=Noto+Serif+Devanagari:wght@400;700&family=Tiro+Devanagari+Sanskrit&family=Hind:wght@400;600&family=Karma:wght@400;600&family=Baloo+2&family=Tiro+Tamil&family=Noto+Sans+Malayalam&family=Noto+Sans+Kannada&family=Noto+Sans+Tamil&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+
 </head>
 <body>
   <!-- 🌸 Header -->
-  <header class="topbar">
-    <div class="left">
-      <img src="logo.png" alt="AksharaChitra logo" class="logo" />
-      <span class="app-title">AksharaChitra</span>
-    </div>
-    <nav class="nav">
-      <button class="tab-btn active" data-tab="home">🏠 Home</button>
-      <button class="tab-btn active" data-tab="create">🎨 Create</button>
-      <button class="tab-btn" data-tab="gallery">💾 My Creations</button> 
-      <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
-    </nav>
-    <div class="right-controls">
-      <button id="installBtnHeader" title="Install App">📲</button>
-      <button id="themeToggle" title="Toggle Theme">🌙</button>
-    </div>
-  </header>
+<!-- 🌸 HEADER WITH MOBILE MENU -->
+<header class="topbar">
+  <div class="left">
+    <img src="logo.png" alt="AksharaChitra" class="logo" />
+    <span class="app-title">AksharaChitra</span>
+  </div>
+
+  <!-- 🌟 Hamburger (mobile only) -->
+  <button id="hamburgerBtn" class="hamburger">☰</button>
+  <!-- 🌈 Desktop Navigation -->
+  <nav class="nav desktop-nav">
+    <button class="tab-btn active" data-tab="home">🏠 Home</button>
+    <button class="tab-btn" data-tab="create">🎨 Create</button>
+    <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
+    <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
+  </nav>
+
+  <div class="right-controls">
+    <button id="installBtnHeader" title="Install App">📲</button>
+    <button id="themeToggle" title="Toggle Theme">🌙</button>
+  </div>
+</header>
+
+<!-- ⭐ MOBILE SLIDE-DOWN MENU -->
+<nav id="mobileMenu" class="mobile-menu">
+
+  <button class="m-item" data-tab="home">🏠 Home</button>
+  <button class="m-item" data-tab="create">🎨 Create</button>
+  <button class="m-item" data-tab="gallery">💾 My Creations</button>
+  <button class="m-item" data-tab="feedback">💌 Feedback</button>
+</nav>
+
   <!-- 🌈 MAIN CONTENT -->
   <main id="mainContent" class="content">
+  
 <section id="home" class="tab-content">
   <div class="home-wrapper">
     
@@ -165,7 +133,7 @@ rel="stylesheet">
           🇮🇳 <strong>മലയാളം</strong>
           <p class="font-sample">അലങ്കാരമായ പോസ്റ്റർ സൃഷ്ടിക്കുക 🌺</p>
         </div>
-        <div class="font-card" data-lang="or" style="font-family:'Noto Sans Oriya';">
+        <div class="font-card" data-lang="or" style="font-family:'Noto Sans Oriya UI family';">
           🇮🇳 <strong>ଓଡ଼ିଆ</strong>
           <p class="font-sample">ସୁନ୍ଦର ପୋଷ୍ଟର ତିଆରି କରନ୍ତୁ 💫</p>
         </div>
@@ -215,9 +183,6 @@ rel="stylesheet">
   </div>
 </section>
 
-<!-- ✅ External CSS & JS -->
-<link rel="stylesheet" href="/Styles/home-section.css" />
-<script src="/JS/homesection.js" defer></script>
     <!-- 🎨 CREATE -->
     <section id="create" class="tab-content">
       <div class="editor">
@@ -355,7 +320,8 @@ rel="stylesheet">
               <option value="prevMonth">Previous Month</option>
               <option value="custom">Custom Date</option>
             </select>
-            <input type="date" id="customDate" class="hidden" />
+           <input type="date" id="customDate" class="hidden" />
+
           </div>
           <!-- ✍️ Font -->
           <div class="group">
@@ -389,9 +355,6 @@ rel="stylesheet">
         </div>
 
         <!-- RIGHT PANEL -->
-
-        <!-- 🧾 Poster Information -->
-  <!-- 🧾 Poster Information Box -->
 <div class="poster-info-container">
   <button id="toggleInfoBtn" class="info-toggle-btn">🧾 Show Poster Info</button>
   
@@ -434,9 +397,6 @@ rel="stylesheet">
   </div>
   <div id="galleryGrid"></div>
 </section>
-
-
-
     <!-- 💌 FEEDBACK -->
     <section id="feedback" class="tab-content">
       <h2> Feedback</h2>
@@ -450,7 +410,7 @@ rel="stylesheet">
   <p>
     © <span id="year"></span> 
     <strong>AksharaChitra</strong> 
-    <span id="version"></span> — Made with  by 
+    <span id="version"></span> — Made with  by ❤️ 
     <strong>Sandeep Miriyala</strong>
   </p>
 </footer>
@@ -476,53 +436,132 @@ rel="stylesheet">
   <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>
   <script src="pwa.js" defer></script>
-
-</body>
-<script defer>
+  <script src="/JS/homesection.js" defer></script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
 
+  const qs = (sel, parent=document) => parent.querySelector(sel);
 
-  // 💬 WhatsApp / Native Share Feature
+  /* ======================================================
+   ⭐ MOBILE MENU — FIXED VERSION
+   ====================================================== */
+  const hamburgerBtn = qs("#hamburgerBtn");
+  const mobileMenu   = qs("#mobileMenu");
+
+  // Toggle menu
+  hamburgerBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    mobileMenu.classList.toggle("open");
+  });
+
+  // Close when clicking a mobile menu item
+  document.querySelectorAll(".mobile-menu .m-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+    });
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+      mobileMenu.classList.remove("open");
+    }
+  });
+
+
+  /* ======================================================
+     ⭐ UNIVERSAL TAB SWITCH HANDLER (FIXED)
+     Works for Desktop (.tab-btn) + Mobile (.m-item)
+     ====================================================== */
+
+  function activateTab(tab) {
+    // Hide all tabs
+    document.querySelectorAll(".tab-content").forEach(sec => sec.classList.remove("active"));
+    // Remove highlights
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+    // Activate the target section
+    const section = document.getElementById(tab);
+    if (section) section.classList.add("active");
+    // Highlight desktop nav
+    const desktopBtn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+    if (desktopBtn) desktopBtn.classList.add("active");
+  }
+
+  // Desktop buttons
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.tab;
+      activateTab(tab);
+    });
+  });
+
+  // Mobile menu buttons
+  document.querySelectorAll(".m-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const tab = item.dataset.tab;
+      activateTab(tab);
+      mobileMenu.classList.remove("open"); // hide menu after click
+    });
+  });
+
+
+  /* ======================================================
+     ⭐ SHARE BUTTON — WhatsApp + Native
+     ====================================================== */
   const shareBtn = qs("#shareProjectBtn");
+
   if (shareBtn) {
-    shareBtn.addEventListener("click", () => {
+    shareBtn.addEventListener("click", async () => {
+
       const message = `🌸 *AksharaChitra — Multilingual Poster Maker 🎨*
 
-Create, Save & Share beautiful posters *offline* in 8+ Indian languages — Telugu, Hindi, Sanskrit, Tamil, Kannada, Malayalam & more!
+Create, Save & Share posters *offline* in 8+ Indian languages!
 
-✨ *Key Features:*
-🖋️ Title, Subtitle, and Message customization  
-🌐 Native language fonts  
-🖼️ Upload & Crop Images / Logos  
-🎙️ Voice Input + Text-to-Speech  
-💾 Offline Save (IndexedDB)  
-📤 Share on WhatsApp  
-🌙 Dark Mode + PWA Install  
-🖋️ *Supports 52 Beautiful Font Families.* ✨
+✨ Features:
+🖋️ Title / Subtitle / Message
+🖼️ Upload + Crop Images
+🎙️ Voice Input
+💾 Offline Save (IndexedDB)
+📤 Share Anywhere
+🌙 Dark Mode
+52+ Native Font Families
 
-Made with ❤️ by *Sandeep Miriyala*  
+Made by ❤️ Sandeep Miriyala
 🔗 https://aksharachitra.netlify.app`;
 
-      // 🌍 Prefer Web Share API (mobile native share)
+      const data = {
+        title: "AksharaChitra",
+        text: message,
+        url: "https://aksharachitra.netlify.app"
+      };
+
+      // 1️⃣ Native Share
       if (navigator.share) {
-        navigator
-          .share({
-            title: "AksharaChitra — Multilingual Poster Maker",
-            text: message,
-            url: "https://aksharachitra.netlify.app",
-          })
-          .catch(() => {});
-      } else {
-        // 💬 WhatsApp fallback
-        const encoded = encodeURIComponent(message);
-        const whatsappURL = `https://wa.me/?text=${encoded}`;
-        window.open(whatsappURL, "_blank");
+        try {
+          await navigator.share(data);
+          return;
+        } catch (e) {}
+      }
+
+      // 2️⃣ WhatsApp
+      try {
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+        return;
+      } catch (e) {}
+
+      // 3️⃣ Clipboard fallback
+      try {
+        await navigator.clipboard.writeText(message);
+        alert("📋 Copied! Paste anywhere to share.");
+      } catch (e) {
+        alert("Unable to share. Copy manually.");
       }
     });
   }
 
-  console.log("✅ AksharaChitra main script initialized with Home auto-active.");
+  console.log("✓ Mobile Menu + Tab Switch + Share Ready");
 });
 </script>
 
+</body>
 </html>
