@@ -1,0 +1,366 @@
+/* =========================================================
+   AksharaChitra v5.0 — Unified Master CSS (Readable)
+   Mobile-first, Option-D navigation (scrollable + icons-only),
+   UI/UX improvements, Dark mode, Fonts, Animations.
+   Author: Sandeep Miriyala
+   ========================================================= */
+
+/* -------------------- Root / Theme -------------------- */
+:root{
+  --primary:#1e88e5;
+  --primary-700:#1565c0;
+  --accent:#00bfa6;
+  --accent-600:#00a388;
+  --muted:#666666;
+  --text:#111111;
+  --card:#ffffff;
+  --bg:#f6f7fb;
+  --glass: rgba(255,255,255,0.7);
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow-sm: 0 2px 8px rgba(10,10,30,0.06);
+  --shadow-md: 0 8px 24px rgba(10,10,30,0.08);
+  --transition: 220ms cubic-bezier(.2,.9,.2,1);
+  --ease: all var(--transition);
+  --max-width:1200px;
+}
+
+/* dark theme vars (prefers-color-scheme) */
+@media (prefers-color-scheme: dark){
+  :root{
+    --card:#0c1726;
+    --bg:#07101a;
+    --glass: rgba(6,10,18,0.6);
+    --text: #e6eef8;
+    --muted: #b8c7db;
+    --shadow-sm: 0 4px 20px rgba(2,6,20,0.6);
+    --shadow-md: 0 8px 28px rgba(0,0,0,0.6);
+  }
+}
+
+/* -------------------- Reset -------------------- */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:"Poppins","Montserrat","Noto Sans Telugu",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  background:var(--bg); color:var(--text); line-height:1.55;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  transition:var(--transition);
+  overflow-x:hidden;
+}
+
+/* -------------------- Fonts (custom telugu examples) -------------------- */
+@font-face{font-family:'Veturi';src:url('fonts/Veturi.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Sirivennela';src:url('fonts/Sirivennela.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Ramaraja-Regular';src:url('fonts/Ramaraja-Regular.ttf') format('truetype');font-display:swap}
+/* add other @font-face rules you need (kept minimal here) */
+
+/* -------------------- Utilities -------------------- */
+.container{max-width:var(--max-width);margin:0 auto;padding:0 16px}
+.hide{display:none!important}
+.flex{display:flex;align-items:center;gap:8px}
+.center{display:flex;align-items:center;justify-content:center}
+.round{border-radius:999px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);transition:var(--ease);}
+
+/* -------------------- Header / Topbar -------------------- */
+.topbar{
+  position:sticky;top:0;z-index:120;
+  backdrop-filter: blur(6px);
+  background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+  border-bottom:1px solid rgba(0,0,0,0.04);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:10px 12px;
+}
+body.dark .topbar{
+  background: linear-gradient(180deg, rgba(6,10,18,0.8), rgba(6,10,18,0.6));
+  border-bottom-color: rgba(255,255,255,0.03);
+}
+
+/* left area */
+.topbar .left{display:flex;align-items:center;gap:10px}
+.logo{height:36px;width:auto;border-radius:8px}
+.app-title{font-weight:800;font-size:1.15rem;color:var(--primary);letter-spacing:0.2px}
+
+/* right controls */
+.right-controls{display:flex;align-items:center;gap:8px}
+.right-controls button{background:transparent;border:none;font-size:1.15rem;cursor:pointer;padding:6px;border-radius:8px;transition:var(--ease)}
+.right-controls button:hover{transform:translateY(-2px);}
+
+/* -------------------- Navigation (Option D) -------------------- */
+/* container */
+.nav{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  /* IMPORTANT: keep single line & allow scroll on small screens */
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none; /* firefox */
+  white-space:nowrap;
+  padding:6px 4px;
+}
+
+/* hide native scrollbar (webkit) */
+.nav::-webkit-scrollbar{height:6px}
+.nav::-webkit-scrollbar-track{background:transparent}
+.nav::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:999px}
+
+/* each tab */
+.tab-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  flex:0 0 auto; /* do not shrink */
+  background:transparent;border:none;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;
+  font-size:0.95rem;color:var(--muted);transition:var(--ease);
+  white-space:nowrap;
+}
+.tab-btn .tab-icon{font-size:1.1rem;display:inline-block;line-height:1}
+.tab-btn .tab-label{display:inline-block}
+.tab-btn:hover{background:rgba(0,0,0,0.04)}
+.tab-btn.active{background:linear-gradient(90deg,var(--primary),var(--primary-700));color:#fff;box-shadow:var(--shadow-md)}
+
+/* compact pill style for share/install in nav */
+.nav .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:var(--glass);border:1px solid rgba(0,0,0,0.04);font-weight:600}
+
+/* -------------------- Menu Modes (Option D Responsive) -------------------- */
+/* Desktop / Tablet (>=601px): show full text label */
+@media (min-width:601px){
+  .tab-btn{padding:9px 14px;font-size:0.98rem}
+  .tab-btn .tab-icon{font-size:1.15rem}
+  .tab-btn .tab-label{display:inline-block}
+}
+
+/* Mobile small (<=600px): show icon+short label, still scrollable */
+@media (max-width:600px){
+  .topbar{padding:8px 10px}
+  .app-title{font-size:1rem}
+  .tab-btn{padding:8px 10px;font-size:0.95rem}
+  /* slightly smaller labels */
+  .tab-btn .tab-label{font-size:0.88rem}
+}
+
+/* Very small phones (<=400px): icons-only */
+@media (max-width:400px){
+  .tab-btn{padding:8px;border-radius:10px;width:44px;height:44px;justify-content:center}
+  .tab-btn .tab-label{display:none}
+  .tab-btn .tab-icon{font-size:1.15rem}
+  .nav{gap:6px;padding:6px}
+  .app-title{display:none} /* conserve space - optional */
+}
+
+/* -------------------- Main Content / Tabs -------------------- */
+.content{padding:16px;animation:contentFade .36s ease;min-height:60vh}
+@keyframes contentFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* -------------------- Home / Wrapper -------------------- */
+.home-wrapper{
+  margin:0 auto;max-width:var(--max-width);background:var(--glass);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow-md);backdrop-filter: blur(8px) saturate(1.05);
+}
+
+/* headings */
+h2{font-size:1.6rem;color:var(--primary);text-align:center;margin-bottom:6px}
+.subtitle{color:var(--muted);text-align:center;margin-bottom:14px;font-weight:600}
+
+/* divider */
+.divider{border:none;border-top:1px solid rgba(0,0,0,0.06);margin:20px auto;width:86%}
+
+/* -------------------- Font Preview Grid -------------------- */
+.font-preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.font-card{background:linear-gradient(180deg, var(--card), rgba(255,255,255,0.96));padding:12px;border-radius:10px;box-shadow:var(--shadow-sm);text-align:center;transition:transform var(--transition),box-shadow var(--transition)}
+.font-card p{margin-top:8px;font-size:1rem}
+.font-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+
+/* -------------------- Editor / Panels -------------------- */
+.editor{display:flex;flex-direction:column;gap:16px}
+.panel{padding:14px;border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-sm);transition:var(--ease)}
+.left-panel{width:100%;min-width:240px}
+.right-panel{width:100%;display:flex;flex-direction:column;gap:12px;align-items:center}
+
+/* on wide screens show side-by-side */
+@media(min-width:901px){
+  .editor{flex-direction:row;align-items:flex-start}
+  .left-panel{flex:0 0 380px}
+  .right-panel{flex:1 1 auto}
+}
+
+/* inputs */
+label{display:block;font-size:0.9rem;color:var(--muted);font-weight:600;margin-top:12px}
+input,select,textarea,button{font-family:inherit}
+input,select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:var(--card);transition:box-shadow var(--transition),border-color var(--transition);font-size:0.95rem}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 6px 18px rgba(30,136,229,0.06)}
+textarea{min-height:88px;resize:vertical}
+
+/* rows */
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.row>*{flex:1}
+
+/* buttons */
+.btn{padding:8px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;transition:transform var(--transition),box-shadow var(--transition)}
+.btn.primary{background:linear-gradient(90deg,var(--primary),var(--primary-700));color:#fff}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--primary);font-weight:700}
+
+/* share button */
+.share-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,var(--primary),#3949ab);color:#fff;font-weight:700;box-shadow:0 6px 18px rgba(30,136,229,0.12)}
+.share-btn .share-icon{width:28px;height:28px;background:#fff;border-radius:8px;padding:2px;display:inline-flex;align-items:center;justify-content:center}
+
+/* install + floating CTA */
+.install-fab{position:fixed;right:16px;bottom:16px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:999;cursor:pointer;transform:translateY(0);transition:var(--ease)}
+.install-fab.hide{display:none}
+
+/* preview card */
+#previewCard{width:320px;max-width:100%;aspect-ratio:4/5;padding:18px;border-radius:12px;background:var(--card);box-shadow:var(--shadow-md);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#previewCard .p-title{font-size:1.6rem;font-weight:800;text-align:center}
+#previewCard .p-subtitle{font-size:1rem;color:var(--muted);text-align:center;margin-top:6px}
+#previewCard .p-body{margin-top:10px;text-align:center;line-height:1.5;padding:0 6px}
+
+/* watermark & date */
+.ak-created-date,.ak-watermark{position:absolute;bottom:10px;font-size:12px;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,0.7);box-shadow:0 2px 6px rgba(0,0,0,0.06);font-weight:600}
+.ak-created-date{left:12px}
+.ak-watermark{right:12px}
+body.dark .ak-created-date, body.dark .ak-watermark{background:rgba(0,0,0,0.45);color:var(--text)}
+
+/* -------------------- Gallery (Canva-style) -------------------- */
+#galleryGrid{padding:20px;display:flex;flex-direction:column;gap:18px;background:linear-gradient(180deg,#f9fbff 0%, #eef7ff 100%)}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:1200px;margin:0 auto;width:100%}
+.gallery-item{border-radius:16px;background:var(--card);overflow:hidden;box-shadow:var(--shadow-md);transition:transform var(--transition),box-shadow var(--transition);position:relative}
+.gallery-item img{display:block;width:100%;height:160px;object-fit:cover}
+.gallery-item .meta{padding:12px;display:flex;justify-content:space-between;align-items:flex-start}
+.card-overlay{position:absolute;top:10px;right:10px;display:flex;gap:8px;opacity:0;transform:translateY(-6px);transition:all 200ms ease}
+.gallery-item:hover{transform:translateY(-8px);box-shadow:0 18px 36px rgba(30,136,229,0.08)}
+.gallery-item:hover .card-overlay{opacity:1;transform:translateY(0)}
+.gallery-pagination{display:flex;justify-content:center;gap:10px;padding:12px;flex-wrap:wrap}
+
+/* -------------------- Panchangam Section -------------------- */
+#panchangam{padding:24px 12px;background:linear-gradient(180deg,#fffdf7 0%,#fff8e1 100%);display:flex;flex-direction:column;align-items:center;gap:18px}
+.panchangam-box{max-width:640px;width:100%;background:#fffaf3;border-radius:16px;padding:18px;border:1.5px solid #f9cc5c;box-shadow:var(--shadow-md)}
+.panchangam-box h2{color:#b57f00;font-size:1.5rem;margin-bottom:6px}
+.panchangam-card p{color:#4b3b2a;line-height:1.6}
+.panchang-nav .btn{background:#fff4d3;border:1px solid #f1c04c;color:#6d4c00;padding:8px 12px;border-radius:10px}
+.panchang-actions .btn.primary{background:linear-gradient(90deg,#f9d776,#f6b93b);color:#4a2e00}
+
+/* -------------------- Help / Features / Tip Box -------------------- */
+.features-section{margin-top:18px;padding:16px;border-radius:12px;background:var(--card);box-shadow:var(--shadow-sm)}
+.feature-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;list-style:none;padding:0}
+.feature-list li{background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,249,250,0.96));padding:12px;border-radius:10px;box-shadow:var(--shadow-sm);font-weight:600}
+.tip-box{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(135deg,#e8f4ff,#f3faff);text-align:center;box-shadow:var(--shadow-sm)}
+
+/* -------------------- Poster Info Toggle -------------------- */
+.poster-info-container{margin-bottom:12px;text-align:center}
+.info-toggle-btn{background:var(--primary);color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+.poster-info-box{background:linear-gradient(180deg, #f8faff, #ffffff);border-radius:12px;padding:12px;border:1px solid #dde5f1;box-shadow:var(--shadow-sm);max-height:420px;overflow:auto;transition:var(--transition)}
+.poster-info-box.hidden{max-height:0;padding:0 12px;opacity:0;overflow:hidden}
+
+/* -------------------- Voice Section -------------------- */
+.voice-section{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#startVoice,#stopVoice{padding:8px 10px;border-radius:10px;border:1px solid var(--primary);background:transparent;color:var(--primary);cursor:pointer}
+#startVoice.listening{background:#ff6f61;color:#fff;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,111,97,0.6)}70%{box-shadow:0 0 0 10px rgba(255,111,97,0)}100%{box-shadow:0 0 0 0 rgba(255,111,97,0)}}
+
+/* -------------------- Modals & Crop -------------------- */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);z-index:9999;padding:12px}
+.modal-content{width:100%;max-width:720px;background:var(--card);border-radius:14px;padding:18px;box-shadow:var(--shadow-md);overflow:auto}
+.modal.hidden{display:none}
+
+/* -------------------- Footer -------------------- */
+.footer{text-align:center;padding:18px;color:var(--muted);font-size:0.9rem}
+.footer strong{color:var(--primary)}
+
+/* -------------------- Misc / Responsive -------------------- */
+.go-top{position:fixed;right:24px;bottom:24px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:999}
+@media (max-width:900px){.editor{gap:12px}.right-panel{order:2}#previewCard{width:100%;max-width:420px}}
+@media (max-width:768px){.home-wrapper{padding:16px}h2{font-size:1.4rem}}
+@media (max-width:600px){
+  .container{padding:0 12px}
+  .studio-subtext{padding:12px}
+  .share-btn{width:100%}
+  .install-fab{right:12px;bottom:12px}
+}
+/* final tiny phone polish */
+@media (max-width:360px){
+  .logo{height:32px}
+  .tab-btn{padding:6px}
+  .tab-btn .tab-icon{font-size:1.05rem}
+}
+
+/* -------------------- Animations -------------------- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeUp 0.6s cubic-bezier(.2,.9,.2,1) both}
+/* ============================
+   Telugu Fonts — @font-face + usage
+   (Paste near top of your CSS)
+   ============================ */
+
+/* --- Telugu font faces (font-display: swap for best UX) --- */
+@font-face { font-family: 'Veturi'; src: url('fonts/Veturi.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Sirivennela'; src: url('fonts/Sirivennela.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'RamaneeyaWin'; src: url('fonts/RamaneeyaWin.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Ramaraja'; src: url('fonts/Ramaraja-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'RaviPrakash'; src: url('fonts/RaviPrakash.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'TenaliRamakrishna'; src: url('fonts/TenaliRamakrishna-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'TANA'; src: url('fonts/TANA.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Timmana'; src: url('fonts/TimmanaRegular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+
+/* --- Telugu font stack (priority list + safe fallback) --- */
+:root {
+  --telugu-stack: "Veturi", 
+  "Sirivennela", "TenaliRamakrishna", "Timmana", "Ramaraja",
+   "RamaneeyaWin", "RaviPrakash", "TANA", "Noto Sans Telugu",
+    "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* --- Utility classes to apply Telugu fonts deliberately --- */
+.telugu { font-family: var(--telugu-stack); font-feature-settings: "liga" 1; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+.telugu-strong { font-family: var(--telugu-stack); font-weight:700; }
+.telugu-sans { font-family: "Noto Sans Telugu", var(--telugu-stack); }
+
+/* --- Apply Telugu fonts in places that matter --- */
+/* Font preview cards for Telugu */
+.font-card[data-lang="te"], .font-card[data-lang="te"] .font-sample, .font-preview-grid .font-card[data-lang="te"] {
+  font-family: var(--telugu-stack);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+/* Editor language select: show Telugu sample text using Telugu fonts */
+.lang-select option[value="te"], select#language option[value="te"] {
+  font-family: var(--telugu-stack);
+}
+
+/* Preview card — if language is Telugu (you can toggle by adding .lang-te to preview wrapper) */
+.lang-te #previewCard, #previewCard.lang-te, .preview.lang-te {
+  font-family: var(--telugu-stack);
+}
+
+/* Poster info and panchangam — devotional Telugu sections */
+#panchangam, #panchangam * {
+  font-family: var(--telugu-stack) !important;
+}
+
+/* Ensure Telugu textarea/inputs render Telugu fonts when language set */
+/* Usage in JS: add class "telugu" to the input/textarea when language === 'te' */
+input.telugu, textarea.telugu, .editable.telugu {
+  font-family: var(--telugu-stack);
+  font-size: 0.98rem;
+}
+
+/* Small device readability tweaks for Telugu lines */
+@media (max-width:480px) {
+  .font-card[data-lang="te"] .font-sample { font-size: 0.98rem; }
+  .telugu, .telugu-sans { letter-spacing: 0.2px; line-height:1.55; }
+}
+
+/* Accessibility: explicit fallback if font files fail to load */
+@supports (font-family: "Veturi") {
+  /* nothing — feature used as hint; browsers will load @font-face above */
+}
+
+/* Optional: set the sitewide default for Devanagari/Sanskrit separately if needed */
+/* .devanagari { font-family: "Noto Serif Devanagari", "Tiro Devanagari Sanskrit", serif; } */
+
+
+/* ======================= End of CSS ======================= */
