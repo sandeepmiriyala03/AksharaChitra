@@ -1,64 +1,38 @@
 /* ==========================================================
-   🌸 AksharaChitra — create-section.js (v15.30)
+   🌸 AksharaChitra — create-section.js (v18.0)
    ----------------------------------------------------------
-   Features:
-   • Dynamic font switching by language
-   • Collapsible Poster Information (hidden by default)
-   • Smooth toggle animation + responsive design
-   • Real-time preview + font update
-   • Home language preview toggle
-   ----------------------------------------------------------
-   Author: Sandeep Miriyala
-   ========================================================== */
+   Upgrades:
+   • Title / Subtitle / Message Font Family selectors
+   • Live preview under each selector (3 preview boxes)
+   • Poster Info Box shows all 3 fonts individually
+   • Full language → font auto-loading for all selectors
+   • Smooth reactive update for previewCard also
+   ---------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
 
   const q = (sel) => document.querySelector(sel);
   const qa = (sel) => Array.from(document.querySelectorAll(sel));
 
-  // ---------------------- Element References ----------------------
+  // ---------------------- Inputs ----------------------
   const languageSelect = q("#language");
   const templateSelect = q("#templateSelect");
+
   const titleEl = q("#title");
   const subtitleEl = q("#subtitle");
   const messageEl = q("#message");
-  const fontFamilySelect = q("#fontFamily");
-  const previewCard = q("#previewCard");
-  const previewLangSelect = q("#previewLangSelect");
 
-  // ---------------------- Poster Info UI ----------------------
-  let infoBox = q("#posterInfoBox");
-  let toggleBtn = q("#toggleInfoBtn");
+  // Font selectors
+  const titleFontFamily = q("#titleFontFamily");
+  const subtitleFontFamily = q("#subtitleFontFamily");
+  const messageFontFamily = q("#fontFamily");
 
-  // Create container + button if missing
-  if (previewCard && !infoBox) {
-    const container = document.createElement("div");
-    container.className = "poster-info-container";
+  // Poster preview fields
+  const pTitle = q("#pTitle");
+  const pSubtitle = q("#pSubtitle");
+  const pMessage = q("#pMessage");
 
-    toggleBtn = document.createElement("button");
-    toggleBtn.id = "toggleInfoBtn";
-    toggleBtn.className = "info-toggle-btn";
-    toggleBtn.textContent = "🧾 Show Poster Info";
-
-    infoBox = document.createElement("div");
-    infoBox.id = "posterInfoBox";
-    infoBox.className = "poster-info-box hidden";
-    infoBox.innerHTML = `
-      <h3>🧾 Poster Information</h3>
-      <p id="infoLang">🌐 Language: —</p>
-      <p id="infoTemplate">🧩 Template: —</p>
-      <p id="infoFont">✍️ Font: —</p>
-      <p id="infoTitle">🖋️ Title: —</p>
-      <p id="infoSubtitle">🪶 Subtitle: —</p>
-      <p id="infoMessage">💬 Message: —</p>
-    `;
-
-    container.appendChild(toggleBtn);
-    container.appendChild(infoBox);
-    previewCard.parentNode.insertBefore(container, previewCard);
-  }
-
-  // --- Poster Info fields ---
+  // Info box
   const infoLang = q("#infoLang");
   const infoTemplate = q("#infoTemplate");
   const infoFont = q("#infoFont");
@@ -66,203 +40,156 @@ document.addEventListener("DOMContentLoaded", () => {
   const infoSubtitle = q("#infoSubtitle");
   const infoMessage = q("#infoMessage");
 
-  // --- Poster Preview text fields ---
-  const pTitle = q("#pTitle");
-  const pSubtitle = q("#pSubtitle");
-  const pMessage = q("#pMessage");
+  // ---------------------- Preview Boxes ----------------------
+  function insertPreviewBox(afterEl, id) {
+    if (!afterEl) return null;
+    let box = q(`#${id}`);
 
-  // --- Font preview ---
-  let fontPreview = q("#fontPreview");
-  if (!fontPreview && fontFamilySelect) {
-    fontPreview = document.createElement("p");
-    fontPreview.id = "fontPreview";
-    fontPreview.style.cssText = `
-      margin-top:8px;font-size:1.05rem;text-align:center;
-      background:#f1f4fa;border-radius:8px;padding:8px;
-      color:#222;font-family:'Poppins',sans-serif;`;
-    fontFamilySelect.parentNode.insertBefore(fontPreview, fontFamilySelect.nextSibling);
+    if (!box) {
+      box = document.createElement("div");
+      box.id = id;
+      box.style.cssText = `
+        margin-top:6px;
+        padding:8px;
+        background:var(--glass);
+        border-radius:8px;
+        box-shadow:var(--shadow-sm);
+        font-size:1rem;
+        text-align:center;
+      `;
+      afterEl.parentNode.insertBefore(box, afterEl.nextSibling);
+    }
+    return box;
   }
 
-  // ---------------------- Font Map ----------------------
-const FONT_MAP = {
-  en: [
-    "Arvo",
-    "Bebas Neue",
-    "Cinzel",
-    "Comfortaa",
-    "Courgette",
-    "DM Serif Display",
-    "Dancing Script",
-    "Exo 2",
-    "Fira Sans",
-    "Great Vibes",
-    "Inter",
-    "Josefin Sans",
-    "Lato",
-    "Lobster",
-    "Merriweather",
-    "Montserrat",
-    "Nunito",
-    "Open Sans",
-    "Orbitron",
-    "Oswald",
-    "Pacifico",
-    "Playfair Display",
-    "Poppins",
-    "Prompt",
-    "Quicksand",
-    "Raleway",
-    "Righteous",
-    "Roboto",
-    "Source Sans Pro",
-    "Ubuntu"
-  ],
+  const titlePreviewBox = insertPreviewBox(titleFontFamily, "titleFontPreview");
+  const subtitlePreviewBox = insertPreviewBox(subtitleFontFamily, "subtitleFontPreview");
+  const messagePreviewBox = insertPreviewBox(messageFontFamily, "messageFontPreview");
 
-  te: [
-    "Mandali",
-    "Noto Sans Telugu",
-    "NTR",
-    "Ramabhadra",
-    "Ramaneeya",
-    "Ramaraja",
-    "RaviPrakash",
-    "Sirivennela",
-    "TANA",
-    "TenaliRamakrishna-Regular",
-    "TimmanaRegular",
-    "Veturi"
-  ],
+  // ---------------------- FONT MAP ----------------------
+  const FONT_MAP = {
+    en: ["Arvo","Bebas Neue","Cinzel","Comfortaa","DM Serif Display","Inter",
+         "Lato","Lobster","Merriweather","Montserrat","Nunito","Open Sans",
+         "Playfair Display","Poppins","Prompt","Quicksand","Raleway",
+         "Roboto","Ubuntu"],
 
-  hi: [
-    "Hind",
-    "Karma",
-    "Noto Serif Devanagari"
-  ],
+    te: ["Mandali","Noto Sans Telugu","NTR","Ramabhadra","Ramaraja",
+         "RaviPrakash","Sirivennela","TimmanaRegular","Veturi"],
 
-  sa: [
-    "Noto Serif Devanagari",
-    "Tiro Devanagari Sanskrit"
-  ],
-
-  ta: [
-    "Noto Sans Tamil",
-    "Tiro Tamil"
-  ],
-
-  kn: [
-    "Noto Sans Kannada"
-  ],
-
-  ml: [
-    "Noto Sans Malayalam"
-  ],
-
-  or: [
-    "Noto Sans Oriya"
-  ]
-};
-
-
-  // ---------------------- Sample Text ----------------------
-  const SAMPLE_TEXT = {
-    en: "Create beautiful posters easily!",
-    te: "ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా 🎨",
-    hi: "सुंदर पोस्टर बनाएँ 🌸",
-    sa: "सौन्दर्यमयं पोस्टरं निर्मियताम् 🕉️",
-    ta: "அழகான போஸ்டரை உருவாக்குங்கள் 🎉",
-    kn: "ಅಂದವಾದ ಪೋಸ್ಟರ್ ರಚಿಸಿ 🌈",
-    ml: "അലങ്കാരമായ പോസ്റ്റർ സൃഷ്ടിക്കുക 🌺",
-    or: "ସୁନ୍ଦର ପୋଷ୍ଟର ତିଆରି କରନ୍ତୁ 💫"
+    hi: ["Hind","Karma","Noto Serif Devanagari"],
+    sa: ["Noto Serif Devanagari","Tiro Devanagari Sanskrit"],
+    ta: ["Noto Sans Tamil","Tiro Tamil"],
+    kn: ["Noto Sans Kannada"],
+    ml: ["Noto Sans Malayalam"],
+    or: ["Noto Sans Oriya"]
   };
 
-  // ---------------------- Utility ----------------------
+  // ---------------------- SAMPLE TEXT ----------------------
+  const SAMPLE_TEXT = {
+    en: "The quick brown fox jumps over the lazy dog",
+    te: "ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..",
+    hi: "उदाहरण: सुंदर पोस्टर टेक्स्ट",
+    sa: "उदाहरणम्: सुन्दरम् लेखनम्",
+    ta: "உதாரணம்: அழகான உரை",
+    kn: "ಉದಾಹರಣೆ: ಸುಂದರ ಪೋಸ್ಟರ್",
+    ml: "ഉദാഹരണം: മനോഹരമായ ടെക്സ്റ്റ്",
+    or: "ଉଦାହରଣ: ସୁନ୍ଦର ପୋଷ୍ଟର ଟେକ୍ସଟ୍"
+  };
+
+  // ---------------------- HELPERS ----------------------
   const safeSet = (el, txt) => el && (el.textContent = txt);
 
-  // ---------------------- Font Handling ----------------------
-  function updateFontList(lang) {
-    if (!fontFamilySelect) return;
-    const fonts = FONT_MAP[lang] || FONT_MAP.en;
-    fontFamilySelect.innerHTML = "";
-    fonts.forEach((font) => {
+  function fillFonts(selectEl, fonts) {
+    if (!selectEl) return;
+    selectEl.innerHTML = "";
+    fonts.forEach(font => {
       const opt = document.createElement("option");
       opt.value = font;
       opt.textContent = font;
-      fontFamilySelect.appendChild(opt);
+      selectEl.appendChild(opt);
     });
-    updateFontPreview();
   }
 
-  // ---------------------- Summary + Preview ----------------------
-  function updateSummaryAndPreview() {
-    const langText = languageSelect ? languageSelect.options[languageSelect.selectedIndex].text : "—";
-    const templateText = templateSelect ? templateSelect.value || "—" : "—";
-    const fontText = fontFamilySelect ? fontFamilySelect.value || "—" : "—";
-    const titleText = titleEl ? titleEl.value || "—" : "—";
-    const subtitleText = subtitleEl ? subtitleEl.value || "—" : "—";
-    const messageText = messageEl ? messageEl.value || "—" : "—";
+  // ---------------------- LOAD FONTS (ALL THREE SELECTORS) ----------------------
+  function loadFontsForLanguage(lang) {
+    const fonts = FONT_MAP[lang] || FONT_MAP["en"];
 
-    safeSet(infoLang, `🌐 Language: ${langText}`);
-    safeSet(infoTemplate, `🧩 Template: ${templateText}`);
-    safeSet(infoFont, `✍️ Font: ${fontText}`);
-    safeSet(infoTitle, `🖋️ Title: ${titleText}`);
-    safeSet(infoSubtitle, `🪶 Subtitle: ${subtitleText}`);
-    safeSet(infoMessage, `💬 Message: ${messageText}`);
+    fillFonts(titleFontFamily, fonts);
+    fillFonts(subtitleFontFamily, fonts);
+    fillFonts(messageFontFamily, fonts);
 
-    if (pTitle) pTitle.textContent = titleText === "—" ? "" : titleText;
-    if (pSubtitle) pSubtitle.textContent = subtitleText === "—" ? "" : subtitleText;
-    if (pMessage) pMessage.textContent = messageText === "—" ? "" : messageText;
-    if (previewCard && fontFamilySelect) previewCard.style.fontFamily = fontFamilySelect.value;
+    updateAllPreviews();
   }
 
-  // ---------------------- Font Preview ----------------------
-  function updateFontPreview() {
-    const lang = languageSelect ? languageSelect.value : "en";
-    const font = fontFamilySelect ? fontFamilySelect.value : "";
-    const sample = SAMPLE_TEXT[lang] || SAMPLE_TEXT.en;
-    if (fontPreview) {
-      fontPreview.textContent = sample;
-      fontPreview.style.fontFamily = font;
-      fontPreview.style.display = "block";
+  // ---------------------- UPDATE PREVIEW + INFO BOX ----------------------
+  function updateAllPreviews() {
+    const lang = languageSelect?.value || "en";
+
+    // font values
+    const titleFont = titleFontFamily?.value;
+    const subtitleFont = subtitleFontFamily?.value;
+    const messageFont = messageFontFamily?.value;
+
+    // text inputs
+    const t = titleEl?.value || "";
+    const s = subtitleEl?.value || "";
+    const m = messageEl?.value || "";
+
+    // poster box preview
+    if (pTitle)  pTitle.style.fontFamily = titleFont;
+    if (pSubtitle) pSubtitle.style.fontFamily = subtitleFont;
+    if (pMessage) pMessage.style.fontFamily = messageFont;
+
+    if (pTitle) pTitle.textContent = t;
+    if (pSubtitle) pSubtitle.textContent = s;
+    if (pMessage) pMessage.textContent = m;
+
+    // 🔥 preview boxes (below selectors)
+    if (titlePreviewBox) {
+      titlePreviewBox.textContent = t || SAMPLE_TEXT[lang];
+      titlePreviewBox.style.fontFamily = titleFont;
     }
-    updateSummaryAndPreview();
+
+    if (subtitlePreviewBox) {
+      subtitlePreviewBox.textContent = s || SAMPLE_TEXT[lang];
+      subtitlePreviewBox.style.fontFamily = subtitleFont;
+    }
+
+    if (messagePreviewBox) {
+      messagePreviewBox.textContent = m || SAMPLE_TEXT[lang];
+      messagePreviewBox.style.fontFamily = messageFont;
+    }
+
+    // 🔥 poster info box
+    safeSet(infoLang, `🌐 Language: ${languageSelect?.options[languageSelect.selectedIndex].text}`);
+    safeSet(infoTemplate, `🧩 Template: ${templateSelect?.value || "—"}`);
+    safeSet(infoFont,
+      `✍️ Fonts → 
+       Title: ${titleFont}, 
+       Subtitle: ${subtitleFont}, 
+       Message: ${messageFont}`
+    );
+    safeSet(infoTitle, `🖋️ Title: ${t || "—"}`);
+    safeSet(infoSubtitle, `🪶 Subtitle: ${s || "—"}`);
+    safeSet(infoMessage, `💬 Message: ${m || "—"}`);
   }
 
-  // ---------------------- Home Preview Grid ----------------------
-  function updateHomePreview(lang) {
-    const cards = qa("#fontPreviewGrid .font-card");
-    cards.forEach((card) => {
-      if (card.dataset.lang === lang) {
-        card.style.display = "block";
-        card.style.opacity = "1";
-      } else {
-        card.style.display = "none";
-        card.style.opacity = "0";
-      }
-    });
-  }
+  // ---------------------- EVENTS ----------------------
+  languageSelect?.addEventListener("change", () => {
+    loadFontsForLanguage(languageSelect.value);
+  });
 
-  // ---------------------- Info Box Toggle ----------------------
-  if (toggleBtn && infoBox) {
-    toggleBtn.addEventListener("click", () => {
-      const isHidden = infoBox.classList.toggle("hidden");
-      toggleBtn.textContent = isHidden ? "🧾 Show Poster Info" : "❌ Hide Poster Info";
-    });
-  }
+  templateSelect?.addEventListener("change", updateAllPreviews);
 
-  // ---------------------- Event Listeners ----------------------
-  if (languageSelect) languageSelect.addEventListener("change", () => updateFontList(languageSelect.value));
-  if (templateSelect) templateSelect.addEventListener("change", updateSummaryAndPreview);
-  if (fontFamilySelect) fontFamilySelect.addEventListener("change", updateFontPreview);
-  if (titleEl) titleEl.addEventListener("input", updateSummaryAndPreview);
-  if (subtitleEl) subtitleEl.addEventListener("input", updateSummaryAndPreview);
-  if (messageEl) messageEl.addEventListener("input", updateSummaryAndPreview);
+  [titleEl, subtitleEl, messageEl].forEach(el =>
+    el?.addEventListener("input", updateAllPreviews)
+  );
 
-  if (previewLangSelect) {
-    updateHomePreview(previewLangSelect.value);
-    previewLangSelect.addEventListener("change", (e) => updateHomePreview(e.target.value));
-  }
+  [titleFontFamily, subtitleFontFamily, messageFontFamily].forEach(sel =>
+    sel?.addEventListener("change", updateAllPreviews)
+  );
 
-  // ---------------------- Initialize ----------------------
-  if (languageSelect) updateFontList(languageSelect.value || "en");
-  updateSummaryAndPreview();
+  // ---------------------- INIT ----------------------
+  loadFontsForLanguage(languageSelect?.value || "en");
+  updateAllPreviews();
 });

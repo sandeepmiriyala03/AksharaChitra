@@ -236,10 +236,7 @@
       </div>
 
       <!-- ✍️ Font Family (GLOBAL for whole poster) -->
-      <div class="group">
-        <label>✍️ Font Family</label>
-        <select id="fontFamily" class="font-select-minimal"></select>
-      </div>
+     
 
       <!-- 🔖 Small Logo -->
       <div class="group">
@@ -255,7 +252,7 @@
         <input id="title" placeholder="Enter title..." />
 
         <!-- Title Font Family -->
-        <label>Font Family</label>
+        <label> Title Font Family</label>
         <select id="titleFontFamily" class="font-select-minimal"></select>
 
         <div class="row">
@@ -281,7 +278,7 @@
         <input id="subtitle" placeholder="Enter subtitle..." />
 
         <!-- Subtitle Font Family -->
-        <label>Font Family</label>
+        <label>Subtitle Font Family</label>
         <select id="subtitleFontFamily" class="font-select-minimal"></select>
 
         <div class="row">
@@ -298,6 +295,7 @@
           <label>Text Color</label><input type="color" id="subtitleColor" value="#111111" />
           <label>BG Color</label><input type="color" id="subtitleBg" value="#ffffff" />
         </div>
+        
       </div>
 
       <!-- 💬 Message -->
@@ -305,7 +303,10 @@
         <h3>💬 Message</h3>
 
         <textarea id="message" rows="3" placeholder="Type your message..."></textarea>
-
+          <div class="group">
+                <label>✍️ Font Family</label>
+                <select id="fontFamily" class="font-select-minimal"></select>
+      </div>
         <div class="row">
           <label>Font Size</label><input id="messageSize" type="number" value="20" min="10" max="60" />
           <label>Align</label>
@@ -321,7 +322,7 @@
           <label>Text Color</label><input type="color" id="messageColor" value="#111111" />
           <label>BG Color</label><input type="color" id="messageBg" value="#ffffff" />
         </div>
-
+    
         <!-- 🎙️ Voice Input Controls (NOW placed correctly) -->
         <div class="row voice-row">
           <button id="startVoice" class="btn ghost">🎤 Speak</button>
@@ -384,22 +385,9 @@
         <button id="shareBtn" class="btn ghost">📤 Share</button>
       </div>
     </div>
-
     <!-- RIGHT PANEL -->
     <div class="poster-info-container">
-      <button id="toggleInfoBtn" class="info-toggle-btn">🧾 Show Poster Info</button>
-
-      <div id="posterInfoBox" class="poster-info-box hidden">
-        <h3>🧾 Poster Information</h3>
-        <p id="infoLang">🌐 Language: —</p>
-        <p id="infoTemplate">🧩 Template: —</p>
-        <p id="infoFont">✍️ Font: —</p>
-        <p id="infoTitle">🖋️ Title: —</p>
-        <p id="infoSubtitle">🪶 Subtitle: —</p>
-        <p id="infoMessage">💬 Message: —</p>
-      </div>
-    </div>
-
+      
     <!-- LIVE POSTER PREVIEW -->
     <div id="previewCard" class="card">
       <div id="pSmallLogo" class="p-logo"></div>
