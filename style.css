@@ -1,10 +1,10 @@
 /* =========================================================
-   AksharaChitra — Ultra-Clean PRO v8.0 (main.css)
-   Single stylesheet — mobile-first, compact UI, site-wide dark
-   Author: Sandeep Miriyala 
+   AksharaChitra — Ultra PRO v9.0 (main.css)
+   Mobile-first, production-ready, Telugu fonts included
+   Author: Sandeep Miriyala (merged & cleaned)
    ========================================================= */
 
-/* ---------- 0) Root variables (Single source of truth) ---------- */
+/* -------------------- 0) Root variables -------------------- */
 :root{
   --accent: #00bfa6;
   --primary: #1e88e5;
@@ -26,9 +26,10 @@
   --focus-ring: rgba(30,136,229,0.12);
   --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
   --font-sans: "Poppins","Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  --telugu-stack: "Veturi","Sirivennela","TenaliRamakrishna","Timmana","Ramaraja","RamaneeyaWin","RaviPrakash","TANA","Noto Sans Telugu",system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
 }
 
-/* ---------- Dark mode (auto and forced) ---------- */
+/* Dark theme (prefers-color-scheme & .dark) */
 @media (prefers-color-scheme: dark){
   :root{
     --card: #0b1320;
@@ -52,7 +53,7 @@ body.dark{
   --focus-ring: rgba(30,136,229,0.14);
 }
 
-/* ---------- 1) Base reset & typography ---------- */
+/* -------------------- 1) Reset & base -------------------- */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
@@ -79,7 +80,7 @@ body{
 .small{font-size:0.85rem;color:var(--muted)}
 .mono{font-family:monospace}
 
-/* ---------- 2) Global UI primitives ---------- */
+/* -------------------- 2) Primitives -------------------- */
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-sm);transition:box-shadow var(--transition),transform var(--transition)}
 h1,h2,h3{margin:0 0 8px 0;line-height:1.15}
 h1{font-size:1.85rem}
@@ -90,7 +91,7 @@ p,li,label{color:var(--text);font-size:0.95rem}
 /* uniform section */
 .section{background:var(--glass);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-md);margin-bottom:var(--ui-gap)}
 
-/* ---------- 3) Topbar / navigation (mobile-first) ---------- */
+/* -------------------- 3) Topbar & nav -------------------- */
 .topbar{
   position:sticky;top:0;z-index:120;
   backdrop-filter:blur(6px);
@@ -124,19 +125,19 @@ body.dark .topbar{background:linear-gradient(180deg, rgba(6,10,18,0.85), rgba(6,
 .hamburger{display:none;background:transparent;border:none;font-size:26px;cursor:pointer;padding:6px;border-radius:8px}
 @media (max-width:768px){.hamburger{display:block}.desktop-nav{display:none}}
 
-/* ---------- 4) Mobile menu ---------- */
+/* mobile menu */
 .mobile-menu{display:none;position:absolute;top:58px;left:0;right:0;background:var(--card);border-radius:0 0 var(--radius) var(--radius);box-shadow:0 6px 24px rgba(2,6,23,0.12);padding:8px 0;z-index:999;transform-origin:top center;opacity:0;transform:translateY(-8px) scaleY(.98);pointer-events:none;transition:transform 180ms ease,opacity 180ms ease}
 .mobile-menu.open{display:block;opacity:1;transform:translateY(0) scaleY(1);pointer-events:auto}
 .mobile-menu .m-item{padding:12px 18px;text-align:left;font-size:16px;border:none;background:none;width:100%;cursor:pointer;color:var(--text)}
 .mobile-menu .m-item:hover{background:rgba(0,0,0,0.04)}
 
-/* ---------- 5) Content & tabs ---------- */
+/* -------------------- 4) Content & tabs -------------------- */
 .content{padding:16px;min-height:60vh;animation:contentFade .36s ease}
 @keyframes contentFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* ---------- 6) Home / hero / font preview ---------- */
+/* -------------------- 5) Home / font preview -------------------- */
 .home-wrapper{margin:0 auto;max-width:var(--max-width);background:var(--glass);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-md);backdrop-filter:blur(8px) saturate(1.05)}
 .subtitle{text-align:center;color:var(--muted);margin-bottom:14px;font-weight:600}
 .divider{border:none;border-top:1px solid rgba(2,6,23,0.06);margin:20px auto;width:86%}
@@ -148,13 +149,13 @@ body.dark .topbar{background:linear-gradient(180deg, rgba(6,10,18,0.85), rgba(6,
 .font-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
 .font-card.active{border:2px solid var(--primary);background:#eaf3ff}
 
-/* ---------- 7) Editor (left/right) and inputs ---------- */
+/* -------------------- 6) Editor & inputs -------------------- */
 .editor{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;justify-content:space-between;margin-top:12px}
 .panel{background:var(--card);border-radius:10px;padding:16px;box-shadow:0 8px 20px rgba(20,20,40,0.04);transition:var(--transition)}
 .left-panel{flex:1 1 350px;min-width:280px}
 .right-panel{flex:1 1 600px;min-width:360px;display:flex;flex-direction:column;align-items:center}
 
-/* Inputs (uniform) */
+/* Inputs */
 label{display:block;margin-top:10px;font-size:0.9rem;color:var(--muted);font-weight:600}
 input,select,textarea{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid rgba(2,6,23,0.06);font-size:0.95rem;background:var(--card);color:var(--text);transition:box-shadow var(--transition),border-color var(--transition)}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px var(--focus-ring)}
@@ -162,8 +163,7 @@ textarea{resize:vertical;min-height:80px}
 .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .row>*{flex:1}
 
-/* ---------- 8) Selects / compact dropdowns (special for home) ---------- */
-/* General custom-select look */
+/* select compact styles */
 select{
   appearance:none;
   -webkit-appearance:none;
@@ -172,22 +172,14 @@ select{
   background-repeat:no-repeat;
   background-position:right 10px center;
   background-size:12px;
-  padding-right:34px; /* leave space for arrow */
+  padding-right:34px;
 }
-
-/* Compact variant (home language preview, small lists) */
-/* =========================================================
-   Ultra-Compact Select v2.0
-   - Reduced size on desktop
-   - Extra-compact on mobile
-   ========================================================= */
-
 .lang-select.compact,
 .select-compact {
-  padding: 6px 10px;              /* reduced desktop padding */
+  padding: 6px 10px;
   border-radius: 8px;
-  min-width: 120px;               /* smaller desktop width */
-  font-size: 0.88rem;             /* smaller font */
+  min-width: 120px;
+  font-size: 0.88rem;
   color: var(--text);
   background: var(--card);
   border: 1px solid rgba(2,6,23,0.08);
@@ -196,13 +188,14 @@ select{
   transition: var(--transition);
 }
 
+/* select hover/focus */
 .lang-select.compact:hover,
 .select-compact:hover {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-/* 📱 Mobile (super compact) */
+/* compact mobile */
 @media (max-width: 480px) {
   .lang-select.compact,
   .select-compact {
@@ -213,7 +206,7 @@ select{
   }
 }
 
-/* 🖥️ Large Desktop (extra clean look) */
+/* large desktop compact */
 @media (min-width: 1024px) {
   .lang-select.compact,
   .select-compact {
@@ -224,7 +217,7 @@ select{
   }
 }
 
-/* ---------- 9) Buttons — uniform & responsive ---------- */
+/* -------------------- 7) Buttons -------------------- */
 .btn{
   padding:var(--btn-padding);
   border-radius:8px;
@@ -243,375 +236,172 @@ select{
 .btn.danger{background:#E53935;color:#fff}
 .btn.danger:hover{filter:brightness(.95)}
 
-/* CTA / Share */
-.share-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px 18px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, var(--primary), #3949ab);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.95rem;
-  box-shadow: 0 6px 18px rgba(30, 136, 229, 0.15);
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-  cursor: pointer;
-  user-select: none;
-}
-
-/* Desktop hover */
+/* share button */
+.share-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:10px 18px;border-radius:12px;background:linear-gradient(90deg,var(--primary),#3949ab);color:#fff;font-weight:600;font-size:0.95rem;box-shadow:0 6px 18px rgba(30,136,229,0.15);transition:transform 0.22s ease,box-shadow 0.22s ease;cursor:pointer;user-select:none}
 @media (hover: hover) and (pointer: fine) {
-  .share-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 26px rgba(30, 136, 229, 0.22);
-  }
+  .share-btn:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(30,136,229,0.22)}
 }
-
-/* Press animation (mobile + desktop) */
-.share-btn:active {
-  transform: scale(0.97);
-  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.18);
-}
-
-/* Mobile friendly */
-@media (max-width: 480px) {
-  .share-btn {
-    padding: 12px 20px;
-    border-radius: 14px;
-    font-size: 1rem;
-    gap: 12px;
-  }
-}
-.share-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 6px;           /* ⬅ gap between left/right buttons */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease;
-}
-
-/* Hover for desktop only */
+.share-btn:active{transform:scale(0.97);box-shadow:0 4px 10px rgba(30,136,229,0.18)}
+.share-icon{width:32px;height:32px;border-radius:10px;background:#fff;display:inline-flex;align-items:center;justify-content:center;margin:0 6px;box-shadow:0 2px 6px rgba(0,0,0,0.08);transition:transform 0.2s ease}
 @media (hover: hover) and (pointer: fine) {
-  .share-icon:hover {
-    transform: scale(1.08);
-    background: var(--accent);
-    color: #fff;
-  }
+  .share-icon:hover{transform:scale(1.08);background:var(--accent);color:#fff}
 }
-
-/* Mobile adjustments */
 @media (max-width: 480px) {
-  .share-icon {
-    width: 36px;
-    height: 36px;
-    margin: 0 8px;       /* bigger gap for finger touch */
-    border-radius: 12px; /* more padding */
-  }
+  .share-btn{padding:12px 20px;border-radius:14px;font-size:1rem;gap:12px}
+  .share-icon{width:36px;height:36px;margin:0 8px;border-radius:12px}
 }
 
-/* ---------- 10) Preview card ---------- */
+/* -------------------- 8) Preview card -------------------- */
 #previewCard{width:300px;aspect-ratio:4/5;padding:20px;border-radius:12px;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;margin:10px auto;box-shadow:0 8px 24px rgba(10,10,30,0.06);transition:var(--transition)}
 #previewCard:hover{box-shadow:0 12px 36px rgba(10,10,30,0.08)}
 .p-title{font-size:2rem;font-weight:700;margin-bottom:6px;text-align:center;color:var(--text)}
 .p-subtitle{font-size:1.1rem;color:var(--muted);margin-bottom:6px;text-align:center}
 .p-body{margin-top:10px;line-height:1.5;text-align:center;padding:0 6px;color:var(--text)}
 .p-logo img{width:56px;height:56px;border-radius:8px;object-fit:cover}
-
-/* watermark/date */
 .ak-created-date,.ak-watermark{position:absolute;bottom:10px;font-size:12px;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,0.75);box-shadow:0 2px 6px rgba(0,0,0,0.06);font-weight:600;color:var(--text)}
 .ak-created-date{left:12px}.ak-watermark{right:12px}
 body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);color:var(--text)}
 
-/* ---------- 11) Gallery / Studio (works with dynamic JS) ---------- */
-
-/* --------------------------------------------------
-   GALLERY MAIN WRAPPER 
--------------------------------------------------- */
-#galleryGrid {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background: linear-gradient(180deg, #f9fbff 0%, #eef7ff 100%);
-  width: 100%;
-  box-sizing: border-box;
+/* -------------------- 9) Gallery / Studio (mobile-first) -------------------- */
+/* Gallery main wrapper */
+#galleryGrid{
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  background:linear-gradient(180deg,#f9fbff 0%,#eef7ff 100%);
+  width:100%;
+  box-sizing:border-box;
+  /* Critical mobile/webview safety defaults */
+  min-height: 100px;
+  overflow: visible;
 }
 
-/* --------------------------------------------------
-   HEADER PANEL (Sort + Page Size + Search + Buttons)
--------------------------------------------------- */
-.gallery-header-panel {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  flex-wrap: wrap;
-  width: 100%;
+/* header panel */
+.gallery-header-panel{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  flex-wrap:wrap;
+  width:100%;
+}
+.gallery-total-badge{background:linear-gradient(90deg,var(--primary),var(--primary-700));color:#fff;padding:8px 14px;border-radius:999px;font-weight:700;font-size:0.95rem;box-shadow:0 5px 14px rgba(30,136,229,0.12)}
+.gallery-control{padding:10px 12px;border-radius:8px;border:1px solid rgba(2,6,23,0.08);background:var(--card);font-size:0.92rem;min-width:130px}
+.button-group{display:flex;flex-direction:column;gap:10px;width:180px}
+
+/* gallery grid */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px;
+  width:100%;
+  max-width:var(--max-width);
+  margin:0 auto;
+  /* Android / WebView fixes */
+  grid-auto-rows: auto;
+  min-height: 1px;
 }
 
-.gallery-total-badge {
-  background: linear-gradient(90deg, var(--primary), var(--primary-700));
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  box-shadow: 0 5px 14px rgba(30, 136, 229, 0.12);
+/* gallery card */
+.gallery-item{
+  border-radius:14px;
+  background:var(--card);
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+  transition:transform 0.25s ease, box-shadow 0.25s ease;
+  position:relative;
+  display:block;
+  visibility:visible;
+  opacity:1;
+}
+.gallery-item img{
+  display:block;
+  width:100%;
+  aspect-ratio:4/3;
+  object-fit:cover;
+  background:#f3f4f6;
+  height:auto;
+  min-height:40px; /* safety for webview */
 }
 
-.gallery-control {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(2, 6, 23, 0.08);
-  background: var(--card);
-  font-size: 0.92rem;
-  min-width: 130px;
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 180px;
-}
-
-/* --------------------------------------------------
-   GALLERY GRID 
--------------------------------------------------- */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* --------------------------------------------------
-   GALLERY CARD 
--------------------------------------------------- */
-.gallery-item {
-  border-radius: 14px;
-  background: var(--card);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  position: relative;
-}
-
-.gallery-item img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background: #f3f4f6;
-}
-
-/* Desktop hover */
+/* desktop hover */
 @media (hover: hover) and (pointer: fine) {
-  .gallery-item:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 32px rgba(2, 6, 23, 0.12);
-  }
-  .gallery-item:hover .card-overlay {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .gallery-item:hover{transform:translateY(-6px);box-shadow:0 14px 32px rgba(2,6,23,0.12)}
+  .gallery-item:hover .card-overlay{opacity:1;transform:translateY(0)}
 }
 
-/* --------------------------------------------------
-   OVERLAY BUTTONS
--------------------------------------------------- */
-.card-overlay {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: all 0.25s ease;
-  z-index: 5;
+/* overlay buttons */
+.card-overlay{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:flex;
+  gap:8px;
+  opacity:0;
+  transform:translateY(-6px);
+  transition:all 0.25s ease;
+  z-index:5;
+  /* On touch devices we will show overlay (see media queries) */
 }
-
-.card-overlay button {
-  background: rgba(255, 255, 255, 0.88);
-  border: none;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  transition: 0.2s ease;
+.card-overlay button{
+  background:rgba(255,255,255,0.88);
+  border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.08);transition:0.2s ease;
 }
+.card-overlay button:hover{background:var(--accent);color:#fff}
 
-.card-overlay button:hover {
-  background: var(--accent);
-  color: #fff;
-}
+/* pagination */
+.gallery-pagination{display:flex;justify-content:center;gap:10px;padding:14px;flex-wrap:wrap}
+.gallery-pagination .btn{border-radius:10px;padding:8px 14px;background:#eef1f6;color:#333;font-size:0.9rem}
+.gallery-pagination .btn.active{background:var(--accent);color:#fff;box-shadow:0 3px 8px rgba(0,191,166,0.35)}
+.gallery-pagination .btn:disabled{opacity:0.5;cursor:not-allowed}
 
-/* --------------------------------------------------
-   PAGINATION
--------------------------------------------------- */
-.gallery-pagination {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px;
-  flex-wrap: wrap;
-}
+/* small modifier */
+.delete-btn{background:transparent;border:none;color:#E53935;font-weight:700;font-size:0.95rem;padding:6px;border-radius:8px}
+.delete-btn:hover{background:rgba(229,57,53,0.06)}
 
-.gallery-pagination .btn {
-  border-radius: 10px;
-  padding: 8px 14px;
-  background: #eef1f6;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-.gallery-pagination .btn.active {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 3px 8px rgba(0,191,166,0.35);
-}
-
-.gallery-pagination .btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* --------------------------------------------------
-   RESPONSIVE — MOBILE & TABLET
--------------------------------------------------- */
+/* -------------------- 10) Responsive adjustments -------------------- */
 @media (max-width: 768px) {
-
-  /* Prevent grid collapse */
-  #galleryGrid {
-    display: block !important;
-    overflow: visible !important;
-    padding: 14px !important;
-  }
-
-  .gallery-header-panel {
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-  }
-
-  .gallery-header-panel > div {
-    width: 100%;
-  }
-
-  .gallery-control,
-  .gallery-header-panel input {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  /* Grid for tablets */
-  .gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 14px;
-  }
-
-  /* Image ratio for mobile/tablet */
-  .gallery-item img {
-    aspect-ratio: 3 / 4 !important;
-  }
-
-  /* Overlay always visible on touch devices */
-  .card-overlay {
-    opacity: 1 !important;
-    transform: none !important;
-  }
+  #galleryGrid{display:block !important;overflow:visible !important;padding:14px !important}
+  .gallery-header-panel{flex-direction:column;gap:16px;width:100%}
+  .gallery-header-panel > div{width:100%}
+  .gallery-control, .gallery-header-panel input{width:100% !important;min-width:0 !important}
+  .button-group{width:100%;flex-direction:column;gap:10px}
+  .gallery-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .gallery-item img{aspect-ratio:3/4 !important}
+  .card-overlay{opacity:1 !important;transform:none !important} /* Always visible on touch devices */
 }
 
-/* --------------------------------------------------
-   EXTRA SMALL MOBILE (≤ 480px)
--------------------------------------------------- */
 @media (max-width: 480px) {
-
-  #galleryGrid {
-    padding: 12px !important;
-  }
-
-  .gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px;
-  }
-
-  .gallery-item {
-    border-radius: 12px;
-  }
-
-  .gallery-total-badge {
-    font-size: 0.85rem;
-    padding: 6px 10px;
-  }
+  #galleryGrid{padding:12px !important}
+  .gallery-grid{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+  .gallery-item{border-radius:12px}
+  .gallery-item img{aspect-ratio:3/4}
+  .gallery-total-badge{font-size:0.85rem;padding:6px 10px}
 }
 
-/* --------------------------------------------------
-   DELETE BUTTON STYLE
--------------------------------------------------- */
-.delete-btn {
-  background: transparent;
-  border: none;
-  color: #E53935;
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 6px;
-  border-radius: 8px;
-}
-.delete-btn:hover {
-  background: rgba(229,57,53,0.06);
+/* extra small polish */
+@media (max-width: 360px){
+  .logo{height:32px}
+  .tab-btn{padding:6px}
+  .tab-btn .tab-icon{font-size:1.05rem}
 }
 
-/* ---------- 12) Modal / cropper / panchangam / voice ---------- */
+/* -------------------- 11) Modal / cropper / voice -------------------- */
 .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);z-index:9999;padding:12px}
-
-/* ===== Compact Modal v2.0 ===== */
-.modal-content{
-  width: 100%;
-  max-width: 720px;        /* reduced from 920 → 720 */
-  background: var(--card);
-  border-radius: 10px;      /* reduced from 14px → 10px */
-  padding: 14px;            /* reduced from 18px → 14px */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.28);  /* slightly softer */
-  overflow: auto;
-  animation: fadeUp 0.35s ease both;
-}
-
-/* even more compact on small screens */
-@media (max-width: 480px) {
-  .modal-content{
-    max-width: 92%;
-    border-radius: 8px;
-    padding: 12px;
-  }
-}
-
+.modal-content{width:100%;max-width:720px;background:var(--card);border-radius:10px;padding:14px;box-shadow:var(--shadow-md);overflow:auto;animation:fadeUp .35s ease both}
 .modal.hidden{display:none}
-#panchangam{padding:2rem 1rem;background:linear-gradient(180deg,#fffdf7 0%,#fff8e1 100%);font-family:"Noto Sans Telugu","Mandali",sans-serif;min-height:60vh;display:flex;flex-direction:column;align-items:center;gap:18px}
+#panchangam{padding:2rem 1rem;background:linear-gradient(180deg,#fffdf7 0%,#fff8e1 100%);font-family:var(--telugu-stack);min-height:60vh;display:flex;flex-direction:column;align-items:center;gap:18px}
 #startVoice,#stopVoice{border:1px solid var(--primary);background:transparent;border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--primary);transition:all 0.3s ease}
 #startVoice.listening{background:#ff6f61;color:#fff;animation:pulse 1.2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,111,97,0.6)}70%{box-shadow:0 0 0 10px rgba(255,111,97,0)}100%{box-shadow:0 0 0 0 rgba(255,111,97,0)}}
 
-/* ---------- 13) Footer & floating actions ---------- */
+/* -------------------- 12) Footer / FABs -------------------- */
 .footer{text-align:center;padding:18px;color:var(--muted);font-size:0.9rem}
 .install-fab{position:fixed;right:16px;bottom:16px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:999;cursor:pointer}
 .go-top{position:fixed;right:24px;bottom:24px;background:var(--accent);color:#fff;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:999}
 
-/* ---------- 14) Responsive tweaks & compacting ---------- */
+/* -------------------- 13) Responsive layout tweaks -------------------- */
 @media (min-width:901px){
   .editor{flex-wrap:nowrap;justify-content:flex-start}
   .left-panel{flex:0 0 380px}
@@ -641,365 +431,199 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   .home-wrapper{padding:14px}
 }
 
-/* ---------- 15) small helpers ---------- */
+/* -------------------- 14) Small helpers & animations -------------------- */
 .fade-in{animation:fadeUp .6s cubic-bezier(.2,.9,.2,1) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
+/* -------------------- 15) Poster Info Toggle + helpers -------------------- */
+.info-toggle-btn{width:100%;padding:10px 14px;border:none;border-radius:8px;background:linear-gradient(90deg,var(--primary),var(--primary-700));color:#fff;font-size:0.9rem;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(30,136,229,0.12);transition:var(--transition);text-align:center;margin-bottom:10px}
+.info-toggle-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(30,136,229,0.2)}
+.poster-info-box{background:var(--card);padding:14px;border-radius:10px;box-shadow:var(--shadow-md);margin-bottom:14px;animation:fadeUp .35s ease both}
+.poster-info-box h3{margin-bottom:10px;font-size:1rem;font-weight:700;color:var(--primary)}
+.poster-info-box p{margin:6px 0;font-size:0.9rem;line-height:1.45;color:var(--text)}
+.poster-info-box.hidden{display:none}
+@media (max-width:480px){.info-toggle-btn{padding:8px 12px;font-size:0.85rem}.poster-info-box{padding:12px}}
 
-/* ============================
-   Poster Info Toggle Button
-   ============================ */
-.info-toggle-btn {
-  width: 100%;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(90deg, var(--primary), var(--primary-700));
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(30,136,229,0.12);
-  transition: var(--transition);
-  text-align: center;
-  margin-bottom: 10px;
+/* -------------------- 16) Font-face (Telugu & others) -------------------- */
+/* Telugu font faces (ensure these files exist at /fonts/*.ttf) */
+@font-face { font-family: 'Veturi'; src: url('fonts/Veturi.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Sirivennela'; src: url('fonts/Sirivennela.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'RamaneeyaWin'; src: url('fonts/RamaneeyaWin.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Ramaraja'; src: url('fonts/Ramaraja-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'RaviPrakash'; src: url('fonts/RaviPrakash.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'TenaliRamakrishna'; src: url('fonts/TenaliRamakrishna-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'TANA'; src: url('fonts/TANA.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Timmana'; src: url('fonts/TimmanaRegular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+
+/* telugu stack utility classes */
+.telugu { font-family: var(--telugu-stack); font-feature-settings: "liga" 1; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+.telugu-strong { font-family: var(--telugu-stack); font-weight:700; }
+.telugu-sans { font-family: "Noto Sans Telugu", var(--telugu-stack); }
+
+/* apply to preview areas / inputs when language = te */
+.font-card[data-lang="te"], .font-card[data-lang="te"] .font-sample, .font-preview-grid .font-card[data-lang="te"] { font-family: var(--telugu-stack); font-size: 1.05rem; line-height: 1.5; }
+.lang-select option[value="te"], select#language option[value="te"] { font-family: var(--telugu-stack); }
+.lang-te #previewCard, #previewCard.lang-te, .preview.lang-te { font-family: var(--telugu-stack); }
+#panchangam, #panchangam * { font-family: var(--telugu-stack) !important; }
+input.telugu, textarea.telugu, .editable.telugu { font-family: var(--telugu-stack); font-size: 0.98rem; }
+
+/* small device tweaks for Telugu */
+@media (max-width:480px) {
+  .font-card[data-lang="te"] .font-sample { font-size: 0.98rem; }
+  .telugu, .telugu-sans { letter-spacing: 0.2px; line-height:1.55; }
 }
 
-.info-toggle-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(30,136,229,0.2);
-}
+/* -------------------- 17) Accessibility extras -------------------- */
+/* high contrast focus for keyboard users */
+:focus-visible{outline:3px solid rgba(30,136,229,0.18);outline-offset:2px}
 
-/* ============================
-   Poster Info Box
-   ============================ */
-.poster-info-box {
-  background: var(--card);
-  padding: 14px;
-  border-radius: 10px;
-  box-shadow: var(--shadow-md);
-  margin-bottom: 14px;
-  animation: fadeUp 0.35s ease both;
-}
+/* -------------------- 18) Final hardening for Android WebView & Chrome -------------------- */
+/* These are the critical rules to prevent gallery blanking on Android webview / app */
+#galleryGrid{min-height:100px !important;display:block !important;overflow:visible !important}
+.gallery-grid{grid-auto-rows:auto !important;min-height:1px !important}
+.gallery-item{display:block !important;visibility:visible !important;opacity:1 !important}
+.gallery-item img{height:auto !important;min-height:40px !important;object-fit:cover !important}
+.card-overlay{opacity:1 !important;transform:none !important}
+/* ===========================================================
+   🟦 PRO Crop Modal — Universal Responsive CSS (All Devices)
+   =========================================================== */
 
-.poster-info-box h3 {
-  margin-bottom: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.poster-info-box p {
-  margin: 6px 0;
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: var(--text);
-}
-
-/* Hidden state */
-.poster-info-box.hidden {
-  display: none;
-}
-
-/* Responsive tweak */
-@media (max-width: 480px) {
-  .info-toggle-btn {
-    padding: 8px 12px;
-    font-size: 0.85rem;
-  }
-  .poster-info-box {
-    padding: 12px;
-  }
-}
-
-/* ============================================================
-   🔥 Missing Classes Pack — Ultra-Clean PRO v8.5 (Responsive)
-   ============================================================ */
-
-/* -------------------------
-   1) Info Toggle Button
-   ------------------------- */
-.info-toggle-btn {
-  width: 100%;
-  background: var(--card);
-  border: 1px solid rgba(2,6,23,0.08);
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--primary);
-  cursor: pointer;
-  transition: var(--transition);
-  text-align: center;
-  display: block;
-}
-
-.info-toggle-btn:hover {
-  background: rgba(30,136,229,0.06);
-  transform: translateY(-1px);
-}
-
-.poster-info-box {
-  background: var(--glass);
-  padding: 14px;
-  border-radius: 10px;
-  box-shadow: var(--shadow-sm);
-  margin-top: 10px;
-  animation: fadeUp 0.3s ease;
-}
-
-/* Mobile Compact */
-@media (max-width: 480px) {
-  .info-toggle-btn {
-    font-size: 0.85rem;
-    padding: 8px 10px;
-  }
-}
-
-/* -------------------------
-   2) Language Select (compact dropdown)
-   ------------------------- */
-.lang-select.compact {
-  padding: 6px 8px;
-  font-size: 0.85rem;
-  background: var(--card);
-  border-radius: 8px;
-  border: 1px solid rgba(2,6,23,0.06);
-  min-width: 130px;
-  width: 100%;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.lang-select.compact:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--focus-ring);
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-  .lang-select.compact {
-    font-size: 0.8rem;
-    padding: 6px;
-    min-width: 100px;
-  }
-}
-
-/* -------------------------
-   3) Font Output Preview Text
-   ------------------------- */
-#fontOutput {
-  margin-top: 12px;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--primary);
-  padding: 8px 10px;
-}
-
-/* Mobile font scaling */
-@media (max-width: 480px) {
-  #fontOutput {
-    font-size: 1rem;
-    padding: 6px;
-  }
-}
-
-/* -------------------------
-   4) Font Select Minimal
-   ------------------------- */
-.font-select-minimal {
-  padding: 8px 10px;
-  font-size: 0.9rem;
-  border-radius: 8px;
-  border: 1px solid rgba(2,6,23,0.08);
-  background: var(--card);
-  width: 100%;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.font-select-minimal:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--focus-ring);
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-  .font-select-minimal {
-    padding: 6px 8px;
-    font-size: 0.85rem;
-  }
-}
-
-/* -------------------------
-   5) Read Message Button
-   ------------------------- */
-#readMessageBtn {
-  padding: var(--btn-padding);
-  background: linear-gradient(90deg, var(--primary), var(--primary-700));
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: var(--btn-font-size);
-  font-weight: 700;
-  cursor: pointer;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  display: inline-flex;
-  gap: 6px;
-  transition: var(--transition);
-}
-
-#readMessageBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 26px rgba(30,136,229,0.16);
-}
-
-#readMessageBtn:active {
-  transform: scale(0.96);
-}
-
-/* Mobile Compact */
-@media (max-width: 480px) {
-  #readMessageBtn {
-    padding: 10px;
-    font-size: 0.88rem;
-  }
-}
-/* ============================================================
-   🔥 PRO Crop Modal (Isolated Styles)
-   ============================================================ */
-
-/* Modal backdrop */
-#cropModal.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-}
-
-/* Box */
 .crop-modal-content {
-  background: var(--card);
   width: 100%;
-  max-width: 520px;
+  max-width: 720px;
+  background: var(--card);
   border-radius: 14px;
-  padding: 14px 16px;
+  padding: 16px;
   box-shadow: var(--shadow-md);
+  overflow-y: auto;
+  overflow-x: hidden;
   animation: fadeUp .35s ease both;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  position: relative;
+  gap: 14px;
+  max-height: 90vh;           /* Prevents overflow on Android */
+  -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
 }
 
-/* Header */
-.crop-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(2,6,23,0.06);
-  padding-bottom: 8px;
-}
-
-.crop-modal-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-/* Close button (top right) */
-.crop-close-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.3rem;
-  color: var(--muted);
-  cursor: pointer;
-  transition: var(--transition);
-  padding: 4px 6px;
-}
-
-.crop-close-btn:hover {
-  color: var(--primary);
-  transform: scale(1.1);
-}
-
-/* Image */
-.crop-image-wrapper {
-  max-height: 60vh;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.crop-image-wrapper img {
-  width: 100%;
-  border-radius: 10px;
-  display: block;
-}
-
-/* Action buttons */
-.crop-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  border-top: 1px solid rgba(2,6,23,0.08);
-  padding-top: 10px;
-}
-
-/* Buttons — isolated for crop modal only */
-.crop-btn {
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition);
-  font-size: 0.95rem;
-}
-
-.crop-btn.primary {
-  background: linear-gradient(90deg, var(--primary), var(--primary-700));
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(30,136,229,0.16);
-}
-
-.crop-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(30,136,229,0.24);
-}
-
-.crop-btn.ghost {
-  background: transparent;
-  border: 1px solid rgba(2,6,23,0.12);
-  color: var(--text);
-}
-
-.crop-btn.ghost:hover {
-  background: rgba(30,136,229,0.06);
-}
-
-/* Mobile Responsive */
-@media (max-width:480px) {
+/* -----------------------------
+   📱 Tablets (≤ 900px)
+------------------------------ */
+@media (max-width: 900px) {
   .crop-modal-content {
-    max-width: 95%;
-    padding: 12px;
-  }
-  .crop-actions {
-    flex-direction: column;
-  }
-  .crop-btn {
-    width: 100%;
+    max-width: 640px;
+    padding: 14px;
+    border-radius: 12px;
   }
 }
 
-/* =========================================================
-   End of main.css — Ultra-Clean PRO v8.0
-   Notes:
-    - Mobile-first, responsive design with media queries
-    - Uses CSS variables for easy theming and maintenance   
+/* -----------------------------
+   📱 Mobile (≤ 600px)
+------------------------------ */
+@media (max-width: 600px) {
+  .crop-modal-content {
+    max-width: 92%;
+    padding: 12px;
+    border-radius: 10px;
+    max-height: 88vh;     /* Fix for Android keyboard resize */
+  }
+}
+
+/* -----------------------------
+   📱 Small Phones (≤ 480px)
+------------------------------ */
+@media (max-width: 480px) {
+  .crop-modal-content {
+    max-width: 94%;
+    padding: 10px;
+    border-radius: 10px;
+    gap: 12px;
+  }
+}
+
+/* -----------------------------
+   📱 Ultra-Small Phones (≤ 360px)
+------------------------------ */
+@media (max-width: 360px) {
+  .crop-modal-content {
+    max-width: 96%;
+    padding: 8px;
+    border-radius: 8px;
+    gap: 10px;
+  }
+}
+
+/* -----------------------------
+   📱 Landscape rotation fix
+------------------------------ */
+@media (max-height: 480px) {
+  .crop-modal-content {
+    max-height: 80vh;
+    padding: 10px;
+    border-radius: 10px;
+  }
+}
+.preview-heading {
+  text-align: center;
+  margin-bottom: 14px;
+  font-size: 1.25rem;          /* Base for desktop */
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.3px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  line-height: 1.4;
+}
+
+/* 🌙 Dark mode */
+body.dark .preview-heading {
+  border-bottom-color: rgba(255,255,255,0.12);
+}
+
+/* 📱 MOBILE — best readability on small screens */
+@media (max-width: 600px) {
+  .preview-heading {
+    font-size: 1.1rem;     /* slightly smaller */
+    margin-bottom: 12px;
+    padding-bottom: 5px;
+  }
+}
+
+/* 📱 Small mobile screens (iPhone SE, low-end Android) */
+@media (max-width: 380px) {
+  .preview-heading {
+    font-size: 1rem;       /* compact text */
+    letter-spacing: 0.2px;
+  }
+}
+
+/* 📲 TABLETS (Portrait + Landscape) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .preview-heading {
+    font-size: 1.22rem;
+    padding-bottom: 7px;
+  }
+}
+
+/* 🖥️ LARGE DESKTOPS */
+@media (min-width: 1440px) {
+  .preview-heading {
+    font-size: 1.35rem;
+  }
+}
+
+/* 📱 SAFE AREA (iOS notch devices) */
+@supports(padding: env(safe-area-inset-top)) {
+  .preview-heading {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+
+/* -------------------- 19) End of file -------------------- */
+/* Notes:
+   - Keep fonts under /fonts/ as referenced above.
+   - The gallery safety rules (section 18) are intentionally aggressive (important/!important)
+     to override older or conflicting styles that cause Android WebView / Chrome blank gallery.
+   - If you prefer less aggressive overrides, we can prune the !important flags after testing.
+*/

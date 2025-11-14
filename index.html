@@ -26,7 +26,7 @@
  
 <header class="topbar">
   <div class="left">
-    <img src="logo.png" alt="AksharaChitra" class="logo" />
+    <img src="logo.png" alt="AksharaChitra" class="logo"  loading="lazy"/>
     <span class="app-title">AksharaChitra</span>
   </div>
 
@@ -131,7 +131,7 @@
           🇮🇳 <strong>മലയാളം</strong>
           <p class="font-sample">അലങ്കാരമായ പോസ്റ്റർ സൃഷ്ടിക്കുക 🌺</p>
         </div>
-        <div class="font-card" data-lang="or" style="font-family:'Noto Sans Oriya UI family';">
+        <div class="font-card" data-lang="or" style="font-family:'Noto Sans Oriya';">
           🇮🇳 <strong>ଓଡ଼ିଆ</strong>
           <p class="font-sample">ସୁନ୍ଦର ପୋଷ୍ଟର ତିଆରି କରନ୍ତୁ 💫</p>
         </div>
@@ -155,14 +155,12 @@
       <div class="cta-buttons">
         <button id="openCreateBtn" class="btn primary large pulse">🎨 Start Creating</button>
         <button id="shareProjectBtn" class="share-btn">
-          <img src="/icons/icon-72x72.png" alt="AksharaChitra" class="share-icon" />
+          <img src="/icons/icon-72x72.png" loading="lazy" alt="AksharaChitra" class="share-icon" />
           <span>Share</span>
         </button>
       </div>
     </div>
-
     <hr class="divider" />
-
     <!-- 📘 HELP -->
     <div class="help-section fade-in">
       <h2>📘 Quick Help Guide</h2>
@@ -381,7 +379,8 @@
     </div>
     <!-- RIGHT PANEL -->
     <div class="poster-info-container">
-      
+ <h3 class="preview-heading">🖼️ AksharaChitra Poster Preview</h3>
+
     <!-- LIVE POSTER PREVIEW -->
     <div id="previewCard" class="card">
       <div id="pSmallLogo" class="p-logo"></div>
@@ -392,6 +391,7 @@
       <div id="pQR" class="p-qr"></div>
     </div>
 
+    </div>
   </div>
 </section>
     <!-- 💾 GALLERY -->
@@ -411,7 +411,7 @@
     <!-- 💌 FEEDBACK -->
     <section id="feedback" class="tab-content">
       <h2> Feedback</h2>
-      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSccI8Qw2LrZ1vytgsVZiFWCTTJOLMl1A0j2s-WSzERd3Qmhjg/viewform?usp=publish-editor"
+      <iframe  title="Feedback Form"  src="https://docs.google.com/forms/d/e/1FAIpQLSccI8Qw2LrZ1vytgsVZiFWCTTJOLMl1A0j2s-WSzERd3Qmhjg/viewform?usp=publish-editor"
         style="width:100%;height:520px;border:none;border-radius:10px;"></iframe>
     </section>
 
@@ -427,8 +427,8 @@
   <!-- Floating Buttons -->
   <button id="installBtn" class="install-fab">📲</button>
   <button id="goTopBtn" class="go-top">⬆️</button>
-  <!-- ✂ Crop Modal -->
- <!-- 🌟 PRO Crop Modal -->
+
+<!-- 🌟 PRO Crop Modal -->
 <div id="cropModal" class="modal hidden">
   <div class="crop-modal-content">
 
@@ -438,9 +438,9 @@
       <button class="crop-close-btn" id="closeCropTop">✖</button>
     </div>
 
-    <!-- Image area -->
+    <!-- Image Area -->
     <div class="crop-image-wrapper">
-      <img id="cropImage" src="" alt="Crop Image" />
+      <img id="cropImage" src="" alt="Crop Image" loading="lazy" />
     </div>
 
     <!-- Action Buttons -->
@@ -452,7 +452,7 @@
   </div>
 </div>
 
-  </div>
+
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js" defer></script>
