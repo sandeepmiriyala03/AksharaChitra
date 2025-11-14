@@ -789,507 +789,232 @@ if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", () => sharePoster(true));
     }
   });
 
-  // Gallery rendering
+/* ============================================================
+   FINAL — RESPONSIVE, CLEAN & OPTIMIZED GALLERY RENDER FUNCTION
+   Works perfectly with your existing HTML structure.
+   ============================================================ */
 async function renderIndexedGallery({
   sortBy = "newest",
   filter = "",
   page = 1,
-  pageSize = 10,
+  pageSize = 12,
 } = {}) {
-const galleryContainer = document.getElementById("galleryContainer");
-if (!galleryContainer) return;
 
+  const galleryContainer = document.getElementById("galleryContainer");
+  if (!galleryContainer) return;
 
-  // --- UI: clear + loading
-  galleryContainer.innerHTML = "";
-  const loading = document.createElement("div");
-  loading.className = "muted";
-  loading.textContent = "Loading creations…";
-  galleryContainer.appendChild(loading);
+  // Show loading spinner
+  galleryContainer.innerHTML = `<div class="gallery-loading">Loading…</div>`;
 
-  // --- fetch all items
+  // Fetch all posters
   let all = await getAllFromDB();
   all = all || [];
-
-  // --- total header
   const total = all.length;
-  galleryContainer.innerHTML = ""; // clear loader
 
+  // Reset container
+  galleryContainer.innerHTML = "";
+
+  /* -----------------------------------------------------------
+     ⬆ Header Panel
+  ------------------------------------------------------------ */
   const header = document.createElement("div");
   header.className = "gallery-header-panel";
-  header.style.display = "flex";
-  header.style.justifyContent = "space-between";
-  header.style.alignItems = "center";
-  header.style.gap = "12px";
-  header.style.marginBottom = "12px";
 
-  const leftGroup = document.createElement("div");
-  leftGroup.style.display = "flex";
-  leftGroup.style.alignItems = "center";
-  leftGroup.style.gap = "8px";
+  header.innerHTML = `
+    <span class="gallery-total-badge">Total: ${total}</span>
 
- const totalBadge = document.createElement("div");
-totalBadge.setAttribute("aria-live", "polite");
-totalBadge.className = "gallery-total-badge";
-totalBadge.textContent = ` Total Creations: ${total}`;
+    <select id="sortSelect" class="gallery-control">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="name-asc">A → Z</option>
+      <option value="name-desc">Z → A</option>
+    </select>
 
+    <select id="pageSizeSelect" class="gallery-control">
+      <option value="6">6 per page</option>
+      <option value="12" selected>12 per page</option>
+      <option value="20">20 per page</option>
+    </select>
 
-  // Page size select (5,10,20,50)
-  const pageSizeSel = document.createElement("select");
-  pageSizeSel.className = "gallery-control";
-  pageSizeSel.innerHTML = `<option value="5">5 / page</option>
-                           <option value="10">10 / page</option>
-                           <option value="20">20 / page</option>
-                           <option value="50">50 / page</option>`;
-  pageSizeSel.value = String(pageSize);
+    <input id="galleryFilter" class="gallery-control" placeholder="Filter by title…">
 
-  // Sort select
-  const sortSel = document.createElement("select");
-  sortSel.className = "gallery-control";
-  sortSel.innerHTML = `
-    <option value="newest">Sort: Newest</option>
-    <option value="oldest">Sort: Oldest</option>
-    <option value="name-asc">Sort: A → Z</option>
-    <option value="name-desc">Sort: Z → A</option>
+    <div class="button-group">
+      <button id="refreshGallery" class="btn ghost small">🔄 Refresh</button>
+      <button id="downloadAll" class="btn primary small">⬇ Download All</button>
+      <button id="clearAll" class="btn danger small">🗑 Clear All</button>
+    </div>
   `;
-  sortSel.value = sortBy;
 
-  leftGroup.appendChild(totalBadge);
-  leftGroup.appendChild(sortSel);
-  leftGroup.appendChild(pageSizeSel);
-
-  const rightGroup = document.createElement("div");
-  rightGroup.style.display = "flex";
-  rightGroup.style.alignItems = "center";
-  rightGroup.style.gap = "8px";
-
-  // Filter input
-  const filterInput = document.createElement("input");
-  filterInput.placeholder = "Filter by title…";
-  filterInput.className = "gallery-control";
-  filterInput.style.minWidth = "200px";
-  filterInput.value = filter;
-
-  // Refresh + Delete All buttons
-  const refreshBtn = document.createElement("button");
-  refreshBtn.className = "btn ghost small";
-  refreshBtn.textContent = "🔄 Refresh";
-  refreshBtn.addEventListener("click", () => renderIndexedGallery({ sortBy, filter: filterInput.value, page, pageSize }));
-
-  const deleteAllBtn = document.createElement("button");
-  deleteAllBtn.className = "btn danger small";
-  deleteAllBtn.textContent = "🗑️ Clear All";
-  deleteAllBtn.addEventListener("click", async () => {
-    if (!confirm("Delete ALL saved posters? This cannot be undone.")) return;
-    try {
-      const dbRef = await openDB();
-      const tx = dbRef.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).clear();
-      tx.oncomplete = () => {
-        showToast("🗑️ All creations cleared", "#E53935");
-        renderIndexedGallery({ sortBy, filter: filterInput.value, page: 1, pageSize: Number(pageSizeSel.value) });
-      };
-      tx.onerror = () => showToast("❌ Could not clear gallery", "#E53935");
-    } catch (err) {
-      console.error("delete all failed", err);
-      showToast("❌ Could not clear gallery", "#E53935");
-    }
-  });
-// 🔥 Download All button
-    const downloadAllBtn = document.createElement("button");
-    downloadAllBtn.className = "btn primary small";
-    downloadAllBtn.textContent = "⬇ Download All";
-    downloadAllBtn.addEventListener("click", () => downloadAllAsZip(all));
-  rightGroup.appendChild(filterInput);
-
-      // Make the button group vertical
-      rightGroup.style.display = "flex";
-      rightGroup.style.flexDirection = "column";
-      rightGroup.style.alignItems = "stretch"; 
-      rightGroup.style.width = "160px";      // Keep clean width
-      rightGroup.style.gap = "10px";
-
-      rightGroup.appendChild(refreshBtn);
-      rightGroup.appendChild(downloadAllBtn);
-      rightGroup.appendChild(deleteAllBtn);
-
-  
-
-  header.appendChild(leftGroup);
-  header.appendChild(rightGroup);
   galleryContainer.appendChild(header);
 
-  // --- debounce helper for filter input
-  let filterTimer = null;
-  filterInput.addEventListener("input", () => {
-    clearTimeout(filterTimer);
-    filterTimer = setTimeout(() => {
-      renderIndexedGallery({
-        sortBy: sortSel.value,
-        filter: filterInput.value.trim(),
-        page: 1,
-        pageSize: Number(pageSizeSel.value),
-      });
-    }, 350);
-  });
+  /* -----------------------------------------------------------
+     🔍 Filtering
+  ------------------------------------------------------------ */
+  let filtered = all.slice();
+  const f = filter.trim().toLowerCase();
+  if (f) filtered = filtered.filter(x => (x.title || "").toLowerCase().includes(f));
 
-  // --- wire sort & page size changes
-  sortSel.addEventListener("change", () => renderIndexedGallery({
-    sortBy: sortSel.value,
-    filter: filterInput.value.trim(),
-    page: 1,
-    pageSize: Number(pageSizeSel.value),
-  }));
-  pageSizeSel.addEventListener("change", () => renderIndexedGallery({
-    sortBy: sortSel.value,
-    filter: filterInput.value.trim(),
-    page: 1,
-    pageSize: Number(pageSizeSel.value),
-  }));
+  /* -----------------------------------------------------------
+     🔃 Sorting
+  ------------------------------------------------------------ */
+  if (sortBy === "newest") filtered.sort((a, b) => b.ts - a.ts);
+  if (sortBy === "oldest") filtered.sort((a, b) => a.ts - b.ts);
+  if (sortBy === "name-asc") filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+  if (sortBy === "name-desc") filtered.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
 
-  // --- apply filter
-  let list = all.slice();
-  const f = (filterInput.value || "").trim().toLowerCase();
-  if (f) list = list.filter(x => (x.title || "").toLowerCase().includes(f));
-
-  // --- sorting
-  if (sortSel.value === "newest") list.sort((a, b) => b.ts - a.ts);
-  else if (sortSel.value === "oldest") list.sort((a, b) => a.ts - b.ts);
-  else if (sortSel.value === "name-asc") list.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
-  else if (sortSel.value === "name-desc") list.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
-
-  // --- pagination
-  const totalFiltered = list.length;
-  const ps = Number(pageSizeSel.value) || pageSize || 10;
+  /* -----------------------------------------------------------
+     📄 Pagination
+  ------------------------------------------------------------ */
+  const totalFiltered = filtered.length;
+  const ps = Number(pageSize);
   const totalPages = Math.max(1, Math.ceil(totalFiltered / ps));
-  let currentPage = Math.min(Math.max(1, page || 1), totalPages);
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+
   const start = (currentPage - 1) * ps;
   const end = start + ps;
-  const pageItems = list.slice(start, end);
 
-  // --- empty state
-  if (!pageItems.length) {
-    const empty = document.createElement("div");
-    empty.className = "muted";
-    empty.style.padding = "18px";
-    empty.innerHTML = totalFiltered === 0
-      ? `No creations yet. <strong>Save</strong> a poster to see it here.`
-      : `No results for "<strong>${escapeHtml(f)}</strong>" on page ${currentPage}.`;
-    galleryContainer.appendChild(empty);
-    // pagination controls still shown below
-  } else {
-    // --- grid container
-    const grid = document.createElement("div");
-    grid.className = "gallery-grid";
-    grid.style.display = "grid";
-    grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(220px, 1fr))";
-    grid.style.gap = "12px";
+  const items = filtered.slice(start, end);
 
-    pageItems.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "gallery-item";
-      card.setAttribute("role", "listitem");
-      safeSetStyle(card, { borderRadius: "10px", overflow: "hidden", boxShadow: "0 6px 18px rgba(0,0,0,0.06)", background: "#fff", position: "relative" });
-
-      // thumbnail
-      const imgWrap = document.createElement("div");
-      imgWrap.style.position = "relative";
-      imgWrap.style.overflow = "hidden";
-      const img = document.createElement("img");
-      img.src = item.dataUrl;
-      img.alt = item.title || "AksharaChitra poster";
-      safeSetStyle(img, { width: "100%", display: "block", height: "140px", objectFit: "cover", cursor: "pointer" });
-
-      // quick overlay (appears on hover) - we'll show always for small screens
-      const overlay = document.createElement("div");
-      overlay.className = "card-overlay";
-      safeSetStyle(overlay, {
-        position: "absolute",
-        top: "8px",
-        right: "8px",
-        display: "flex",
-        gap: "8px",
-        zIndex: "5",
-      });
-
-      // Preview button
-      const previewBtn = document.createElement("button");
-      previewBtn.className = "btn ghost small";
-      previewBtn.title = "Preview";
-      previewBtn.textContent = "🔍";
-      previewBtn.addEventListener("click", () => openPreviewModal(item));
-
-      // Share
-      const shareBtnCard = document.createElement("button");
-      shareBtnCard.className = "btn ghost small";
-      shareBtnCard.title = "Share";
-      shareBtnCard.textContent = "📤";
-      shareBtnCard.addEventListener("click", async () => {
-        try {
-          const resp = await fetch(item.dataUrl);
-          const blob = await resp.blob();
-          const file = new File([blob], `${(item.title || "poster").replace(/\s+/g, "_")}.png`, { type: blob.type });
-          if (navigator.canShare?.({ files: [file] })) {
-            await navigator.share({ files: [file], title: item.title || "AksharaChitra Poster" });
-          } else {
-            const txt = `Poster: ${item.title}\nCreated: ${new Date(item.ts).toLocaleString()}\nGenerated with AksharaChitra`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank");
-          }
-        } catch (err) { showToast("Share failed", "#E53935"); }
-      });
-
-      // Download
-      const downloadBtnCard = document.createElement("button");
-      downloadBtnCard.className = "btn small";
-      downloadBtnCard.title = "Download";
-      downloadBtnCard.textContent = "⬇";
-      downloadBtnCard.addEventListener("click", () => {
-        const a = document.createElement("a");
-        a.href = item.dataUrl;
-        a.download = `${(item.title || "poster").replace(/[^\w\- ]/g, "").slice(0, 40)}.png`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      });
-
-      // Delete
-      const delBtn = document.createElement("button");
-      delBtn.className = "delete-btn small";
-      delBtn.title = "Delete";
-      delBtn.textContent = "🗑️";
-      delBtn.addEventListener("click", async () => {
-        if (!confirm("Delete this poster?")) return;
-        await deleteFromDB(item.id);
-        showToast("Deleted", "#E53935");
-        // re-render with same controls
-        renderIndexedGallery({ sortBy: sortSel.value, filter: filterInput.value.trim(), page: currentPage, pageSize: ps });
-      });
-
-      overlay.append(previewBtn, shareBtnCard, downloadBtnCard, delBtn);
-      imgWrap.appendChild(img);
-      imgWrap.appendChild(overlay);
-
-      // meta
-      const meta = document.createElement("div");
-      safeSetStyle(meta, { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px" });
-
-      const left = document.createElement("div");
-      safeSetStyle(left, { display: "flex", flexDirection: "column", gap: "4px" });
-      const ttl = document.createElement("div");
-      ttl.textContent = item.title || "Untitled";
-      ttl.style.fontWeight = "700";
-      const dt = document.createElement("div");
-      dt.textContent = new Date(item.ts).toLocaleString();
-      safeSetStyle(dt, { fontSize: "0.85rem", opacity: "0.7" });
-
-      left.appendChild(ttl);
-      left.appendChild(dt);
-
-      const right = document.createElement("div");
-      right.style.display = "flex";
-      right.style.flexDirection = "column";
-      right.style.alignItems = "flex-end";
-      right.style.gap = "6px";
-
-      right.appendChild(downloadBtnCard);
-      // optionally attach more tiny controls
-
-      meta.append(left, right);
-
-      card.appendChild(imgWrap);
-      card.appendChild(meta);
-
-      grid.appendChild(card);
-    });
-
-    galleryContainer.appendChild(grid);
+  /* -----------------------------------------------------------
+     🚫 Empty State
+  ------------------------------------------------------------ */
+  if (!items.length) {
+    galleryContainer.innerHTML += `
+      <div class="gallery-empty">No posters found.</div>
+    `;
+    return;
   }
 
-  // --- pagination UI (bottom)
+  /* -----------------------------------------------------------
+     🖼 Grid Container
+  ------------------------------------------------------------ */
+const grid = document.createElement("div");
+grid.className = "gallery-grid";
+
+items.forEach(item => {
+  const card = document.createElement("div");
+  card.className = "gallery-item";
+
+  card.innerHTML = `
+    <div class="gallery-thumb-wrap">
+      <img 
+        src="${item.dataUrl}" 
+        alt="${item.title}" 
+        class="gallery-thumb"
+        onload="this.classList.add('loaded')"
+      />
+
+      <div class="card-overlay">
+        <button data-id="${item.id}" data-act="preview">🔍</button>
+        <button data-id="${item.id}" data-act="share">📤</button>
+        <button data-id="${item.id}" data-act="download">⬇</button>
+        <button class="delete-btn" data-id="${item.id}" data-act="delete">🗑</button>
+      </div>
+    </div>
+
+    <div class="gallery-meta">
+      <div class="gallery-title">${item.title || "Untitled"}</div>
+      <div class="gallery-date">${new Date(item.ts).toLocaleDateString()}</div>
+    </div>
+  `;
+
+  grid.appendChild(card);
+});
+
+galleryContainer.appendChild(grid);
+
+
+  /* -----------------------------------------------------------
+     📍 Pagination Bar
+  ------------------------------------------------------------ */
   const pager = document.createElement("div");
-  pager.style.display = "flex";
-  pager.style.justifyContent = "space-between";
-  pager.style.alignItems = "center";
-  pager.style.marginTop = "12px";
-  pager.style.gap = "12px";
- pager.className = "gallery-pagination";
+  pager.className = "gallery-pagination";
 
-  const pageInfo = document.createElement("div");
-  pageInfo.className = "muted small";
-  pageInfo.textContent = `Showing ${Math.min(1 + start, totalFiltered)}–${Math.min(end, totalFiltered)} of ${totalFiltered}`;
+  pager.innerHTML = `
+    <button class="btn ghost small" id="prevPage" ${currentPage <= 1 ? "disabled" : ""}>◀ Prev</button>
 
-  const pagerControls = document.createElement("div");
-  pagerControls.style.display = "flex";
-  pagerControls.style.gap = "8px";
-  pagerControls.style.alignItems = "center";
+    <span class="page-num">${currentPage} / ${totalPages}</span>
 
-  const prevBtn = document.createElement("button");
-  prevBtn.className = "btn ghost small";
-  prevBtn.textContent = "◀ Prev";
-  prevBtn.disabled = currentPage <= 1;
-  prevBtn.addEventListener("click", () => renderIndexedGallery({
-    sortBy: sortSel.value,
-    filter: filterInput.value.trim(),
-    page: currentPage - 1,
-    pageSize: ps,
-  }));
+    <button class="btn ghost small" id="nextPage" ${currentPage >= totalPages ? "disabled" : ""}>Next ▶</button>
+  `;
 
-  const nextBtn = document.createElement("button");
-  nextBtn.className = "btn ghost small";
-  nextBtn.textContent = "Next ▶";
-  nextBtn.disabled = currentPage >= totalPages;
-  nextBtn.addEventListener("click", () => renderIndexedGallery({
-    sortBy: sortSel.value,
-    filter: filterInput.value.trim(),
-    page: currentPage + 1,
-    pageSize: ps,
-  }));
-
-  // page numbers (condensed when many pages)
-  const pageList = document.createElement("div");
-  pageList.style.display = "flex";
-  pageList.style.gap = "6px";
-  pageList.style.alignItems = "center";
-
-  const createPageButton = (n) => {
-    const b = document.createElement("button");
-    b.className = "btn ghost small";
-    b.textContent = String(n);
-    if (n === currentPage) {
-      b.classList.add("active");
-      safeSetStyle(b, { background: "var(--accent, #1e88e5)", color: "#fff" });
-    }
-    b.addEventListener("click", () => renderIndexedGallery({
-      sortBy: sortSel.value,
-      filter: filterInput.value.trim(),
-      page: n,
-      pageSize: ps,
-    }));
-    return b;
-  };
-
-  if (totalPages <= 7) {
-    for (let i = 1; i <= totalPages; i++) pageList.appendChild(createPageButton(i));
-  } else {
-    // show first, some middle, last
-    pageList.appendChild(createPageButton(1));
-    if (currentPage > 4) {
-      const dots = document.createElement("span"); dots.textContent = "…"; pageList.appendChild(dots);
-    }
-    const startPage = Math.max(2, currentPage - 2);
-    const endPage = Math.min(totalPages - 1, currentPage + 2);
-    for (let i = startPage; i <= endPage; i++) pageList.appendChild(createPageButton(i));
-    if (currentPage < totalPages - 3) {
-      const dots = document.createElement("span"); dots.textContent = "…"; pageList.appendChild(dots);
-    }
-    pageList.appendChild(createPageButton(totalPages));
-  }
-
-  pagerControls.append(prevBtn, pageList, nextBtn);
-  pager.appendChild(pageInfo);
-  pager.appendChild(pagerControls);
   galleryContainer.appendChild(pager);
 
-  // --- small helper: preview modal
-  function openPreviewModal(item) {
-    const existing = document.getElementById("akPreviewModal");
-    if (existing) existing.remove();
-    const modal = document.createElement("div");
-    modal.id = "akPreviewModal";
-    Object.assign(modal.style, {
-      position: "fixed", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
-      background: "rgba(0,0,0,0.6)", zIndex: 99999, padding: "18px"
-    });
-    modal.setAttribute("role", "dialog");
-    modal.setAttribute("aria-modal", "true");
+  /* -----------------------------------------------------------
+     🎯 Event Listeners
+  ------------------------------------------------------------ */
 
-    const box = document.createElement("div");
-    Object.assign(box.style, {
-      width: "min(920px, 96%)", maxHeight: "92vh", background: "#fff", borderRadius: "12px", overflow: "auto", padding: "12px"
-    });
+  // Pagination
+  pager.querySelector("#prevPage")?.addEventListener("click", () =>
+    renderIndexedGallery({ sortBy, filter, page: currentPage - 1, pageSize: ps })
+  );
 
-    const top = document.createElement("div");
-    top.style.display = "flex";
-    top.style.justifyContent = "space-between";
-    top.style.alignItems = "center";
-    top.style.marginBottom = "8px";
+  pager.querySelector("#nextPage")?.addEventListener("click", () =>
+    renderIndexedGallery({ sortBy, filter, page: currentPage + 1, pageSize: ps })
+  );
 
-    const t = document.createElement("div");
-    t.innerHTML = `<strong>${escapeHtml(item.title || "Untitled")}</strong><div class="muted small">${new Date(item.ts).toLocaleString()}</div>`;
+  // Sort
+  header.querySelector("#sortSelect").addEventListener("change", (e) =>
+    renderIndexedGallery({ sortBy: e.target.value, filter, page: 1, pageSize: ps })
+  );
 
-    const closeBtn = document.createElement("button");
-    closeBtn.className = "btn ghost small";
-    closeBtn.textContent = "Close ✖";
-    closeBtn.addEventListener("click", () => modal.remove());
+  // Page size
+  header.querySelector("#pageSizeSelect").addEventListener("change", (e) =>
+    renderIndexedGallery({ sortBy, filter, page: 1, pageSize: Number(e.target.value) })
+  );
 
-    top.appendChild(t);
-    top.appendChild(closeBtn);
+  // Filter
+  header.querySelector("#galleryFilter").addEventListener("input", (e) => {
+    clearTimeout(window._filterDelay);
+    window._filterDelay = setTimeout(() => {
+      renderIndexedGallery({ sortBy, filter: e.target.value, page: 1, pageSize: ps });
+    }, 300);
+  });
 
-    const img = document.createElement("img");
-    img.src = item.dataUrl;
-    img.alt = item.title || "Poster preview";
-    img.style.width = "100%";
-    img.style.height = "auto";
-    img.style.display = "block";
-    img.style.borderRadius = "8px";
+  // Refresh
+  header.querySelector("#refreshGallery").addEventListener("click", () =>
+    renderIndexedGallery({ sortBy, filter, page: 1, pageSize: ps })
+  );
 
-    // action row
-    const actions = document.createElement("div");
-    actions.style.display = "flex";
-    actions.style.gap = "8px";
-    actions.style.marginTop = "10px";
+  // Clear All
+  header.querySelector("#clearAll").addEventListener("click", async () => {
+    if (!confirm("Delete ALL posters?")) return;
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    tx.objectStore(STORE_NAME).clear();
+    tx.oncomplete = () => {
+      showToast("Cleared all", "#E53935");
+      renderIndexedGallery();
+    };
+  });
 
-    const downloadFull = document.createElement("button");
-    downloadFull.className = "btn primary";
-    downloadFull.textContent = "⬇ Download";
-    downloadFull.addEventListener("click", () => {
-      const a = document.createElement("a");
-      a.href = item.dataUrl;
-      a.download = `${(item.title || "poster").replace(/[^\w\- ]/g, "").slice(0, 40)}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    });
+  // Download All ZIP
+  header.querySelector("#downloadAll").addEventListener("click", () =>
+    downloadAllAsZip(all)
+  );
 
-    const shareFull = document.createElement("button");
-    shareFull.className = "btn ghost";
-    shareFull.textContent = "📤 Share";
-    shareFull.addEventListener("click", async () => {
-      try {
-        const resp = await fetch(item.dataUrl);
-        const blob = await resp.blob();
-        const file = new File([blob], `${(item.title || "poster").replace(/\s+/g, "_")}.png`, { type: blob.type });
-        if (navigator.canShare?.({ files: [file] })) {
-          await navigator.share({ files: [file], title: item.title || "AksharaChitra Poster" });
-        } else {
-          const txt = `Poster: ${item.title}\nCreated: ${new Date(item.ts).toLocaleString()}\nGenerated with AksharaChitra`;
-          window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank");
-        }
-      } catch (err) { showToast("Share failed", "#E53935"); }
-    });
+  // Overlay buttons
+  grid.addEventListener("click", async (ev) => {
+    const btn = ev.target.closest("button");
+    if (!btn) return;
 
-    actions.append(downloadFull, shareFull);
+    const id = btn.dataset.id;
+    const act = btn.dataset.act;
 
-    box.appendChild(top);
-    box.appendChild(img);
-    box.appendChild(actions);
-    modal.appendChild(box);
+    const item = all.find(x => x.id == id);
+    if (!item) return;
 
-    // close on backdrop click or ESC
-    modal.addEventListener("click", (ev) => { if (ev.target === modal) modal.remove(); });
-    window.addEventListener("keydown", function escHandler(e) { if (e.key === "Escape") { modal.remove(); window.removeEventListener("keydown", escHandler); } });
-
-    document.body.appendChild(modal);
-  }
-
-  // small escape utility for HTML in strings
-  function escapeHtml(str) {
-    if (!str) return "";
-    return String(str).replace(/[&<>"'`=\/]/g, function (s) {
-      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;' })[s];
-    });
-  }
+    if (act === "preview") openPreviewModal(item);
+    if (act === "download") downloadPoster(item);
+    if (act === "share") sharePoster(item);
+    if (act === "delete") {
+      if (!confirm("Delete this poster?")) return;
+      await deleteFromDB(id);
+      renderIndexedGallery({ sortBy, filter, page: currentPage, pageSize: ps });
+    }
+  });
 }
+
 
  async function downloadAllAsZip(items) {
   if (!items || !items.length) {
@@ -1321,6 +1046,100 @@ totalBadge.textContent = ` Total Creations: ${total}`;
 
   showToast("All posters downloaded as ZIP 🎉", "#00BFA5");
 }
+
+/* ==========================================================
+   GLOBAL FUNCTIONS REQUIRED BY GALLERY
+   (Fixes: openPreviewModal not defined, downloadPoster not defined,
+           sharePoster not defined)
+   ========================================================== */
+
+/* ---------------------------------------------
+   1) FULLSCREEN PREVIEW MODAL
+---------------------------------------------- */
+window.openPreviewModal = function (item) {
+  const old = document.getElementById("akPreviewModal");
+  if (old) old.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "akPreviewModal";
+
+  const box = document.createElement("div");
+  box.className = "ak-preview-box";
+
+  box.innerHTML = `
+    <div class="ak-preview-header">
+      <div>
+        <div class="ak-preview-title">${item.title || "Untitled"}</div>
+        <div class="ak-preview-date">${new Date(item.ts).toLocaleString()}</div>
+      </div>
+      <button class="btn ghost small" id="closePreview">✖</button>
+    </div>
+
+    <img src="${item.dataUrl}" class="ak-preview-img" alt="Poster">
+
+    <div class="ak-preview-actions">
+      <button class="btn primary" id="previewDownload">⬇ Download</button>
+      <button class="btn ghost" id="previewShare">📤 Share</button>
+    </div>
+  `;
+
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+
+  document.getElementById("closePreview").onclick = () => modal.remove();
+  document.getElementById("previewDownload").onclick = () => downloadPoster(item);
+  document.getElementById("previewShare").onclick = () => sharePoster(item);
+  
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.remove();
+  });
+};
+
+
+/* ---------------------------------------------
+   2) DOWNLOAD ONE POSTER
+---------------------------------------------- */
+window.downloadPoster = function (item) {
+  const a = document.createElement("a");
+  a.href = item.dataUrl;
+  a.download = `${(item.title || "poster").replace(/[^\w\- ]/g, "")}.png`;
+  a.click();
+};
+
+
+/* ---------------------------------------------
+   3) SHARE ONE POSTER
+---------------------------------------------- */
+window.sharePoster = async function (item) {
+  try {
+    const res = await fetch(item.dataUrl);
+    const blob = await res.blob();
+
+    const file = new File(
+      [blob],
+      `${(item.title || "poster").replace(/\s+/g, "_")}.png`,
+      { type: "image/png" }
+    );
+
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: item.title || "AksharaChitra Poster",
+        text: "Shared from AksharaChitra",
+      });
+      return;
+    }
+
+    // WhatsApp fallback
+    const msg = `Poster: ${item.title || ""}\nCreated: ${new Date(item.ts).toLocaleString()}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+
+  } catch (err) {
+    console.error("Share failed", err);
+    showToast("Share failed", "#E53935");
+  }
+};
+
 
 // =============================================================
 // 🌸 AksharaChitra — Universal Voice Typing + Read Aloud (v20)
