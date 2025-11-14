@@ -11,40 +11,91 @@
 
 // ---- 1️⃣ Loading Spinner Overlay ----
 const spinner = document.createElement("div");
+
+// Wrapper
 Object.assign(spinner.style, {
   position: "fixed",
   inset: 0,
-  background: "#ffffff",
+  background: "linear-gradient(180deg,#e3f2fd,#bbdefb)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  zIndex: "9999",
-  transition: "opacity 0.7s ease",
+  zIndex: "999999",
+  transition: "opacity 0.8s ease, transform 0.8s ease",
 });
+
+// Loader UI
 spinner.innerHTML = `
   <div style="
-    display:flex;flex-direction:column;align-items:center;
-    font-family:Montserrat, sans-serif;color:#1565c0;
-    font-weight:600;font-size:1.1rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    animation:fadeUp 1s ease forwards;
   ">
+
+    <!-- Logo -->
+    <img src="logo.png" alt="logo" style="
+      width:85px;
+      height:85px;
+      object-fit:contain;
+      margin-bottom:18px;
+      animation:pulseGlow 2s infinite ease-in-out;
+    ">
+
+    <!-- Premium Ring Spinner -->
     <div style="
-      width:42px;height:42px;
-      border:4px solid #bbdefb;
+      width:48px;height:48px;
+      border:5px solid rgba(21,101,192,0.25);
       border-top-color:#1565c0;
       border-radius:50%;
-      animation:spin 1s linear infinite;
-      margin-bottom:10px;
+      animation:spin 0.9s linear infinite;
+      margin-bottom:14px;
     "></div>
-    Loading AksharaChitra...
+
+    <!-- Text -->
+    <div style="
+      font-family: 'Poppins', sans-serif;
+      font-weight:600;
+      font-size:1.05rem;
+      color:#0d47a1;
+      letter-spacing:0.4px;
+      animation:fadeText 1.4s infinite;
+    ">
+      Loading AksharaChitra…
+    </div>
   </div>
-  <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes pulseGlow {
+      0%   { transform:scale(1); filter:drop-shadow(0 0 0px #42a5f5); }
+      50%  { transform:scale(1.08); filter:drop-shadow(0 0 12px #1e88e5); }
+      100% { transform:scale(1); filter:drop-shadow(0 0 0px #42a5f5); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    @keyframes fadeText {
+      0%   { opacity:1; }
+      50%  { opacity:0.4; }
+      100% { opacity:1; }
+    }
+  </style>
 `;
+
 document.body.appendChild(spinner);
+
+// Fade-out
 window.addEventListener("load", () => {
   setTimeout(() => {
     spinner.style.opacity = "0";
-    setTimeout(() => spinner.remove(), 800);
-  }, 500);
+    spinner.style.transform = "scale(1.05)";
+    setTimeout(() => spinner.remove(), 900);
+  }, 400);
 });
 
 // ---- 2️⃣ Register Service Worker ----
