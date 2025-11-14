@@ -1,0 +1,33 @@
+/* AI Translator */
+.ai-translator-section {
+  margin-top: 30px;
+}
+
+.translator-box,
+.translator-output {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 0.9rem;
+  color: #333;
+  resize: vertical;
+}
+
+.translator-controls {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+  align-items: center;
+}
+.translator-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
