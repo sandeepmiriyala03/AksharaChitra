@@ -334,6 +334,9 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
      🔥 GALLERY — ULTRA RESPONSIVE
    =============================== */
 
+/* --------------------------------------------------
+   GALLERY MAIN WRAPPER 
+-------------------------------------------------- */
 #galleryGrid {
   padding: 16px;
   display: flex;
@@ -344,14 +347,16 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   box-sizing: border-box;
 }
 
-/* ---------- Header Panel ---------- */
+/* --------------------------------------------------
+   HEADER PANEL (Sort + Page Size + Search + Buttons)
+-------------------------------------------------- */
 .gallery-header-panel {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
+  align-items: flex-start;
+  gap: 20px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .gallery-total-badge {
@@ -365,7 +370,7 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
 }
 
 .gallery-control {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid rgba(2, 6, 23, 0.08);
   background: var(--card);
@@ -373,7 +378,17 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   min-width: 130px;
 }
 
-/* ---------- Grid Wrapper ---------- */
+/* Vertical button group for right side */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 180px;
+}
+
+/* --------------------------------------------------
+   GALLERY GRID 
+-------------------------------------------------- */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -383,7 +398,9 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   margin: 0 auto;
 }
 
-/* ---------- Gallery Item ---------- */
+/* --------------------------------------------------
+   GALLERY CARD 
+-------------------------------------------------- */
 .gallery-item {
   border-radius: 14px;
   background: var(--card);
@@ -393,13 +410,65 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   position: relative;
 }
 
-/* Safe image sizing (mobile fix) */
 .gallery-item img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3; /* 🔥 Auto-height fix for all devices */
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   background: #f3f4f6;
+}
+
+/* Hover only desktop */
+@media (hover: hover) and (pointer: fine) {
+  .gallery-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 32px rgba(2, 6, 23, 0.12);
+  }
+
+  .gallery-item:hover .card-overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------
+   MOBILE FIXES (IMPORTANT)
+-------------------------------------------------- */
+@media (max-width: 600px) {
+  
+  .gallery-header-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  /* Full width row sections */
+  .gallery-header-panel > div {
+    width: 100%;
+  }
+
+  .gallery-control {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Search input full width */
+  .gallery-header-panel input[type="text"],
+  .gallery-header-panel input {
+    width: 100% !important;
+  }
+
+  /* Right button group */
+  .button-group {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Adjust images taller for mobile */
+  .gallery-item img {
+    aspect-ratio: 3 / 4;
+  }
 }
 
 /* ---------- Desktop hover (disabled on mobile) ---------- */
