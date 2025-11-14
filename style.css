@@ -244,8 +244,77 @@ select{
 .btn.danger:hover{filter:brightness(.95)}
 
 /* CTA / Share */
-.share-btn{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,var(--primary),#3949ab);color:#fff;font-weight:600;box-shadow:0 6px 18px rgba(30,136,229,0.12)}
-.share-icon{width:28px;height:28px;border-radius:8px;background:#fff;display:inline-flex;align-items:center;justify-content:center}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--primary), #3949ab);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 18px rgba(30, 136, 229, 0.15);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Desktop hover */
+@media (hover: hover) and (pointer: fine) {
+  .share-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 26px rgba(30, 136, 229, 0.22);
+  }
+}
+
+/* Press animation (mobile + desktop) */
+.share-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.18);
+}
+
+/* Mobile friendly */
+@media (max-width: 480px) {
+  .share-btn {
+    padding: 12px 20px;
+    border-radius: 14px;
+    font-size: 1rem;
+    gap: 12px;
+  }
+}
+.share-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 6px;           /* ⬅ gap between left/right buttons */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+/* Hover for desktop only */
+@media (hover: hover) and (pointer: fine) {
+  .share-icon:hover {
+    transform: scale(1.08);
+    background: var(--accent);
+    color: #fff;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .share-icon {
+    width: 36px;
+    height: 36px;
+    margin: 0 8px;       /* bigger gap for finger touch */
+    border-radius: 12px; /* more padding */
+  }
+}
 
 /* ---------- 10) Preview card ---------- */
 #previewCard{width:300px;aspect-ratio:4/5;padding:20px;border-radius:12px;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;margin:10px auto;box-shadow:0 8px 24px rgba(10,10,30,0.06);transition:var(--transition)}
