@@ -794,24 +794,23 @@ if (shareWhatsAppBtn) on(shareWhatsAppBtn, "click", () => sharePoster(true));
     }
   });
 
-  // ---------------------------------------------
   // Gallery rendering
-  // ---------------------------------------------
- // Replace your old renderIndexedGallery with this improved version
 async function renderIndexedGallery({
   sortBy = "newest",
   filter = "",
   page = 1,
   pageSize = 10,
 } = {}) {
-  if (!galleryGrid) return;
+const galleryContainer = document.getElementById("galleryContainer");
+if (!galleryContainer) return;
+
 
   // --- UI: clear + loading
-  galleryGrid.innerHTML = "";
+  galleryContainer.innerHTML = "";
   const loading = document.createElement("div");
   loading.className = "muted";
   loading.textContent = "Loading creations…";
-  galleryGrid.appendChild(loading);
+  galleryContainer.appendChild(loading);
 
   // --- fetch all items
   let all = await getAllFromDB();
@@ -819,7 +818,7 @@ async function renderIndexedGallery({
 
   // --- total header
   const total = all.length;
-  galleryGrid.innerHTML = ""; // clear loader
+  galleryContainer.innerHTML = ""; // clear loader
 
   const header = document.createElement("div");
   header.className = "gallery-header-panel";
@@ -908,7 +907,7 @@ totalBadge.textContent = ` Total Creations: ${total}`;
 
   header.appendChild(leftGroup);
   header.appendChild(rightGroup);
-  galleryGrid.appendChild(header);
+  galleryContainer.appendChild(header);
 
   // --- debounce helper for filter input
   let filterTimer = null;
@@ -966,7 +965,7 @@ totalBadge.textContent = ` Total Creations: ${total}`;
     empty.innerHTML = totalFiltered === 0
       ? `No creations yet. <strong>Save</strong> a poster to see it here.`
       : `No results for "<strong>${escapeHtml(f)}</strong>" on page ${currentPage}.`;
-    galleryGrid.appendChild(empty);
+    galleryContainer.appendChild(empty);
     // pagination controls still shown below
   } else {
     // --- grid container
@@ -1093,7 +1092,7 @@ totalBadge.textContent = ` Total Creations: ${total}`;
       grid.appendChild(card);
     });
 
-    galleryGrid.appendChild(grid);
+    galleryContainer.appendChild(grid);
   }
 
   // --- pagination UI (bottom)
@@ -1103,7 +1102,7 @@ totalBadge.textContent = ` Total Creations: ${total}`;
   pager.style.alignItems = "center";
   pager.style.marginTop = "12px";
   pager.style.gap = "12px";
-pager.className = "gallery-pagination";
+ pager.className = "gallery-pagination";
 
   const pageInfo = document.createElement("div");
   pageInfo.className = "muted small";
@@ -1179,7 +1178,7 @@ pager.className = "gallery-pagination";
   pagerControls.append(prevBtn, pageList, nextBtn);
   pager.appendChild(pageInfo);
   pager.appendChild(pagerControls);
-  galleryGrid.appendChild(pager);
+  galleryContainer.appendChild(pager);
 
   // --- small helper: preview modal
   function openPreviewModal(item) {
