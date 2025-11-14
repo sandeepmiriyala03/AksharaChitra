@@ -50,10 +50,63 @@ body{
 }
 
 /* -------------------- Fonts (custom telugu examples) -------------------- */
-@font-face{font-family:'Veturi';src:url('fonts/Veturi.ttf') format('truetype');font-display:swap}
-@font-face{font-family:'Sirivennela';src:url('fonts/Sirivennela.ttf') format('truetype');font-display:swap}
-@font-face{font-family:'Ramaraja-Regular';src:url('fonts/Ramaraja-Regular.ttf') format('truetype');font-display:swap}
-/* add other @font-face rules you need (kept minimal here) */
+/* Veturi */
+@font-face {
+  font-family: 'Veturi';
+  src: url('fonts/Veturi.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Sirivennela */
+@font-face {
+  font-family: 'Sirivennela';
+  src: url('fonts/Sirivennela.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Ramaraja */
+@font-face {
+  font-family: 'Ramaraja';
+  src: url('fonts/Ramaraja-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Ramaneeya Win */
+@font-face {
+  font-family: 'RamaneeyaWin';
+  src: url('fonts/RamaneeyaWin.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Ravi Prakash */
+@font-face {
+  font-family: 'RaviPrakash';
+  src: url('fonts/RaviPrakash.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* TANA */
+@font-face {
+  font-family: 'TANA';
+  src: url('fonts/TANA.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Tenali Ramakrishna */
+@font-face {
+  font-family: 'TenaliRamakrishna';
+  src: url('fonts/TenaliRamakrishna-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Timmana */
+@font-face {
+  font-family: 'Timmana';
+  src: url('fonts/TimmanaRegular.ttf') format('truetype');
+  font-display: swap;
+}
+
+
 
 /* -------------------- Utilities -------------------- */
 .container{max-width:var(--max-width);margin:0 auto;padding:0 16px}

@@ -72,9 +72,22 @@ document.addEventListener("DOMContentLoaded", () => {
          "Lato","Lobster","Merriweather","Montserrat","Nunito","Open Sans",
          "Playfair Display","Poppins","Prompt","Quicksand","Raleway",
          "Roboto","Ubuntu"],
+      te: [
+        "Mandali",
+        "Noto Sans Telugu",
+        "NTR",
+        "Ramabhadra",
 
-    te: ["Mandali","Noto Sans Telugu","NTR","Ramabhadra","Ramaraja",
-         "RaviPrakash","Sirivennela","TimmanaRegular","Veturi"],
+        //appaji fonts here
+        "RamaneeyaWin",
+        "Ramaraja",
+        "RaviPrakash",
+        "Sirivennela",
+        "TANA",
+        "TenaliRamakrishna",
+        "Timmana",
+        "Veturi"
+      ],
 
     hi: ["Hind","Karma","Noto Serif Devanagari"],
     sa: ["Noto Serif Devanagari","Tiro Devanagari Sanskrit"],
