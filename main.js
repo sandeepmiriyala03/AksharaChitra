@@ -799,170 +799,162 @@ async function renderIndexedGallery({
   page = 1,
   pageSize = 12,
 } = {}) {
-
   const galleryContainer = document.getElementById("galleryContainer");
   if (!galleryContainer) return;
 
-  // Prevent flicker on PWA mobile
   galleryContainer.style.minHeight = "120px";
+  galleryContainer.innerHTML = ""; // Clear for a fresh render
 
-  // Show loading spinner
-  galleryContainer.innerHTML = `<div class="gallery-loading">Loading…</div>`;
-
-  // Fetch data
-  let all = await getAllFromDB();
-  all = Array.isArray(all) ? all : [];
-  const total = all.length;
-
-  // Reset UI
-  galleryContainer.innerHTML = "";
-
-  /* -----------------------------------------------------------
-     HEADER PANEL
-  ------------------------------------------------------------ */
+  // -------------------------------
+  // HEADER (Controls): Always show
+  // -------------------------------
   const header = document.createElement("div");
   header.className = "gallery-header-panel";
-
   header.innerHTML = `
-    <span id="TotalCount">Total: ${total}</span>
-
-    <select id="sortSelect" >
+    <span id="TotalCount">Total: …</span>
+    <select id="sortSelect">
       <option value="newest">Newest First</option>
       <option value="oldest">Oldest First</option>
       <option value="name-asc">A → Z</option>
       <option value="name-desc">Z → A</option>
     </select>
-
-    <select id="pageSizeSelect" >
+    <select id="pageSizeSelect">
       <option value="6">6 per page</option>
       <option value="12" selected>12 per page</option>
       <option value="20">20 per page</option>
     </select>
-
-    <input id="galleryFilter"  placeholder="Filter by title…">
-
+    <input id="galleryFilter" placeholder="Filter by title…">
     <div class="button-group">
       <button id="refreshGallery" class="btn ghost small">🔄 Refresh</button>
       <button id="downloadAll" class="btn primary small">⬇ Download All</button>
       <button id="clearAll" class="btn danger small">🗑 Clear All</button>
     </div>
   `;
-
   galleryContainer.appendChild(header);
 
-  // Restore selected values
+  // -------------------------------
+  // GRID HOLDER: Placeholders/spinner
+  // -------------------------------
+  let gridWrap = document.createElement("div");
+  gridWrap.className = "gallery-grid-wrap";
+  gridWrap.innerHTML = `<div class="gallery-loading">Loading…</div>`;
+  galleryContainer.appendChild(gridWrap);
+
+  // -------------------------------
+  // DATA FETCH
+  // -------------------------------
+  let all = [];
+  try {
+    all = await getAllFromDB();
+  } catch (e) {
+    gridWrap.innerHTML = `<div class="gallery-empty">Could not load gallery.</div>`;
+    return;
+  }
+  all = Array.isArray(all) ? all : [];
+  const total = all.length;
+
+  // Update total count
+  header.querySelector("#TotalCount").textContent = `Total: ${total}`;
+
+  // Restore select inputs and filter
   header.querySelector("#sortSelect").value = sortBy;
   header.querySelector("#pageSizeSelect").value = pageSize;
   header.querySelector("#galleryFilter").value = filter;
 
-  /* -----------------------------------------------------------
-     FILTERING
-  ------------------------------------------------------------ */
+  // FILTER/SORT
   let filtered = all.slice();
   const f = filter.trim().toLowerCase();
   if (f) filtered = filtered.filter(x => (x.title || "").toLowerCase().includes(f));
-
-  /* -----------------------------------------------------------
-     SORTING
-  ------------------------------------------------------------ */
-  if (sortBy === "newest") filtered.sort((a, b) => b.ts - a.ts);
-  if (sortBy === "oldest") filtered.sort((a, b) => a.ts - b.ts);
-  if (sortBy === "name-asc") filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+  if (sortBy === "newest")    filtered.sort((a, b) => b.ts - a.ts);
+  if (sortBy === "oldest")    filtered.sort((a, b) => a.ts - b.ts);
+  if (sortBy === "name-asc")  filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
   if (sortBy === "name-desc") filtered.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
 
-  /* -----------------------------------------------------------
-     PAGINATION
-  ------------------------------------------------------------ */
+  // PAGINATION
   const totalFiltered = filtered.length;
   const ps = Number(pageSize);
   const totalPages = Math.max(1, Math.ceil(totalFiltered / ps));
   const currentPage = Math.min(Math.max(1, page), totalPages);
-
   const start = (currentPage - 1) * ps;
   const items = filtered.slice(start, start + ps);
 
-  /* -----------------------------------------------------------
-     EMPTY STATE
-  ------------------------------------------------------------ */
+  // EMPTY STATE
   if (!items.length) {
-    galleryContainer.innerHTML += `
-      <div class="gallery-empty">No posters found.</div>
+    gridWrap.innerHTML = `<div class="gallery-empty">No posters found.</div>`;
+  } else {
+    // GALLERY GRID
+    const grid = document.createElement("div");
+    grid.className = "gallery-grid";
+    items.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "gallery-item";
+      card.innerHTML = `
+        <div class="gallery-thumb-wrap">
+          <img 
+            src="${item.dataUrl}" 
+            alt="${item.title}" 
+            class="gallery-thumb"
+            loading="lazy"
+            onload="this.classList.add('loaded')"
+          />
+          <div class="card-overlay">
+            <button data-id="${item.id}" data-act="preview">🔍</button>
+            <button data-id="${item.id}" data-act="download">⬇</button>
+            <button class="delete-btn" data-id="${item.id}" data-act="delete">🗑</button>
+          </div>
+        </div>
+        <div class="gallery-meta">
+          <div class="gallery-title">${item.title || "Untitled"}</div>
+          <div class="gallery-date">${new Date(item.ts).toLocaleDateString()}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    gridWrap.innerHTML = ""; // Remove spinner/empty
+    gridWrap.appendChild(grid);
+
+    // PAGINATION BAR
+    const pager = document.createElement("div");
+    pager.className = "gallery-pagination";
+    pager.innerHTML = `
+      ${currentPage > 1 ? `<button id="prevPage" class="btn ghost small">◀ Prev</button>` : ""}
+      <span class="page-num">${currentPage} / ${totalPages}</span>
+      ${currentPage < totalPages ? `<button id="nextPage" class="btn ghost small">Next ▶</button>` : ""}
     `;
-    return;
+    gridWrap.appendChild(pager);
+
+    // EVENT HANDLERS FOR PAGINATION
+    pager.querySelector("#prevPage")?.addEventListener("click", () =>
+      renderIndexedGallery({ sortBy, filter, page: currentPage - 1, pageSize: ps })
+    );
+    pager.querySelector("#nextPage")?.addEventListener("click", () =>
+      renderIndexedGallery({ sortBy, filter, page: currentPage + 1, pageSize: ps })
+    );
+
+    // CARD BUTTON HANDLERS
+    grid.addEventListener("click", async ev => {
+      const btn = ev.target.closest("button");
+      if (!btn) return;
+      const item = all.find(x => x.id == btn.dataset.id);
+      if (!item) return;
+      const act = btn.dataset.act;
+      if (act === "preview") openPreviewModal(item);
+      if (act === "download") downloadPoster(item);
+      if (act === "delete") {
+        if (!confirm("Delete this poster?")) return;
+        await deleteFromDB(item.id);
+        renderIndexedGallery({ sortBy, filter, page: currentPage, pageSize: ps });
+      }
+    });
   }
 
-  /* -----------------------------------------------------------
-     GALLERY GRID
-  ------------------------------------------------------------ */
-  const grid = document.createElement("div");
-  grid.className = "gallery-grid";
-
-  items.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "gallery-item";
-
-    card.innerHTML = `
-      <div class="gallery-thumb-wrap">
-        <img 
-          src="${item.dataUrl}" 
-          alt="${item.title}" 
-          class="gallery-thumb"
-          loading="lazy"
-          onload="this.classList.add('loaded')"
-        />
-
-        <div class="card-overlay">
-          <button data-id="${item.id}" data-act="preview">🔍</button>
-          <button data-id="${item.id}" data-act="download">⬇</button>
-          <button class="delete-btn" data-id="${item.id}" data-act="delete">🗑</button>
-        </div>
-      </div>
-
-      <div class="gallery-meta">
-        <div class="gallery-title">${item.title || "Untitled"}</div>
-        <div class="gallery-date">${new Date(item.ts).toLocaleDateString()}</div>
-      </div>
-    `;
-
-    grid.appendChild(card);
-  });
-
-  galleryContainer.appendChild(grid);
-
-  /* -----------------------------------------------------------
-     PAGINATION BAR
-  ------------------------------------------------------------ */
-  const pager = document.createElement("div");
-  pager.className = "gallery-pagination";
-
-  pager.innerHTML = `
-    ${currentPage > 1 ? `<button id="prevPage" class="btn ghost small">◀ Prev</button>` : ""}
-    <span class="page-num">${currentPage} / ${totalPages}</span>
-    ${currentPage < totalPages ? `<button id="nextPage" class="btn ghost small">Next ▶</button>` : ""}
-  `;
-
-  galleryContainer.appendChild(pager);
-
-  /* -----------------------------------------------------------
-     EVENT HANDLERS
-  ------------------------------------------------------------ */
-
-  pager.querySelector("#prevPage")?.addEventListener("click", () =>
-    renderIndexedGallery({ sortBy, filter, page: currentPage - 1, pageSize: ps })
-  );
-
-  pager.querySelector("#nextPage")?.addEventListener("click", () =>
-    renderIndexedGallery({ sortBy, filter, page: currentPage + 1, pageSize: ps })
-  );
-
+  // EVENT HANDLERS FOR HEADER (CONTROLS)
   header.querySelector("#sortSelect").addEventListener("change", e =>
     renderIndexedGallery({ sortBy: e.target.value, filter, page: 1, pageSize: ps })
   );
-
   header.querySelector("#pageSizeSelect").addEventListener("change", e =>
     renderIndexedGallery({ sortBy, filter, page: 1, pageSize: Number(e.target.value) })
   );
-
   header.querySelector("#galleryFilter").addEventListener("input", e => {
     clearTimeout(window.__filterDelay);
     window.__filterDelay = setTimeout(() => {
@@ -974,14 +966,11 @@ async function renderIndexedGallery({
       });
     }, 300);
   });
-
   header.querySelector("#refreshGallery").addEventListener("click", () =>
     renderIndexedGallery({ sortBy, filter, page: 1, pageSize: ps })
   );
-
   header.querySelector("#clearAll").addEventListener("click", async () => {
     if (!confirm("Delete ALL posters?")) return;
-
     const db = await openDB();
     const tx = db.transaction(STORE_NAME, "readwrite");
     tx.objectStore(STORE_NAME).clear();
@@ -990,30 +979,11 @@ async function renderIndexedGallery({
       renderIndexedGallery();
     };
   });
-
   header.querySelector("#downloadAll").addEventListener("click", () =>
     downloadAllAsZip(all)
   );
-
-  grid.addEventListener("click", async ev => {
-    const btn = ev.target.closest("button");
-    if (!btn) return;
-
-    const item = all.find(x => x.id == btn.dataset.id);
-    if (!item) return;
-
-    const act = btn.dataset.act;
-
-    if (act === "preview") openPreviewModal(item);
-    if (act === "download") downloadPoster(item);
-
-    if (act === "delete") {
-      if (!confirm("Delete this poster?")) return;
-      await deleteFromDB(item.id);
-      renderIndexedGallery({ sortBy, filter, page: currentPage, pageSize: ps });
-    }
-  });
 }
+
 
  async function downloadAllAsZip(items) {
   if (!items || !items.length) {
