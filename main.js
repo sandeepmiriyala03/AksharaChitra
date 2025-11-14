@@ -1,11 +1,6 @@
 /* ==========================================================
    🌸 AksharaChitra — main.js (v18.0 Stable)
    ----------------------------------------------------------
-   Merged + Fixed:
-   • IndexedDB reliability
-   • Mobile duplicate datetime footer
-   • Right-edge black crop fix
-   • WhatsApp/native share + download filename with timestamp
    ----------------------------------------------------------
    Built & Maintained by: Sandeep Miriyala
    ========================================================== */
@@ -900,10 +895,25 @@ totalBadge.textContent = ` Total Creations: ${total}`;
       showToast("❌ Could not clear gallery", "#E53935");
     }
   });
-
+// 🔥 Download All button
+    const downloadAllBtn = document.createElement("button");
+    downloadAllBtn.className = "btn primary small";
+    downloadAllBtn.textContent = "⬇ Download All";
+    downloadAllBtn.addEventListener("click", () => downloadAllAsZip(all));
   rightGroup.appendChild(filterInput);
-  rightGroup.appendChild(refreshBtn);
-  rightGroup.appendChild(deleteAllBtn);
+
+      // Make the button group vertical
+      rightGroup.style.display = "flex";
+      rightGroup.style.flexDirection = "column";
+      rightGroup.style.alignItems = "stretch"; 
+      rightGroup.style.width = "160px";      // Keep clean width
+      rightGroup.style.gap = "10px";
+
+      rightGroup.appendChild(refreshBtn);
+      rightGroup.appendChild(downloadAllBtn);
+      rightGroup.appendChild(deleteAllBtn);
+
+  
 
   header.appendChild(leftGroup);
   header.appendChild(rightGroup);
@@ -1279,6 +1289,37 @@ totalBadge.textContent = ` Total Creations: ${total}`;
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;' })[s];
     });
   }
+}
+
+ async function downloadAllAsZip(items) {
+  if (!items || !items.length) {
+    showToast("No posters to download", "#E53935");
+    return;
+  }
+
+  const zip = new JSZip();
+  const folder = zip.folder("AksharaChitra_Posters");
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    try {
+      const response = await fetch(item.dataUrl);
+      const blob = await response.blob();
+
+      const safeName = (item.title || `poster_${i + 1}`)
+        .replace(/[^\w\- ]/g, "")
+        .slice(0, 40);
+
+      folder.file(`${safeName}.png`, blob);
+    } catch (err) {
+      console.error("ZIP add failed for item", i, err);
+    }
+  }
+
+  const content = await zip.generateAsync({ type: "blob" });
+  saveAs(content, "AksharaChitra_Posters.zip");
+
+  showToast("All posters downloaded as ZIP 🎉", "#00BFA5");
 }
 
 // =============================================================
