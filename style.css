@@ -330,9 +330,6 @@ select{
 body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);color:var(--text)}
 
 /* ---------- 11) Gallery / Studio (works with dynamic JS) ---------- */
-/* ===============================
-     🔥 GALLERY — ULTRA RESPONSIVE
-   =============================== */
 
 /* --------------------------------------------------
    GALLERY MAIN WRAPPER 
@@ -378,7 +375,6 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   min-width: 130px;
 }
 
-/* Vertical button group for right side */
 .button-group {
   display: flex;
   flex-direction: column;
@@ -418,13 +414,12 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   background: #f3f4f6;
 }
 
-/* Hover only desktop */
+/* Desktop hover */
 @media (hover: hover) and (pointer: fine) {
   .gallery-item:hover {
     transform: translateY(-6px);
     box-shadow: 0 14px 32px rgba(2, 6, 23, 0.12);
   }
-
   .gallery-item:hover .card-overlay {
     opacity: 1;
     transform: translateY(0);
@@ -432,59 +427,8 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
 }
 
 /* --------------------------------------------------
-   MOBILE FIXES (IMPORTANT)
+   OVERLAY BUTTONS
 -------------------------------------------------- */
-@media (max-width: 600px) {
-  
-  .gallery-header-panel {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-  }
-
-  /* Full width row sections */
-  .gallery-header-panel > div {
-    width: 100%;
-  }
-
-  .gallery-control {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  /* Search input full width */
-  .gallery-header-panel input[type="text"],
-  .gallery-header-panel input {
-    width: 100% !important;
-  }
-
-  /* Right button group */
-  .button-group {
-    width: 100%;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  /* Adjust images taller for mobile */
-  .gallery-item img {
-    aspect-ratio: 3 / 4;
-  }
-}
-
-/* ---------- Desktop hover (disabled on mobile) ---------- */
-@media (hover: hover) and (pointer: fine) {
-  .gallery-item:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 32px rgba(2, 6, 23, 0.12);
-  }
-
-  .gallery-item:hover .card-overlay {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ---------- Overlay Buttons ---------- */
 .card-overlay {
   position: absolute;
   top: 10px;
@@ -495,14 +439,6 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   transform: translateY(-6px);
   transition: all 0.25s ease;
   z-index: 5;
-}
-
-/* Always visible on mobile */
-@media (max-width: 600px) {
-  .card-overlay {
-    opacity: 1 !important;
-    transform: none !important;
-  }
 }
 
 .card-overlay button {
@@ -524,7 +460,9 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   color: #fff;
 }
 
-/* ---------- Pagination ---------- */
+/* --------------------------------------------------
+   PAGINATION
+-------------------------------------------------- */
 .gallery-pagination {
   display: flex;
   justify-content: center;
@@ -552,24 +490,68 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   cursor: not-allowed;
 }
 
-/* ---------- Mobile Improvements ---------- */
+/* --------------------------------------------------
+   RESPONSIVE — MOBILE & TABLET
+-------------------------------------------------- */
+@media (max-width: 768px) {
+
+  /* Prevent grid collapse */
+  #galleryGrid {
+    display: block !important;
+    overflow: visible !important;
+    padding: 14px !important;
+  }
+
+  .gallery-header-panel {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .gallery-header-panel > div {
+    width: 100%;
+  }
+
+  .gallery-control,
+  .gallery-header-panel input {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Grid for tablets */
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  /* Image ratio for mobile/tablet */
+  .gallery-item img {
+    aspect-ratio: 3 / 4 !important;
+  }
+
+  /* Overlay always visible on touch devices */
+  .card-overlay {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* --------------------------------------------------
+   EXTRA SMALL MOBILE (≤ 480px)
+-------------------------------------------------- */
 @media (max-width: 480px) {
 
   #galleryGrid {
-    padding: 12px;
+    padding: 12px !important;
   }
 
   .gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 12px;
   }
 
   .gallery-item {
     border-radius: 12px;
-  }
-
-  .gallery-item img {
-    aspect-ratio: 3 / 4; /* Taller images for mobile */
   }
 
   .gallery-total-badge {
@@ -578,9 +560,21 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
   }
 }
 
-/* small modifier classes (for JS-created buttons) */
-.delete-btn{background:transparent;border:none;color:#E53935;font-weight:700;font-size:0.95rem;padding:6px;border-radius:8px}
-.delete-btn:hover{background:rgba(229,57,53,0.06)}
+/* --------------------------------------------------
+   DELETE BUTTON STYLE
+-------------------------------------------------- */
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #E53935;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 6px;
+  border-radius: 8px;
+}
+.delete-btn:hover {
+  background: rgba(229,57,53,0.06);
+}
 
 /* ---------- 12) Modal / cropper / panchangam / voice ---------- */
 .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);z-index:9999;padding:12px}
