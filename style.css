@@ -1281,13 +1281,81 @@ body.dark #nextPage:hover {
     max-width: 120px;
   }
 }
+/* ============================================================
+   🎛 ULTRA MINIMAL PRO CONTROLS (Canva-style)
+   ============================================================ */
+/* ============================================================
+   🎛 Ultra-Compact Pro Controls (Canva Style)
+   ============================================================ */
+/* ------------------------------------------------------------
+   PRIMARY-STYLE SELECT & INPUT (Uniform Button Look)
+-------------------------------------------------------------*/
+#sortSelect,
+#pageSizeSelect,
+#galleryFilter {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 8px 14px;                 /* same as small button */
+  min-width: 120px;
+  border-radius: 8px;                /* same curve as buttons */
+  border: 1px solid rgba(0,0,0,0.12);
+
+  background: var(--card);
+  color: var(--text);
+
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.18s ease;
+  line-height: 1.2;
+
+  
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+}
+
+/* Text input only — remove arrow */
+#galleryFilter {
+  background-image: none !important;
+  padding-right: 12px;
+}
+
+/* Hover feel = button hover */
+@media (hover:hover) {
+  #sortSelect:hover,
+  #pageSizeSelect:hover,
+  #galleryFilter:hover {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.18);
+  }
+}
+
+/* Focus = button focus */
+#sortSelect:focus,
+#pageSizeSelect:focus,
+#galleryFilter:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  outline: none;
+}
+
+/* ------------------------------------------------------------
+   MOBILE (full width)
+-------------------------------------------------------------*/
+@media (max-width: 600px) {
+  #sortSelect,
+  #pageSizeSelect,
+  #galleryFilter {
+    width: 100%;
+    min-width: 100%;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+  }
+}
 
 
 
-/* -------------------- 19) End of file -------------------- */
-/* Notes:
-   - Keep fonts under /fonts/ as referenced above.
-   - The gallery safety rules (section 18) are intentionally aggressive (important/!important)
-     to override older or conflicting styles that cause Android WebView / Chrome blank gallery.
-   - If you prefer less aggressive overrides, we can prune the !important flags after testing.
-*/

@@ -824,22 +824,22 @@ async function renderIndexedGallery({
   header.className = "gallery-header-panel";
 
   header.innerHTML = `
-    <span class="gallery-total-badge">Total: ${total}</span>
+    <span id="TotalCount">Total: ${total}</span>
 
-    <select id="sortSelect" class="gallery-control">
+    <select id="sortSelect" >
       <option value="newest">Newest First</option>
       <option value="oldest">Oldest First</option>
       <option value="name-asc">A → Z</option>
       <option value="name-desc">Z → A</option>
     </select>
 
-    <select id="pageSizeSelect" class="gallery-control">
+    <select id="pageSizeSelect" >
       <option value="6">6 per page</option>
       <option value="12" selected>12 per page</option>
       <option value="20">20 per page</option>
     </select>
 
-    <input id="galleryFilter" class="gallery-control" placeholder="Filter by title…">
+    <input id="galleryFilter"  placeholder="Filter by title…">
 
     <div class="button-group">
       <button id="refreshGallery" class="btn ghost small">🔄 Refresh</button>
