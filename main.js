@@ -803,19 +803,22 @@ async function renderIndexedGallery({
   const galleryContainer = document.getElementById("galleryContainer");
   if (!galleryContainer) return;
 
+  // Prevent flicker on PWA mobile
+  galleryContainer.style.minHeight = "120px";
+
   // Show loading spinner
   galleryContainer.innerHTML = `<div class="gallery-loading">Loading…</div>`;
 
-  // Fetch all posters
+  // Fetch data
   let all = await getAllFromDB();
-  all = all || [];
+  all = Array.isArray(all) ? all : [];
   const total = all.length;
 
-  // Reset container
+  // Reset UI
   galleryContainer.innerHTML = "";
 
   /* -----------------------------------------------------------
-     ⬆ Header Panel
+     HEADER PANEL
   ------------------------------------------------------------ */
   const header = document.createElement("div");
   header.className = "gallery-header-panel";
@@ -847,15 +850,20 @@ async function renderIndexedGallery({
 
   galleryContainer.appendChild(header);
 
+  // Restore selected values
+  header.querySelector("#sortSelect").value = sortBy;
+  header.querySelector("#pageSizeSelect").value = pageSize;
+  header.querySelector("#galleryFilter").value = filter;
+
   /* -----------------------------------------------------------
-     🔍 Filtering
+     FILTERING
   ------------------------------------------------------------ */
   let filtered = all.slice();
   const f = filter.trim().toLowerCase();
   if (f) filtered = filtered.filter(x => (x.title || "").toLowerCase().includes(f));
 
   /* -----------------------------------------------------------
-     🔃 Sorting
+     SORTING
   ------------------------------------------------------------ */
   if (sortBy === "newest") filtered.sort((a, b) => b.ts - a.ts);
   if (sortBy === "oldest") filtered.sort((a, b) => a.ts - b.ts);
@@ -863,7 +871,7 @@ async function renderIndexedGallery({
   if (sortBy === "name-desc") filtered.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
 
   /* -----------------------------------------------------------
-     📄 Pagination
+     PAGINATION
   ------------------------------------------------------------ */
   const totalFiltered = filtered.length;
   const ps = Number(pageSize);
@@ -871,12 +879,10 @@ async function renderIndexedGallery({
   const currentPage = Math.min(Math.max(1, page), totalPages);
 
   const start = (currentPage - 1) * ps;
-  const end = start + ps;
-
-  const items = filtered.slice(start, end);
+  const items = filtered.slice(start, start + ps);
 
   /* -----------------------------------------------------------
-     🚫 Empty State
+     EMPTY STATE
   ------------------------------------------------------------ */
   if (!items.length) {
     galleryContainer.innerHTML += `
@@ -886,65 +892,61 @@ async function renderIndexedGallery({
   }
 
   /* -----------------------------------------------------------
-     🖼 Grid Container
+     GALLERY GRID
   ------------------------------------------------------------ */
-const grid = document.createElement("div");
-grid.className = "gallery-grid";
+  const grid = document.createElement("div");
+  grid.className = "gallery-grid";
 
-items.forEach(item => {
-  const card = document.createElement("div");
-  card.className = "gallery-item";
+  items.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "gallery-item";
 
-  card.innerHTML = `
-    <div class="gallery-thumb-wrap">
-      <img 
-        src="${item.dataUrl}" 
-        alt="${item.title}" 
-        class="gallery-thumb"
-        onload="this.classList.add('loaded')"
-      />
+    card.innerHTML = `
+      <div class="gallery-thumb-wrap">
+        <img 
+          src="${item.dataUrl}" 
+          alt="${item.title}" 
+          class="gallery-thumb"
+          loading="lazy"
+          onload="this.classList.add('loaded')"
+        />
 
-      <div class="card-overlay">
-        <button data-id="${item.id}" data-act="preview">🔍</button>
-        <button data-id="${item.id}" data-act="share">📤</button>
-        <button data-id="${item.id}" data-act="download">⬇</button>
-        <button class="delete-btn" data-id="${item.id}" data-act="delete">🗑</button>
+        <div class="card-overlay">
+          <button data-id="${item.id}" data-act="preview">🔍</button>
+          <button data-id="${item.id}" data-act="download">⬇</button>
+          <button class="delete-btn" data-id="${item.id}" data-act="delete">🗑</button>
+        </div>
       </div>
-    </div>
 
-    <div class="gallery-meta">
-      <div class="gallery-title">${item.title || "Untitled"}</div>
-      <div class="gallery-date">${new Date(item.ts).toLocaleDateString()}</div>
-    </div>
-  `;
+      <div class="gallery-meta">
+        <div class="gallery-title">${item.title || "Untitled"}</div>
+        <div class="gallery-date">${new Date(item.ts).toLocaleDateString()}</div>
+      </div>
+    `;
 
-  grid.appendChild(card);
-});
+    grid.appendChild(card);
+  });
 
-galleryContainer.appendChild(grid);
-
+  galleryContainer.appendChild(grid);
 
   /* -----------------------------------------------------------
-     📍 Pagination Bar
+     PAGINATION BAR
   ------------------------------------------------------------ */
   const pager = document.createElement("div");
   pager.className = "gallery-pagination";
 
   pager.innerHTML = `
-    <button class="btn ghost small" id="prevPage" ${currentPage <= 1 ? "disabled" : ""}>◀ Prev</button>
-
+    ${currentPage > 1 ? `<button id="prevPage" class="btn ghost small">◀ Prev</button>` : ""}
     <span class="page-num">${currentPage} / ${totalPages}</span>
-
-    <button class="btn ghost small" id="nextPage" ${currentPage >= totalPages ? "disabled" : ""}>Next ▶</button>
+    ${currentPage < totalPages ? `<button id="nextPage" class="btn ghost small">Next ▶</button>` : ""}
   `;
 
   galleryContainer.appendChild(pager);
 
   /* -----------------------------------------------------------
-     🎯 Event Listeners
+     EVENT HANDLERS
   ------------------------------------------------------------ */
 
-  // Pagination
   pager.querySelector("#prevPage")?.addEventListener("click", () =>
     renderIndexedGallery({ sortBy, filter, page: currentPage - 1, pageSize: ps })
   );
@@ -953,32 +955,33 @@ galleryContainer.appendChild(grid);
     renderIndexedGallery({ sortBy, filter, page: currentPage + 1, pageSize: ps })
   );
 
-  // Sort
-  header.querySelector("#sortSelect").addEventListener("change", (e) =>
+  header.querySelector("#sortSelect").addEventListener("change", e =>
     renderIndexedGallery({ sortBy: e.target.value, filter, page: 1, pageSize: ps })
   );
 
-  // Page size
-  header.querySelector("#pageSizeSelect").addEventListener("change", (e) =>
+  header.querySelector("#pageSizeSelect").addEventListener("change", e =>
     renderIndexedGallery({ sortBy, filter, page: 1, pageSize: Number(e.target.value) })
   );
 
-  // Filter
-  header.querySelector("#galleryFilter").addEventListener("input", (e) => {
-    clearTimeout(window._filterDelay);
-    window._filterDelay = setTimeout(() => {
-      renderIndexedGallery({ sortBy, filter: e.target.value, page: 1, pageSize: ps });
+  header.querySelector("#galleryFilter").addEventListener("input", e => {
+    clearTimeout(window.__filterDelay);
+    window.__filterDelay = setTimeout(() => {
+      renderIndexedGallery({
+        sortBy,
+        filter: e.target.value,
+        page: 1,
+        pageSize: ps
+      });
     }, 300);
   });
 
-  // Refresh
   header.querySelector("#refreshGallery").addEventListener("click", () =>
     renderIndexedGallery({ sortBy, filter, page: 1, pageSize: ps })
   );
 
-  // Clear All
   header.querySelector("#clearAll").addEventListener("click", async () => {
     if (!confirm("Delete ALL posters?")) return;
+
     const db = await openDB();
     const tx = db.transaction(STORE_NAME, "readwrite");
     tx.objectStore(STORE_NAME).clear();
@@ -988,33 +991,29 @@ galleryContainer.appendChild(grid);
     };
   });
 
-  // Download All ZIP
   header.querySelector("#downloadAll").addEventListener("click", () =>
     downloadAllAsZip(all)
   );
 
-  // Overlay buttons
-  grid.addEventListener("click", async (ev) => {
+  grid.addEventListener("click", async ev => {
     const btn = ev.target.closest("button");
     if (!btn) return;
 
-    const id = btn.dataset.id;
-    const act = btn.dataset.act;
-
-    const item = all.find(x => x.id == id);
+    const item = all.find(x => x.id == btn.dataset.id);
     if (!item) return;
+
+    const act = btn.dataset.act;
 
     if (act === "preview") openPreviewModal(item);
     if (act === "download") downloadPoster(item);
-    if (act === "share") sharePoster(item);
+
     if (act === "delete") {
       if (!confirm("Delete this poster?")) return;
-      await deleteFromDB(id);
+      await deleteFromDB(item.id);
       renderIndexedGallery({ sortBy, filter, page: currentPage, pageSize: ps });
     }
   });
 }
-
 
  async function downloadAllAsZip(items) {
   if (!items || !items.length) {
@@ -1057,9 +1056,11 @@ galleryContainer.appendChild(grid);
    1) FULLSCREEN PREVIEW MODAL
 ---------------------------------------------- */
 window.openPreviewModal = function (item) {
+  // Remove old modal if exists
   const old = document.getElementById("akPreviewModal");
   if (old) old.remove();
 
+  // Create modal
   const modal = document.createElement("div");
   modal.id = "akPreviewModal";
 
@@ -1072,6 +1073,8 @@ window.openPreviewModal = function (item) {
         <div class="ak-preview-title">${item.title || "Untitled"}</div>
         <div class="ak-preview-date">${new Date(item.ts).toLocaleString()}</div>
       </div>
+
+      <!-- CLOSE BUTTON (LEFT SIDE SUPPORT READY IN CSS) -->
       <button class="btn ghost small" id="closePreview">✖</button>
     </div>
 
@@ -1079,17 +1082,22 @@ window.openPreviewModal = function (item) {
 
     <div class="ak-preview-actions">
       <button class="btn primary" id="previewDownload">⬇ Download</button>
-      <button class="btn ghost" id="previewShare">📤 Share</button>
     </div>
   `;
 
   modal.appendChild(box);
   document.body.appendChild(modal);
 
+  /* ---------------------------
+     BUTTON HANDLERS
+  --------------------------- */
+
   document.getElementById("closePreview").onclick = () => modal.remove();
   document.getElementById("previewDownload").onclick = () => downloadPoster(item);
-  document.getElementById("previewShare").onclick = () => sharePoster(item);
-  
+
+  /* ---------------------------
+     CLICK OUTSIDE TO CLOSE
+  --------------------------- */
   modal.addEventListener("click", (e) => {
     if (e.target === modal) modal.remove();
   });

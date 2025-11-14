@@ -715,23 +715,95 @@ body.dark #nextPage:hover {
 }
 
 .gallery-total-badge {
-  padding: 8px 14px;
-  background: linear-gradient(90deg, var(--primary), var(--primary-700));
-  color: #fff;
-  border-radius: 999px;
-  font-size: clamp(0.75rem, 2vw, 0.95rem);
-  font-weight: 700;
-  box-shadow: 0 5px 14px rgba(30,136,229,0.12);
+  padding: 6px 10px;
+  background: var(--card);         /* matches your theme */
+  color: var(--text-color, #222);
+  
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 6px;              /* small, subtle */
+  
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  font-weight: 600;
+
+  box-shadow: none;                /* removed */
 }
 
-/* Controls */
+
+/* ============================================================
+   🎛 Better Minimal Controls (Dropdown + Input)
+   Looks like buttons (not form fields)
+   ============================================================ */
+
 .gallery-control {
-  padding: 10px 12px;
-  width: clamp(120px, 40%, 200px);
-  border-radius: 10px;
-  border: 1px solid rgba(2,6,23,0.1);
-  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  appearance: none;                      /* remove native styles */
+  -webkit-appearance: none;
+
+  padding: 6px 12px;
+  width: 100%;
+  max-width: 140px;
+
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 8px;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-color, #222);
+
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);   /* button feel */
 }
+
+/* Hover (Desktop only) */
+@media (hover:hover) and (pointer:fine) {
+  .gallery-control:hover {
+    background: var(--accent-light, #f6f9ff);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.10);
+  }
+}
+
+/* Focus */
+.gallery-control:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0,191,166,0.25);
+}
+
+/* ============================================================
+   📱 Mobile — full width
+   ============================================================ */
+@media (max-width: 600px) {
+  .gallery-control {
+    width: 100%;
+    max-width: none;
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+}
+
+/* ============================================================
+   🖥 Desktop — small like Canva UI
+   ============================================================ */
+@media (min-width: 1024px) {
+  .gallery-control {
+    width: 120px;
+    max-width: 120px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Arrow icon simulation */
+.gallery-control {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='14' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M4 6l3 3 3-3z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
 
 .button-group {
   display: flex;
@@ -954,6 +1026,262 @@ body.dark #nextPage:hover {
   from { opacity:0; transform: translateY(20px); }
   to   { opacity:1; transform: translateY(0); }
 }
+#closePreview {
+  position: absolute;
+  top: clamp(8px, 2vw, 14px);
+  left: clamp(8px, 2vw, 14px);
+  right: auto;
+
+  width: clamp(30px, 5vw, 40px);
+  height: clamp(30px, 5vw, 40px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 50%;
+
+  font-size: clamp(16px, 3vw, 20px);
+  line-height: 1;
+
+  box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+  cursor: pointer;
+  z-index: 99999;
+  transition: all 0.2s ease;
+}
+
+/* Hover (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  #closePreview:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: scale(1.12);
+  }
+}
+
+/* Mobile tap feedback */
+@media (max-width: 600px) {
+  #closePreview:active {
+    transform: scale(0.92);
+    background: var(--accent);
+    color: #fff;
+  }
+}
+/* ============================================================
+   📄 Pagination Wrapper (All Devices)
+   ============================================================ */
+.gallery-pagination {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 14px 0;
+  flex-wrap: wrap;
+}
+
+/* Current Page Info */
+.page-num {
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  font-weight: 600;
+  opacity: 0.75;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.04);
+}
+
+/* ============================================================
+   ◀ Prev / Next ▶  Premium Buttons
+   ============================================================ */
+#prevPage,
+#nextPage {
+  padding: 8px 16px;
+  font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+  font-weight: 600;
+
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+
+  background: linear-gradient(90deg, #eef2f7, #e0e7f1);
+  color: #222;
+
+  box-shadow: 0 3px 8px rgba(0,0,0,0.10);
+  transition: all 0.22s ease;
+}
+
+/* Hover (desktop only) */
+@media (hover:hover) and (pointer:fine) {
+  #prevPage:hover,
+  #nextPage:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,191,166,0.35);
+  }
+}
+
+/* Disabled buttons (when hidden also used) */
+#prevPage:disabled,
+#nextPage:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: #e5e6ea;
+  color: #777;
+}
+
+/* ============================================================
+   📱 Responsive Tweaks
+   ============================================================ */
+
+/* Tablet + Mobile */
+@media (max-width: 768px) {
+  .gallery-pagination {
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  #prevPage,
+  #nextPage {
+    padding: 10px 18px;
+    border-radius: 12px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .gallery-pagination {
+    gap: 10px;
+  }
+
+  #prevPage,
+  #nextPage {
+    font-size: 0.82rem;
+    padding: 8px 14px;
+    border-radius: 10px;
+  }
+
+  .page-num {
+    padding: 4px 8px;
+    font-size: 0.82rem;
+  }
+}
+
+/* Extra Small (≤ 360px) */
+@media (max-width: 360px) {
+  .gallery-pagination {
+    gap: 8px;
+  }
+
+  #prevPage,
+  #nextPage {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .page-num {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+  }
+}
+
+/* ============================================================
+   🌙 Dark Mode
+   ============================================================ */
+body.dark #prevPage,
+body.dark #nextPage {
+  background: #2d3035;
+  color: #eee;
+  box-shadow: 0 3px 8px rgba(255,255,255,0.08);
+}
+
+body.dark #prevPage:hover,
+body.dark #nextPage:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ============================================================
+   🎛 Better Minimal Controls (Dropdown + Input)
+   Looks like buttons (not form fields)
+   ============================================================ */
+/* ============================================================
+   Ultra-Compact Dropdown / Input (All Devices)
+   ============================================================ */
+.gallery-control {
+  appearance: none;
+  -webkit-appearance: none;
+
+  padding: 6px 10px;
+  width: auto;
+  min-width: 95px;
+  max-width: 130px;
+
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-color, #222);
+  line-height: 1;
+
+  cursor: pointer;
+  transition: 0.18s ease;
+  white-space: nowrap;
+
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='12' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M4 5l2 2 2-2z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 10px;
+}
+
+/* Hover (desktop only) */
+@media (hover:hover) and (pointer:fine) {
+  .gallery-control:hover {
+    background: #f8fafc;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
+}
+
+/* Focus */
+.gallery-control:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0,191,166,0.25);
+}
+
+/* ------------------------------------------------------------
+   📱 Mobile (Full width but STILL compact)
+   ------------------------------------------------------------ */
+@media (max-width: 600px) {
+  .gallery-control {
+    width: 100%;
+    max-width: none;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ------------------------------------------------------------
+   🖥 Desktop (small UI)
+   ------------------------------------------------------------ */
+@media (min-width: 1024px) {
+  .gallery-control {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    min-width: 90px;
+    max-width: 120px;
+  }
+}
+
 
 
 /* -------------------- 19) End of file -------------------- */
