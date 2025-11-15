@@ -1673,28 +1673,7 @@ body.dark #nextPage:hover {
   }
 }
 
-/* =========================================== 🖥️ DESKTOP (LARGE VIEW) =========================================== */
-@media (min-width: 992px) {
-  .crop-modal-content {
-    max-width: 620px;
-    padding: 22px;
-  }
-  .crop-modal-header h3 {
-    font-size: 1.75rem;
-  }
-  .crop-btn {
-    font-size: 1.1rem;
-    padding: 12px;
-  }
-  .crop-image-wrapper {
-    padding: 30px;
-  }
-  .crop-close-btn {
-    font-size: 1.8rem;
-  }
-}
-
-/* Base styles for modal and buttons */
+/* Modal Base Styles */
 .modal {
   position: fixed;
   inset: 0;
@@ -1704,23 +1683,30 @@ body.dark #nextPage:hover {
   background: rgba(0, 0, 0, 0.55);
   z-index: 9999;
   padding: 12px;
-  transform: translate(0, -50%); /* Center vertically on mobile */
-  overflow: auto; /* Allow scrolling if content is too tall */
+  transform: translate(0, 0); /* Ensure the modal is centered and full screen */
+  overflow: hidden; /* Prevent overflow of modal content */
 }
 
+/* Modal Content */
 .crop-modal-content {
   width: 100%;
-  max-width: 90%; /* Ensure modal content doesn't overflow */
-  max-height: 80vh; /* Prevent overflowing on large images */
+  height: 100%;  /* Ensure it covers the entire height of the screen */
+  max-width: 100%; /* Ensure modal content doesn't overflow on small screens */
+  max-height: 100%;  /* Ensure it covers the entire height of the screen */
   background: var(--card);
   border-radius: 10px;
-  padding: 14px;
+  padding: 20px;
   box-shadow: var(--shadow-md);
-  overflow-y: auto; /* Allow vertical scrolling if needed */
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box; /* Include padding in content width calculation */
+  position: relative;
 }
 
+/* Crop Modal Header */
 .crop-modal-header {
   display: flex;
   justify-content: space-between;
@@ -1736,20 +1722,64 @@ body.dark #nextPage:hover {
   color: var(--primary);
   cursor: pointer;
   transition: transform 0.3s ease;
-  padding: 10px; /* Make it larger for touch interaction */
+  padding: 10px;
 }
 
 .crop-close-btn:hover {
   transform: rotate(90deg);
 }
 
+/* Image Wrapper */
 .crop-image-wrapper {
   display: flex;
   justify-content: center;
   padding: 20px;
-  overflow: hidden; /* Hide overflowing image */
+  overflow: hidden; /* Hide any overflowing image */
+  max-height: 60vh;  /* Allow a max height for the image */
+  width: 100%;  /* Ensure it takes up the full available width */
 }
 
+.crop-image-wrapper img {
+  max-width: 100%; /* Ensure the image fits within the container */
+  object-fit: contain;  /* Make sure the image maintains its aspect ratio */
+  max-height: 100%; /* Ensure image height doesn't overflow */
+}
+
+/* Controls Wrapper: Flexbox layout */
+.controls-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 20px;
+  width: 100%;
+  flex-wrap: wrap;  /* Allow the controls to wrap on smaller screens */
+}
+
+/* Control Item: Column layout for each slider */
+.control-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;  /* Allow control items to grow and fill the space */
+  margin-bottom: 10px;
+  max-width: 48%;
+}
+
+/* Label for each control (icon size and spacing) */
+.control-label {
+  font-size: 1.5rem; /* Icon size */
+  margin-bottom: 5px;
+  color: var(--primary);
+}
+
+/* Range input styling */
+input[type="range"] {
+  width: 100%;  /* Make range slider full width */
+  margin-top: 5px;
+  max-width: 200px;  /* Limit width on smaller screens */
+}
+
+/* Crop Actions */
 .crop-actions {
   display: flex;
   justify-content: space-between;
@@ -1769,7 +1799,7 @@ body.dark #nextPage:hover {
   align-items: center;
   gap: 8px;
   justify-content: center;
-  width: 100%; /* Ensure buttons take up full width on mobile */
+  width: 100%;
 }
 
 /* Mobile Button Styles */
@@ -1785,6 +1815,7 @@ body.dark #nextPage:hover {
 }
 
 /* =========================================== Mobile-first styles =========================================== */
+
 @media (max-width: 380px) {
   .crop-modal-content {
     max-width: 90%;
@@ -1863,4 +1894,7 @@ body.dark #nextPage:hover {
     font-size: 1rem;
   }
 }
-
+/* ============================================================
+   🎛 Better Minimal Controls (Dropdown + Input)
+   Looks like buttons (not form fields)
+   ============================================================ */  
