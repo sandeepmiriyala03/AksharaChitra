@@ -1,11 +1,11 @@
 /* ==========================================================
-   🌸 AksharaChitra — Home Section Script (v14.1 CLEAN)
+   🌸 AksharaChitra — Home Section Script (v14.2 CLEAN & FIXED)
    ----------------------------------------------------------
-   ✔ Show only English card by default
-   ✔ Dynamic font dropdown
-   ✔ Font Search (live filter)
-   ✔ Browser AI Capability Detector 🤖  
-  
+   ✔ Dynamic font selection + search
+   ✔ Auto sample preview
+   ✔ Always-visible fontOutput (fixed)
+   ✔ Show only selected-language card
+   ✔ Browser AI Capability Detector 🤖
    ---------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -39,19 +39,45 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /* ----------------------------------------------------------
-      DOM ELEMENTS
+     DOM ELEMENTS + FIXED FONT OUTPUT HANDLING
   ---------------------------------------------------------- */
   const langSelect = document.getElementById("previewLangSelect");
   const fontPreviewGrid = document.getElementById("fontPreviewGrid");
-  const fontOutput = document.getElementById("fontOutput");
+
+  // Always ensure only one fontOutput exists
+  let fontOutput = document.getElementById("fontOutput");
+
+  function ensureFontOutput() {
+    const all = document.querySelectorAll("#fontOutput");
+
+    // Remove duplicates if exist
+    if (all.length > 1) {
+      for (let i = 1; i < all.length; i++) all[i].remove();
+    }
+
+    fontOutput = all[0] || document.createElement("p");
+
+    if (!all[0]) {
+      fontOutput.id = "fontOutput";
+      fontOutput.textContent = "Select a language to preview sample text.";
+      langSelect.insertAdjacentElement("afterend", fontOutput);
+    }
+
+    // Ensure it's visible & readable
+    fontOutput.style.minHeight = "44px";
+    fontOutput.style.marginTop = "8px";
+    fontOutput.style.fontSize = "1rem";
+    fontOutput.style.lineHeight = "1.4";
+    fontOutput.style.transition = "opacity .18s, transform .18s";
+  }
+  ensureFontOutput();
 
   /* ----------------------------------------------------------
-      FONT SELECT + SEARCH UI
+     FONT SELECT + SEARCH
   ---------------------------------------------------------- */
   const container = document.createElement("div");
   container.style.marginTop = "10px";
 
-  // Search Input
   const fontSearch = document.createElement("input");
   fontSearch.placeholder = "🔍 Search fonts...";
   fontSearch.className = "font-search";
@@ -64,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   container.appendChild(fontSearch);
 
-  // Font Dropdown
   const fontSelect = document.createElement("select");
   fontSelect.id = "fontSelect";
   fontSelect.className = "font-select-minimal";
@@ -74,20 +99,25 @@ document.addEventListener("DOMContentLoaded", () => {
   langSelect.insertAdjacentElement("afterend", container);
 
   /* ----------------------------------------------------------
-     Fade helper
+     Fade Effect
   ---------------------------------------------------------- */
   function fade(el) {
-    el.classList.remove("show");
-    setTimeout(() => el.classList.add("show"), 10);
+    if (!el) return;
+    el.style.opacity = "0.01";
+    el.style.transform = "translateY(4px)";
+    setTimeout(() => {
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    }, 10);
   }
 
   /* ----------------------------------------------------------
-     Dropdown Handling
+     Update Fonts
   ---------------------------------------------------------- */
   function updateFontDropdown(lang) {
     fontSelect.innerHTML = "";
-
     const fonts = FONT_MAP[lang] || [];
+
     fonts.forEach(font => {
       const opt = document.createElement("option");
       opt.value = font;
@@ -95,11 +125,11 @@ document.addEventListener("DOMContentLoaded", () => {
       fontSelect.appendChild(opt);
     });
 
-    fontSelect.value = fonts[0]; // first item default
+    fontSelect.value = fonts[0]; // default
   }
 
   function applyFont(font) {
-    fontOutput.style.fontFamily = `'${font}'`;
+    fontOutput.style.fontFamily = `'${font}', inherit`;
     fade(fontOutput);
   }
 
@@ -109,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----------------------------------------------------------
-     Show Only Language Card
+     Show Only Language Cards
   ---------------------------------------------------------- */
   function showOnlyLanguageCards(lang) {
     const cards = fontPreviewGrid.querySelectorAll(".font-card");
@@ -149,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateSampleText("en");
   showOnlyLanguageCards("en");
 
-  console.log("✨ Home Section Ready (v14.1 — Clean + Search + Browser AI)");
+  console.log("✨ Home Section Ready (v14.2 — Clean, Stable, Fixed)");
 
   /* ----------------------------------------------------------
      🤖 BROWSER AI CAPABILITY DETECTOR
@@ -158,12 +188,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (aiList) aiList.innerHTML = "";
 
   function addCap(name, ok) {
-    if (!aiList) return;
     const item = document.createElement("div");
     item.className = "ai-cap-item";
     item.innerHTML = `
       <span>${name}</span>
-      <strong style="color:${ok ? 'green' : 'red'}">${ok ? "✔ Available" : "✖ No"}</strong>
+      <strong style="color:${ok ? 'green' : 'red'}">
+        ${ok ? "✔ Available" : "✖ No"}
+      </strong>
     `;
     aiList.appendChild(item);
   }
@@ -173,9 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const c = document.createElement("canvas");
       return !!(c.getContext("webgl") || c.getContext("experimental-webgl"));
-    } catch {
-      return false;
-    }
+    } catch { return false; }
   })());
   addCap("Speech Recognition (Voice Input)", "SpeechRecognition" in window || "webkitSpeechRecognition" in window);
   addCap("Text-to-Speech (TTS)", "speechSynthesis" in window);

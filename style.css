@@ -1444,5 +1444,121 @@ body.dark #nextPage:hover {
   .ai-cap-item {
     padding: 16px 18px;
   }
+}/* Home intro header with right-aligned logo */
+.about-intro-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
 }
+
+/* logo in the intro (right side) */
+.home-intro-logo {
+  width: 56px;              /* desktop default */
+  height: 56px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.9);
+}
+
+/* keep heading readable on small screens */
+@media (max-width: 640px) {
+  .about-intro-header {
+    flex-direction: row;
+    align-items: center;
+  }
+  .about-intro-header h2 {
+    font-size: 1.15rem;
+    line-height: 1.2;
+    flex: 1 1 auto;
+    margin-right: 8px;
+  }
+  .home-intro-logo {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* tighter spacing for very small phones */
+@media (max-width: 380px) {
+  .home-intro-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .about-intro-header h2 {
+    font-size: 1rem;
+  }
+}
+/* AI Coming Soon Title */
+.coming-soon-title {
+  margin-top: 20px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--primary-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.coming-soon-title::before {
+  content: "🚀";
+  font-size: 1.2rem;
+}
+
+/* AI Coming Soon Items */
+.coming-soon {
+  opacity: 0.85;
+  position: relative;
+  padding: 10px 12px;
+  margin: 6px 0;
+  background: rgba(0,0,0,0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.25s ease;
+}
+
+/* Hover (Desktop Only) */
+@media (hover: hover) {
+  .coming-soon:hover {
+    background: var(--glass);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Coming Soon Badge */
+.coming-soon .tag {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 4px rgba(255,152,0,0.3);
+  white-space: nowrap;
+}
+
+/* Mobile Optimized (Small Phones) */
+@media (max-width: 480px) {
+  .coming-soon {
+    padding: 8px 10px;
+    font-size: 0.88rem;
+  }
+
+  .coming-soon .tag {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+
+  .coming-soon-title {
+    font-size: 1rem;
+  }
+}
+/* Tablet Adjustments */
 
