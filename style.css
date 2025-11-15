@@ -1693,7 +1693,7 @@ body.dark #nextPage:hover {
     font-size: 1.8rem;
   }
 }
-/* =========================================== Base styles =========================================== */
+/* Base styles for modal and buttons */
 .modal {
   position: fixed;
   inset: 0;
@@ -1703,16 +1703,18 @@ body.dark #nextPage:hover {
   background: rgba(0, 0, 0, 0.55);
   z-index: 9999;
   padding: 12px;
+  transform: translate(0, -50%); /* Center vertically on mobile */
 }
 
 .crop-modal-content {
   width: 100%;
-  max-width: 720px;
+  max-width: 90%; /* Ensure modal content doesn't overflow */
+  max-height: 80vh;
   background: var(--card);
   border-radius: 10px;
   padding: 14px;
   box-shadow: var(--shadow-md);
-  overflow: auto;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -1732,6 +1734,7 @@ body.dark #nextPage:hover {
   color: var(--primary);
   cursor: pointer;
   transition: transform 0.3s ease;
+  padding: 10px; /* Make it larger for touch interaction */
 }
 
 .crop-close-btn:hover {
@@ -1763,35 +1766,26 @@ body.dark #nextPage:hover {
   align-items: center;
   gap: 8px;
   justify-content: center;
+  width: 100%; /* Ensure buttons take up full width on mobile */
 }
 
-.primary {
-  background: linear-gradient(90deg, var(--primary), var(--primary-700));
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(30, 136, 229, 0.12);
+/* Mobile Button Styles */
+.mobile-btn {
+  font-size: 1rem;
+  padding: 10px 12px;
 }
 
-.primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 26px rgba(30, 136, 229, 0.14);
-}
-
-.ghost {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid rgba(2, 6, 23, 0.06);
-}
-
-.ghost:hover {
-  background: rgba(57, 73, 171, 0.06);
+/* Desktop Button Styles */
+.desktop-btn {
+  font-size: 1.1rem;
+  padding: 12px 14px;
 }
 
 /* =========================================== Mobile-first styles =========================================== */
 
-/* Adjustments for small devices (≤380px) */
 @media (max-width: 380px) {
   .crop-modal-content {
-    max-width: 90%; /* smaller max width */
+    max-width: 90%;
     padding: 8px;
   }
 
@@ -1807,7 +1801,6 @@ body.dark #nextPage:hover {
   .crop-btn {
     font-size: 0.9rem;
     padding: 8px 12px;
-    width: 100%; /* Ensure buttons take up full width */
   }
 
   .crop-image-wrapper {
@@ -1816,10 +1809,10 @@ body.dark #nextPage:hover {
 
   .crop-close-btn {
     font-size: 1.3rem;
+    padding: 12px;
   }
 }
 
-/* Adjustments for medium devices (≤768px) */
 @media (max-width: 768px) {
   .crop-modal-content {
     max-width: 90%;
@@ -1838,7 +1831,6 @@ body.dark #nextPage:hover {
   .crop-btn {
     font-size: 1rem;
     padding: 10px;
-    width: 100%; /* Ensure buttons take up full width */
   }
 
   .crop-image-wrapper {
@@ -1850,7 +1842,6 @@ body.dark #nextPage:hover {
   }
 }
 
-/* Tablet devices (portrait and landscape) */
 @media (max-width: 1024px) {
   .crop-modal-content {
     max-width: 90%;
@@ -1870,61 +1861,4 @@ body.dark #nextPage:hover {
     font-size: 1rem;
   }
 }
-
-/* Large screens / desktops */
-@media (min-width: 1024px) {
-  .crop-modal-content {
-    max-width: 720px;
-    padding: 20px;
-  }
-
-  .crop-modal-header h3 {
-    font-size: 1.75rem;
-  }
-
-  .crop-actions {
-    gap: 20px;
-  }
-
-  .crop-btn {
-    font-size: 1.1rem;
-    padding: 12px;
-  }
-
-  .crop-image-wrapper {
-    padding: 30px;
-  }
-
-  .crop-close-btn {
-    font-size: 1.8rem;
-  }
-}
-
-/* Extra large screens (≥1440px) */
-@media (min-width: 1440px) {
-  .crop-modal-content {
-    max-width: 800px;
-    padding: 24px;
-  }
-
-  .crop-modal-header h3 {
-    font-size: 2rem;
-  }
-
-  .crop-actions {
-    gap: 24px;
-  }
-
-  .crop-btn {
-    font-size: 1.2rem;
-    padding: 14px;
-  }
-
-  .crop-image-wrapper {
-    padding: 40px;
-  }
-
-  .crop-close-btn {
-    font-size: 2rem;
-  }
-}
+/* Desktop styles */

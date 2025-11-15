@@ -392,7 +392,7 @@ function renderPreview() {
   console.log('Render Preview with:', cropTarget === "logo" ? uploadedLogoData : uploadedMainData);
 }
 
-// Adjust buttons for mobile devices (automatic scaling)
+// Function to adjust button layout for mobile and desktop
 function adjustButtonLayoutForMobile() {
   // Ensure the buttons exist before applying styles
   const applyCropBtn = document.getElementById('applyCropBtn');
@@ -400,24 +400,25 @@ function adjustButtonLayoutForMobile() {
 
   if (!applyCropBtn || !cancelCropBtn) return; // Exit if buttons don't exist
 
-  const isMobile = window.innerWidth <= 768; // Mobile breakpoint
+  const isMobile = window.innerWidth <= 768; // Mobile breakpoint (<=768px)
 
-  // Adjust button styles for mobile or larger screens
+  // Apply appropriate classes based on screen size
   if (isMobile) {
-    applyCropBtn.style.fontSize = "1rem"; // Make buttons a little bigger on mobile
-    applyCropBtn.style.padding = "10px 12px";
+    // Add mobile button classes
+    applyCropBtn.classList.add('mobile-btn');
+    applyCropBtn.classList.remove('desktop-btn');
     
-    cancelCropBtn.style.fontSize = "1rem"; // Adjust cancel button style too
-    cancelCropBtn.style.padding = "10px 12px";
+    cancelCropBtn.classList.add('mobile-btn');
+    cancelCropBtn.classList.remove('desktop-btn');
   } else {
-    applyCropBtn.style.fontSize = "1.1rem"; // Default size for larger screens
-    applyCropBtn.style.padding = "12px 14px";
+    // Add desktop button classes
+    applyCropBtn.classList.add('desktop-btn');
+    applyCropBtn.classList.remove('mobile-btn');
     
-    cancelCropBtn.style.fontSize = "1.1rem"; // Adjust cancel button style for larger screens
-    cancelCropBtn.style.padding = "12px 14px";
+    cancelCropBtn.classList.add('desktop-btn');
+    cancelCropBtn.classList.remove('mobile-btn');
   }
 }
-
 // Call the function when the page loads
 adjustButtonLayoutForMobile();
 
