@@ -490,7 +490,7 @@
     <!-- Top Bar -->
     <div class="crop-modal-header">
       <h3>✂ Crop Image</h3>
-      <button class="crop-close-btn" id="closeCropTop">✖</button>
+      <button class="crop-close-btn" id="closeCropTop">✖</button> <!-- Close button in the header -->
     </div>
 
     <!-- Image Area -->
@@ -501,13 +501,11 @@
     <!-- Action Buttons -->
     <div class="crop-actions">
       <button id="applyCropBtn" class="crop-btn primary">✅ Apply</button>
-      <button id="cancelCropBtn" class="crop-btn ghost">❌ Cancel</button>
+      <!-- Only keep the 'Apply' button for confirming the crop -->
     </div>
 
   </div>
 </div>
-
-
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js" defer></script>

@@ -260,40 +260,155 @@ console.log("✅ Tab Navigation Initialized (v18.3 Stable)");
   // ---------------------------------------------
   // ✂️ Cropper integration
   // ---------------------------------------------
-  function openCropModal(dataUrl, target) {
-    if (!cropModal || !cropImage) {
-      if (target === "logo") uploadedLogoData = dataUrl; else uploadedMainData = dataUrl;
-      renderPreview(); return;
+// DOM Elements
+
+const closeCropTop = document.getElementById('closeCropTop');
+
+// Function to open the crop modal
+function openCropModal(dataUrl, target) {
+  // If no crop modal or crop image, return early
+  if (!cropModal || !cropImage) {
+    if (target === "logo") uploadedLogoData = dataUrl;
+    else uploadedMainData = dataUrl;
+    renderPreview();
+    return;
+  }
+
+  // Set the target for the crop (logo or main image)
+  cropTarget = target;
+  cropImage.src = dataUrl;
+  cropModal.classList.remove("hidden");
+
+  // Destroy any existing cropper instance if it exists
+  try {
+    if (cropper) cropper.destroy();
+  } catch (e) {}
+
+  // Initialize the cropper with the new image
+  cropper = new Cropper(cropImage, {
+    viewMode: 1,
+    autoCropArea: 1,
+    background: false,
+    responsive: true,
+    movable: true,
+    zoomable: true,
+    rotatable: false,
+  });
+
+  // Adjust button layout when modal opens (after image upload)
+  adjustButtonLayoutForMobile();
+}
+
+// Handle apply button click
+if (applyCropBtn) {
+  applyCropBtn.addEventListener("click", () => {
+    if (!cropper) {
+      cropModal.classList.add("hidden");
+      return;
     }
-    cropTarget = target;
-    cropImage.src = dataUrl;
-    cropModal.classList.remove("hidden");
-    try { if (cropper) cropper.destroy(); } catch (e) {}
-    cropper = new Cropper(cropImage, {
-      viewMode: 1, autoCropArea: 1, background: false,
-      responsive: true, movable: true, zoomable: true, rotatable: false
+
+    try {
+      // Get the cropped canvas from cropper
+      const c = cropper.getCroppedCanvas({
+        maxWidth: 3000,
+        imageSmoothingQuality: "high",
+      });
+
+      // Convert canvas to data URL
+      const dataUrl = c.toDataURL("image/png");
+
+      // Save the cropped image data based on target (logo or main)
+      if (cropTarget === "logo") uploadedLogoData = dataUrl;
+      else uploadedMainData = dataUrl;
+
+    } catch (err) {
+      console.error("Crop apply error", err);
+      alert("Unable to crop image.");
+    }
+
+    // Destroy the cropper and hide the modal
+    try {
+      cropper.destroy();
+    } catch (e) {}
+    cropper = null;
+    cropModal.classList.add("hidden");
+
+    // Render the preview with the cropped image data
+    renderPreview();
+  });
+}
+
+// Handle cancel button click
+if (cancelCropBtn) {
+  cancelCropBtn.addEventListener("click", () => {
+    try {
+      if (cropper) cropper.destroy();
+    } catch (e) {}
+    cropper = null;
+    cropImage.src = "";  // Clear the image after cancel
+    cropModal.classList.add("hidden");
+  });
+}
+
+// Handle close button ('✖') click
+if (closeCropTop) {
+  closeCropTop.addEventListener("click", () => {
+    try {
+      if (cropper) cropper.destroy();
+    } catch (e) {}
+    cropper = null;
+    cropImage.src = "";  // Clear the image after close
+    cropModal.classList.add("hidden");
+  });
+}
+
+// Handle image upload
+
+if (imageUpload) {
+  imageUpload.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => openCropModal(ev.target.result, "main");
+    reader.readAsDataURL(file);
+  });
+}
+
+// Handle small logo upload
+
+if (smallLogoUpload) {
+  smallLogoUpload.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => openCropModal(ev.target.result, "logo");
+    reader.readAsDataURL(file);
+  });
+}
+
+// Function to render the preview after the crop
+function renderPreview() {
+  // Add your preview rendering logic here based on uploadedLogoData or uploadedMainData
+  console.log('Render Preview with:', cropTarget === "logo" ? uploadedLogoData : uploadedMainData);
+}
+
+// Adjust buttons for mobile devices (automatic scaling)
+function adjustButtonLayoutForMobile() {
+  const isMobile = window.innerWidth <= 768; // Mobile breakpoint, adjust as needed
+  const buttons = [applyCropBtn, cancelCropBtn];
+
+  if (isMobile) {
+    buttons.forEach(btn => {
+      btn.style.fontSize = "1rem";  // Make buttons a little bigger on mobile
+      btn.style.padding = "10px 12px";
+    });
+  } else {
+    buttons.forEach(btn => {
+      btn.style.fontSize = "1.1rem";  // Default size for larger screens
+      btn.style.padding = "12px 14px";
     });
   }
-  if (applyCropBtn) on(applyCropBtn, "click", () => {
-    if (!cropper) { cropModal.classList.add("hidden"); return; }
-    try {
-      const c = cropper.getCroppedCanvas({ maxWidth: 3000, imageSmoothingQuality: "high" });
-      const dataUrl = c.toDataURL("image/png");
-      if (cropTarget === "logo") uploadedLogoData = dataUrl; else uploadedMainData = dataUrl;
-    } catch (err) { console.error("Crop apply error", err); alert("Unable to crop image."); }
-    try { cropper.destroy(); } catch (e) {}
-    cropper = null; cropModal.classList.add("hidden"); renderPreview();
-  });
-  if (cancelCropBtn) on(cancelCropBtn, "click", () => { try { if (cropper) cropper.destroy(); } catch (e) {} cropper = null; cropModal.classList.add("hidden"); });
-
-  if (imageUpload) on(imageUpload, "change", (e) => {
-    const f = e.target.files?.[0]; if (!f) return;
-    const r = new FileReader(); r.onload = (ev) => openCropModal(ev.target.result, "main"); r.readAsDataURL(f);
-  });
-  if (smallLogoUpload) on(smallLogoUpload, "change", (e) => {
-    const f = e.target.files?.[0]; if (!f) return;
-    const r = new FileReader(); r.onload = (ev) => openCropModal(ev.target.result, "logo"); r.readAsDataURL(f);
-  });
+}
 
   // ---------------------------------------------
   // 🪶 Render Preview

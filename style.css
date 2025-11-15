@@ -374,9 +374,7 @@ body.dark .ak-created-date,body.dark .ak-watermark{background:rgba(0,0,0,0.45);c
    ============================================================ */
 
 /* -------------------- 11) Modal / cropper / voice -------------------- */
-.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);z-index:9999;padding:12px}
-.modal-content{width:100%;max-width:720px;background:var(--card);border-radius:10px;padding:14px;box-shadow:var(--shadow-md);overflow:auto;animation:fadeUp .35s ease both}
-.modal.hidden{display:none}
+
 #panchangam{padding:2rem 1rem;background:linear-gradient(180deg,#fffdf7 0%,#fff8e1 100%);font-family:var(--telugu-stack);min-height:60vh;display:flex;flex-direction:column;align-items:center;gap:18px}
 #startVoice,#stopVoice{border:1px solid var(--primary);background:transparent;border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--primary);transition:all 0.3s ease}
 #startVoice.listening{background:#ff6f61;color:#fff;animation:pulse 1.2s infinite}
@@ -474,80 +472,6 @@ input.telugu, textarea.telugu, .editable.telugu { font-family: var(--telugu-stac
    🟦 PRO Crop Modal — Universal Responsive CSS (All Devices)
    =========================================================== */
 
-.crop-modal-content {
-  width: 100%;
-  max-width: 720px;
-  background: var(--card);
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: var(--shadow-md);
-  overflow-y: auto;
-  overflow-x: hidden;
-  animation: fadeUp .35s ease both;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-height: 90vh;           /* Prevents overflow on Android */
-  -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
-}
-
-/* -----------------------------
-   📱 Tablets (≤ 900px)
------------------------------- */
-@media (max-width: 900px) {
-  .crop-modal-content {
-    max-width: 640px;
-    padding: 14px;
-    border-radius: 12px;
-  }
-}
-
-/* -----------------------------
-   📱 Mobile (≤ 600px)
------------------------------- */
-@media (max-width: 600px) {
-  .crop-modal-content {
-    max-width: 92%;
-    padding: 12px;
-    border-radius: 10px;
-    max-height: 88vh;     /* Fix for Android keyboard resize */
-  }
-}
-
-/* -----------------------------
-   📱 Small Phones (≤ 480px)
------------------------------- */
-@media (max-width: 480px) {
-  .crop-modal-content {
-    max-width: 94%;
-    padding: 10px;
-    border-radius: 10px;
-    gap: 12px;
-  }
-}
-
-/* -----------------------------
-   📱 Ultra-Small Phones (≤ 360px)
------------------------------- */
-@media (max-width: 360px) {
-  .crop-modal-content {
-    max-width: 96%;
-    padding: 8px;
-    border-radius: 8px;
-    gap: 10px;
-  }
-}
-
-/* -----------------------------
-   📱 Landscape rotation fix
------------------------------- */
-@media (max-height: 480px) {
-  .crop-modal-content {
-    max-height: 80vh;
-    padding: 10px;
-    border-radius: 10px;
-  }
-}
 .preview-heading {
   text-align: center;
   margin-bottom: 14px;
@@ -1749,17 +1673,260 @@ body.dark #nextPage:hover {
   }
 }
 
-/* ===========================================
-   🖥️ DESKTOP (LARGE VIEW)
-   =========================================== */
+/* =========================================== 🖥️ DESKTOP (LARGE VIEW) =========================================== */
 @media (min-width: 992px) {
-  .preview-card-modern {
+  .crop-modal-content {
     max-width: 620px;
     padding: 22px;
   }
-  .preview-text {
-    font-size: 1.25rem;
+  .crop-modal-header h3 {
+    font-size: 1.75rem;
+  }
+  .crop-btn {
+    font-size: 1.1rem;
+    padding: 12px;
+  }
+  .crop-image-wrapper {
+    padding: 30px;
+  }
+  .crop-close-btn {
+    font-size: 1.8rem;
   }
 }
 
+/* =========================================== Base styles =========================================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 9999;
+  padding: 12px;
+}
+
+.crop-modal-content {
+  width: 100%;
+  max-width: 720px;
+  background: var(--card);
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: var(--shadow-md);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.crop-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.crop-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.crop-close-btn:hover {
+  transform: rotate(90deg);
+}
+
+.crop-image-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.crop-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.crop-btn {
+  padding: var(--btn-padding);
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+  font-size: var(--btn-font-size);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.primary {
+  background: linear-gradient(90deg, var(--primary), var(--primary-700));
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(30, 136, 229, 0.12);
+}
+
+.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(30, 136, 229, 0.14);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(2, 6, 23, 0.06);
+}
+
+.ghost:hover {
+  background: rgba(57, 73, 171, 0.06);
+}
+
+/* =========================================== Mobile-first styles =========================================== */
+
+/* Adjustments for small devices (≤380px) */
+@media (max-width: 380px) {
+  .crop-modal-content {
+    max-width: 100%;
+    padding: 8px;
+  }
+
+  .crop-modal-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .crop-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .crop-btn {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    width: 100%; /* Ensure buttons take up full width */
+  }
+
+  .crop-image-wrapper {
+    padding: 10px;
+  }
+
+  .crop-close-btn {
+    font-size: 1.3rem;
+  }
+}
+
+/* Adjustments for medium devices (≤768px) */
+@media (max-width: 768px) {
+  .crop-modal-content {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .crop-modal-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .crop-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .crop-btn {
+    font-size: 1rem;
+    padding: 10px;
+    width: 100%; /* Ensure buttons take up full width */
+  }
+
+  .crop-image-wrapper {
+    padding: 12px;
+  }
+
+  .crop-close-btn {
+    font-size: 1.5rem;
+  }
+}
+
+/* Tablet devices (portrait and landscape) */
+@media (max-width: 1024px) {
+  .crop-modal-content {
+    max-width: 90%;
+    padding: 16px;
+  }
+
+  .crop-modal-header h3 {
+    font-size: 1.5rem;
+  }
+
+  .crop-actions {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .crop-btn {
+    font-size: 1rem;
+  }
+}
+
+/* Large screens / desktops */
+@media (min-width: 1024px) {
+  .crop-modal-content {
+    max-width: 720px;
+    padding: 20px;
+  }
+
+  .crop-modal-header h3 {
+    font-size: 1.75rem;
+  }
+
+  .crop-actions {
+    gap: 20px;
+  }
+
+  .crop-btn {
+    font-size: 1.1rem;
+    padding: 12px;
+  }
+
+  .crop-image-wrapper {
+    padding: 30px;
+  }
+
+  .crop-close-btn {
+    font-size: 1.8rem;
+  }
+}
+
+/* Extra large screens (≥1440px) */
+@media (min-width: 1440px) {
+  .crop-modal-content {
+    max-width: 800px;
+    padding: 24px;
+  }
+
+  .crop-modal-header h3 {
+    font-size: 2rem;
+  }
+
+  .crop-actions {
+    gap: 24px;
+  }
+
+  .crop-btn {
+    font-size: 1.2rem;
+    padding: 14px;
+  }
+
+  .crop-image-wrapper {
+    padding: 40px;
+  }
+
+  .crop-close-btn {
+    font-size: 2rem;
+  }
+}
 
