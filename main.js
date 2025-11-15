@@ -170,14 +170,13 @@ qsAll(".tab-btn").forEach((btn) => {
     if (section) section.classList.add("active");
 
  // 🌸 Auto-render gallery safely (PWA first-load FIX)
-if (target === "gallery") {
-  console.log("🖼 Safe Gallery Load (PWA)");
- setTimeout(initGallerySafe, 120);   // ✔️ FIX: delay to ensure DB ready
-}
+      if (target === "gallery") {
+        console.log("🖼 Safe Gallery Load (PWA)");
+      setTimeout(initGallerySafe, 120);   // ✔️ FIX: delay to ensure DB ready
+      }
     // Smooth scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
     // Save last active tab
-    localStorage.setItem("activeTab", target);
   });
 });
 
