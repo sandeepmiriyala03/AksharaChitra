@@ -1358,4 +1358,91 @@ body.dark #nextPage:hover {
 }
 
 
+/* 🌟 AI Browser Feature Block (fully responsive) */
+.ai-browser-section {
+  background: var(--glass);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  margin-top: 20px;
+  transition: 0.3s ease;
+}
+
+/* Mobile-friendly list layout */
+.ai-cap-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Each capability item */
+.ai-cap-item {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s ease;
+}
+
+/* Hover effect for desktop only */
+@media (hover: hover) {
+  .ai-cap-item:hover {
+    transform: translateY(-2px);
+    background: rgba(0, 0, 0, 0.08);
+  }
+}
+
+.ai-cap-item span {
+  font-weight: 600;
+}
+
+/* Info message */
+.ai-info-tip {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+/* 🌙 Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ai-cap-item {
+    background: rgba(255, 255, 255, 0.08);
+    color: #eee;
+  }
+
+  .ai-browser-section {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* 📱 Ultra-small screens handling */
+@media (max-width: 360px) {
+  .ai-cap-item {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ⬛ Larger screens (tablet/desktop) */
+@media (min-width: 768px) {
+  .ai-browser-section {
+    padding: 20px;
+  }
+  .ai-cap-item {
+    font-size: 1rem;
+    padding: 14px 16px;
+  }
+}
+
+/* 🖥 Wide screens */
+@media (min-width: 1200px) {
+  .ai-cap-item {
+    padding: 16px 18px;
+  }
+}
 

@@ -1,11 +1,11 @@
 /* ==========================================================
-   🌸 AksharaChitra — Home Section Script (v12.0)
+   🌸 AksharaChitra — Home Section Script (v14.1 CLEAN)
    ----------------------------------------------------------
    ✔ Show only English card by default
    ✔ Dynamic font dropdown
    ✔ Font Search (live filter)
-   ✔ Favorite Fonts ⭐
-   ✔ AI Font Recommendation 🎯
+   ✔ Browser AI Capability Detector 🤖  
+  
    ---------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -40,14 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ----------------------------------------------------------
       DOM ELEMENTS
-  ----------------------------------------------------------- */
+  ---------------------------------------------------------- */
   const langSelect = document.getElementById("previewLangSelect");
   const fontPreviewGrid = document.getElementById("fontPreviewGrid");
   const fontOutput = document.getElementById("fontOutput");
 
   /* ----------------------------------------------------------
-      FONT SELECT + SEARCH + FAVORITES UI
-  ----------------------------------------------------------- */
+      FONT SELECT + SEARCH UI
+  ---------------------------------------------------------- */
   const container = document.createElement("div");
   container.style.marginTop = "10px";
 
@@ -71,91 +71,23 @@ document.addEventListener("DOMContentLoaded", () => {
   fontSelect.style.width = "100%";
   container.appendChild(fontSelect);
 
-  // Favorites Area
-  const favTitle = document.createElement("p");
-  favTitle.textContent = "⭐ Favorite Fonts";
-  favTitle.style.marginTop = "10px";
-  const favBox = document.createElement("div");
-  favBox.id = "favoriteFonts";
-  favBox.style.display = "flex";
-  favBox.style.flexWrap = "wrap";
-  favBox.style.gap = "8px";
-
-  container.appendChild(favTitle);
-  container.appendChild(favBox);
-
   langSelect.insertAdjacentElement("afterend", container);
 
   /* ----------------------------------------------------------
-     Fade Helper
-  ----------------------------------------------------------- */
+     Fade helper
+  ---------------------------------------------------------- */
   function fade(el) {
-    if (!el) return;
     el.classList.remove("show");
     setTimeout(() => el.classList.add("show"), 10);
   }
 
   /* ----------------------------------------------------------
-     FAVORITES (stored in localStorage)
-  ----------------------------------------------------------- */
-  let favoriteFonts = JSON.parse(localStorage.getItem("ac_favorites") || "[]");
-
-  function updateFavoritesUI() {
-    favBox.innerHTML = "";
-    favoriteFonts.forEach(font => {
-      const tag = document.createElement("div");
-      tag.textContent = font;
-      tag.style = `
-        padding: 5px 10px;
-        border-radius: 6px;
-        background: #eee;
-        cursor: pointer;
-        font-family: '${font}';
-      `;
-      tag.onclick = () => {
-        fontSelect.value = font;
-        applyFont(font);
-      };
-      favBox.appendChild(tag);
-    });
-  }
-
-  function toggleFavorite(font) {
-    if (favoriteFonts.includes(font)) {
-      favoriteFonts = favoriteFonts.filter(f => f !== font);
-    } else {
-      favoriteFonts.push(font);
-    }
-    localStorage.setItem("ac_favorites", JSON.stringify(favoriteFonts));
-    updateFavoritesUI();
-  }
-
-  /* ----------------------------------------------------------
-     AI FONT RECOMMENDATION
-  ----------------------------------------------------------- */
-  function aiRecommendFont(lang) {
-    // Can later integrate WebLLM
-    const logic = {
-      en: "Montserrat",
-      te: "Mandali",
-      hi: "Hind",
-      sa: "Tiro Devanagari Sanskrit",
-      ta: "Noto Sans Tamil",
-      kn: "Noto Sans Kannada",
-      ml: "Noto Sans Malayalam",
-      or: "Noto Sans Oriya"
-    };
-    return logic[lang] || "Montserrat";
-  }
-
-  /* ----------------------------------------------------------
-     Update Font Dropdown
-  ----------------------------------------------------------- */
+     Dropdown Handling
+  ---------------------------------------------------------- */
   function updateFontDropdown(lang) {
     fontSelect.innerHTML = "";
 
     const fonts = FONT_MAP[lang] || [];
-
     fonts.forEach(font => {
       const opt = document.createElement("option");
       opt.value = font;
@@ -163,18 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
       fontSelect.appendChild(opt);
     });
 
-    // AI recommended font → select automatically
-    const recommended = aiRecommendFont(lang);
-    if (fonts.includes(recommended)) {
-      fontSelect.value = recommended;
-    } else {
-      fontSelect.selectedIndex = 0;
-    }
+    fontSelect.value = fonts[0]; // first item default
   }
 
-  /* ----------------------------------------------------------
-     Update Sample Text
-  ----------------------------------------------------------- */
   function applyFont(font) {
     fontOutput.style.fontFamily = `'${font}'`;
     fade(fontOutput);
@@ -182,13 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateSampleText(lang) {
     fontOutput.textContent = SAMPLE_TEXT[lang];
-    const defaultFont = fontSelect.value;
-    applyFont(defaultFont);
+    applyFont(fontSelect.value);
   }
 
   /* ----------------------------------------------------------
-     Show only selected language card
-  ----------------------------------------------------------- */
+     Show Only Language Card
+  ---------------------------------------------------------- */
   function showOnlyLanguageCards(lang) {
     const cards = fontPreviewGrid.querySelectorAll(".font-card");
     cards.forEach(card => {
@@ -197,12 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----------------------------------------------------------
-     SEARCH FILTER
-  ----------------------------------------------------------- */
+     Search Filter
+  ---------------------------------------------------------- */
   fontSearch.addEventListener("input", () => {
-    const keyword = fontSearch.value.toLowerCase();
+    const key = fontSearch.value.toLowerCase();
     Array.from(fontSelect.options).forEach(opt => {
-      opt.style.display = opt.value.toLowerCase().includes(keyword)
+      opt.style.display = opt.value.toLowerCase().includes(key)
         ? "block"
         : "none";
     });
@@ -210,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ----------------------------------------------------------
      EVENTS
-  ----------------------------------------------------------- */
+  ---------------------------------------------------------- */
   langSelect.addEventListener("change", () => {
     const lang = langSelect.value;
     updateFontDropdown(lang);
@@ -218,22 +140,52 @@ document.addEventListener("DOMContentLoaded", () => {
     showOnlyLanguageCards(lang);
   });
 
-  fontSelect.addEventListener("change", () => {
-    applyFont(fontSelect.value);
-  });
-
-  // Double-tap on font output → add to favorites
-  fontOutput.addEventListener("dblclick", () => {
-    toggleFavorite(fontSelect.value);
-  });
+  fontSelect.addEventListener("change", () => applyFont(fontSelect.value));
 
   /* ----------------------------------------------------------
-     INIT — Default English
-  ----------------------------------------------------------- */
+     INIT
+  ---------------------------------------------------------- */
   updateFontDropdown("en");
   updateSampleText("en");
   showOnlyLanguageCards("en");
-  updateFavoritesUI();
 
-  console.log("✨ Home Section Ready (Search + Favorites + AI Suggestions)");
+  console.log("✨ Home Section Ready (v14.1 — Clean + Search + Browser AI)");
+
+  /* ----------------------------------------------------------
+     🤖 BROWSER AI CAPABILITY DETECTOR
+  ---------------------------------------------------------- */
+  const aiList = document.getElementById("aiCapabilityList");
+  if (aiList) aiList.innerHTML = "";
+
+  function addCap(name, ok) {
+    if (!aiList) return;
+    const item = document.createElement("div");
+    item.className = "ai-cap-item";
+    item.innerHTML = `
+      <span>${name}</span>
+      <strong style="color:${ok ? 'green' : 'red'}">${ok ? "✔ Available" : "✖ No"}</strong>
+    `;
+    aiList.appendChild(item);
+  }
+
+  addCap("WebGPU (Local AI Acceleration)", !!navigator.gpu);
+  addCap("WebGL Renderer", (() => {
+    try {
+      const c = document.createElement("canvas");
+      return !!(c.getContext("webgl") || c.getContext("experimental-webgl"));
+    } catch {
+      return false;
+    }
+  })());
+  addCap("Speech Recognition (Voice Input)", "SpeechRecognition" in window || "webkitSpeechRecognition" in window);
+  addCap("Text-to-Speech (TTS)", "speechSynthesis" in window);
+  addCap("Local File Access API", "showOpenFilePicker" in window);
+  addCap("Clipboard API", !!navigator.clipboard);
+  addCap("Local Font Access API", "queryLocalFonts" in window);
+  addCap("WebNN (Neural Network API)", "ml" in navigator);
+  addCap("Web Workers (AI Threads)", !!window.Worker);
+  addCap("Storage Manager (Offline Models)", "storage" in navigator);
+  addCap("Device RAM", navigator.deviceMemory ? `${navigator.deviceMemory} GB` : "Unknown");
+  addCap("CPU Threads", navigator.hardwareConcurrency || "Unknown");
+
 });
