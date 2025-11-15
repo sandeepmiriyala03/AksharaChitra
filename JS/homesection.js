@@ -1,11 +1,11 @@
 /* ==========================================================
-   🌸 AksharaChitra — Home Section Script (v14.2 CLEAN & FIXED)
+   🌸 AksharaChitra — Home Section Script (v15 FINAL)
    ----------------------------------------------------------
-   ✔ Dynamic font selection + search
-   ✔ Auto sample preview
-   ✔ Always-visible fontOutput (fixed)
-   ✔ Show only selected-language card
-   ✔ Browser AI Capability Detector 🤖
+   ✔ Font Selection + Search
+   ✔ Auto Sample Preview
+   ✔ Save Custom Fonts per Language
+   ✔ Local Font Access API (FIXED)
+   ✔ Browser AI Capability Detector
    ---------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -27,6 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     or: ["Noto Sans Oriya"]
   };
 
+  /* Load custom saved fonts */
+  let CUSTOM_FONTS = JSON.parse(localStorage.getItem("ac_custom_fonts") || "{}");
+  for (const lang of Object.keys(FONT_MAP)) {
+    if (!CUSTOM_FONTS[lang]) CUSTOM_FONTS[lang] = [];
+    FONT_MAP[lang].push(...CUSTOM_FONTS[lang]);
+  }
+
   const SAMPLE_TEXT = {
     en: "Create beautiful posters easily!",
     te: "అందమైన పోస్టర్ సృష్టించండి 🎨",
@@ -39,41 +46,23 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /* ----------------------------------------------------------
-     DOM ELEMENTS + FIXED FONT OUTPUT HANDLING
+     DOM ELEMENTS
   ---------------------------------------------------------- */
   const langSelect = document.getElementById("previewLangSelect");
   const fontPreviewGrid = document.getElementById("fontPreviewGrid");
-
-  // Always ensure only one fontOutput exists
   let fontOutput = document.getElementById("fontOutput");
 
+  /* Ensure fontOutput exists only once */
   function ensureFontOutput() {
     const all = document.querySelectorAll("#fontOutput");
-
-    // Remove duplicates if exist
     if (all.length > 1) {
       for (let i = 1; i < all.length; i++) all[i].remove();
     }
-
-    fontOutput = all[0] || document.createElement("p");
-
-    if (!all[0]) {
-      fontOutput.id = "fontOutput";
-      fontOutput.textContent = "Select a language to preview sample text.";
-      langSelect.insertAdjacentElement("afterend", fontOutput);
-    }
-
-    // Ensure it's visible & readable
-    fontOutput.style.minHeight = "44px";
-    fontOutput.style.marginTop = "8px";
-    fontOutput.style.fontSize = "1rem";
-    fontOutput.style.lineHeight = "1.4";
-    fontOutput.style.transition = "opacity .18s, transform .18s";
   }
   ensureFontOutput();
 
   /* ----------------------------------------------------------
-     FONT SELECT + SEARCH
+     Font Search + Dropdown
   ---------------------------------------------------------- */
   const container = document.createElement("div");
   container.style.marginTop = "10px";
@@ -96,13 +85,13 @@ document.addEventListener("DOMContentLoaded", () => {
   fontSelect.style.width = "100%";
   container.appendChild(fontSelect);
 
+  /* Insert UI after language selector */
   langSelect.insertAdjacentElement("afterend", container);
 
   /* ----------------------------------------------------------
-     Fade Effect
+     Fade animation
   ---------------------------------------------------------- */
   function fade(el) {
-    if (!el) return;
     el.style.opacity = "0.01";
     el.style.transform = "translateY(4px)";
     setTimeout(() => {
@@ -125,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fontSelect.appendChild(opt);
     });
 
-    fontSelect.value = fonts[0]; // default
+    fontSelect.value = fonts[0];
   }
 
   function applyFont(font) {
@@ -139,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----------------------------------------------------------
-     Show Only Language Cards
+     Show only the selected language card
   ---------------------------------------------------------- */
   function showOnlyLanguageCards(lang) {
     const cards = fontPreviewGrid.querySelectorAll(".font-card");
@@ -149,19 +138,77 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ----------------------------------------------------------
-     Search Filter
+     Live Search Filter
   ---------------------------------------------------------- */
   fontSearch.addEventListener("input", () => {
-    const key = fontSearch.value.toLowerCase();
+    const q = fontSearch.value.toLowerCase();
     Array.from(fontSelect.options).forEach(opt => {
-      opt.style.display = opt.value.toLowerCase().includes(key)
-        ? "block"
-        : "none";
+      opt.style.display = opt.value.toLowerCase().includes(q) ? "block" : "none";
     });
   });
 
   /* ----------------------------------------------------------
-     EVENTS
+     ✨ LOCAL FONT ACCESS API (Fully Working)
+  ---------------------------------------------------------- */
+  const loadLocalBtn = document.getElementById("loadLocalFontsBtn");
+  const localFontsDropdown = document.getElementById("localFontsDropdown");
+  const localFontInfo = document.getElementById("localFontInfo");
+  const saveLocalFontBtn = document.getElementById("saveLocalFontBtn");
+
+  async function loadLocalFonts() {
+    if (!window.queryLocalFonts) {
+      alert("Local Font Access API not supported in this browser.");
+      return;
+    }
+
+    try {
+      const fonts = await window.queryLocalFonts();
+
+      localFontsDropdown.innerHTML = "";
+      localFontsDropdown.style.display = "block";
+      localFontInfo.style.display = "block";
+      saveLocalFontBtn.style.display = "block";
+
+      fonts.forEach(font => {
+        const opt = document.createElement("option");
+        opt.value = font.fullName;
+        opt.textContent = font.fullName;
+        localFontsDropdown.appendChild(opt);
+      });
+
+      localFontInfo.textContent = `${fonts.length} system fonts found`;
+
+      localFontsDropdown.addEventListener("change", () => {
+        fontOutput.style.fontFamily = `'${localFontsDropdown.value}', inherit`;
+        fade(fontOutput);
+      });
+
+    } catch (err) {
+      console.error(err);
+      alert("Unable to access system fonts. Permission denied.");
+    }
+  }
+
+  if (loadLocalBtn) loadLocalBtn.onclick = loadLocalFonts;
+
+  /* Save selected font */
+  saveLocalFontBtn.onclick = () => {
+    const lang = langSelect.value;
+    const name = localFontsDropdown.value;
+
+    if (!name) return alert("Select a font first!");
+
+    CUSTOM_FONTS[lang].push(name);
+    localStorage.setItem("ac_custom_fonts", JSON.stringify(CUSTOM_FONTS));
+
+    FONT_MAP[lang].push(name);
+
+    updateFontDropdown(lang);
+    alert(`Font "${name}" saved to ${lang} font family!`);
+  };
+
+  /* ----------------------------------------------------------
+     Events
   ---------------------------------------------------------- */
   langSelect.addEventListener("change", () => {
     const lang = langSelect.value;
@@ -179,42 +226,38 @@ document.addEventListener("DOMContentLoaded", () => {
   updateSampleText("en");
   showOnlyLanguageCards("en");
 
-  console.log("✨ Home Section Ready (v14.2 — Clean, Stable, Fixed)");
+  console.log("✨ Home Section Ready (v15 FINAL)");
 
   /* ----------------------------------------------------------
-     🤖 BROWSER AI CAPABILITY DETECTOR
+     🤖 Browser AI Capability Detector
   ---------------------------------------------------------- */
   const aiList = document.getElementById("aiCapabilityList");
-  if (aiList) aiList.innerHTML = "";
+  aiList.innerHTML = "";
 
   function addCap(name, ok) {
-    const item = document.createElement("div");
-    item.className = "ai-cap-item";
-    item.innerHTML = `
+    const el = document.createElement("div");
+    el.className = "ai-cap-item";
+    el.innerHTML = `
       <span>${name}</span>
-      <strong style="color:${ok ? 'green' : 'red'}">
-        ${ok ? "✔ Available" : "✖ No"}
-      </strong>
+      <strong style="color:${ok ? 'green' : 'red'}">${ok ? "✔ Available" : "✖ No"}</strong>
     `;
-    aiList.appendChild(item);
+    aiList.appendChild(el);
   }
 
-  addCap("WebGPU (Local AI Acceleration)", !!navigator.gpu);
-  addCap("WebGL Renderer", (() => {
-    try {
-      const c = document.createElement("canvas");
-      return !!(c.getContext("webgl") || c.getContext("experimental-webgl"));
-    } catch { return false; }
-  })());
-  addCap("Speech Recognition (Voice Input)", "SpeechRecognition" in window || "webkitSpeechRecognition" in window);
-  addCap("Text-to-Speech (TTS)", "speechSynthesis" in window);
+  addCap("WebGPU", !!navigator.gpu);
+  addCap("WebGL", (() => { try {
+    const c = document.createElement("canvas");
+    return !!c.getContext("webgl");
+  } catch { return false; }})());
+  addCap("Speech Recognition", !!(window.SpeechRecognition || window.webkitSpeechRecognition));
+  addCap("Text-to-Speech", "speechSynthesis" in window);
   addCap("Local File Access API", "showOpenFilePicker" in window);
   addCap("Clipboard API", !!navigator.clipboard);
   addCap("Local Font Access API", "queryLocalFonts" in window);
-  addCap("WebNN (Neural Network API)", "ml" in navigator);
-  addCap("Web Workers (AI Threads)", !!window.Worker);
-  addCap("Storage Manager (Offline Models)", "storage" in navigator);
-  addCap("Device RAM", navigator.deviceMemory ? `${navigator.deviceMemory} GB` : "Unknown");
+  addCap("WebNN", "ml" in navigator);
+  addCap("Web Workers", !!window.Worker);
+  addCap("Storage Manager", "storage" in navigator);
+  addCap("Device RAM", navigator.deviceMemory || "Unknown");
   addCap("CPU Threads", navigator.hardwareConcurrency || "Unknown");
 
 });

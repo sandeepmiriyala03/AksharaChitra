@@ -1561,4 +1561,235 @@ body.dark #nextPage:hover {
   }
 }
 /* Tablet Adjustments */
+/* ==========================================================
+   🌸 Local Font Access — UI/UX Styling
+   ---------------------------------------------------------- */
+
+.local-font-access {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--glass, rgba(255,255,255,0.45));
+  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 0.35s ease;
+}
+
+/* Load System Font Button */
+.local-font-access button {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #0078ff, #00a6ff);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0,123,255,0.25);
+}
+
+.local-font-access button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,123,255,0.35);
+}
+
+.local-font-access button:active {
+  transform: scale(0.97);
+}
+
+/* Dropdown (System Fonts) */
+#localFontsDropdown {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  border: 1px solid var(--border, #ccc);
+  background: var(--card, rgba(255,255,255,0.6));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  outline: none;
+  transition: border-color 0.25s;
+}
+
+#localFontsDropdown:focus {
+  border-color: #0078ff;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+}
+
+/* Info Text */
+#localFontInfo {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  text-align: left;
+}
+
+/* 🔄 Smooth Fade Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   Responsive Layout
+---------------------------------------------------------- */
+
+/* Tablets & Up */
+@media (min-width: 600px) {
+  .local-font-access {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .local-font-access button {
+    font-size: 1rem;
+    padding: 12px 18px;
+  }
+
+  #localFontsDropdown {
+    font-size: 1rem;
+    padding: 12px 14px;
+  }
+}
+
+/* Desktop Wide */
+@media (min-width: 1024px) {
+  .local-font-access {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+/* ==========================================================
+   🌸 LOCAL FONT ACCESS — FULL RESPONSIVE UI (Final v1.1)
+   ----------------------------------------------------------
+   ✔ Glass UI
+   ✔ Mobile-friendly
+   ✔ Touch-safe tap areas
+   ✔ Works on all screen sizes
+   ✔ Smooth animations
+   ---------------------------------------------------------- */
+
+.local-font-access {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.35s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Title */
+.local-font-access h3 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-text);
+}
+
+/* Load Local Fonts Button */
+#loadLocalFontsBtn {
+  width: 100%;
+  padding: 12px;
+  background: #4a9cff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+  font-size: 0.95rem;
+}
+
+#loadLocalFontsBtn:hover {
+  background: #227be9;
+}
+
+/* System Fonts Dropdown */
+#localFontsDropdown {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(140, 140, 140, 0.4);
+  background: rgba(255, 255, 255, 0.3);
+  font-size: 0.95rem;
+  backdrop-filter: blur(6px);
+  display: none;
+}
+
+/* Info Text */
+#localFontInfo {
+  margin-top: 8px;
+  opacity: 0.85;
+  font-size: 0.85rem;
+  color: var(--primary-text);
+  display: none;
+}
+
+/* Save Font Button */
+#saveLocalFontBtn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  background: #0c8cff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+  font-size: 0.95rem;
+  display: none;
+}
+
+#saveLocalFontBtn:hover {
+  background: #006ae0;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   🔥 FULL RESPONSIVE OPTIMIZATION
+   ---------------------------------------------------------- */
+
+/* Small phones (<360px width) */
+@media (max-width: 360px) {
+  .local-font-access {
+    padding: 14px;
+  }
+
+  #loadLocalFontsBtn,
+  #localFontsDropdown,
+  #saveLocalFontBtn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablets */
+@media (min-width: 600px) {
+  .local-font-access {
+    padding: 20px;
+  }
+}
+
+/* Desktop widescreen */
+@media (min-width: 992px) {
+  .local-font-access {
+    max-width: 600px;
+  }
+}
+
 
