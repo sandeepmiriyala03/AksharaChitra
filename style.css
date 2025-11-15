@@ -1693,6 +1693,7 @@ body.dark #nextPage:hover {
     font-size: 1.8rem;
   }
 }
+
 /* Base styles for modal and buttons */
 .modal {
   position: fixed;
@@ -1704,17 +1705,18 @@ body.dark #nextPage:hover {
   z-index: 9999;
   padding: 12px;
   transform: translate(0, -50%); /* Center vertically on mobile */
+  overflow: auto; /* Allow scrolling if content is too tall */
 }
 
 .crop-modal-content {
   width: 100%;
   max-width: 90%; /* Ensure modal content doesn't overflow */
-  max-height: 80vh;
+  max-height: 80vh; /* Prevent overflowing on large images */
   background: var(--card);
   border-radius: 10px;
   padding: 14px;
   box-shadow: var(--shadow-md);
-  overflow-y: auto;
+  overflow-y: auto; /* Allow vertical scrolling if needed */
   display: flex;
   flex-direction: column;
 }
@@ -1745,6 +1747,7 @@ body.dark #nextPage:hover {
   display: flex;
   justify-content: center;
   padding: 20px;
+  overflow: hidden; /* Hide overflowing image */
 }
 
 .crop-actions {
@@ -1782,7 +1785,6 @@ body.dark #nextPage:hover {
 }
 
 /* =========================================== Mobile-first styles =========================================== */
-
 @media (max-width: 380px) {
   .crop-modal-content {
     max-width: 90%;
@@ -1861,4 +1863,4 @@ body.dark #nextPage:hover {
     font-size: 1rem;
   }
 }
-/* Desktop styles */
+
