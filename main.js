@@ -169,23 +169,20 @@ qsAll(".tab-btn").forEach((btn) => {
     const section = document.getElementById(target);
     if (section) section.classList.add("active");
 
-    // 🌸 Auto-render gallery (ensure DB ready first)
-    if (target === "gallery" && typeof renderIndexedGallery === "function") {
-      console.log("🖼 Loading My Creations from IndexedDB...");
-      await openDB(); // ensures DB ready before rendering
-      setTimeout(renderIndexedGallery, 200);
-    }
-
+ // 🌸 Auto-render gallery safely (PWA first-load FIX)
+if (target === "gallery") {
+  console.log("🖼 Safe Gallery Load (PWA)");
+ setTimeout(initGallerySafe, 120);   // ✔️ FIX: delay to ensure DB ready
+}
     // Smooth scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
-
     // Save last active tab
     localStorage.setItem("activeTab", target);
   });
 });
 
 // 🔄 Restore last open tab OR fallback to Home
-window.addEventListener("DOMContentLoaded", async () => {
+window.addEventListener("load", async () => {
   const lastTab = localStorage.getItem("activeTab") || "home";
   const lastBtn = qs(`.tab-btn[data-tab="${lastTab}"]`);
   const lastSection = qs(`#${lastTab}`);
@@ -198,7 +195,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     if (lastTab === "gallery" && typeof renderIndexedGallery === "function") {
       console.log("🖼 Restoring Gallery on reload...");
       await openDB();
-      setTimeout(renderIndexedGallery, 400);
+      setTimeout( initGallerySafe, 400);
     }
   } else {
     // Default fallback → Home
@@ -212,7 +209,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 // 🎨 “Start Creating” → Jump directly to Create tab
-
 if (openCreateBtn) {
   on(openCreateBtn, "click", () => {
     const createBtn = qs('.tab-btn[data-tab="create"]');
@@ -1302,4 +1298,34 @@ if (typeof speechSynthesis !== "undefined") {
   // expose API for debugging
   window.ak = { renderPreview, generateImage, renderIndexedGallery, saveToDB, deleteFromDB };
   console.log("✅ AksharaChitra v18.0 loaded successfully!");
+/* ==========================================================
+   🌐 FIX PWA FIRST-LOAD GALLERY BUG (Android Chrome)
+   Ensures Gallery loads ONLY after:
+   ✔ ServiceWorker ready
+   ✔ DOM settled
+   ✔ IndexedDB opened
+   ========================================================== */
+async function initGallerySafe() {
+
+  // 1. Wait until Service Worker fully active
+  if (navigator.serviceWorker) {
+    try { await navigator.serviceWorker.ready; } catch (e) {}
+  }
+
+  // 2. Wait for DOM paint (important for PWA)
+  await new Promise(r => requestAnimationFrame(r));
+
+  // 3. Small delay to avoid missing UI (Chrome mobile bug)
+  await new Promise(r => setTimeout(r, 80));
+
+  // 4. Ensure DB ready
+  await openDB();
+
+  // 5. Finally load gallery
+  renderIndexedGallery();
+}
+
+window.initGallerySafe = initGallerySafe;
+
+
 });
