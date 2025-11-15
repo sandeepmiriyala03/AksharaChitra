@@ -88,14 +88,15 @@
 </div>
 
 <hr class="divider" />
-
 <!-- 🌍 FONT PREVIEW -->
 <div class="font-preview-section fade-in">
+
   <h2>🌍 Multilingual Font Preview</h2>
   <p class="muted small">Select your language and preview fonts 👇</p>
 
-  <!-- Language Selector -->
+  <!-- 1️⃣ Language Selector -->
   <div class="tts-control">
+    <label class="input-label">Language</label>
     <select id="previewLangSelect" class="lang-select compact">
       <option value="en">🇬🇧 English</option>
       <option value="te">🇮🇳 తెలుగు (Telugu)</option>
@@ -108,22 +109,26 @@
     </select>
   </div>
 
-  <!-- 📌 Modern Preview Card (JS inserts here) -->
-  <div id="previewCardContainer"></div>
+  <!-- 2️⃣ Font Family (JS will insert label + dropdown here) -->
+  <div class="font-family-wrapper"></div>
 
-  <!-- 🔤 Local Font Access -->
+  <!-- 3️⃣ Local System Font Loader -->
   <div class="local-font-access">
-    <button id="loadLocalFontsBtn">📁 Load Fonts</button>
+    <button id="loadLocalFontsBtn">📁 Load Local System Fonts</button>
+
     <select id="localFontsDropdown" style="display:none;"></select>
+
     <button id="saveLocalFontBtn" class="save-font-btn" style="display:none;">
       💾 Save this Font to AksharaChitra
     </button>
 
     <p id="localFontInfo" style="display:none;"></p>
   </div>
+
+  <!-- 4️⃣ Preview Card -->
+  <div id="previewCardContainer"></div>
+
 </div>
-
-
 
 <!-- 🤖 BROWSER AI CAPABILITIES -->
 <div class="ai-browser-section fade-in">
