@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Noto Sans Telugu",
         "NTR",
         "Ramabhadra",
-
+        "Gidugu",
         //appaji fonts here
         "RamaneeyaWin",
         "Ramaraja",
