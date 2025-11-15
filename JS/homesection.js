@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     en: "Create beautiful posters easily!",
     te: "అందమైన పోస్టర్ సృష్టించండి 🎨",
     hi: "सुंदर पोस्टर बनाएँ 🌸",
-    sa: "सौन्दर्यमयं पोस्टरं निर्मियताम् 🕉️",
+    sa: "सौन्दर्यमयं पोस्टेरं निर्मियताम् ",
     ta: "அழகான போஸ்டரை உருவாக்குங்கள் 🎉",
     kn: "ಅಂದವಾದ ಪೋಸ್ಟರ್ ರಚಿಸಿ 🌈",
     ml: "അലങ്കാരമായ പോസ്റ്റർ സൃഷ്ടിക്കുക 🌺",
@@ -86,62 +86,100 @@ document.addEventListener("DOMContentLoaded", () => {
   previewContainer.appendChild(previewCard);
 
 
-  /* ----------------------------------------------------------
-     5) FONT SEARCH + DROPDOWN
-  ---------------------------------------------------------- */
-  const wrapper = document.createElement("div");
-  wrapper.style.marginTop = "12px";
+/* ----------------------------------------------------------
+   5) FONT DROPDOWN + DYNAMIC LABEL (NO SEARCH)
+---------------------------------------------------------- */
+const wrapper = document.createElement("div");
+wrapper.style.marginTop = "12px";
 
-  const fontSearch = document.createElement("input");
-  fontSearch.placeholder = "🔍 Search fonts...";
-  fontSearch.className = "font-search";
+/* Dynamic Label: Font Family (Language) */
+const fontLabel = document.createElement("div");
+fontLabel.className = "font-label-dynamic";
+fontLabel.style.cssText = `
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: .85;
+`;
 
-  const fontSelect = document.createElement("select");
-  fontSelect.id = "fontSelect";
-  fontSelect.className = "font-select-minimal";
+/* Function to update label based on selected language */
+function updateFontLabel() {
+  const langText = langSelect.options[langSelect.selectedIndex].text;
+  fontLabel.textContent = `Font Family (${langText})`;
+}
 
-  wrapper.append(fontSearch, fontSelect);
-  previewCard.insertAdjacentElement("afterend", wrapper);
+/* Dropdown */
+const fontSelect = document.createElement("select");
+fontSelect.id = "fontSelect";
+fontSelect.className = "font-select-minimal";
 
+/* Build UI */
+wrapper.append(fontLabel, fontSelect);
 
-  /* ----------------------------------------------------------
-     6) UPDATE FUNCTIONS
-  ---------------------------------------------------------- */
-  function updateFontDropdown(lang) {
-    fontSelect.innerHTML = "";
-    FONT_MAP[lang].forEach(f => {
-      const opt = document.createElement("option");
-      opt.value = f;
-      opt.textContent = f;
-      fontSelect.appendChild(opt);
-    });
-    fontSelect.value = FONT_MAP[lang][0];
-  }
+/* Insert after preview card */
+previewCard.insertAdjacentElement("afterend", wrapper);
 
-  function applySelectedFont(font) {
-    previewCard.style.fontFamily = `'${font}', inherit`;
-    previewFont.textContent = font;
+/* Initialize label */
+updateFontLabel();
 
-    // Always show correct language sample text
-    previewText.textContent = SAMPLE_TEXT[langSelect.value];
-  }
-
-  function updatePreview(lang) {
-    previewLang.textContent = langSelect.options[langSelect.selectedIndex].text;
-    previewText.textContent = SAMPLE_TEXT[lang];
-    applySelectedFont(fontSelect.value);
-  }
+/* Update label when language changes */
+langSelect.addEventListener("change", updateFontLabel);
 
 
-  /* ----------------------------------------------------------
-     7) SEARCH FILTER
-  ---------------------------------------------------------- */
-  fontSearch.addEventListener("input", () => {
-    const q = fontSearch.value.toLowerCase();
-    [...fontSelect.options].forEach(opt => {
-      opt.style.display = opt.value.toLowerCase().includes(q) ? "block" : "none";
-    });
+/* ----------------------------------------------------------
+   6) UPDATE FUNCTIONS (FINAL — PERFECT LOGIC)
+---------------------------------------------------------- */
+
+/* 1) Update dropdown for selected language */
+function updateFontDropdown(lang) {
+  fontSelect.innerHTML = "";
+
+  FONT_MAP[lang].forEach(f => {
+    const opt = document.createElement("option");
+    opt.value = f;
+    opt.textContent = f;
+    fontSelect.appendChild(opt);
   });
+
+  // Default: first font
+  fontSelect.value = FONT_MAP[lang][0];
+}
+
+/* 2) Apply selected font + correct sample text */
+function applySelectedFont(font) {
+  const lang = langSelect.value;
+
+  // Apply font to full preview card
+  previewCard.style.fontFamily = `'${font}', inherit`;
+
+  // Apply font directly to preview text
+  previewText.style.fontFamily = `'${font}', inherit`;
+
+  // Apply font to the small font name label
+  previewFont.textContent = font;
+  previewFont.style.fontFamily = `'${font}', inherit`;
+
+  // Correct sample text for selected language
+  previewText.textContent = SAMPLE_TEXT[lang];
+}
+
+/* 3) When the user changes language */
+function updatePreview(lang) {
+
+  // Update selected language label
+  previewLang.textContent = langSelect.options[langSelect.selectedIndex].text;
+
+  // Update sample text
+  previewText.textContent = SAMPLE_TEXT[lang];
+
+  // Reapply the font to ALL elements
+  const currentFont = fontSelect.value;
+  previewCard.style.fontFamily = `'${currentFont}', inherit`;
+  previewText.style.fontFamily = `'${currentFont}', inherit`;
+  previewFont.textContent = currentFont;
+  alert(textContent);
+  previewFont.style.fontFamily = `'${currentFont}', inherit`;
+}
 
 
   /* ----------------------------------------------------------
@@ -206,10 +244,12 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ----------------------------------------------------------
      10) EVENTS
   ---------------------------------------------------------- */
-  langSelect.onchange = () => {
-    updateFontDropdown(langSelect.value);
-    updatePreview(langSelect.value);
-  };
+ langSelect.onchange = () => {
+  updateFontDropdown(langSelect.value);
+  updatePreview(langSelect.value);
+  applySelectedFont(fontSelect.value);  // 🔥 Important
+};
+
 
   fontSelect.onchange = () => {
     applySelectedFont(fontSelect.value);
