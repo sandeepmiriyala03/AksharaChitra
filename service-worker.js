@@ -1,34 +1,100 @@
-const CACHE = 'aksharachitra-v4';
+const CACHE = "aksharachitra-v5.1";
+const OFFLINE_FALLBACK = "/index.html";
+
+// -----------------------------------------------------------
+// 📌 STATIC FILES — MUST WORK OFFLINE
+// -----------------------------------------------------------
 const FILES = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/main.js',
-  '/createsection.js',
-  '/pwa.js',
-  '/manifest.json',
-  '/logo.png',
-  
-  'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-  'https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js'
+  "/",
+  "/index.html",
+  "/style.css",
+  "/main.js",
+  "/createsection.js",
+  "/pwa.js",
+  "/JS/homesection.js",
+
+  "/logo.png",
+  "/icons/icon-72x72.png",
+
+  // LOCAL FONTS
+  "/fonts/Veturi.ttf",
+  "/fonts/Sirivennela.ttf",
+  "/fonts/RamaneeyaWin.ttf",
+  "/fonts/Ramaraja-Regular.ttf",
+  "/fonts/RaviPrakash.ttf",
+  "/fonts/TenaliRamakrishna-Regular.ttf",
+  "/fonts/TANA.ttf",
+  "/fonts/TimmanaRegular.ttf"
 ];
 
-self.addEventListener('install', evt => {
-  evt.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));
+// -----------------------------------------------------------
+// 🛠️ INSTALL — CACHE LOCAL FILES
+// -----------------------------------------------------------
+self.addEventListener("install", (evt) => {
+  evt.waitUntil(
+    caches.open(CACHE).then((cache) => cache.addAll(FILES))
+  );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', evt => {
-  evt.waitUntil(clients.claim());
+// -----------------------------------------------------------
+// 🔄 ACTIVATE — DELETE OLD CACHES
+// -----------------------------------------------------------
+self.addEventListener("activate", (evt) => {
+  evt.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((k) => k !== CACHE)
+          .map((k) => caches.delete(k))
+      )
+    )
+  );
+  self.clients.claim();
 });
 
-self.addEventListener('fetch', evt => {
+// -----------------------------------------------------------
+// ⚡ FETCH — OFFLINE-FIRST FOR LOCAL, SMART RUNTIME FOR CDN
+// -----------------------------------------------------------
+self.addEventListener("fetch", (evt) => {
+  const req = evt.request;
+  const url = new URL(req.url);
+
+  // 1️⃣ LOCAL FILES → CACHE FIRST
+  if (url.origin === location.origin) {
+    evt.respondWith(
+      caches.match(req).then((cached) => {
+        return (
+          cached ||
+          fetch(req).catch(() => caches.match(OFFLINE_FALLBACK))
+        );
+      })
+    );
+    return;
+  }
+
+  // 2️⃣ CDN (CropperJS, html2canvas, QRCodeJS, Google Fonts)
+  if (
+    url.hostname.includes("googleapis.com") ||
+    url.hostname.includes("gstatic.com") ||
+    url.hostname.includes("cdn.jsdelivr.net") ||
+    url.hostname.includes("unpkg.com") ||
+    url.hostname.includes("cdnjs.cloudflare.com")
+  ) {
+    evt.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((cache) => cache.put(req, copy));
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // 3️⃣ Default
   evt.respondWith(
-    caches.match(evt.request).then(res => {
-      return res || fetch(evt.request).then(fetchRes => {
-        // cache fetched resources (optional)
-        return fetchRes;
-      });
-    }).catch(()=> caches.match('/index.html'))
+    fetch(req).catch(() => caches.match(req))
   );
 });

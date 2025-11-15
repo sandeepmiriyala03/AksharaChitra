@@ -181,33 +181,6 @@ if (target === "gallery") {
   });
 });
 
-// 🔄 Restore last open tab OR fallback to Home
-window.addEventListener("load", async () => {
-  const lastTab = localStorage.getItem("activeTab") || "home";
-  const lastBtn = qs(`.tab-btn[data-tab="${lastTab}"]`);
-  const lastSection = qs(`#${lastTab}`);
-
-  if (lastBtn && lastSection) {
-    lastBtn.classList.add("active");
-    lastSection.classList.add("active");
-
-    // If last opened was Gallery, render it again
-    if (lastTab === "gallery" && typeof renderIndexedGallery === "function") {
-      console.log("🖼 Restoring Gallery on reload...");
-      await openDB();
-      setTimeout( initGallerySafe, 400);
-    }
-  } else {
-    // Default fallback → Home
-    const homeBtn = qs('.tab-btn[data-tab="home"]');
-    const homeSection = qs("#home");
-    if (homeBtn && homeSection) {
-      homeBtn.classList.add("active");
-      homeSection.classList.add("active");
-    }
-  }
-});
-
 // 🎨 “Start Creating” → Jump directly to Create tab
 if (openCreateBtn) {
   on(openCreateBtn, "click", () => {
@@ -215,9 +188,7 @@ if (openCreateBtn) {
     if (createBtn) createBtn.click();
   });
 }
-
 console.log("✅ Tab Navigation Initialized (v18.3 Stable)");
-
 
   // ---------------------------------------------
   // 🧠 Helpers
