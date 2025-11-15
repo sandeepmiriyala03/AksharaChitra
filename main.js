@@ -1319,5 +1319,124 @@ async function initGallerySafe() {
 
 window.initGallerySafe = initGallerySafe;
 
+/* ------------------------------------------------------------------
+   🌐 Unified Tab + Mobile Menu Controller (Final Stable Version)
+   ------------------------------------------------------------------ */
+
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+
+// Open / close menu
+if (hamburgerBtn && mobileMenu) {
+  hamburgerBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    mobileMenu.classList.toggle("open");
+  });
+
+  // Close on outside click
+  document.addEventListener("click", (e) => {
+    if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+      mobileMenu.classList.remove("open");
+    }
+  });
+}
+
+// -----------------------------------------------------------
+// ⭐ UNIFIED TAB SWITCH FUNCTION (desktop + mobile + external)
+// -----------------------------------------------------------
+function activateTab(tab) {
+  // Hide all sections
+  document.querySelectorAll(".tab-content")
+    .forEach(sec => sec.classList.remove("active"));
+
+  // Remove active from buttons
+  document.querySelectorAll(".tab-btn")
+    .forEach(b => b.classList.remove("active"));
+
+  // Show selected section
+  const section = document.getElementById(tab);
+  if (section) section.classList.add("active");
+
+  // Highlight desktop nav
+  const desktopBtn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+  if (desktopBtn) desktopBtn.classList.add("active");
+
+  // Special: Gallery
+  if (tab === "gallery") {
+    setTimeout(initGallerySafe, 120);
+  }
+
+  // Close mobile menu if open
+  if (mobileMenu) mobileMenu.classList.remove("open");
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+window.activateTab = activateTab; // If needed globally
+
+// Desktop nav
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => activateTab(btn.dataset.tab));
+});
+
+// Mobile nav
+document.querySelectorAll(".m-item").forEach(item => {
+  item.addEventListener("click", () => activateTab(item.dataset.tab));
+});
+
+// Default tab on first load
+activateTab("home");
+
+
+
+
+// SHARE BUTTON ON HOME PAGE
+const shareHomeBtn = document.getElementById("shareProjectBtn");
+
+if (shareHomeBtn) {
+  shareHomeBtn.onclick = async () => {
+
+    const message = `🌸 *AksharaChitra — Multilingual Poster Maker 🎨*
+
+Create, Save & Share posters *offline* in 8+ Indian languages!
+
+✨ Features:
+🖋️ Title / Subtitle / Message
+🖼️ Upload + Crop Images
+🎙️ Voice Input
+💾 Offline Save (IndexedDB)
+📤 Share Anywhere
+🌙 Dark Mode
+52+ Native Font Families
+
+Made by ❤️ Yuktishala AI Lab
+Get it here: https://aksharachitra.netlify.app`;
+
+    const data = {
+      title: "AksharaChitra",
+      text: message
+    };
+
+    // 1️⃣ Native Share
+    if (navigator.share) {
+      try {
+        await navigator.share(data);
+        return;
+      } catch (e) {}
+    }
+
+    // 2️⃣ WhatsApp fallback
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+
+    // 3️⃣ Clipboard fallback
+    try {
+      await navigator.clipboard.writeText(message);
+      alert("📋 Copied! Paste anywhere to share.");
+    } catch (e) {
+      alert("Unable to share. Copy manually.");
+    }
+  };
+}
 
 });
