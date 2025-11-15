@@ -377,19 +377,41 @@ console.log("✅ Tab Navigation Initialized (v18.3 Stable)");
     // QR
     const qrValue = document.getElementById("qrText")?.value?.trim();
     const qrAlign = qrAlignEl?.value || "left";
-    if (pQR) {
-      pQR.innerHTML = "";
-      if (qrValue && typeof QRCode !== "undefined") {
-        const qrContainer = document.createElement("div");
-        qrContainer.style.textAlign = qrAlign;
-        qrContainer.style.marginTop = "12px";
-        const qrDiv = document.createElement("div");
-        qrDiv.id = "qrPreview";
-        qrContainer.appendChild(qrDiv);
-        pQR.appendChild(qrContainer);
-        new QRCode(qrDiv, { text: qrValue, width: 70, height: 70, colorDark: "#000", colorLight: "#fff", correctLevel: QRCode.CorrectLevel.H });
-      }
-    }
+   if (pQR) {
+  pQR.innerHTML = "";
+
+  if (qrValue && typeof QRCode !== "undefined") {
+    const deviceWidth = window.innerWidth;
+
+    // Auto-size QR based on device
+    let qrSize = 70;  // default
+
+    if (deviceWidth < 360) qrSize = 50;       // very small mobile
+    else if (deviceWidth < 480) qrSize = 60;  // normal mobile
+    else if (deviceWidth < 768) qrSize = 70;  // tablet portrait
+    else if (deviceWidth < 1024) qrSize = 90; // tablet landscape
+    else qrSize = 110;                        // desktop
+
+    const qrContainer = document.createElement("div");
+    qrContainer.style.textAlign = qrAlign;
+    qrContainer.style.marginTop = "12px";
+
+    const qrDiv = document.createElement("div");
+    qrDiv.id = "qrPreview";
+    qrContainer.appendChild(qrDiv);
+    pQR.appendChild(qrContainer);
+
+    new QRCode(qrDiv, {
+      text: qrValue,
+      width: qrSize,
+      height: qrSize,
+      colorDark: "#000",
+      colorLight: "#fff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+}
+
 
     // footer: remove existing and re-add
     previewCard.querySelectorAll(".ak-footer").forEach(el => el.remove());
