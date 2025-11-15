@@ -259,14 +259,14 @@
       <div class="group">
         <label>🌐 Language</label>
         <select id="language">
-          <option value="en">English</option>
-          <option value="te">తెలుగు</option>
-          <option value="sa">संस्कृतम्</option>
-          <option value="hi">हिंदी</option>
-          <option value="ta">தமிழ்</option>
-          <option value="kn">ಕನ್ನಡ</option>
-          <option value="ml">മലയാളം</option>
-          <option value="or">ଓଡ଼ିଆ</option>
+          <option value="eng">English</option>
+          <option value="tel">తెలుగు</option>
+          <option value="san">संस्कृतम्</option>
+          <option value="hin">हिंदी</option>
+          <option value="tam">தமிழ்</option>
+          <option value="kan">ಕನ್ನಡ</option>
+          <option value="mal">മലയാളം</option>
+          <option value="ori">ଓଡ଼ିଆ</option>
         </select>
       </div>
 
@@ -353,6 +353,21 @@
                 <label>✍️ Font Family</label>
                 <select id="fontFamily" class="font-select-minimal"></select>
       </div>
+
+              <!-- OCR Section Added -->
+        <div class="group ocr-section">
+          <h3>📸 OCR - Image to Text</h3>
+
+          <label for="ocrImageInput">🖼️ Upload Image for OCR</label>
+          <input type="file" id="ocrImageInput" accept="image/*" />
+
+          <button id="startOcrBtn" class="btn primary" disabled>⚡ Start OCR</button>
+
+          <textarea id="ocrResult" rows="5" placeholder="OCR text will appear here..." readonly style="width: 100%; margin-top: 10px;"></textarea>
+
+          <button id="pasteOcrToMessageBtn" class="btn ghost" disabled>📋 Paste OCR Text to Message</button>
+        </div>
+
         <div class="row">
           <label>Font Size</label><input id="messageSize" type="number" value="20" min="10" max="60" />
           <label>Align</label>
@@ -540,12 +555,148 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
-  <script src="createsection.js" defer></script>
+<script defer  src="https://docs.opencv.org/4.x/opencv.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+
+ <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>
    <script src="/ai//imageEnhancement.js" defer></script>
   <script src="pwa.js" defer></script>
   <script src="/JS/homesection.js" defer></script>
- 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // --- OCR Elements ---
+  const ocrImageInput = document.getElementById('ocrImageInput');
+  const startOcrBtn = document.getElementById('startOcrBtn');
+  const ocrResult = document.getElementById('ocrResult');
+  const pasteBtn = document.getElementById('pasteOcrToMessageBtn');
+  const messageBox = document.getElementById('message');
+  const langSelect = document.getElementById('language');
+
+  let ocrWorker = null;
+  let currentOcrLang = null; 
+
+  startOcrBtn.disabled = true; 
+  pasteBtn.disabled = true;
+
+  // --- Tessdata Accessibility Check (Adjusted to check the .gz file) ---
+  fetch('./tessdata/tel.traineddata.gz') 
+    .then(response => {
+      if (response.ok) {
+        console.log('✅ tessdata/tel.traineddata.gz is accessible. OCR should work.');
+      } else {
+        console.error('❌ tessdata/tel.traineddata.gz is NOT accessible! Check folder, server root, and path.');
+      }
+    })
+    .catch(error => {
+      console.error('❌ Error accessing tessdata/tel.traineddata.gz:', error);
+    });
+
+  // --- OCR Functions ---
+
+  async function initOcrWorker() {
+    if (!ocrWorker) {
+      console.log("Creating Tesseract worker (v5+ syntax)...");
+      ocrWorker = await Tesseract.createWorker({ 
+        langPath: './tessdata/',
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            const progress = (m.progress * 100).toFixed(1);
+            startOcrBtn.textContent = `OCR Processing: ${progress}%`;
+          }
+        }
+      });
+      // REMOVED: await ocrWorker.load(); 
+      console.log("Tesseract worker created.");
+    }
+  }
+
+  // Load and initialize selected OCR language
+  async function initLanguage(langCode) {
+    if (!ocrWorker) {
+        console.error("Worker not initialized before initLanguage was called.");
+        return;
+    }
+    console.log(`Loading OCR language: ${langCode}...`);
+    startOcrBtn.textContent = `Loading ${langCode}...`;
+    
+    // FIX 2: Ensure these methods are called on the properly awaited worker object
+    await ocrWorker.loadLanguage(langCode);
+    await ocrWorker.initialize(langCode);
+    
+    currentOcrLang = langCode; 
+    console.log(`OCR Language initialized: ${langCode}`);
+  }
+
+  // Pre-load worker and default language on page load
+  async function warmUpOcr() {
+    console.log('Pre-loading Tesseract worker...');
+    try {
+      await initOcrWorker(); 
+      const defaultLang = langSelect.value || 'eng';
+      await initLanguage(defaultLang);
+      
+      console.log(`Tesseract worker and ${defaultLang} model loaded.`);
+      startOcrBtn.textContent = '⚡ Start OCR';
+      startOcrBtn.disabled = !ocrImageInput.files.length;
+    } catch (error) {
+      console.error('Failed to pre-load Tesseract worker:', error);
+      startOcrBtn.textContent = 'OCR Failed to Load';
+      startOcrBtn.disabled = true;
+    }
+  }
+
+  // --- Event Listeners (Rest of the code is unchanged) ---
+  ocrImageInput.addEventListener('change', () => {
+    if (ocrWorker && currentOcrLang) {
+      startOcrBtn.disabled = !ocrImageInput.files.length;
+    }
+  });
+
+  startOcrBtn.addEventListener('click', async () => {
+    if (!ocrImageInput.files.length) return;
+
+    startOcrBtn.disabled = true;
+    pasteBtn.disabled = true;
+    ocrResult.value = '';
+    
+    const selectedLang = langSelect.value || 'eng';
+
+    try {
+      if (selectedLang !== currentOcrLang) {
+        console.log(`Switching OCR language from ${currentOcrLang} to ${selectedLang}...`);
+        await initLanguage(selectedLang);
+      }
+      
+      startOcrBtn.textContent = 'Recognizing...';
+      const { data: { text } } = await ocrWorker.recognize(ocrImageInput.files[0]);
+
+      ocrResult.value = text.trim();
+      pasteBtn.disabled = false;
+      startOcrBtn.textContent = '⚡ Start OCR';
+    } catch (error) {
+      console.error('OCR Error:', error);
+      alert('OCR failed. Please try again.');
+      startOcrBtn.textContent = '⚡ Start OCR';
+    } finally {
+      startOcrBtn.disabled = !ocrImageInput.files.length;
+    }
+  });
+
+  pasteBtn.addEventListener('click', () => {
+    if (ocrResult.value.trim()) {
+      const prefix = messageBox.value.trim() ? '\n' : '';
+      messageBox.value += prefix + ocrResult.value;
+      messageBox.dispatchEvent(new Event('input'));
+    }
+  });
+
+  warmUpOcr();
+
+});
+</script>
+
 </body>
+
 </html>

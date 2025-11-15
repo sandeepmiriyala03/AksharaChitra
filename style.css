@@ -1898,3 +1898,79 @@ input[type="range"] {
    🎛 Better Minimal Controls (Dropdown + Input)
    Looks like buttons (not form fields)
    ============================================================ */  
+/* OCR Section Styles */
+#ocrSection {
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#ocrSection h3 {
+    color: #4CAF50;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#ocrSection label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#ocrSection input[type="file"] {
+    margin-bottom: 10px;
+}
+
+#ocrText {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: monospace;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.status {
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.status.info {
+    background-color: #e6f7ff;
+    color: #0056b3;
+}
+
+.status.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#ocrSpinner {
+    font-size: 14px;
+    color: #007bff;
+    margin-top: 10px;
+}

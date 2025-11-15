@@ -72,24 +72,3 @@ window.getEnhancedImageDataURL = function() {
 
   return canvas.toDataURL('image/png');
 };
-
-/* =========================================== 🖥️ DESKTOP (LARGE VIEW) =========================================== */
-@media (min-width: 992px) {
-  .crop-modal-content {
-    max-width: 620px;
-    padding: 22px;
-  }
-  .crop-modal-header h3 {
-    font-size: 1.75rem;
-  }
-  .crop-btn {
-    font-size: 1.1rem;
-    padding: 12px;
-  }
-  .crop-image-wrapper {
-    padding: 30px;
-  }
-  .crop-close-btn {
-    font-size: 1.8rem;
-  }
-}
