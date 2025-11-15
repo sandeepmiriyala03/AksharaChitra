@@ -92,7 +92,7 @@
 <!-- 🌍 FONT PREVIEW -->
 <div class="font-preview-section fade-in">
   <h2>🌍 Multilingual Font Preview</h2>
-  <p class="muted small">Select your language and preview native fonts 👇</p>
+  <p class="muted small">Select your language and preview fonts 👇</p>
 
   <!-- Language Selector -->
   <div class="tts-control">
@@ -108,67 +108,22 @@
     </select>
   </div>
 
-  <!-- Text Preview -->
-  <p id="fontOutput" class="font-preview-output">
-    Select a language to preview sample text.
-  </p>
+  <!-- 📌 Modern Preview Card (JS inserts here) -->
+  <div id="previewCardContainer"></div>
 
- <div class="local-font-access">
-  <button id="loadLocalFontsBtn">📁 Load Local System Fonts</button>
+  <!-- 🔤 Local Font Access -->
+  <div class="local-font-access">
+    <button id="loadLocalFontsBtn">📁 Load Fonts</button>
+    <select id="localFontsDropdown" style="display:none;"></select>
+    <button id="saveLocalFontBtn" class="save-font-btn" style="display:none;">
+      💾 Save this Font to AksharaChitra
+    </button>
 
-  <select id="localFontsDropdown" style="display:none;"></select>
-
-  <button id="saveLocalFontBtn" class="save-font-btn" style="display:none;">
-    💾 Save this Font to AksharaChitra
-  </button>
-
-  <p id="localFontInfo" style="display:none;"></p>
-</div>
-
-
-  <!-- Font Cards -->
-  <div class="font-preview-grid" id="fontPreviewGrid">
-    <div class="font-card" data-lang="en" style="font-family:'Montserrat';">
-      🇬🇧 <strong>English</strong>
-      <p class="font-sample">Create beautiful posters easily!</p>
-    </div>
-
-    <div class="font-card" data-lang="te" style="font-family:'NTR';">
-      🇮🇳 <strong>తెలుగు</strong>
-      <p class="font-sample">అందమైన పోస్టర్ సృష్టించండి 🎨</p>
-    </div>
-
-    <div class="font-card" data-lang="hi" style="font-family:'Noto Serif Devanagari';">
-      🇮🇳 <strong>हिंदी</strong>
-      <p class="font-sample">सुंदर पोस्टर बनाएँ 🌸</p>
-    </div>
-
-    <div class="font-card" data-lang="sa" style="font-family:'Noto Serif Devanagari';">
-      🇮🇳 <strong>संस्कृतम्</strong>
-      <p class="font-sample">सौन्दर्यमयं पोस्टरं निर्मियताम् 🕉️</p>
-    </div>
-
-    <div class="font-card" data-lang="ta" style="font-family:'Noto Sans Tamil';">
-      🇮🇳 <strong>தமிழ்</strong>
-      <p class="font-sample">அழகான போஸ்டரை உருவாக்குங்கள் 🎉</p>
-    </div>
-
-    <div class="font-card" data-lang="kn" style="font-family:'Noto Sans Kannada';">
-      🇮🇳 <strong>ಕನ್ನಡ</strong>
-      <p class="font-sample">ಅಂದವಾದ ಪೋಸ್ಟರ್ ರಚಿಸಿ 🌈</p>
-    </div>
-
-    <div class="font-card" data-lang="ml" style="font-family:'Noto Sans Malayalam';">
-      🇮🇳 <strong>മലയാളം</strong>
-      <p class="font-sample">അലങ്കാരമായ പോസ്റ്റർ സൃഷ്ടിക്കുക 🌺</p>
-    </div>
-
-    <div class="font-card" data-lang="or" style="font-family:'Noto Sans Oriya';">
-      🇮🇳 <strong>ଓଡ଼ିଆ</strong>
-      <p class="font-sample">ସୁନ୍ଦର ପୋଷ୍ଟର ତିଆରି କରନ୍ତୁ 💫</p>
-    </div>
+    <p id="localFontInfo" style="display:none;"></p>
   </div>
 </div>
+
+
 
 <!-- 🤖 BROWSER AI CAPABILITIES -->
 <div class="ai-browser-section fade-in">

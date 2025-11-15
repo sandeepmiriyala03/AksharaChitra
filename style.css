@@ -1560,235 +1560,205 @@ body.dark #nextPage:hover {
     font-size: 1rem;
   }
 }
-/* Tablet Adjustments */
 /* ==========================================================
-   🌸 Local Font Access — UI/UX Styling
+   🌸 Local Font Access — Minimal & Compact UI (v3.1)
    ---------------------------------------------------------- */
+
+./* ======================================================
+   Local Font Access — Minimal, Clean, Compact (Final)
+   ====================================================== */
 
 .local-font-access {
   margin-top: 16px;
   padding: 14px;
-  border-radius: 12px;
-  background: var(--glass, rgba(255,255,255,0.45));
-  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: fadeIn 0.35s ease;
-}
-
-/* Load System Font Button */
-.local-font-access button {
-  width: 100%;
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #0078ff, #00a6ff);
-  border: none;
   border-radius: 10px;
-  cursor: pointer;
-  transition: 0.25s ease;
-  box-shadow: 0 3px 8px rgba(0,123,255,0.25);
-}
-
-.local-font-access button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,123,255,0.35);
-}
-
-.local-font-access button:active {
-  transform: scale(0.97);
-}
-
-/* Dropdown (System Fonts) */
-#localFontsDropdown {
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px 12px;
-  font-size: 0.95rem;
-  border-radius: 10px;
-  border: 1px solid var(--border, #ccc);
-  background: var(--card, rgba(255,255,255,0.6));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  outline: none;
-  transition: border-color 0.25s;
-}
-
-#localFontsDropdown:focus {
-  border-color: #0078ff;
-  box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
-}
-
-/* Info Text */
-#localFontInfo {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  opacity: 0.75;
-  text-align: left;
-}
-
-/* 🔄 Smooth Fade Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ----------------------------------------------------------
-   Responsive Layout
----------------------------------------------------------- */
-
-/* Tablets & Up */
-@media (min-width: 600px) {
-  .local-font-access {
-    padding: 18px;
-    border-radius: 14px;
-  }
-
-  .local-font-access button {
-    font-size: 1rem;
-    padding: 12px 18px;
-  }
-
-  #localFontsDropdown {
-    font-size: 1rem;
-    padding: 12px 14px;
-  }
-}
-
-/* Desktop Wide */
-@media (min-width: 1024px) {
-  .local-font-access {
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-/* ==========================================================
-   🌸 LOCAL FONT ACCESS — FULL RESPONSIVE UI (Final v1.1)
-   ----------------------------------------------------------
-   ✔ Glass UI
-   ✔ Mobile-friendly
-   ✔ Touch-safe tap areas
-   ✔ Works on all screen sizes
-   ✔ Smooth animations
-   ---------------------------------------------------------- */
-
-.local-font-access {
-  margin-top: 18px;
-  padding: 16px;
-  border-radius: 14px;
-  background: var(--glass);
-  backdrop-filter: blur(8px);
-  box-shadow: var(--shadow-sm);
-  animation: fadeIn 0.35s ease;
-  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
   box-sizing: border-box;
 }
 
-/* Title */
-.local-font-access h3 {
-  margin-bottom: 10px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--primary-text);
-}
-
-/* Load Local Fonts Button */
+/* Load Button */
 #loadLocalFontsBtn {
   width: 100%;
-  padding: 12px;
-  background: #4a9cff;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
   font-weight: 600;
+  color: #fff;
+  background: #1e88e5;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.25s;
-  font-size: 0.95rem;
+  transition: background 0.2s ease;
 }
 
 #loadLocalFontsBtn:hover {
-  background: #227be9;
+  background: #166fcc;
 }
 
-/* System Fonts Dropdown */
+/* Dropdown */
 #localFontsDropdown {
   width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(140, 140, 140, 0.4);
-  background: rgba(255, 255, 255, 0.3);
-  font-size: 0.95rem;
-  backdrop-filter: blur(6px);
+  margin-top: 10px;
+  padding: 7px 10px;
+  font-size: 0.88rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: #fafafa;
   display: none;
+}
+
+/* Save Button */
+#saveLocalFontBtn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: #2196f3;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: none;
+  transition: background 0.2s ease;
+}
+
+#saveLocalFontBtn:hover {
+  background: #0c7bd8;
 }
 
 /* Info Text */
 #localFontInfo {
   margin-top: 8px;
-  opacity: 0.85;
-  font-size: 0.85rem;
-  color: var(--primary-text);
+  font-size: 0.82rem;
+  color: #555;
+  line-height: 1.4;
   display: none;
 }
 
-/* Save Font Button */
-#saveLocalFontBtn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  background: #0c8cff;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.25s;
-  font-size: 0.95rem;
-  display: none;
-}
-
-#saveLocalFontBtn:hover {
-  background: #006ae0;
-}
-
-/* Fade animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ----------------------------------------------------------
-   🔥 FULL RESPONSIVE OPTIMIZATION
-   ---------------------------------------------------------- */
-
-/* Small phones (<360px width) */
+/* Responsive tweaks */
 @media (max-width: 360px) {
   .local-font-access {
-    padding: 14px;
+    padding: 12px;
   }
 
   #loadLocalFontsBtn,
   #localFontsDropdown,
   #saveLocalFontBtn {
-    padding: 10px;
-    font-size: 0.9rem;
+    padding: 7px 10px;
+    font-size: 0.84rem;
   }
 }
 
-/* Tablets */
-@media (min-width: 600px) {
-  .local-font-access {
-    padding: 20px;
-  }
-}
-
-/* Desktop widescreen */
 @media (min-width: 992px) {
   .local-font-access {
-    max-width: 600px;
+    max-width: 360px;
+  }
+}
+
+/* ===========================================
+   🌸 Preview Card — Fully Responsive (v2.0)
+   =========================================== */
+
+.preview-card-modern {
+  width: 100%;
+  max-width: 480px;          /* looks perfect on all devices */
+  margin: 16px auto 0;       /* center on all screens */
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--glass, rgba(255,255,255,0.45));
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-align: center;
+  transition: 0.25s ease;
+}
+
+/* Language label */
+.preview-lang {
+  font-size: 1rem;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+/* Font name */
+.preview-font {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* Sample text */
+.preview-text {
+  margin-top: 12px;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  padding: 0 4px;
+}
+
+/* ===========================================
+   📱 SMALL PHONES (<360px)
+   =========================================== */
+@media (max-width: 360px) {
+  .preview-card-modern {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  .preview-lang {
+    font-size: 0.95rem;
+  }
+  .preview-font {
+    font-size: 0.8rem;
+  }
+  .preview-text {
+    font-size: 1rem;
+  }
+}
+
+/* ===========================================
+   📱 MEDIUM PHONES (360–600px)
+   =========================================== */
+@media (min-width: 360px) and (max-width: 600px) {
+  .preview-card-modern {
+    padding: 14px;
+  }
+  .preview-text {
+    font-size: 1.05rem;
+  }
+}
+
+/* ===========================================
+   📱 TABLETS
+   =========================================== */
+@media (min-width: 600px) {
+  .preview-card-modern {
+    max-width: 560px;
+    padding: 20px;
+  }
+  .preview-lang {
+    font-size: 1.15rem;
+  }
+  .preview-font {
+    font-size: 1rem;
+  }
+  .preview-text {
+    font-size: 1.2rem;
+  }
+}
+
+/* ===========================================
+   🖥️ DESKTOP (LARGE VIEW)
+   =========================================== */
+@media (min-width: 992px) {
+  .preview-card-modern {
+    max-width: 620px;
+    padding: 22px;
+  }
+  .preview-text {
+    font-size: 1.25rem;
   }
 }
 
