@@ -130,7 +130,11 @@ langSelect.addEventListener("change", updateFontLabel);
    6) UPDATE FUNCTIONS (FINAL — PERFECT LOGIC)
 ---------------------------------------------------------- */
 
-/* 1) Update dropdown for selected language */
+/* ----------------------------------------------------------
+   6) UPDATE FUNCTIONS (Apply font ONLY to sample text)
+---------------------------------------------------------- */
+
+/* 1) Update dropdown when language changes */
 function updateFontDropdown(lang) {
   fontSelect.innerHTML = "";
 
@@ -141,45 +145,37 @@ function updateFontDropdown(lang) {
     fontSelect.appendChild(opt);
   });
 
-  // Default: first font
   fontSelect.value = FONT_MAP[lang][0];
 }
 
-/* 2) Apply selected font + correct sample text */
+
+/* 2) Apply selected font — ONLY to sample text */
 function applySelectedFont(font) {
   const lang = langSelect.value;
 
-  // Apply font to full preview card
-  previewCard.style.fontFamily = `'${font}', inherit`;
-
-  // Apply font directly to preview text
+  // Apply font ONLY to sample text
   previewText.style.fontFamily = `'${font}', inherit`;
 
-  // Apply font to the small font name label
+  // Do NOT apply to card or label
   previewFont.textContent = font;
-  previewFont.style.fontFamily = `'${font}', inherit`;
 
-  // Correct sample text for selected language
+  // Always show sample text for selected language
   previewText.textContent = SAMPLE_TEXT[lang];
 }
 
-/* 3) When the user changes language */
-function updatePreview(lang) {
 
-  // Update selected language label
+/* 3) Update preview when language changes */
+function updatePreview(lang) {
+  // Update selected language text
   previewLang.textContent = langSelect.options[langSelect.selectedIndex].text;
 
-  // Update sample text
+  // Update sample text for chosen language
   previewText.textContent = SAMPLE_TEXT[lang];
 
-  // Reapply the font to ALL elements
-  const currentFont = fontSelect.value;
-  previewCard.style.fontFamily = `'${currentFont}', inherit`;
-  previewText.style.fontFamily = `'${currentFont}', inherit`;
-  previewFont.textContent = currentFont;
-  alert(textContent);
-  previewFont.style.fontFamily = `'${currentFont}', inherit`;
+  // Reapply currently selected font ONLY to text
+  applySelectedFont(fontSelect.value);
 }
+
 
 
   /* ----------------------------------------------------------
