@@ -1693,7 +1693,6 @@ body.dark #nextPage:hover {
     font-size: 1.8rem;
   }
 }
-
 /* =========================================== Base styles =========================================== */
 .modal {
   position: fixed;
@@ -1792,7 +1791,7 @@ body.dark #nextPage:hover {
 /* Adjustments for small devices (≤380px) */
 @media (max-width: 380px) {
   .crop-modal-content {
-    max-width: 100%;
+    max-width: 90%; /* smaller max width */
     padding: 8px;
   }
 
@@ -1823,7 +1822,7 @@ body.dark #nextPage:hover {
 /* Adjustments for medium devices (≤768px) */
 @media (max-width: 768px) {
   .crop-modal-content {
-    max-width: 100%;
+    max-width: 90%;
     padding: 12px;
   }
 
@@ -1929,4 +1928,3 @@ body.dark #nextPage:hover {
     font-size: 2rem;
   }
 }
-

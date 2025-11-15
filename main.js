@@ -394,21 +394,36 @@ function renderPreview() {
 
 // Adjust buttons for mobile devices (automatic scaling)
 function adjustButtonLayoutForMobile() {
-  const isMobile = window.innerWidth <= 768; // Mobile breakpoint, adjust as needed
-  const buttons = [applyCropBtn, cancelCropBtn];
+  // Ensure the buttons exist before applying styles
+  const applyCropBtn = document.getElementById('applyCropBtn');
+  const cancelCropBtn = document.getElementById('cancelCropBtn');
 
+  if (!applyCropBtn || !cancelCropBtn) return; // Exit if buttons don't exist
+
+  const isMobile = window.innerWidth <= 768; // Mobile breakpoint
+
+  // Adjust button styles for mobile or larger screens
   if (isMobile) {
-    buttons.forEach(btn => {
-      btn.style.fontSize = "1rem";  // Make buttons a little bigger on mobile
-      btn.style.padding = "10px 12px";
-    });
+    applyCropBtn.style.fontSize = "1rem"; // Make buttons a little bigger on mobile
+    applyCropBtn.style.padding = "10px 12px";
+    
+    cancelCropBtn.style.fontSize = "1rem"; // Adjust cancel button style too
+    cancelCropBtn.style.padding = "10px 12px";
   } else {
-    buttons.forEach(btn => {
-      btn.style.fontSize = "1.1rem";  // Default size for larger screens
-      btn.style.padding = "12px 14px";
-    });
+    applyCropBtn.style.fontSize = "1.1rem"; // Default size for larger screens
+    applyCropBtn.style.padding = "12px 14px";
+    
+    cancelCropBtn.style.fontSize = "1.1rem"; // Adjust cancel button style for larger screens
+    cancelCropBtn.style.padding = "12px 14px";
   }
 }
+
+// Call the function when the page loads
+adjustButtonLayoutForMobile();
+
+// Add event listener to handle resizing and adjust buttons dynamically
+window.addEventListener('resize', adjustButtonLayoutForMobile);
+
 
   // ---------------------------------------------
   // 🪶 Render Preview
