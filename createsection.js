@@ -68,11 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------------------- FONT MAP ----------------------
   const FONT_MAP = {
-    en: ["Arvo","Bebas Neue","Cinzel","Comfortaa","DM Serif Display","Inter",
+    eng: ["Arvo","Bebas Neue","Cinzel","Comfortaa","DM Serif Display","Inter",
          "Lato","Lobster","Merriweather","Montserrat","Nunito","Open Sans",
          "Playfair Display","Poppins","Prompt","Quicksand","Raleway",
          "Roboto","Ubuntu"],
-      te: [
+      tel: [
         "Mandali",
         "Noto Sans Telugu",
         "NTR",
@@ -89,24 +89,24 @@ document.addEventListener("DOMContentLoaded", () => {
         "Veturi"
       ],
 
-    hi: ["Hind","Karma","Noto Serif Devanagari"],
-    sa: ["Noto Serif Devanagari","Tiro Devanagari Sanskrit"],
-    ta: ["Noto Sans Tamil","Tiro Tamil"],
-    kn: ["Noto Sans Kannada"],
-    ml: ["Noto Sans Malayalam"],
-    or: ["Noto Sans Oriya"]
+    hin: ["Hind","Karma","Noto Serif Devanagari"],
+    san: ["Noto Serif Devanagari","Tiro Devanagari Sanskrit"],
+    tam: ["Noto Sans Tamil","Tiro Tamil"],
+    kan: ["Noto Sans Kannada"],
+    mal: ["Noto Sans Malayalam"],
+    ori: ["Noto Sans Oriya"]
   };
 
   // ---------------------- SAMPLE TEXT ----------------------
   const SAMPLE_TEXT = {
-    en: "The quick brown fox jumps over the lazy dog",
-    te: "ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..",
-    hi: "उदाहरण: सुंदर पोस्टर टेक्स्ट",
-    sa: "उदाहरणम्: सुन्दरम् लेखनम्",
-    ta: "உதாரணம்: அழகான உரை",
-    kn: "ಉದಾಹರಣೆ: ಸುಂದರ ಪೋಸ್ಟರ್",
-    ml: "ഉദാഹരണം: മനോഹരമായ ടെക്സ്റ്റ്",
-    or: "ଉଦାହରଣ: ସୁନ୍ଦର ପୋଷ୍ଟର ଟେକ୍ସଟ୍"
+    eng: "The quick brown fox jumps over the lazy dog",
+    tel: "ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..",
+    hin: "उदाहरण: सुंदर पोस्टर टेक्स्ट",
+    san: "उदाहरणम्: सुन्दरम् लेखनम्",
+    tam: "உதாரணம்: அழகான உரை",
+    kan: "ಉದಾಹರಣೆ: ಸುಂದರ ಪೋಸ್ಟರ್",
+    mal: "ഉദാഹരണം: മനോഹരമായ ടെക്സ്റ്റ്",
+    ori: "ଉଦାହରଣ: ସୁନ୍ଦର ପୋଷ୍ଟର ଟେକ୍ସଟ୍"
   };
 
   // ---------------------- HELPERS ----------------------
