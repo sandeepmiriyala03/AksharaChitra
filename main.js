@@ -1553,47 +1553,121 @@ const shareHomeBtn = document.getElementById("home_feature_share_btn");
 
 if (shareHomeBtn) {
   shareHomeBtn.onclick = async () => {
+    // 🌟 COMPREHENSIVE SHARE MESSAGE - Covers ALL features
+    const message = `🌸 *AksharaChitra — Multilingual Poster Maker* 🎨
 
-    const message = `🌸 *AksharaChitra — Multilingual Poster Maker 🎨*
+Create Beautiful Posters *Offline* in 8+ Indian Languages! 🇮🇳
 
-Create, Save & Share posters *offline* in 8+ Indian languages!
+✨ *Key Features:*
+🖋️ Title, Subtitle & Custom Message
+🌐 Support for Telugu, Hindi, Sanskrit, Tamil, Kannada, Malayalam, Odia & English
+🎨 52+ Native Indian Font Families
+📱 Multiple Templates (News, Birthday, Devotional, Business, Invitation, Quote)
+🖼️ Upload & Crop Images with Brightness/Contrast Controls
+🔖 Add Small Logos & QR Codes
+🎙️ Voice Input & Text-to-Speech
+📸 *OCR (Image to Text)* — Extract text from photos
+💾 Save Offline with IndexedDB — Access Anytime
+🌙 Dark Mode Support
+📲 *PWA Ready* — Install as App, Works Fully Offline
+📁 Load Local System Fonts
+🤖 Browser AI Capabilities
+📤 Download & Share Anywhere
 
-✨ Features:
-🖋️ Title / Subtitle / Message
-🖼️ Upload + Crop Images
-🎙️ Voice Input
-💾 Offline Save (IndexedDB)
-📤 Share Anywhere
-🌙 Dark Mode
-52+ Native Font Families
+🎯 *Perfect For:*
+✅ Event Invitations & Announcements
+✅ Business Promotions & Branding
+✅ Devotional & Cultural Posters
+✅ Birthday Wishes & Greetings
+✅ Educational Content in Regional Languages
 
-Made by ❤️ Yuktishala AI Lab
-Get it here: https://aksharachitra.netlify.app`;
+💡 *Why AksharaChitra?*
+✓ 100% Offline — No Internet Needed
+✓ Privacy First — All Data Stays on Your Device
+✓ Made for Bharat 🇮🇳
+✓ Free & Open Source
+
+💖 *Made with Love by Yuktishala AI Lab*
+
+🔗 *Get Started Now:*
+https://aksharachitra.netlify.app
+
+#AksharaChitra #MultilingualPosterMaker #OfflineFirst #IndianLanguages #PWA #MadeInIndia`;
 
     const data = {
-      title: "AksharaChitra",
+      title: "AksharaChitra — Multilingual Poster Maker",
       text: message
     };
 
-    // 1️⃣ Native Share
+    // 1️⃣ Try Native Share API First
     if (navigator.share) {
       try {
         await navigator.share(data);
-        return;
-      } catch (e) {}
+        return; // Success - stop here
+      } catch (error) {
+        // User cancelled share dialog
+        if (error.name === 'AbortError') {
+          console.log('Share cancelled by user');
+          return; // Don't force other methods if user cancelled intentionally
+        }
+        console.log('Native share failed, trying fallbacks:', error);
+      }
     }
 
-    // 2️⃣ WhatsApp fallback
-    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
-
-    // 3️⃣ Clipboard fallback
-    try {
-      await navigator.clipboard.writeText(message);
-      alert("📋 Copied! Paste anywhere to share.");
-    } catch (e) {
-      alert("Unable to share. Copy manually.");
+    // 2️⃣ WhatsApp Fallback (Mobile Preferred)
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // Mobile: Direct WhatsApp share
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      const whatsappWindow = window.open(whatsappUrl, "_blank");
+      
+      // If popup blocked, try clipboard
+      if (!whatsappWindow) {
+        await fallbackToClipboard(message);
+      }
+      return;
     }
+
+    // 3️⃣ Desktop: Clipboard First, then offer options
+    await fallbackToClipboard(message);
   };
+}
+
+// 🎯 Clipboard Fallback Function
+async function fallbackToClipboard(message) {
+  try {
+    await navigator.clipboard.writeText(message);
+    
+    // Success alert with options
+    const shareNow = confirm(
+      "✅ Message copied to clipboard!\n\n" +
+      "📋 You can now paste it anywhere to share.\n\n" +
+      "Would you like to open WhatsApp Web?"
+    );
+    
+    if (shareNow) {
+      window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(message)}`, "_blank");
+    }
+  } catch (clipError) {
+    // Final fallback: Manual copy via prompt
+    console.error('Clipboard failed:', clipError);
+    const userCopy = prompt(
+      "📋 Copy this message to share AksharaChitra:",
+      message
+    );
+    
+    if (userCopy) {
+      alert("✅ Message ready to share! Paste it anywhere.");
+    }
+  }
+}
+
+// 🎯 Optional: Add share analytics/tracking
+function trackShare(method) {
+  console.log(`Share attempted via: ${method}`);
+  // Add your analytics here if needed
+  // Example: gtag('event', 'share', { method: method });
 }
 
 });
