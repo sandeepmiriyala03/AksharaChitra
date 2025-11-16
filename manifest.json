@@ -6,14 +6,12 @@
   "scope": "https://aksharachitra.netlify.app/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
+  "background_color": "#1e88e5",    
   "theme_color": "#3949ab",
   "dir": "ltr",
   "lang": "en-IN",
   "prefer_related_applications": false,
-
   "categories": ["productivity", "art", "design", "tools", "devotional"],
-
   "icons": [
     { "src": "icons/icon-48x48.png", "sizes": "48x48", "type": "image/png" },
     { "src": "icons/icon-72x72.png", "sizes": "72x72", "type": "image/png" },
