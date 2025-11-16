@@ -122,14 +122,91 @@ body.dark .topbar{background:linear-gradient(180deg, rgba(6,10,18,0.85), rgba(6,
 .right-controls button:hover{transform:translateY(-2px)}
 
 /* hamburger */
-.hamburger{display:none;background:transparent;border:none;font-size:26px;cursor:pointer;padding:6px;border-radius:8px}
-@media (max-width:768px){.hamburger{display:block}.desktop-nav{display:none}}
+.hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  color: var(--text, #e0e7ff);
+  transition: background-color 220ms ease, color 220ms ease;
+}
 
-/* mobile menu */
-.mobile-menu{display:none;position:absolute;top:58px;left:0;right:0;background:var(--card);border-radius:0 0 var(--radius) var(--radius);box-shadow:0 6px 24px rgba(2,6,23,0.12);padding:8px 0;z-index:999;transform-origin:top center;opacity:0;transform:translateY(-8px) scaleY(.98);pointer-events:none;transition:transform 180ms ease,opacity 180ms ease}
-.mobile-menu.open{display:block;opacity:1;transform:translateY(0) scaleY(1);pointer-events:auto}
-.mobile-menu .m-item{padding:12px 18px;text-align:left;font-size:16px;border:none;background:none;width:100%;cursor:pointer;color:var(--text)}
-.mobile-menu .m-item:hover{background:rgba(0,0,0,0.04)}
+.hamburger:hover,
+.hamburger:focus {
+  background-color: rgba(0, 191, 166, 0.15);
+  color: var(--accent, #00bfa6);
+  outline: none;
+  box-shadow: 0 0 10px var(--accent, #00bfa6);
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  .desktop-nav {
+    display: none;
+  }
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 58px;
+  left: 0;
+  right: 0;
+  background: var(--card, #1e2a47); /* Use --card variable or fallback deep blue */
+  border-radius: 0 0 var(--radius, 12px) var(--radius, 12px);
+  box-shadow: 0 6px 24px rgba(2, 6, 23, 0.12);
+  padding: 8px 0;
+  z-index: 999;
+  transform-origin: top center;
+  opacity: 0;
+  transform: translateY(-8px) scaleY(0.98);
+  pointer-events: none;
+  visibility: hidden;
+  transition: transform 180ms ease, opacity 180ms ease, visibility 0ms linear 180ms;
+}
+
+.mobile-menu.open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* Mobile menu tab buttons */
+.mobile-menu .m-item {
+  padding: 12px 18px;
+  text-align: left;
+  font-size: 16px;
+  border: none;
+  background: none;
+  width: 100%;
+  cursor: pointer;
+  color: var(--text, #e0e7ff); /* same as desktop text color */
+  font-weight: 700; /* match desktop tab font weight */
+  border-radius: 10px; /* match desktop tabs */
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+
+.mobile-menu .m-item:hover {
+  background: rgba(30, 136, 229, 0.15); /* subtle accent hover */
+  box-shadow: 0 0 10px var(--accent, #00bfa6);
+  color: #fff;
+}
+
+.mobile-menu .m-item.active {
+  background: linear-gradient(90deg, var(--accent, #00bfa6), var(--primary-700, #1565c0));
+  color: #fff;
+  box-shadow: 0 0 20px var(--accent, #00bfa6);
+}
+
+
 
 /* -------------------- 4) Content & tabs -------------------- */
 .content{padding:16px;min-height:60vh;animation:contentFade .36s ease}
