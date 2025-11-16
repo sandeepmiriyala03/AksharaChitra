@@ -1453,24 +1453,26 @@ if (clearOcrBtn) {
    ✔ IndexedDB opened
    ========================================================== */
 async function initGallerySafe() {
-
-  // 1. Wait until Service Worker fully active
+  // 1. Wait until Service Worker is fully active
   if (navigator.serviceWorker) {
-    try { await navigator.serviceWorker.ready; } catch (e) {}
+    try {
+      await navigator.serviceWorker.ready;  // Wait for service worker to be ready
+    } catch (e) {}
   }
 
-  // 2. Wait for DOM paint (important for PWA)
+  // 2. Wait for DOM to be fully painted (important for PWAs)
   await new Promise(r => requestAnimationFrame(r));
 
-  // 3. Small delay to avoid missing UI (Chrome mobile bug)
-  await new Promise(r => setTimeout(r, 80));
+  // 3. Small delay to ensure UI is loaded and ready
+  await new Promise(r => setTimeout(r, 150));  // Increased delay to ensure readiness
 
-  // 4. Ensure DB ready
+  // 4. Ensure IndexedDB is ready
   await openDB();
 
-  // 5. Finally load gallery
+  // 5. Finally load the gallery
   renderIndexedGallery();
 }
+
 
 window.initGallerySafe = initGallerySafe;
 

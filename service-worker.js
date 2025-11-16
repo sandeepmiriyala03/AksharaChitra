@@ -25,9 +25,7 @@ const FILES = [
   "/icons/icon-384x384.png",
   "/icons/icon-48x48.png",
   "/icons/icon-512x512.png",
-  "/icons/Astudio logo.png"
-
-
+  "/icons/Astudio logo.png" ,
 
   // LOCAL FONTS
   "/fonts/Veturi.ttf",
