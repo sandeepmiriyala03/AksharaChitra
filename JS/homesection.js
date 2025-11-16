@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const localFontInfo = document.getElementById("localFontInfo");
   const saveLocalFontBtn = document.getElementById("saveLocalFontBtn");
 
-  const aiList = document.getElementById("aiCapabilityList");
+
 
 
   /* ----------------------------------------------------------
@@ -200,34 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updatePreview("en");
 
 
-  /* ----------------------------------------------------------
-     11) AI CAPABILITIES
-  ---------------------------------------------------------- */
-aiList.innerHTML = ""; // Clear existing list
 
-  function addCap(name, ok) {
-    const item = document.createElement("div");
-    item.className = "ai-cap-item";
-    item.innerHTML = `
-      <span>${name}</span>
-      <strong style="color:${ok ? "green" : "red"}">
-        ${ok ? "✔ Available" : "✖ Not Supported"}
-      </strong>
-    `;
-    aiList.appendChild(item);
-  }
-
-  addCap("WebGPU", !!navigator.gpu);
-  addCap("WebGL", !!document.createElement("canvas").getContext("webgl"));
-  addCap("Speech Recognition", !!(window.SpeechRecognition || window.webkitSpeechRecognition));
-  addCap("Text-to-Speech", "speechSynthesis" in window);
-  addCap("Local File Access API", !!window.showOpenFilePicker);
-  addCap("Clipboard API", !!navigator.clipboard);
-  addCap("Local Font Access API", !!window.queryLocalFonts);
-  addCap("WebNN", !!navigator.ml);
-  addCap("Web Workers", !!window.Worker);
-  addCap("Storage Manager", !!navigator.storage);
-  addCap("Device RAM", navigator.deviceMemory || "Unknown");
-  addCap("CPU Threads", navigator.hardwareConcurrency || "Unknown");
 
 });

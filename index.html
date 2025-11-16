@@ -75,6 +75,7 @@
     <button class="tab-btn" data-tab="create">🎨 Create</button>
     <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
     <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
+    <button class="tab-btn" data-tab="ai-features">🤖 AI Features</button>
   </nav>
   <div class="right-controls">
     <button id="installBtnHeader" title="Install App">📲</button>
@@ -88,6 +89,7 @@
   <button class="m-item" data-tab="create">🎨 Create</button>
   <button class="m-item" data-tab="gallery">💾 My Creations</button>
   <button class="m-item" data-tab="feedback">💌 Feedback</button>
+  <button class="m-item" data-tab="ai-features">🤖 AI Features</button>
 </nav>
   <!-- 🌈 MAIN CONTENT -->
   <main id="mainContent" class="content">
@@ -154,24 +156,9 @@
 
     <p id="localFontInfo" style="display:none;"></p>
   </div>
-
   <!-- 4️⃣ Preview Card -->
   <div id="previewCardContainer"></div>
-
 </div>
-
-<!-- 🤖 BROWSER AI CAPABILITIES -->
-<div class="ai-browser-section fade-in">
-  <h2>🤖 Browser AI — Smart Features</h2>
-  <p class="muted small">Your browser’s built-in AI accelerates AksharaChitra offline.</p>
-  <div id="aiCapabilityList" class="ai-cap-list">
-    <div class="ai-cap-item">Checking browser capabilities…</div>
-  </div>
-  <div class="ai-info-tip">
-    💡 Works fully offline — no data is sent to servers.
-  </div>
-</div>
-
 <hr class="divider" />
 
 <div class="features-section fade-in">
@@ -216,6 +203,18 @@
 </div>
 
 </section>
+
+<section class="tab-content" id="ai-features" aria-label="Browser AI Capabilities and Features">
+  <div class="ai-browser-section fade-in">
+    <h2>🤖 Browser AI Capabilities & Features</h2>
+    <p class="muted small">
+      The list below shows the browser AI/web APIs support and usage availability for AksharaChitra offline & online.
+    </p>
+    <div id="aiCapabilitiesList" class="ai-cap-list"></div>
+  </div>
+</section>
+
+
 
 
  <!-- 🎨 CREATE -->
@@ -527,11 +526,8 @@
 
 <!-- Hidden Canvas for Image Processing -->
 <canvas id="outputCanvas" style="display:none;"></canvas>
-
-
 <!-- Hidden Canvas for Image Processing -->
 <canvas id="outputCanvas" style="display:none;"></canvas>
-
 <!-- Hidden Canvas for Image Processing -->
 <canvas id="outputCanvas" style="display:none;"></canvas>
   <!-- JS -->
@@ -547,6 +543,7 @@
  <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>
    <script src="/ai//imageEnhancement.js" defer></script>
+  <script src ="/ai/browserAI.js" defer></script>
   <script src="pwa.js" defer></script>
   <script src="/JS/homesection.js" defer></script>
 <script>

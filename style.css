@@ -2107,3 +2107,126 @@ button:disabled {
     height: 20px;
   }
 }
+
+/* ============================================================
+   🌟 AI Capability Cards (Fully Responsive)
+   ============================================================ */
+/* Container for AI capability cards */
+./* Summary box at top */
+.ai-cap-summary {
+  background: #e0f7fa;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  color: #006064;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-width: 460px;
+}
+
+.ai-cap-summary p {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ai-cap-list {
+  display: grid;
+  gap: 1.2rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  font-family: 'Poppins', sans-serif;
+}
+
+.ai-cap-item {
+  background-color: #f0fdfa;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 10px rgba(0,191,166,0.12);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease;
+}
+
+.ai-cap-item:hover {
+  box-shadow: 0 6px 15px rgba(0,191,166,0.22);
+}
+
+.ai-cap-item > span {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #00796b;
+  margin-bottom: 10px;
+}
+
+.ai-cap-item > div {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.ai-cap-item strong {
+  font-weight: 700;
+  color: #004d40;
+}
+
+.ai-cap-item strong.available {
+  color: #2e7d32;
+}
+
+.ai-cap-item strong.unavailable {
+  color: #c62828;
+}
+
+.demo-toggle-btn {
+  margin-top: 0.8rem;
+  background-color: #00bfa6;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  align-self: flex-start;
+}
+
+.demo-toggle-btn:hover,
+.demo-toggle-btn:focus {
+  background-color: #1de9b6;
+  outline: none;
+}
+
+.demo-container {
+  margin-top: 1rem;
+  background: #e8f5e9;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #2e7d32;
+  font-size: 0.95rem;
+  box-shadow: inset 0 0 5px rgba(46,125,50,0.4);
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  .ai-cap-list {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-cap-summary {
+    max-width: 100%;
+  }
+
+  .demo-toggle-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+  /* ============================================================
+   ⏳ Loading Spinner (All Devices)
+   ============================================================ */  
