@@ -2051,3 +2051,59 @@ button:disabled {
     color: #007bff;
     margin-top: 10px;
 }
+
+
+#shareProjectBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #00bfa6 0%, #1de9b6 100%);
+  border-radius: 24px;
+  padding: 12px 28px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0, 191, 166, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  border: none;
+  width: auto;
+  max-width: 90vw; /* prevents button overflow on small devices */
+  white-space: nowrap; /* keeps text in one line */
+}
+
+#shareProjectBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 9px 25px rgba(0, 191, 166, 0.6);
+}
+
+#shareProjectBtn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 10px rgba(0, 191, 166, 0.3);
+}
+
+#shareProjectBtn .share-icon {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 0 3px rgba(0, 191, 166, 0.8));
+  transition: filter 0.3s ease;
+}
+
+#shareProjectBtn:hover .share-icon {
+  filter: drop-shadow(0 0 7px rgba(0, 191, 166, 1));
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  #shareProjectBtn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    gap: 8px;
+  }
+  #shareProjectBtn .share-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
