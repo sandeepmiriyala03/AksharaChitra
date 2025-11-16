@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         font-size:1rem;
         text-align:center;
       `;
-      alert("Inserted preview box: " + afterEl);
+     
       afterEl.parentNode.insertBefore(box, afterEl.nextSibling);
     }
     return box;
