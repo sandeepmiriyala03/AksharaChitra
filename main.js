@@ -1562,6 +1562,7 @@ Create Beautiful Posters *Offline* in 8+ Indian Languages! 🇮🇳
 🖋️ Title, Subtitle & Custom Message
 🌐 Support for Telugu, Hindi, Sanskrit, Tamil, Kannada, Malayalam, Odia & English
 🎨 52+ Native Indian Font Families
+📁 *Smart Local Font Loader* — Load & filter fonts from your desktop by language, save favorites offline
 📱 Multiple Templates (News, Birthday, Devotional, Business, Invitation, Quote)
 🖼️ Upload & Crop Images with Brightness/Contrast Controls
 🔖 Add Small Logos & QR Codes
@@ -1570,7 +1571,6 @@ Create Beautiful Posters *Offline* in 8+ Indian Languages! 🇮🇳
 💾 Save Offline with IndexedDB — Access Anytime
 🌙 Dark Mode Support
 📲 *PWA Ready* — Install as App, Works Fully Offline
-📁 Load Local System Fonts
 🤖 Browser AI Capabilities
 📤 Download & Share Anywhere
 
@@ -1669,5 +1669,4 @@ function trackShare(method) {
   // Add your analytics here if needed
   // Example: gtag('event', 'share', { method: method });
 }
-
 });
