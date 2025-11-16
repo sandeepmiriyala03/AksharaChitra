@@ -61,13 +61,12 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
- 
+
 <header class="topbar">
   <div class="left">
     <img src="logo.png" alt="AksharaChitra" class="logo"  loading="lazy"/>
     <span class="app-title">AksharaChitra</span>
   </div>
-
   <!-- 🌟 Hamburger (mobile only) -->
   <button id="hamburgerBtn" class="hamburger">☰</button>
   <!-- 🌈 Desktop Navigation -->
@@ -77,7 +76,6 @@
     <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
     <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
   </nav>
-
   <div class="right-controls">
     <button id="installBtnHeader" title="Install App">📲</button>
     <button id="themeToggle" title="Toggle Theme">🌙</button>
@@ -86,18 +84,14 @@
 
 <!-- ⭐ MOBILE SLIDE-DOWN MENU -->
 <nav id="mobileMenu" class="mobile-menu">
-
   <button class="m-item" data-tab="home">🏠 Home</button>
   <button class="m-item" data-tab="create">🎨 Create</button>
   <button class="m-item" data-tab="gallery">💾 My Creations</button>
   <button class="m-item" data-tab="feedback">💌 Feedback</button>
 </nav>
-
   <!-- 🌈 MAIN CONTENT -->
   <main id="mainContent" class="content">
-  
 <section id="home" class="tab-content">
-
 <!-- INTRO (updated: right-aligned logo) -->
 <div class="about-intro fade-in">
   <div class="about-intro-header">
@@ -355,18 +349,19 @@
       </div>
 
               <!-- OCR Section Added -->
-        <div class="group ocr-section">
-          <h3>📸 OCR - Image to Text</h3>
+     <div class="group ocr-section">
+  <h3>📸 OCR - Image to Text</h3>
 
-          <label for="ocrImageInput">🖼️ Upload Image for OCR</label>
-          <input type="file" id="ocrImageInput" accept="image/*" />
+  <label for="ocrImageInput">🖼️ Upload Image for OCR</label>
+  <input type="file" id="ocrImageInput" accept="image/*" />
 
-          <button id="startOcrBtn" class="btn primary" disabled>⚡ Start OCR</button>
+  <button id="startOcrBtn" class="btn primary" disabled>⚡ Start OCR</button>
 
-          <textarea id="ocrResult" rows="5" placeholder="OCR text will appear here..." readonly style="width: 100%; margin-top: 10px;"></textarea>
+  <textarea id="ocrResult" rows="5" placeholder="OCR text will appear here..." readonly style="width: 100%; margin-top: 10px;"></textarea>
 
-          <button id="pasteOcrToMessageBtn" class="btn ghost" disabled>📋 Paste OCR Text to Message</button>
-        </div>
+  <button id="pasteOcrToMessageBtn" class="btn ghost" disabled>📋 Paste OCR Text to Message</button>
+</div>
+
 
         <div class="row">
           <label>Font Size</label><input id="messageSize" type="number" value="20" min="10" max="60" />

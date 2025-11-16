@@ -1359,6 +1359,29 @@ if (typeof speechSynthesis !== "undefined") {
 }
 
 
+// Select OCR elements
+const ocrImageInput = document.getElementById('ocrImageInput');
+const startOcrBtn = document.getElementById('startOcrBtn');
+const ocrResult = document.getElementById('ocrResult');
+const pasteOcrToMessageBtn = document.getElementById('pasteOcrToMessageBtn');
+
+// Function to clear OCR inputs and reset UI
+function clearOcrInputs() {
+  if (ocrImageInput) ocrImageInput.value = '';           // Clear file input
+  if (ocrResult) ocrResult.value = '';                   // Clear OCR result textarea
+  if (startOcrBtn) startOcrBtn.disabled = true;          // Disable start OCR button
+  if (pasteOcrToMessageBtn) pasteOcrToMessageBtn.disabled = true;  // Disable paste button
+}
+
+// Example usage - attach to some reset or clear button
+const clearOcrBtn = document.getElementById('clearOcrBtn');
+if (clearOcrBtn) {
+  clearOcrBtn.addEventListener('click', () => {
+    clearOcrInputs();
+  });
+}
+
+
   // ---------------------------------------------
   // Clear all fields
   // ---------------------------------------------
@@ -1385,6 +1408,7 @@ if (typeof speechSynthesis !== "undefined") {
     const msg = document.createElement("div"); msg.textContent = "✅ All fields and settings have been reset!";
     Object.assign(msg.style, { position: "fixed", bottom: "20px", left: "50%", transform: "translateX(-50%)", background: "#4CAF50", color: "#fff", padding: "10px 18px", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", fontFamily: "Montserrat, sans-serif", fontSize: "0.9rem", zIndex: "9999", opacity: "0", transition: "opacity 0.3s ease" });
     document.body.appendChild(msg); setTimeout(() => msg.style.opacity = "1", 50); setTimeout(() => { msg.style.opacity = "0"; setTimeout(() => msg.remove(), 600); }, 2500);
+   clearOcrInputs();
   });
 
   // ---------------------------------------------
