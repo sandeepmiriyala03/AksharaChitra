@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imageUpload = $("imageUpload"),
         imagePosition = $("imagePosition"),
         smallLogoUpload = $("smallLogoUpload"),
-        openCreateBtn = $("openCreateBtn"),
+        openCreateBtn = $("home_feature_create_btn"),
         goTopBtn = $("goTopBtn");
 
   // Crop modal
@@ -1549,7 +1549,7 @@ activateTab("home");
 
 
 // SHARE BUTTON ON HOME PAGE
-const shareHomeBtn = document.getElementById("shareProjectBtn");
+const shareHomeBtn = document.getElementById("home_feature_share_btn");
 
 if (shareHomeBtn) {
   shareHomeBtn.onclick = async () => {
