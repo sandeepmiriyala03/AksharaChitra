@@ -11,8 +11,39 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+
+    // ---------------------- FONT MAP ----------------------
+  const FONT_MAP = {
+    eng: ["Arvo","Bebas Neue","Cinzel","Comfortaa","DM Serif Display","Inter",
+         "Lato","Lobster","Merriweather","Montserrat","Nunito","Open Sans",
+         "Playfair Display","Poppins","Prompt","Quicksand","Raleway",
+         "Roboto","Ubuntu"],
+      tel: [
+        "Mandali",
+        "Noto Sans Telugu",
+        "NTR",
+        "Ramabhadra",
+        "Gidugu",
+        //appaji fonts here
+        "RamaneeyaWin",
+        "Ramaraja",
+        "RaviPrakash",
+        "Sirivennela",
+        "TANA",
+        "TenaliRamakrishna",
+        "Timmana",
+        "Veturi"
+      ],
+
+    hin: ["Hind","Karma","Noto Serif Devanagari"],
+    san: ["Noto Serif Devanagari","Tiro Devanagari Sanskrit"],
+    tam: ["Noto Sans Tamil","Tiro Tamil"],
+    kan: ["Noto Sans Kannada"],
+    mal: ["Noto Sans Malayalam"],
+    ori: ["Noto Sans Oriya"]
+  };
   const q = (sel) => document.querySelector(sel);
-  const qa = (sel) => Array.from(document.querySelectorAll(sel));
+
 
   // ---------------------- Inputs ----------------------
   const languageSelect = q("#language");
@@ -57,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         font-size:1rem;
         text-align:center;
       `;
+      alert("Inserted preview box: " + afterEl);
       afterEl.parentNode.insertBefore(box, afterEl.nextSibling);
     }
     return box;
@@ -66,36 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const subtitlePreviewBox = insertPreviewBox(subtitleFontFamily, "subtitleFontPreview");
   const messagePreviewBox = insertPreviewBox(messageFontFamily, "messageFontPreview");
 
-  // ---------------------- FONT MAP ----------------------
-  const FONT_MAP = {
-    eng: ["Arvo","Bebas Neue","Cinzel","Comfortaa","DM Serif Display","Inter",
-         "Lato","Lobster","Merriweather","Montserrat","Nunito","Open Sans",
-         "Playfair Display","Poppins","Prompt","Quicksand","Raleway",
-         "Roboto","Ubuntu"],
-      tel: [
-        "Mandali",
-        "Noto Sans Telugu",
-        "NTR",
-        "Ramabhadra",
-        "Gidugu",
-        //appaji fonts here
-        "RamaneeyaWin",
-        "Ramaraja",
-        "RaviPrakash",
-        "Sirivennela",
-        "TANA",
-        "TenaliRamakrishna",
-        "Timmana",
-        "Veturi"
-      ],
-
-    hin: ["Hind","Karma","Noto Serif Devanagari"],
-    san: ["Noto Serif Devanagari","Tiro Devanagari Sanskrit"],
-    tam: ["Noto Sans Tamil","Tiro Tamil"],
-    kan: ["Noto Sans Kannada"],
-    mal: ["Noto Sans Malayalam"],
-    ori: ["Noto Sans Oriya"]
-  };
 
   // ---------------------- SAMPLE TEXT ----------------------
   const SAMPLE_TEXT = {
@@ -205,4 +207,86 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------- INIT ----------------------
   loadFontsForLanguage(languageSelect?.value || "en");
   updateAllPreviews();
+  const loadLocalBtn = document.getElementById("fontSelect_local");
+const localFontsDropdown = document.getElementById("fontSelect_savelocal");
+const localFontInfo = document.getElementById("CreatelocalFontInfo");
+const saveLocalFontBtn = document.getElementById("fontSelect_saveLocal");
+let CUSTOM_FONTS = JSON.parse(localStorage.getItem("FontsConfig") || "{}");
+
+  Object.keys(FONT_MAP).forEach(lang => {
+    if (!CUSTOM_FONTS[lang]) CUSTOM_FONTS[lang] = [];
+    FONT_MAP[lang] = [...new Set([...FONT_MAP[lang], ...CUSTOM_FONTS[lang]])].sort();
+  });
+
+  loadLocalBtn.onclick = loadLocalFonts;
+  const langSelect = document.getElementById("language");
+async function loadLocalFonts() {
+  if (!window.queryLocalFonts) {
+    alert("Local Font Access API not supported.");
+    return;
+  }
+
+  try {
+    const fonts = await window.queryLocalFonts();
+    localFontsDropdown.innerHTML = "";
+
+    const lang = langSelect.value; // Get currently selected language
+
+    // Use a Set for faster exact match checking
+    const langFontsSet = new Set(FONT_MAP[lang] || FONT_MAP["eng"]);
+
+    // Filter fonts where the full font name exactly matches any language font name
+    const filteredFonts = fonts.filter(f => langFontsSet.has(f.fullName));
+
+    // If no filtered fonts found, fallback to showing all fonts but mark it
+    const displayFonts = filteredFonts.length ? filteredFonts : fonts;
+
+    displayFonts.forEach(f => {
+      const opt = document.createElement("option");
+      opt.value = f.fullName;
+      opt.textContent = f.fullName;
+      localFontsDropdown.appendChild(opt);
+    });
+
+    if (displayFonts.length > 0) {
+      localFontsDropdown.style.display = "inline-block";
+      saveLocalFontBtn.style.display = "inline-block";
+      localFontInfo.style.display = "block";
+      localFontInfo.textContent = filteredFonts.length
+        ? `${filteredFonts.length} fonts found for ${lang}`
+        : `No exact font matches found for ${lang}, showing all (${fonts.length})`;
+    }
+  } catch {
+    alert("Permission denied.");
+  }
+}
+
+
+saveLocalFontBtn.onclick = () => {
+  const lang = langSelect.value;
+  const name = localFontsDropdown.value;
+
+  if (!name) return alert("Select a font first!");
+  if (FONT_MAP[lang].includes(name)) {
+    return alert("Font already added!");
+  }
+
+  if (!CUSTOM_FONTS[lang]) {
+    CUSTOM_FONTS[lang] = [];
+  }
+
+  CUSTOM_FONTS[lang].push(name);
+  localStorage.setItem("FontsConfig", JSON.stringify(CUSTOM_FONTS));
+
+  FONT_MAP[lang].push(name);
+  FONT_MAP[lang].sort();
+
+  fillFonts(titleFontFamily, FONT_MAP[lang]);
+  fillFonts(subtitleFontFamily, FONT_MAP[lang]);
+  fillFonts(messageFontFamily, FONT_MAP[lang]);
+  alert(`Font "${name}" saved!`);
+};
 });
+
+
+ 

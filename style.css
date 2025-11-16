@@ -1554,7 +1554,7 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 /* Local font access */
-.local-font-access {
+.local-font-access, .CustomFont {
   margin-top: 20px;
   padding: 18px;
   border-radius: 14px;
@@ -1567,12 +1567,12 @@ input[type="range"]::-moz-range-thumb:hover {
   transition: all var(--transition);
 }
 
-.local-font-access:hover {
+.local-font-access:hover, .CustomFont:hover {
   box-shadow: var(--shadow-md);
   border-color: var(--primary);
 }
 
-#loadLocalFontsBtn {
+#loadLocalFontsBtn,#fontSelect_local {
   width: 100%;
   padding: 10px 16px;
   font-size: 0.92rem;
@@ -1586,7 +1586,7 @@ input[type="range"]::-moz-range-thumb:hover {
   box-shadow: var(--shadow-sm);
 }
 
-#loadLocalFontsBtn:hover {
+#loadLocalFontsBtn:hover,.fontSelect_local:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -1608,7 +1608,7 @@ input[type="range"]::-moz-range-thumb:hover {
   box-shadow: 0 0 0 4px var(--focus-ring);
 }
 
-#saveLocalFontBtn {
+#saveLocalFontBtn ,#fontSelect_saveLocal{
   width: 100%;
   margin-top: 12px;
   padding: 10px 16px;
@@ -1624,12 +1624,12 @@ input[type="range"]::-moz-range-thumb:hover {
   box-shadow: var(--shadow-sm);
 }
 
-#saveLocalFontBtn:hover {
+#saveLocalFontBtn:hover,#fontSelect_saveLocal:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-#localFontInfo {
+#localFontInfo,#CreatelocalFontInfo {
   margin-top: 10px;
   font-size: 0.84rem;
   color: var(--muted);
