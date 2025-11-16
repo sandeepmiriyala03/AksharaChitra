@@ -186,6 +186,175 @@
     </div>
   </div>
 
+
+
+<!-- 🆕 ADD THIS NEW TUTORIAL SECTION HERE -->
+<hr class="home_feature_divider" />
+
+<div class="desktop-fonts-tutorial home_feature_fade">
+  <div class="tutorial-container">
+    
+    <!-- Header -->
+    <div class="tutorial-header">
+      <h1>
+        <span>📁</span>
+        <span>How to Load Desktop Fonts</span>
+      </h1>
+      <div class="tutorial-subtitle">
+        Learn how to use your computer's fonts in AksharaChitra
+      </div>
+      <div class="feature-badge">✨ New Feature</div>
+    </div>
+
+    <!-- Introduction -->
+    <div class="intro-box">
+      <h2>🎯 What is This Feature?</h2>
+      <p>
+        <strong>Load Desktop Fonts</strong> lets you access and use any font 
+        installed on your computer. AksharaChitra intelligently filters fonts 
+        based on your selected language and allows you to save your favorites for offline use.
+      </p>
+    </div>
+
+    <!-- Steps Container -->
+    <div class="steps-container">
+      
+      <!-- Step 1 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <div class="step-title">Go to Create Section</div>
+        </div>
+        <div class="step-description">
+          Navigate to the <strong>🎨 Create</strong> tab in AksharaChitra.
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <div class="step-title">Select Your Language</div>
+        </div>
+        <div class="step-description">
+          Choose your preferred language from the dropdown.
+        </div>
+        <div class="highlight-box">
+          <strong>💡 Tip:</strong> AksharaChitra supports 8+ Indian languages.
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <div class="step-title">Click "Load Local System Fonts"</div>
+        </div>
+        <div class="step-description">
+          Find and click the blue <strong>📁 Load Local System Fonts</strong> button.
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">4</div>
+          <div class="step-title">Grant Permission</div>
+        </div>
+        <div class="step-description">
+          Your browser will ask for permission. Click <strong>"Allow"</strong>.
+        </div>
+        <div class="highlight-box">
+          <strong>🔒 Privacy:</strong> Your fonts stay on your device!
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">5</div>
+          <div class="step-title">View Filtered Font List</div>
+        </div>
+        <div class="step-description">
+          AksharaChitra shows fonts matching your language.
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">6</div>
+          <div class="step-title">Select Your Favorite Font</div>
+        </div>
+        <div class="step-description">
+          Browse and select any font. See a live preview instantly.
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">7</div>
+          <div class="step-title">Save Font to AksharaChitra</div>
+        </div>
+        <div class="step-description">
+          Click <strong>💾 Save this Font to AksharaChitra</strong> to add it permanently.
+        </div>
+        <div class="success-box">
+          <strong>✨ Success!</strong> Font saved for offline use.
+        </div>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">8</div>
+          <div class="step-title">Use Your Font in Posters!</div>
+        </div>
+        <div class="step-description">
+          Your saved font is now available in all font dropdowns.
+        </div>
+        <div class="success-box">
+          <strong>🎉 You're All Set!</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="benefits-section">
+      <h2>✨ Why Use Desktop Fonts?</h2>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <span class="emoji">🎨</span>
+          <h3>Unlimited Choices</h3>
+          <p>Access every font on your computer</p>
+        </div>
+        <div class="benefit-item">
+          <span class="emoji">🌐</span>
+          <h3>Language-Smart</h3>
+          <p>Auto-filters by language</p>
+        </div>
+        <div class="benefit-item">
+          <span class="emoji">💾</span>
+          <h3>Offline Ready</h3>
+          <p>Save and use without internet</p>
+        </div>
+        <div class="benefit-item">
+          <span class="emoji">🔒</span>
+          <h3>Privacy First</h3>
+          <p>Everything stays on your device</p>
+        </div>
+      </div>
+    </div>
+    <!-- CTA -->
+    <div class="cta-section">
+      <h2>🚀 Ready to Try It?</h2>
+      <button class="cta-button" id="tutorial_go_create">🎨 Go to Create Section</button>
+    </div>
+
+  </div>
+</div>
   <hr class="home_feature_divider" />
 
   <div class="home_help_container home_feature_fade">
@@ -682,6 +851,21 @@ const yearSpan = document.getElementById('year');
   warmUpOcr();
 
 });
+
+// Tutorial CTA Button
+const tutorialGoCreateBtn = document.getElementById('tutorial_go_create');
+if (tutorialGoCreateBtn) {
+  tutorialGoCreateBtn.addEventListener('click', () => {
+    // Switch to create tab
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      if (btn.dataset.tab === 'create') {
+        btn.click();
+      }
+    });
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
 </script>
 
 </body>
