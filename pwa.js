@@ -1,18 +1,15 @@
 /* ==========================================================
    🌸 AksharaChitra v3.5 — Progressive Web App (pwa.js)
    ----------------------------------------------------------
-   ✅ Service Worker
-   ✅ Install Buttons (Header + FAB)
-   ✅ Deferred Prompt Handling
-   ✅ Spinner Overlay
-   ✅ Toasts + iOS Add-to-Home
-   ✅ Opera + Safari Manual Install Fallback
-   ========================================================== */
+   ✅ Service Worker Registration and Update
+   ✅ Deferred Install Prompt Handling
+   ✅ Loading Spinner Overlay
+   ✅ Toast Notifications
+   ✅ iOS and Opera/Safari Install Fallback
+========================================================== */
 
-// ---- 1️⃣ Loading Spinner Overlay ----
+// ---- Loading Spinner Overlay ----
 const spinner = document.createElement("div");
-
-// Wrapper
 Object.assign(spinner.style, {
   position: "fixed",
   inset: 0,
@@ -23,8 +20,6 @@ Object.assign(spinner.style, {
   zIndex: "999999",
   transition: "opacity 0.8s ease, transform 0.8s ease",
 });
-
-// Loader UI
 spinner.innerHTML = `
   <div style="
     display:flex;
@@ -32,8 +27,6 @@ spinner.innerHTML = `
     align-items:center;
     animation:fadeUp 1s ease forwards;
   ">
-
-    <!-- Logo -->
     <img src="logo.png" alt="logo" style="
       width:85px;
       height:85px;
@@ -41,8 +34,6 @@ spinner.innerHTML = `
       margin-bottom:18px;
       animation:pulseGlow 2s infinite ease-in-out;
     ">
-
-    <!-- Premium Ring Spinner -->
     <div style="
       width:48px;height:48px;
       border:5px solid rgba(21,101,192,0.25);
@@ -51,8 +42,6 @@ spinner.innerHTML = `
       animation:spin 0.9s linear infinite;
       margin-bottom:14px;
     "></div>
-
-    <!-- Text -->
     <div style="
       font-family: 'Poppins', sans-serif;
       font-weight:600;
@@ -64,21 +53,17 @@ spinner.innerHTML = `
       Loading AksharaChitra…
     </div>
   </div>
-
   <style>
     @keyframes spin { to { transform: rotate(360deg); } }
-
     @keyframes pulseGlow {
       0%   { transform:scale(1); filter:drop-shadow(0 0 0px #42a5f5); }
       50%  { transform:scale(1.08); filter:drop-shadow(0 0 12px #1e88e5); }
       100% { transform:scale(1); filter:drop-shadow(0 0 0px #42a5f5); }
     }
-
     @keyframes fadeUp {
       from { opacity:0; transform:translateY(20px); }
       to   { opacity:1; transform:translateY(0); }
     }
-
     @keyframes fadeText {
       0%   { opacity:1; }
       50%  { opacity:0.4; }
@@ -86,10 +71,9 @@ spinner.innerHTML = `
     }
   </style>
 `;
-
 document.body.appendChild(spinner);
 
-// Fade-out
+// Fade out spinner after page load
 window.addEventListener("load", () => {
   setTimeout(() => {
     spinner.style.opacity = "0";
@@ -98,28 +82,51 @@ window.addEventListener("load", () => {
   }, 400);
 });
 
-// ---- 2️⃣ Register Service Worker ----
+// ---- Register Service Worker & Enable Silent Updates ----
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("service-worker.js")
-      .then((reg) => console.log("[PWA] SW registered:", reg.scope))
-      .catch((err) => console.warn("[PWA] SW registration failed:", err));
+    navigator.serviceWorker.register("service-worker.js").then(reg => {
+      console.log("[PWA] SW registered:", reg.scope);
+
+      // Detect update found
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        if (!newWorker) return;
+
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // New update installed, activate immediately
+              newWorker.postMessage({ type: 'SKIP_WAITING' });
+              console.log('[PWA] New SW installed and activated silently.');
+
+              // Optionally reload page automatically
+              window.location.reload();
+            } else {
+              console.log('[PWA] Service Worker installed for first time.');
+            }
+          }
+        });
+      });
+    }).catch(err => {
+      console.warn("[PWA] SW registration failed:", err);
+    });
   });
 }
 
-// ---- 3️⃣ Install Buttons Setup ----
+
+// ---- Install Buttons Setup ----
 let deferredPrompt = null;
 const installBtns = [
   document.getElementById("installBtn"),
   document.getElementById("installBtnHeader"),
 ].filter(Boolean);
+
 installBtns.forEach((btn) => {
   btn.style.display = "none";
   btn.disabled = true;
 });
 
-// ---- 4️⃣ Capture beforeinstallprompt ----
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
@@ -131,10 +138,10 @@ window.addEventListener("beforeinstallprompt", (e) => {
     btn.classList.add("show", "pulse");
     btn.disabled = false;
   });
+
   showInstallToast("📲 App ready to install! Tap the icon below.");
 });
 
-// ---- 5️⃣ Button Click Handler ----
 installBtns.forEach((btn) => {
   btn.addEventListener("click", async () => {
     if (btn.disabled) return;
@@ -173,30 +180,28 @@ installBtns.forEach((btn) => {
   });
 });
 
-// ---- 6️⃣ Installed Event ----
 window.addEventListener("appinstalled", () => {
   console.log("[PWA] App installed successfully ✅");
   installBtns.forEach((b) => (b.style.display = "none"));
   showInstallToast("✅ Installed! Open AksharaChitra from Home Screen.");
 });
 
-// ---- 7️⃣ Standalone Mode ----
 if (window.matchMedia("(display-mode: standalone)").matches) {
   installBtns.forEach((b) => (b.style.display = "none"));
   console.log("[PWA] Running in standalone mode 🏠");
-}
+});
 
-// ---- 8️⃣ iOS Add-to-Home Message ----
 function isIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
+
 if (isIOS() && !window.matchMedia("(display-mode: standalone)").matches) {
   setTimeout(() => {
     showInstallToast("📲 On iPhone/iPad: Tap “Share” → “Add to Home Screen”.");
   }, 1200);
 }
 
-// ---- 9️⃣ Fallback (5s grace) ----
+// Fallback if install prompt doesn't fire after 5 sec
 window.addEventListener("load", () => {
   setTimeout(() => {
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
@@ -212,7 +217,7 @@ window.addEventListener("load", () => {
   }, 5000);
 });
 
-// ---- 🔟 Toast Utility ----
+// Toast utility function
 function showInstallToast(msg) {
   const toast = document.createElement("div");
   toast.textContent = msg;
@@ -240,17 +245,13 @@ function showInstallToast(msg) {
   setTimeout(() => toast.remove(), 3400);
 }
 
-// ==========================================================
-//  🌐 Opera + iOS Safari Fallback for Manual Install
-// ==========================================================
+// Manual install fallback for Safari & Opera browsers
 (function setupFallbackInstall() {
   const ua = navigator.userAgent;
   const isIOS = /iPad|iPhone|iPod/.test(ua);
   const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
   const isOpera = /Opera|OPR\//.test(ua);
-
-  const needsManualInstall =
-    (isIOS && isSafari) || isOpera || !("BeforeInstallPromptEvent" in window);
+  const needsManualInstall = (isIOS && isSafari) || isOpera || !('BeforeInstallPromptEvent' in window);
 
   if (!needsManualInstall) return;
 
@@ -308,8 +309,6 @@ function showInstallToast(msg) {
       </div>`;
     overlay.appendChild(card);
     document.body.appendChild(overlay);
-    document
-      .getElementById("closeGuideBtn")
-      .addEventListener("click", () => overlay.remove());
+    document.getElementById("closeGuideBtn").addEventListener("click", () => overlay.remove());
   }
 })();
