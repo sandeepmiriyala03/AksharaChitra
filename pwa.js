@@ -189,7 +189,7 @@ window.addEventListener("appinstalled", () => {
 if (window.matchMedia("(display-mode: standalone)").matches) {
   installBtns.forEach((b) => (b.style.display = "none"));
   console.log("[PWA] Running in standalone mode 🏠");
-});
+}
 
 function isIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;

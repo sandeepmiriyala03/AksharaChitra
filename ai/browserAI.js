@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("aiCapabilitiesList");
+  if (!container) {
+    console.error("Error: #aiCapabilitiesList container not found in DOM.");
+    return; // Exit since container is missing
+  }
 
   // AI capabilities with offline/online usage and roadmap flags
   const capabilities = [
@@ -42,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   container.innerHTML = "";
 
-  // Construct capability cards with toggle buttons and demo containers
   capabilities.forEach(({ name, supported, offline, online, sectionId }) => {
     const item = document.createElement("div");
     item.className = "ai-cap-item";
@@ -65,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     container.appendChild(item);
   });
 
-  // Demo toggle logic: only one demo open at once
   container.querySelectorAll('.demo-toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('aria-controls');
@@ -74,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const isHidden = demoElem.classList.contains('hidden');
 
-      // Close all demo containers and reset buttons
       container.querySelectorAll('.demo-container').forEach(el => {
         el.classList.add('hidden');
         el.setAttribute('aria-hidden', 'true');
@@ -85,13 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (isHidden) {
-        // Open selected demo container
         demoElem.classList.remove('hidden');
         demoElem.setAttribute('aria-hidden', 'false');
         btn.setAttribute('aria-expanded', 'true');
         btn.textContent = '▼ Hide Demo';
 
-        // Demo content based on targetId
         switch (targetId) {
           case 'webglDemo':
             demoElem.innerHTML = `<p><strong>WebGL Demo:</strong> Accelerated GPU rendering used for poster previews and effects.</p>`;
