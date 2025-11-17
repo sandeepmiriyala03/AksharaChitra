@@ -602,14 +602,52 @@ window.addEventListener('resize', adjustButtonLayoutForMobile);
 // ===============================
 const templateSelect = $("templateSelect");
 
-const TEMPLATE_PACK = {
+
+ const TEMPLATE_PACK = {
   eng: {
     news:       { title: "📰 Breaking News", subtitle: "", message: "Write your update here..." },
     birthday:   { title: "🎂 Happy Birthday!", subtitle: "Best Wishes", message: "Many Happy Returns of the Day!" },
     devotional: { title: "🕉 Good Day", subtitle: "", message: "May divine blessings be with you 🙏" },
     business:   { title: "🏢 Business Update", subtitle: "", message: "Contact us at +91 99999 99999" },
     invitation: { title: "💌 Invitation", subtitle: "", message: "Venue • Date • Time" },
-    quote:      { title: "💬 Quote of the Day", subtitle: "", message: "Believe in yourself ✨" }
+    quote:      { title: "💬 Quote of the Day", subtitle: "", message: "Believe in yourself ✨" },
+
+    // Additional Templates
+    goodMorning:       { title: "🌅 Good Morning", subtitle: "", message: "Start your day with positivity" },
+    goodNight:         { title: "🌙 Good Night", subtitle: "", message: "Peaceful dreams and gentle rest" },
+    goodAfternoon:     { title: "☀️ Good Afternoon", subtitle: "", message: "Hope your day is going great" },
+    goodEvening:       { title: "🌆 Good Evening", subtitle: "", message: "Relax and unwind this evening" },
+    weekendVibes:      { title: "😎 Weekend Vibes", subtitle: "", message: "Have a relaxing weekend" },
+
+    festivalGreeting:  { title: "🎊 Festival Greetings", subtitle: "", message: "Wishing you joy and prosperity this festival" },
+    newYearWishes:     { title: "🎆 New Year Wishes", subtitle: "", message: "A fresh start and endless possibilities" },
+    independenceDay:   { title: "🇮🇳 Independence Day", subtitle: "", message: "Proud to celebrate freedom" },
+    republicDay:       { title: "🕊 Republic Day", subtitle: "", message: "Honoring our nation’s unity and strength" },
+    diwaliMessage:     { title: "🪔 Diwali Message", subtitle: "", message: "Light up your life with happiness" },
+
+    dailyMotivation:   { title: "💪 Daily Motivation", subtitle: "", message: "One small step can change everything" },
+    successQuote:      { title: "🚀 Success Quote", subtitle: "", message: "Dream it. Believe it. Achieve it" },
+    fitnessQuote:      { title: "🏃‍♂️ Fitness Quote", subtitle: "", message: "Push yourself, no one else will" },
+    positivityReminder: { title: "✨ Positivity Reminder", subtitle: "", message: "Good energy only" },
+    mindfulnessMoment: { title: "🌸 Mindfulness Moment", subtitle: "", message: "Be calm, be present" },
+
+    studyTime:         { title: "📚 Study Time", subtitle: "", message: "Learning is a journey of growth" },
+    examWishes:        { title: "✍️ Exam Wishes", subtitle: "", message: "Best of luck for your exams" },
+    resultAnnouncement: { title: "🏅 Result Announcement", subtitle: "", message: "Congratulations on your achievement" },
+    schoolEvent:       { title: "🏫 School Event", subtitle: "", message: "Join us for a special class event" },
+    teachersDay:       { title: "🍎 Teacher’s Day", subtitle: "", message: "Thank you for guiding with wisdom" },
+
+    weddingInvitation:  { title: "💍 Wedding Invitation", subtitle: "", message: "Two hearts, one love" },
+    engagementAnnounce: { title: "💞 Engagement Announcement", subtitle: "", message: "We said yes!" },
+    babyShower:         { title: "👶 Baby Shower", subtitle: "", message: "A little miracle is on the way" },
+    housewarming:       { title: "🏠 Housewarming", subtitle: "", message: "Warm wishes for our new home" },
+    farewellCelebration: { title: "🌈 Farewell Celebration", subtitle: "", message: "Goodbyes are new beginnings" },
+
+    jobVacancy:        { title: "🤝 Job Vacancy", subtitle: "", message: "We’re hiring! Join our team" },
+    offerDiscount:     { title: "💸 Offer/Discount", subtitle: "", message: "Special sale this weekend" },
+    achievementPost:   { title: "🏆 Achievement Post", subtitle: "", message: "Proud moment unlocked" },
+    productLaunch:     { title: "🚀 Product Launch", subtitle: "", message: "Introducing something exciting" },
+    serviceUpdate:     { title: "🔧 Service Update", subtitle: "", message: "Check out our latest features" }
   },
 
   tel: {
@@ -618,8 +656,45 @@ const TEMPLATE_PACK = {
     devotional: { title: "🕉 శుభోదయం", subtitle: "", message: "దేవుని ఆశీస్సులు మీతో ఉండాలి 🙏" },
     business:   { title: "🏢 వ్యాపార అప్డేట్", subtitle: "", message: "మమ్మల్ని సంప్రదించండి: +91 99999 99999" },
     invitation: { title: "💌 ఆహ్వానం", subtitle: "", message: "స్థలం • తేదీ • సమయం" },
-    quote:      { title: "💬 నేటి ఆలోచన", subtitle: "", message: "మీ మీద నమ్మకం పెట్టుకోండి ✨" }
+    quote:      { title: "💬 నేటి ఆలోచన", subtitle: "", message: "మీ మీద నమ్మకం పెట్టుకోండి ✨" },
+
+    goodMorning:       { title: "🌅 శుభోదయం", subtitle: "", message: "మీ రోజు సానుకూలతతో ప్రారంభించండి" },
+    goodNight:         { title: "🌙 శుభ రాత్రి", subtitle: "", message: "శాంతియుత నిద్రలు మరియు సున్నితమైన విశ్రాంతి" },
+    goodAfternoon:     { title: "☀️ శుభ మధ్యాహ్నం", subtitle: "", message: "మీ రోజు బాగుండాలని ఆశిస్తున్నాము" },
+    goodEvening:       { title: "🌆 శుభ సాయంత్రం", subtitle: "", message: "ఈ సాయంత్రం విశ్రాంతిగా ఉండండి" },
+    weekendVibes:      { title: "😎 వీకెండ్ వైబ్‌స్కు", subtitle: "", message: "విశ్రాంత్యంతో పూట గడపండి" },
+
+    festivalGreeting:  { title: "🎊 పండుగ శుభాకాంక్షలు", subtitle: "", message: "ఈ పండుగ సందర్భంగా ఆనందం మరియు సంపదతో ఉండండి" },
+    newYearWishes:     { title: "🎆 కొత్త సంవత్సర శుభాకాంక్షలు", subtitle: "", message: "కొత్త ఆరంభం మరియు సర్వసాధారణ అవకాశాలు" },
+    independenceDay:   { title: "🇮🇳 స్వాతంత్ర దినోత్సవం", subtitle: "", message: "స్వాతంత్రాన్ని జరుపుకోవడానికి గర్వపడుతున్నాము" },
+    republicDay:       { title: "🕊 గణతంత్ర దినోత్సవం", subtitle: "", message: "మా జాతి ఐక్యత మరియు బలాన్ని గౌరవించండి" },
+    diwaliMessage:     { title: "🪔 దీపావళి సందేశం", subtitle: "", message: "మీ జీవితాన్ని సంతోషంతో వెలిగించండి" },
+
+    dailyMotivation:   { title: "💪 రోజురోజుకు ప్రేరణ", subtitle: "", message: "ఒక చిన్న అడుగు అన్నింటినీ మార్చొచ్చు" },
+    successQuote:      { title: "🚀 విజయం సందేశం", subtitle: "", message: "కలలు కనండి. నమ్మండి. సాధించండి" },
+    fitnessQuote:      { title: "🏃‍♂️ ఆరోగ్య సందేశం", subtitle: "", message: "ప్రసన్నంగా ప్రేరేపించుకోండి ఇలాంటి కారణాల కోసం" },
+    positivityReminder: { title: "✨ సానుకూలత రిమైంటర్", subtitle: "", message: "మాత్రమే మంచిది ఉर्जा" },
+    mindfulnessMoment: { title: "🌸 మనోనివేద నిమిషం", subtitle: "", message: "శాంతియుతంగా ఉండు, ప్రస్తుతానికి ఉండండి" },
+
+    studyTime:         { title: "📚 పఠనం సమయం", subtitle: "", message: "వారిద్దరు ఉన్నతికి పాఠం" },
+    examWishes:        { title: "✍️ పరీక్ష శుభాకాంక్షలు", subtitle: "", message: "మీ పరీక్షల కోసo శుభాకాంక్షలు" },
+    resultAnnouncement: { title: "🏅 ఫలితాల ప్రకటింపు", subtitle: "", message: "మీ విజయాన్ని అభినందనలు" },
+    schoolEvent:       { title: "🏫 విద్యాలయ కార్యక్రమం", subtitle: "", message: "ప్రత్యేక తరగతి కార్యక్రమానికి మాకు జత కావండి" },
+    teachersDay:       { title: "🍎 గురువు దినోత్సవం", subtitle: "", message: "జ్ఞానంతో మార్గనిర్దేశం చేసినందుకు ధన్యవాదాలు" },
+
+    weddingInvitation:  { title: "💍 పెళ్లి ఆహ్వానం", subtitle: "", message: "రెండు హృదయాలు, ఒక ప్రేమ" },
+    engagementAnnounce: { title: "💞 నిశ్చయ అభినందనలు", subtitle: "", message: "మేము ఓకే అని చెప్పారు!" },
+    babyShower:         { title: "👶 బేబీ షవర్", subtitle: "", message: "చిన్న అద్భుతం రాలనుంది" },
+    housewarming:       { title: "🏠 ఇళ్ళ ప్రవేశం", subtitle: "", message: "మా ఇంటికి హృదయపూర్వక శుభాకాంక్షలు" },
+    farewellCelebration: { title: "🌈 వీడ్కోలు వేడుక", subtitle: "", message: "వీడ్కొల్లు అనేది కొత్త ప్రారంభం" },
+
+    jobVacancy:        { title: "🤝 ఉద్యోగ అవకాశము", subtitle: "", message: "మేము ఉద్యోగులను తీసుకుంటున్నాము! జట్టులో చేరండి" },
+    offerDiscount:     { title: "💸 ఆఫర్ / డిస్కౌంట్", subtitle: "", message: "ఈ వీకెండ్ ప్రత్యేక అమ్మకాలు" },
+    achievementPost:   { title: "🏆 సాధన పోస్ట్", subtitle: "", message: "గర్వపూర్వక క్షణం" },
+    productLaunch:     { title: "🚀 ఉత్పత్తి ప్రారంభం", subtitle: "", message: "ఒక రోమాంచకమైన విషయం పరిచయం" },
+    serviceUpdate:     { title: "🔧 సేవా నవీకరణ", subtitle: "", message: "మేము తాజా లక్షణాలను చూసుకోండి" }
   },
+
 
   hin: {
     news:       { title: "📰 ब्रेकिंग न्यूज़", subtitle: "", message: "अपना अपडेट यहाँ लिखें..." },
@@ -674,7 +749,7 @@ const TEMPLATE_PACK = {
     invitation: { title: "💌 ଆମନ୍ତ୍ରଣ", subtitle: "", message: "ସ୍ଥାନ • ତାରିଖ • ସମୟ" },
     quote:      { title: "💬 ଆଜିର ଚିନ୍ତା", subtitle: "", message: "ନିଜକୁ ବିଶ୍ୱାସ କରନ୍ତୁ ✨" }
   }
-};
+}
 
 // =====================================
 // 📌 Apply Selected Template in Language
