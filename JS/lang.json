@@ -1,0 +1,529 @@
+{
+  "en": {
+    "home": "Home",
+    "create": "Create",
+    "gallery": "My Creations",
+    "ai_features": "AI Features",
+    "feedback": "Feedback",
+
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "message": "Message",
+
+    "upload_main_image": "Upload Main Image",
+    "upload_logo": "Upload Logo",
+    "crop_image": "Crop Image",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "rotate": "Rotate",
+    "brightness": "Brightness",
+    "contrast": "Contrast",
+
+    "font_family": "Font Family",
+    "font_size": "Font Size",
+    "align": "Align",
+    "color": "Color",
+    "background_color": "Background",
+
+    "generate": "Generate",
+    "download": "Download",
+    "share": "Share",
+    "save": "Save",
+    "clear": "Clear",
+
+    "qr_text": "QR Code",
+    "poster_date": "Poster Date",
+
+    "ocr_title": "OCR - Image to Text",
+    "ocr_start": "Start OCR",
+    "ocr_result": "OCR text will appear here...",
+    "paste_ocr": "Paste to Message",
+    "clear_ocr": "Clear OCR",
+
+    "voice_start": "Start Voice",
+    "voice_stop": "Stop Voice",
+    "text_to_speech": "Read Aloud",
+
+    "template": "Template",
+    "news": "News",
+    "birthday": "Birthday",
+    "devotional": "Devotional",
+    "business": "Business",
+    "invitation": "Invitation",
+    "quote": "Quote",
+
+    "preview": "Preview",
+    "delete": "Delete",
+    "download_all": "Download All",
+    "clear_all": "Clear All",
+    "refresh": "Refresh",
+
+    "search": "Search",
+    "sort": "Sort",
+    "page_size": "Page Size",
+
+    "share_home": "Share AksharaChitra"
+  },
+
+  "te": {
+    "home": "హోమ్",
+    "create": "సృష్టించు",
+    "gallery": "నా క్రియేషన్స్",
+    "ai_features": "ఎఐ ఫీచర్లు",
+    "feedback": "ఫీడ్‌బ్యాక్",
+
+    "title": "శీర్షిక",
+    "subtitle": "ఉపశీర్షిక",
+    "message": "సందేశం",
+
+    "upload_main_image": "ప్రధాన ఫోటో అప్‌లోడ్ చేయండి",
+    "upload_logo": "లోగో అప్‌లోడ్ చేయండి",
+    "crop_image": "ఫోటో కట్ చేయండి",
+    "apply": "అప్లై",
+    "cancel": "రద్దు",
+    "rotate": "తిరగబెట్టండి",
+    "brightness": "ప్రకాశం",
+    "contrast": "కాంతి వ్యత్యాసం",
+
+    "font_family": "ఫాంట్ ఫ్యామిలీ",
+    "font_size": "ఫాంట్ సైజు",
+    "align": "అలైన్",
+    "color": "రంగు",
+    "background_color": "బ్యాక్‌గ్రౌండ్",
+
+    "generate": "జనరేట్",
+    "download": "డౌన్‌లోడ్",
+    "share": "షేర్",
+    "save": "సేవ్",
+    "clear": "క్లియర్",
+
+    "qr_text": "QR కోడ్",
+    "poster_date": "తేదీ",
+
+    "ocr_title": "OCR - చిత్రాన్ని వచనంగా మార్చండి",
+    "ocr_start": "OCR ప్రారంభించండి",
+    "ocr_result": "ఇక్కడ వచనం కనిపిస్తుంది...",
+    "paste_ocr": "మెసేజ్‌లో పెట్టండి",
+    "clear_ocr": "OCR క్లియర్ చేయండి",
+
+    "voice_start": "వాయిస్ ప్రారంభించండి",
+    "voice_stop": "వాయిస్ ఆపండి",
+    "text_to_speech": "చదివించు",
+
+    "template": "టెంప్లేట్",
+    "news": "న్యూస్",
+    "birthday": "బర్త్‌డే",
+    "devotional": "భక్తి",
+    "business": "బిజినెస్",
+    "invitation": "ఆహ్వానం",
+    "quote": "కోట్స్",
+
+    "preview": "ప్రివ్యూ",
+    "delete": "డిలీట్",
+    "download_all": "అన్నీ డౌన్‌లోడ్ చేయండి",
+    "clear_all": "అన్నీ క్లియర్ చేయండి",
+    "refresh": "రిఫ్రెష్",
+
+    "search": "సెర్చ్",
+    "sort": "సార్టు",
+    "page_size": "పేజీ సైజు",
+
+    "share_home": "అక్షరచిత్రను షేర్ చేయండి"
+  },
+
+  "hi": {
+    "home": "होम",
+    "create": "बनाएँ",
+    "gallery": "मेरी रचनाएँ",
+    "ai_features": "एआई फ़ीचर्स",
+    "feedback": "फ़ीडबैक",
+
+    "title": "शीर्षक",
+    "subtitle": "उपशीर्षक",
+    "message": "संदेश",
+
+    "upload_main_image": "मुख्य छवि अपलोड करें",
+    "upload_logo": "लोगो अपलोड करें",
+    "crop_image": "क्रॉप करें",
+    "apply": "लागू करें",
+    "cancel": "रद्द",
+    "rotate": "घुमाएँ",
+    "brightness": "चमक",
+    "contrast": "कॉन्ट्रास्ट",
+
+    "font_family": "फ़ॉन्ट परिवार",
+    "font_size": "फ़ॉन्ट आकार",
+    "align": "संरेखण",
+    "color": "रंग",
+    "background_color": "पृष्ठभूमि",
+
+    "generate": "जेनरेट",
+    "download": "डाउनलोड",
+    "share": "शेयर",
+    "save": "सेव",
+    "clear": "क्लियर",
+
+    "qr_text": "QR कोड",
+    "poster_date": "पोस्टर तारीख",
+
+    "ocr_title": "OCR - चित्र से पाठ",
+    "ocr_start": "OCR शुरू करें",
+    "ocr_result": "यहाँ OCR परिणाम दिखेगा...",
+    "paste_ocr": "मेसेज में पेस्ट करें",
+    "clear_ocr": "OCR साफ करें",
+
+    "voice_start": "वॉइस शुरू",
+    "voice_stop": "वॉइस बंद",
+    "text_to_speech": "उच्चारण करें",
+
+    "template": "टेम्पलेट",
+    "news": "समाचार",
+    "birthday": "जन्मदिन",
+    "devotional": "भक्ति",
+    "business": "व्यापार",
+    "invitation": "निमंत्रण",
+    "quote": "उद्धरण",
+
+    "preview": "पूर्वावलोकन",
+    "delete": "हटाएँ",
+    "download_all": "सभी डाउनलोड करें",
+    "clear_all": "सभी साफ करें",
+    "refresh": "रिफ्रेश",
+
+    "search": "खोजें",
+    "sort": "क्रमबद्ध",
+    "page_size": "पृष्ठ आकार",
+
+    "share_home": "AksharaChitra साझा करें"
+  },
+
+  "sa": {
+    "home": "गृहम्",
+    "create": "निर्मातुम्",
+    "gallery": "मम सृष्टयः",
+    "ai_features": "कृत्रिमबुद्धि-विशेषताः",
+    "feedback": "प्रतिपुष्टिः",
+
+    "title": "शीर्षकम्",
+    "subtitle": "उपशीर्षकम्",
+    "message": "सन्देशः",
+
+    "upload_main_image": "मुख्यचित्रम् उपलोड् कुरुत",
+    "upload_logo": "लोगो उपलोड् कुरुत",
+    "crop_image": "छेदनम्",
+    "apply": "अन्वयताम्",
+    "cancel": "निरस्तं कुरुत",
+    "rotate": "परिभ्रमयतु",
+    "brightness": "दीप्तिः",
+    "contrast": "विरोधः",
+
+    "font_family": "लिपिश्रेणीः",
+    "font_size": "आकारः",
+    "align": "संरेखणम्",
+    "color": "वर्णः",
+    "background_color": "पृष्ठभूमिः",
+
+    "generate": "सृजतु",
+    "download": "अवरोहितुम्",
+    "share": "साझां कुरुत",
+    "save": "संग्रहीतुम्",
+    "clear": "परिशोधयतु",
+
+    "qr_text": "QR सङ्केतः",
+    "poster_date": "तिथि",
+
+    "ocr_title": "OCR – चित्रात् पाठः",
+    "ocr_start": "OCR आरभत",
+    "ocr_result": "अत्र OCR-पाठः दृश्यते…",
+    "paste_ocr": "सन्देशे स्थापयतु",
+    "clear_ocr": "OCR मार्जयतु",
+
+    "voice_start": "वाचं आरभत",
+    "voice_stop": "वाचं स्तम्भयतु",
+    "text_to_speech": "उच्चारणम्",
+
+    "template": "नमूना",
+    "news": "समाचारः",
+    "birthday": "जन्मदिनम्",
+    "devotional": "भक्तिः",
+    "business": "वाणिज्यम्",
+    "invitation": "आमन्त्रणम्",
+    "quote": "सूक्तम्",
+
+    "preview": "पूर्वावलोकनम्",
+    "delete": "अपनयतु",
+    "download_all": "सर्वं डाउनलोड् कुरुत",
+    "clear_all": "सर्वं मार्जयतु",
+    "refresh": "पुनः लोड्",
+
+    "search": "अन्वेषणम्",
+    "sort": "क्रमः",
+    "page_size": "पृष्ठ-आकारः",
+
+    "share_home": "AksharaChitra साझां कुर्वन्तु"
+  },
+
+  "ta": {
+    "home": "முகப்பு",
+    "create": "உருவாக்கு",
+    "gallery": "எனது படைப்புகள்",
+    "ai_features": "ஏஐ அம்சங்கள்",
+    "feedback": "கருத்து",
+
+    "title": "தலைப்பு",
+    "subtitle": "துணைத் தலைப்பு",
+    "message": "செய்தி",
+
+    "upload_main_image": "முதன்மை படத்தை பதிவேற்றவும்",
+    "upload_logo": "லோகோ பதிவேற்றவும்",
+    "crop_image": "படத்தை வெட்டவும்",
+    "apply": "செயல்படுத்து",
+    "cancel": "ரத்து செய்",
+    "rotate": "சுழற்று",
+    "brightness": "பிரகாசம்",
+    "contrast": "கான்ட்ராஸ்ட்",
+
+    "font_family": "எழுத்துரு வகை",
+    "font_size": "எழுத்து அளவு",
+    "align": "அமைவு",
+    "color": "நிறம்",
+    "background_color": "பின்னணி நிறம்",
+
+    "generate": "உருவாக்கு",
+    "download": "பதிவிறக்கு",
+    "share": "பகிர்",
+    "save": "சேமி",
+    "clear": "அழி",
+
+    "qr_text": "QR குறியீடு",
+    "poster_date": "தேதி",
+
+    "ocr_title": "OCR - படத்திலிருந்து உரை",
+    "ocr_start": "OCR தொடங்கு",
+    "ocr_result": "இங்கே OCR உரை தோன்றும்...",
+    "paste_ocr": "செய்தியில் ஒட்டு",
+    "clear_ocr": "OCR அழி",
+
+    "voice_start": "வாய்ஸ் தொடங்கு",
+    "voice_stop": "வாய்ஸ் நிறுத்து",
+    "text_to_speech": "குரலில் வாசி",
+
+    "template": "டெம்ப்ளேட்",
+    "news": "செய்தி",
+    "birthday": "பிறந்தநாள்",
+    "devotional": "பக்தி",
+    "business": "வணிகம்",
+    "invitation": "அழைப்பு",
+    "quote": "மேற்கோள்",
+
+    "preview": "பார்வை",
+    "delete": "அழி",
+    "download_all": "அனைத்தும் பதிவிறக்கு",
+    "clear_all": "அனைத்தையும் அழி",
+    "refresh": "ரீஃப்ரெஷ்",
+
+    "search": "தேடு",
+    "sort": "வரிசைப்படுத்து",
+    "page_size": "பக்க அளவு",
+
+    "share_home": "AksharaChitra பகிர்"
+  },
+
+  "kn": {
+    "home": "ಮುಖಪುಟ",
+    "create": "ರಚನೆ",
+    "gallery": "ನನ್ನ ಸೃಷ್ಟಿಗಳು",
+    "ai_features": "ಎಐ ವೈಶಿಷ್ಟ್ಯಗಳು",
+    "feedback": "ಪ್ರತಿಕ್ರಿಯೆ",
+
+    "title": "ಶೀರ್ಷಿಕೆ",
+    "subtitle": "ಉಪಶೀರ್ಷಿಕೆ",
+    "message": "ಸಂದೇಶ",
+
+    "upload_main_image": "ಮುಖ್ಯ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+    "upload_logo": "ಲೋಗೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+    "crop_image": "ಚಿತ್ರವನ್ನು ಕತ್ತರಿಸಿ",
+    "apply": "ಅನ್ವಯಿಸಿ",
+    "cancel": "ರದ್ದು ಮಾಡಿ",
+    "rotate": "ತಿರುಗಿಸಿ",
+    "brightness": "ಪ್ರಕಾಶಮಾನತೆ",
+    "contrast": "ವೆರಿವು",
+
+    "font_family": "ಫಾಂಟ್ ಕುಟುಂಬ",
+    "font_size": "ಅಕ್ಷರ ಗಾತ್ರ",
+    "align": "ಸಂರಚನೆ",
+    "color": "ಬಣ್ಣ",
+    "background_color": "ಹಿನ್ನೆಲೆ ಬಣ್ಣ",
+
+    "generate": "ಉತ್ಪಾದಿಸು",
+    "download": "ಡೌನ್‌ಲೋಡ್",
+    "share": "ಹಂಚಿಕೆ",
+    "save": "ಸೇವ್ ಮಾಡಿ",
+    "clear": "ಕ್ಲಿಯರ್",
+
+    "qr_text": "QR ಕೋಡ್",
+    "poster_date": "ಪೋಸ್ಟರ್ ದಿನಾಂಕ",
+
+    "ocr_title": "OCR - ಚಿತ್ರದ ಪಠ್ಯ",
+    "ocr_start": "OCR ಪ್ರಾರಂಭಿಸಿ",
+    "ocr_result": "ಇಲ್ಲಿ OCR ಪಠ್ಯ ಕಾಣುತ್ತದೆ...",
+    "paste_ocr": "ಸಂದೇಶಕ್ಕೆ ಅಂಟಿಸಿ",
+    "clear_ocr": "OCR ಅಳಿಸಿ",
+
+    "voice_start": "ಧ್ವನಿ ಪ್ರಾರಂಭಿಸಿ",
+    "voice_stop": "ಧ್ವನಿ ನಿಲ್ಲಿಸಿ",
+    "text_to_speech": "ಓದಿ ಕೇಳಿಸಿ",
+
+    "template": "ಟೆಂಪ್ಲೇಟ್",
+    "news": "ಸುದ್ದಿ",
+    "birthday": "ಹುಟ್ಟುಹಬ್ಬ",
+    "devotional": "ಭಕ್ತಿ",
+    "business": "ವ್ಯಾಪಾರ",
+    "invitation": "ಆಹ್ವಾನ",
+    "quote": "ಉದ್ಧರಣೆ",
+
+    "preview": "ಪೂರ್ವದೃಶ್ಯ",
+    "delete": "ಅಳಿಸು",
+    "download_all": "ಎಲ್ಲವನ್ನೂ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+    "clear_all": "ಎಲ್ಲವನ್ನೂ ಕ್ಲಿಯರ್ ಮಾಡಿ",
+    "refresh": "ರಿಫ್ರೆಶ್",
+
+    "search": "ಹುಡುಕಾಟ",
+    "sort": "ವಿಂಗಡಣೆ",
+    "page_size": "ಪುಟದ ಗಾತ್ರ",
+
+    "share_home": "AksharaChitra ಹಂಚಿ"
+  },
+
+  "ml": {
+    "home": "ഹോം",
+    "create": "സൃഷ്ടിക്കുക",
+    "gallery": "എന്റെ സൃഷ്ടികൾ",
+    "ai_features": "എഐ സവിശേഷതകൾ",
+    "feedback": "ഫീഡ്ബാക്ക്",
+
+    "title": "ശീർഷകം",
+    "subtitle": "ഉപശീർഷകം",
+    "message": "സന്ദേശം",
+
+    "upload_main_image": "പ്രധാന ചിത്രം അപ്ലോഡ് ചെയ്യുക",
+    "upload_logo": "ലോഗോ അപ്ലോഡ് ചെയ്യുക",
+    "crop_image": "ചിത്രം ക്രോപ്പ് ചെയ്യുക",
+    "apply": "പ്രയോഗിക്കുക",
+    "cancel": "റദ്ദാക്കുക",
+    "rotate": "തിരിക്കുക",
+    "brightness": "പ്രകാശം",
+    "contrast": "കോണ്ട്രാസ്റ്റ്",
+
+    "font_family": "ഫോണ്ട്",
+    "font_size": "വലുപ്പം",
+    "align": "അലൈൻ",
+    "color": "നിറം",
+    "background_color": "പശ്ചാത്തല നിറം",
+
+    "generate": "ജനറേറ്റ്",
+    "download": "ഡൗൺലോഡ്",
+    "share": "പങ്കിടുക",
+    "save": "സേവ്",
+    "clear": "ക്ലിയർ",
+
+    "qr_text": "QR കോഡ്",
+    "poster_date": "തീയതി",
+
+    "ocr_title": "OCR - ചിത്രത്തിൽ നിന്നും ടെക്സ്റ്റ്",
+    "ocr_start": "OCR ആരംഭിക്കുക",
+    "ocr_result": "ഇവിടെ OCR ടെക്സ്റ്റ് പ്രത്യക്ഷപ്പെടും...",
+    "paste_ocr": "സന്ദേശത്തിലേക്ക് പതിപ്പിക്കുക",
+    "clear_ocr": "OCR നീക്കം ചെയ്യുക",
+
+    "voice_start": "വോയിസ് ആരംഭിക്കുക",
+    "voice_stop": "വോയിസ് നിർത്തുക",
+    "text_to_speech": "വായിച്ചു കേൾപ്പിക്കുക",
+
+    "template": "ടെംപ്ലേറ്റ്",
+    "news": "വാർത്ത",
+    "birthday": "ജന്മദിനം",
+    "devotional": "ഭക്തി",
+    "business": "ബിസിനസ്",
+    "invitation": "ക്ഷണം",
+    "quote": "ഉദ്ധരണി",
+
+    "preview": "പ്രിവ്യൂ",
+    "delete": "ഇല്ലാതാക്കുക",
+    "download_all": "എല്ലാം ഡൗൺലോഡ് ചെയ്യുക",
+    "clear_all": "എല്ലാം ക്ലിയർ ചെയ്യുക",
+    "refresh": "റിഫ്രെഷ്",
+
+    "search": "തിരയുക",
+    "sort": "ക്രമീകരിക്കുക",
+    "page_size": "പേജ് വലുപ്പം",
+
+    "share_home": "AksharaChitra പങ്കിടുക"
+  },
+
+  "or": {
+    "home": "ହୋମ",
+    "create": "ତିଆରି କରନ୍ତୁ",
+    "gallery": "ମୋ ସୃଷ୍ଟିସମୂହ",
+    "ai_features": "AI ବୈଶିଷ୍ଟ୍ୟ",
+    "feedback": "ଫିଡ୍‌ବ୍ୟାକ୍",
+
+    "title": "ଶୀର୍ଷକ",
+    "subtitle": "ଉପଶୀର୍ଷକ",
+    "message": "ସନ୍ଦେଶ",
+
+    "upload_main_image": "ମୁଖ୍ୟ ଛବି ଅପଲୋଡ୍ କରନ୍ତୁ",
+    "upload_logo": "ଲୋଗୋ ଅପଲୋଡ୍ କରନ୍ତୁ",
+    "crop_image": "ଛବି କଟ କରନ୍ତୁ",
+    "apply": "ଲାଗୁ କରନ୍ତୁ",
+    "cancel": "ବାତିଲ୍",
+    "rotate": "ଘୁରାନ୍ତୁ",
+    "brightness": "ପ୍ରକାଶ",
+    "contrast": "କନ୍ଟ୍ରାଷ୍ଟ",
+
+    "font_family": "ଫଣ୍ଟ ପରିବାର",
+    "font_size": "ଫଣ୍ଟ ଆକାର",
+    "align": "ସଂରେଖଣ",
+    "color": "ରଙ୍ଗ",
+    "background_color": "ପୃଷ୍ଠଭୂମି",
+
+    "generate": "ସୃଷ୍ଟି କରନ୍ତୁ",
+    "download": "ଡାଉନଲୋଡ୍",
+    "share": "ଭାଗ କରନ୍ତୁ",
+    "save": "ସେଭ୍",
+    "clear": "ସଫା କରନ୍ତୁ",
+
+    "qr_text": "QR କୋଡ୍",
+    "poster_date": "ତାରିଖ",
+
+    "ocr_title": "OCR - ଛବିରୁ ଟେକ୍ସଟ୍",
+    "ocr_start": "OCR ଆରମ୍ଭ କରନ୍ତୁ",
+    "ocr_result": "ଏଠାରେ OCR ଟେକ୍ସଟ୍ ଦେଖାଯିବ...",
+    "paste_ocr": "ସନ୍ଦେଶରେ ପେଷ୍ଟ୍ କରନ୍ତୁ",
+    "clear_ocr": "OCR କ୍ଲିୟର କରନ୍ତୁ",
+
+    "voice_start": "ଭଏସ୍ ଆରମ୍ଭ",
+    "voice_stop": "ଭଏସ୍ ବନ୍ଦ",
+    "text_to_speech": "ଉଚ୍ଚାରଣ କରନ୍ତୁ",
+
+    "template": "ଟେମ୍ପଲେଟ୍",
+    "news": "ଖବର",
+    "birthday": "ଜନ୍ମଦିନ",
+    "devotional": "ଭକ୍ତି",
+    "business": "ବ୍ୟବସାୟ",
+    "invitation": "ଆମନ୍ତ୍ରଣ",
+    "quote": "କୋଟ୍",
+
+    "preview": "ଝଲକ",
+    "delete": "ଡିଲିଟ୍",
+    "download_all": "ସମସ୍ତ ଡାଉନଲୋଡ୍ କରନ୍ତୁ",
+    "clear_all": "ସମସ୍ତ କ୍ଲିୟର୍ କରନ୍ତୁ",
+    "refresh": "ରିଫ୍ରେଶ୍",
+
+    "search": "ଖୋଜନ୍ତୁ",
+    "sort": "ସଜାନ୍ତୁ",
+    "page_size": "ପୃଷ୍ଠା ଆକାର",
+
+    "share_home": "AksharaChitra ଭାଗ କରନ୍ତୁ"
+  }
+}

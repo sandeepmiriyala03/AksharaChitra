@@ -597,27 +597,103 @@ window.addEventListener('resize', adjustButtonLayoutForMobile);
     fontFamily, imagePosition
   ].forEach((el) => { if (el) on(el, "input", renderPreview); });
 
-  // templates
-  const templateSelect = $("templateSelect");
-  if (templateSelect) {
-    const templates = {
-      news:       { title: "📰 Breaking News", subtitle: "", message: "Write your update here..." },
-      birthday:   { title: "🎂 Happy Birthday!", subtitle: "Best Wishes", message: "Many Happy Returns of the Day!" },
-      devotional: { title: "🕉 Good Day", subtitle: "", message: "May divine blessings be with you 🙏" },
-      business:   { title: "🏢 Business Update", subtitle: "", message: "Contact us at +91 99999 99999" },
-      invitation: { title: "💌 Invitation", subtitle: "", message: "Venue • Date • Time" },
-      quote:      { title: "💬 Quote of the Day", subtitle: "", message: "Believe in yourself ✨" },
-    };
-    on(templateSelect, "change", () => {
-      const v = templateSelect.value;
-      if (templates[v]) {
-        if (titleEl) titleEl.value = templates[v].title;
-        if (subtitleEl) subtitleEl.value = templates[v].subtitle;
-        if (messageEl) messageEl.value = templates[v].message;
-        renderPreview();
-      }
-    });
+// ===============================
+// 🌐 MULTILINGUAL TEMPLATES PACK
+// ===============================
+const templateSelect = $("templateSelect");
+
+const TEMPLATE_PACK = {
+  eng: {
+    news:       { title: "📰 Breaking News", subtitle: "", message: "Write your update here..." },
+    birthday:   { title: "🎂 Happy Birthday!", subtitle: "Best Wishes", message: "Many Happy Returns of the Day!" },
+    devotional: { title: "🕉 Good Day", subtitle: "", message: "May divine blessings be with you 🙏" },
+    business:   { title: "🏢 Business Update", subtitle: "", message: "Contact us at +91 99999 99999" },
+    invitation: { title: "💌 Invitation", subtitle: "", message: "Venue • Date • Time" },
+    quote:      { title: "💬 Quote of the Day", subtitle: "", message: "Believe in yourself ✨" }
+  },
+
+  tel: {
+    news:       { title: "📰 బ్రేకింగ్ న్యూస్", subtitle: "", message: "మీ అప్డేట్ ఇక్కడ రాయండి..." },
+    birthday:   { title: "🎂 జన్మదిన శుభాకాంక్షలు!", subtitle: "మంచి ఆశీస్సులు", message: "హ్యాపీ బర్త్‌డే 🎉" },
+    devotional: { title: "🕉 శుభోదయం", subtitle: "", message: "దేవుని ఆశీస్సులు మీతో ఉండాలి 🙏" },
+    business:   { title: "🏢 వ్యాపార అప్డేట్", subtitle: "", message: "మమ్మల్ని సంప్రదించండి: +91 99999 99999" },
+    invitation: { title: "💌 ఆహ్వానం", subtitle: "", message: "స్థలం • తేదీ • సమయం" },
+    quote:      { title: "💬 నేటి ఆలోచన", subtitle: "", message: "మీ మీద నమ్మకం పెట్టుకోండి ✨" }
+  },
+
+  hin: {
+    news:       { title: "📰 ब्रेकिंग न्यूज़", subtitle: "", message: "अपना अपडेट यहाँ लिखें..." },
+    birthday:   { title: "🎂 जन्मदिन मुबारक!", subtitle: "शुभकामनाएँ", message: "हैप्पी बर्थडे 🎉" },
+    devotional: { title: "🕉 शुभ दिन", subtitle: "", message: "भगवान की कृपा आप पर बनी रहे 🙏" },
+    business:   { title: "🏢 व्यापार अपडेट", subtitle: "", message: "संपर्क करें: +91 99999 99999" },
+    invitation: { title: "💌 निमंत्रण", subtitle: "", message: "स्थान • तिथि • समय" },
+    quote:      { title: "💬 आज का विचार", subtitle: "", message: "अपने आप पर विश्वास रखें ✨" }
+  },
+
+  san: {
+    news:       { title: "📰 ताजा वार्ताः", subtitle: "", message: "अत्र समाचारं लिखतु..." },
+    birthday:   { title: "🎂 जन्मदिनशुभाशयाः!", subtitle: "शुभकामनाः", message: "हैप्पी बर्थडे 🎉" },
+    devotional: { title: "🕉 शुभदिनम्", subtitle: "", message: "ईश्वरस्य आशीर्वादाः भवन्तु 🙏" },
+    business:   { title: "🏢 व्यवसायसूचना", subtitle: "", message: "सम्पर्कः: +91 99999 99999" },
+    invitation: { title: "💌 आमन्त्रणम्", subtitle: "", message: "स्थानम् • तिथिः • समयः" },
+    quote:      { title: "💬 आज्यस्य विचारः", subtitle: "", message: "आत्मविश्वासः कुर्वन्तु ✨" }
+  },
+
+  tam: {
+    news:       { title: "📰 உடனடி செய்தி", subtitle: "", message: "உங்கள் தகவலை எழுதுங்கள்..." },
+    birthday:   { title: "🎂 பிறந்தநாள் வாழ்த்துகள்!", subtitle: "அன்பு வாழ்த்துகள்", message: "Happy Birthday 🎉" },
+    devotional: { title: "🕉 இனிய நாள்", subtitle: "", message: "தெய்வ ஆசீர்வாதம் உங்களுடன் 🙏" },
+    business:   { title: "🏢 வணிக அறிவிப்பு", subtitle: "", message: "தொடர்பு: +91 99999 99999" },
+    invitation: { title: "💌 அழைப்பிதழ்", subtitle: "", message: "இடம் • தேதி • நேரம்" },
+    quote:      { title: "💬 இன்று ஒரு சிந்தனை", subtitle: "", message: "உங்களை நம்புங்கள் ✨" }
+  },
+
+  kan: {
+    news:       { title: "📰 ತಾಜಾ ಸುದ್ದಿ", subtitle: "", message: "ನಿಮ್ಮ ಅಪ್‌ಡೇಟ್ ಬರೆಯಿರಿ..." },
+    birthday:   { title: "🎂 ಹುಟ್ಟುಹಬ್ಬದ ಶುಭಾಶಯಗಳು!", subtitle: "ಶುಭಾಶಯಗಳು", message: "Happy Birthday 🎉" },
+    devotional: { title: "🕉 ಶುಭ ದಿನ", subtitle: "", message: "ದೇವರ ಆಶೀರ್ವಾದ ನಿಮ್ಮೊಂದಿಗಿರಲಿ 🙏" },
+    business:   { title: "🏢 ವ್ಯವಹಾರದ ಮಾಹಿತಿ", subtitle: "", message: "ಸಂಪರ್ಕಿಸಿ: +91 99999 99999" },
+    invitation: { title: "💌 ಆಹ್ವಾನ", subtitle: "", message: "ಸ್ಥಳ • ದಿನಾಂಕ • ಸಮಯ" },
+    quote:      { title: "💬 ಇಂದಿನ ಚಿಂತನೆ", subtitle: "", message: "ನಿಮ್ಮನ್ನು ನಂಬಿ ✨" }
+  },
+
+  mal: {
+    news:       { title: "📰 ബ്രേക്കിംഗ് ന്യൂസ്", subtitle: "", message: "നിങ്ങളുടെ അപ്‌ഡേറ്റ് ഇവിടെ എഴുതുക..." },
+    birthday:   { title: "🎂 ജന്മദിനാശംസകൾ!", subtitle: "നല്ല ആശംസകൾ", message: "Happy Birthday 🎉" },
+    devotional: { title: "🕉 നല്ല ദിവസം", subtitle: "", message: "ദൈവാനുഗ്രഹം നിങ്ങളോടൊപ്പം 🙏" },
+    business:   { title: "🏢 ബിസിനസ് അപ്ഡേറ്റ്", subtitle: "", message: "ബന്ധപ്പെടുക: +91 99999 99999" },
+    invitation: { title: "💌 ക്ഷണം", subtitle: "", message: "സ്ഥലം • തീയതി • സമയം" },
+    quote:      { title: "💬 ഇന്നത്തെ ചിന്ത", subtitle: "", message: "സ്വയം വിശ്വസിക്കുക ✨" }
+  },
+
+  ori: {
+    news:       { title: "📰 ବ୍ରେକିଂ ନ୍ୟୁଜ୍", subtitle: "", message: "ଆପଣଙ୍କ ଅପଡେଟ୍ ଏଠାରେ ଲେଖନ୍ତୁ..." },
+    birthday:   { title: "🎂 ଜନ୍ମଦିନ ଶୁଭେଚ୍ଛା!", subtitle: "ଶୁଭକାମନା", message: "Happy Birthday 🎉" },
+    devotional: { title: "🕉 ଶୁଭ ଦିନ", subtitle: "", message: "ଦେବଙ୍କ ଆଶୀର୍ବାଦ ରହୁ 🙏" },
+    business:   { title: "🏢 ବ୍ୟବସାୟ ସୂଚନା", subtitle: "", message: "ଯୋଗାଯୋଗ: +91 99999 99999" },
+    invitation: { title: "💌 ଆମନ୍ତ୍ରଣ", subtitle: "", message: "ସ୍ଥାନ • ତାରିଖ • ସମୟ" },
+    quote:      { title: "💬 ଆଜିର ଚିନ୍ତା", subtitle: "", message: "ନିଜକୁ ବିଶ୍ୱାସ କରନ୍ତୁ ✨" }
   }
+};
+
+// =====================================
+// 📌 Apply Selected Template in Language
+// =====================================
+if (templateSelect) {
+  on(templateSelect, "change", () => {
+    const lang = languageSelect ? languageSelect.value : "en";
+    const key = templateSelect.value;
+
+    if (TEMPLATE_PACK[lang] && TEMPLATE_PACK[lang][key]) {
+      const tpl = TEMPLATE_PACK[lang][key];
+      if (titleEl) titleEl.value = tpl.title;
+      if (subtitleEl) subtitleEl.value = tpl.subtitle;
+      if (messageEl) messageEl.value = tpl.message;
+      renderPreview();
+    }
+  });
+}
+
 
   // language placeholders
   const LANG = {
