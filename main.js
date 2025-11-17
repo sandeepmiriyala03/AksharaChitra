@@ -1253,14 +1253,14 @@ const synth = window.speechSynthesis;
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const langMap = {
-  en: "en-IN",
-  te: "te-IN",
-  hi: "hi-IN",
-  ta: "ta-IN",
-  kn: "kn-IN",
-  ml: "ml-IN",
-  or: "or-IN",
-  sa: "sa-IN"
+  eng: "en-IN",
+  tel: "te-IN",
+  hin: "hi-IN",
+  tam: "ta-IN",
+  kan: "kn-IN",
+  mal: "ml-IN",
+  ori: "or-IN",
+  san: "sa-IN"
 };
 
 // ---------------------------------------------
@@ -1273,10 +1273,23 @@ if (recognitionAvailable) {
   recog = new SR();
   recog.continuous = false;
   recog.interimResults = false;
-
+  recog.maxAlternatives = 1;
   function updateLanguage() {
-    const selected = languageSelect?.value || "en";
-    recog.lang = langMap[selected] || "en-IN";
+    const selected = languageSelect?.value;
+    console.log("Selected language for recognition:", selected); 
+      console.log("langMap contents:", langMap);
+    if(selected === undefined) {
+      console.log("No language selected, defaulting to en-IN");
+    }
+    else  if(selected in langMap) {
+      recog.lang = langMap[selected];
+      console.log("Language found in langMap:", langMap[selected]);
+    }
+   
+    else {
+      recog.lang = "en-IN"; 
+      console.log("Selected language not found in langMap, defaulting to en-IN");
+    }
   }
 
   if (languageSelect) on(languageSelect, "change", updateLanguage);
