@@ -425,6 +425,23 @@ adjustButtonLayoutForMobile();
 // Add event listener to handle resizing and adjust buttons dynamically
 window.addEventListener('resize', adjustButtonLayoutForMobile);
 
+function backgroundColorChange()
+{
+   const posterBgColorSelect = document.getElementById('posterBgColor');
+
+        // Set initial background color on page load
+        if (previewCard && posterBgColorSelect) {
+          previewCard.style.background = posterBgColorSelect.value;
+        }
+
+        // Update preview background when dropdown value changes
+        posterBgColorSelect.addEventListener('change', () => {
+          if (previewCard) {
+            previewCard.style.background = posterBgColorSelect.value;
+          }
+        });
+    
+}
 
   // ---------------------------------------------
   // 🪶 Render Preview
@@ -439,7 +456,8 @@ window.addEventListener('resize', adjustButtonLayoutForMobile);
     previewCard.style.overflow = "hidden";
     previewCard.style.padding = window.innerWidth < 480 ? "8px" : "12px";
     previewCard.style.borderRadius = "12px";
-    previewCard.style.background = (messageBg?.value && messageBg.value !== "transparent") ? messageBg.value : "#FFFFFF";
+       backgroundColorChange();
+    //previewCard.style.background = (messageBg?.value && messageBg.value !== "transparent") ? messageBg.value : "#FFFFFF";
 
     // small logo
     if (pSmallLogo) {
@@ -1544,6 +1562,8 @@ if (clearOcrBtn) {
     clearOcrInputs();
   });
 }
+
+
 
 
   // ---------------------------------------------
