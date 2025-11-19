@@ -2929,5 +2929,51 @@ textarea.telugu,
     grid-template-columns: 1fr;
   }
 }
+
+/* Chathura Bold */
+@font-face {
+  font-family: 'Chathura';
+  src: url('fonts/Chathura-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chathura ExtraBold */
+@font-face {
+  font-family: 'Chathura';
+  src: url('fonts/Chathura-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chathura Light */
+@font-face {
+  font-family: 'Chathura';
+  src: url('fonts/Chathura-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chathura Regular */
+@font-face {
+  font-family: 'Chathura';
+  src: url('fonts/Chathura-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chathura Thin */
+@font-face {
+  font-family: 'Chathura';
+  src: url('fonts/Chathura-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* -------------------- END OF CSS -------------------- */
   
