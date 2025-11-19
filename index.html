@@ -392,10 +392,15 @@
     <hr class="divider" />
   </div>
 
-  <div class="editor">
-    <!-- LEFT PANEL -->
-    <div class="panel left-panel">
-      <!-- 🌐 Language -->
+<div class="editor">
+
+  <!-- ================= LEFT PANEL (STEP UI) ================= -->
+  <div class="panel left-panel">
+
+    <!-- ===== STEP 1 ===== -->
+    <div class="step-box">
+      <h2>1 — Basic Settings</h2>
+
       <div class="group">
         <label>🌐 Language</label>
         <select id="language">
@@ -410,85 +415,78 @@
         </select>
       </div>
 
-      <!-- 🧩 Template -->
       <div class="group">
-         <label for="templateSearch">Search Template:</label>
-  <input type="text" id="templateSearch" placeholder="Type to filter templates..." />
+        <label for="templateSearch">Search Template:</label>
+        <input type="text" id="templateSearch" placeholder="Type to filter templates..." />
 
         <label>🧩 Template</label>
         <select id="templateSelect">
-              <option value="">— Choose Template —</option>
-              <option value="achievementPost">🏆 Achievement Post</option>
-    <option value="babyShower">👶 Baby Shower</option>
-    <option value="birthday">🎂 Birthday</option>
-    <option value="business">🏢 Business</option>
-    <option value="dailyMotivation">💪 Daily Motivation</option>
-    <option value="devotional">🕉️ Devotional</option>
-    <option value="diwaliMessage">🪔 Diwali Message</option>
-    <option value="engagementAnnounce">💞 Engagement Announcement</option>
-    <option value="examWishes">✍️ Exam Wishes</option>
-    <option value="farewellCelebration">🌈 Farewell Celebration</option>
-    <option value="festivalGreeting">🎊 Festival Greeting</option>
-    <option value="fitnessQuote">🏃‍♂️ Fitness Quote</option>
-    <option value="forgoodMorning">🌅 Good Morning</option>
-    <option value="goodAfternoon">☀️ Good Afternoon</option>
-    <option value="goodEvening">🌆 Good Evening</option>
-    <option value="goodMorning">🌅 Good Morning</option>
-    <option value="goodNight">🌙 Good Night</option>
-    <option value="homewarming">🏠 Housewarming</option>
-    <option value="independenceDay">🇮🇳 Independence Day</option>
-    <option value="invitation">💌 Invitation</option>
-    <option value="jobVacancy">🤝 Job Vacancy</option>
-    <option value="mindfulnessMoment">🌸 Mindfulness Moment</option>
-    <option value="news">📰 News</option>
-    <option value="offerDiscount">💸 Offer / Discount</option>
-    <option value="positivityReminder">✨ Positivity Reminder</option>
-    <option value="productLaunch">🚀 Product Launch</option>
-    <option value="quote">💬 Quote</option>
-    <option value="republicDay">🕊 Republic Day</option>
-    <option value="resultAnnouncement">🏅 Result Announcement</option>
-    <option value="schoolEvent">🏫 School Event</option>
-    <option value="serviceUpdate">🔧 Service Update</option>
-    <option value="successQuote">🚀 Success Quote</option>
-    <option value="weddingInvitation">💍 Wedding Invitation</option>
-    <option value="weekendVibes">😎 Weekend Vibes</option>
-    <option value="studyTime">📚 Study Time</option>
-    <option value="teachersDay">🍎 Teachers Day</option>
-
+          <option value="">— Choose Template —</option>
+          <!-- KEEP ALL YOUR TEMPLATE OPTIONS UNTOUCHED -->
+          <option value="achievementPost">🏆 Achievement Post</option>
+          <option value="babyShower">👶 Baby Shower</option>
+          <option value="birthday">🎂 Birthday</option>
+          <option value="business">🏢 Business</option>
+          <option value="dailyMotivation">💪 Daily Motivation</option>
+          <option value="devotional">🕉️ Devotional</option>
+          <option value="diwaliMessage">🪔 Diwali Message</option>
+          <option value="engagementAnnounce">💞 Engagement Announcement</option>
+          <option value="examWishes">✍️ Exam Wishes</option>
+          <option value="farewellCelebration">🌈 Farewell Celebration</option>
+          <option value="festivalGreeting">🎊 Festival Greeting</option>
+          <option value="fitnessQuote">🏃‍♂️ Fitness Quote</option>
+          <option value="goodMorning">🌅 Good Morning</option>
+          <option value="goodAfternoon">☀️ Good Afternoon</option>
+          <option value="goodEvening">🌆 Good Evening</option>
+          <option value="goodNight">🌙 Good Night</option>
+          <option value="homewarming">🏠 Housewarming</option>
+          <option value="independenceDay">🇮🇳 Independence Day</option>
+          <option value="invitation">💌 Invitation</option>
+          <option value="jobVacancy">🤝 Job Vacancy</option>
+          <option value="mindfulnessMoment">🌸 Mindfulness Moment</option>
+          <option value="news">📰 News</option>
+          <option value="offerDiscount">💸 Offer / Discount</option>
+          <option value="positivityReminder">✨ Positivity Reminder</option>
+          <option value="productLaunch">🚀 Product Launch</option>
+          <option value="quote">💬 Quote</option>
+          <option value="republicDay">🕊 Republic Day</option>
+          <option value="resultAnnouncement">🏅 Result Announcement</option>
+          <option value="schoolEvent">🏫 School Event</option>
+          <option value="serviceUpdate">🔧 Service Update</option>
+          <option value="successQuote">🚀 Success Quote</option>
+          <option value="weddingInvitation">💍 Wedding Invitation</option>
+          <option value="weekendVibes">😎 Weekend Vibes</option>
+          <option value="studyTime">📚 Study Time</option>
+          <option value="teachersDay">🍎 Teachers Day</option>
         </select>
       </div>
-   
-      <div class="group  CustomFont">
-          <!-- 📂 Local System Font Loader -->
-          <div id="fontSelect_localFontsContainer" style="margin-top:8px;">
-            <button id="fontSelect_local" class="">📁 Load Local System Fonts</button>
-            <select id="fontSelect_savelocal" style="display:none;"></select>
-            <button id="fontSelect_saveLocal" class="btn primary small" style="display:none;">
-              💾 Save this Font to AksharaChitra
-            </button>
-          <p id="CreatelocalFontInfo" style="display:none;"></p>
-          </div>
+
+      <!-- Local font loader -->
+      <div class="group CustomFont">
+        <button id="fontSelect_local">📁 Load Local System Fonts</button>
+        <select id="fontSelect_savelocal" style="display:none;"></select>
+        <button id="fontSelect_saveLocal" class="btn primary small" style="display:none;">💾 Save this Font</button>
+        <p id="CreatelocalFontInfo" style="display:none;"></p>
+      </div>
     </div>
-      <!-- ✍️ Font Family (GLOBAL for whole poster) -->
-  
-      <!-- 🔖 Small Logo -->
+
+    <!-- ===== STEP 2 — TITLE ===== -->
+    <div class="step-box">
+      <h2>2 — Title</h2>
+
       <div class="group">
-        <label>🔖 Small Logo (appears before title)</label>
+        <label>🔖 Small Logo (before title)</label>
         <input type="file" id="smallLogoUpload" accept="image/*" />
       </div>
 
-      <!-- 🖋️ Title -->
       <div class="group section-control">
-        <h3>🖋️ Title</h3>
-
-        <!-- Title Input -->
         <input id="title" placeholder="Enter title..." />
-        <!-- Title Font Family -->
-        <label> Title Font Family</label>
-        <select id="titleFontFamily" class="font-select-minimal"></select>
+
+        <label>Title Font Family</label>
+        <select id="titleFontFamily"></select>
 
         <div class="row">
-          <label>Font Size</label><input id="titleSize" type="number" value="32" min="10" max="100" />
+          <label>Size</label><input id="titleSize" type="number" value="32" />
           <label>Align</label>
           <select id="titleAlign">
             <option value="center">Center</option>
@@ -496,23 +494,27 @@
             <option value="right">Right</option>
           </select>
         </div>
+
         <div class="row">
-          <label>Text Color</label><input type="color" id="titleColor" value="#111111" />
-          <label>BG Color</label><input type="color" id="titleBg" value="#ffffff" />
+          <label>Color</label><input type="color" id="titleColor" value="#111111" />
+          <label>BG</label><input type="color" id="titleBg" value="#ffffff" />
         </div>
       </div>
-      <!-- 🪶 Subtitle -->
-      <div class="group section-control">
-        <h3>🪶 Subtitle</h3>
+    </div>
 
+
+    <!-- ===== STEP 3 — SUBTITLE ===== -->
+    <div class="step-box">
+      <h2>3 — Subtitle</h2>
+
+      <div class="group section-control">
         <input id="subtitle" placeholder="Enter subtitle..." />
 
-        <!-- Subtitle Font Family -->
         <label>Subtitle Font Family</label>
-        <select id="subtitleFontFamily" class="font-select-minimal"></select>
+        <select id="subtitleFontFamily"></select>
 
         <div class="row">
-          <label>Font Size</label><input id="subtitleSize" type="number" value="26" min="10" max="80" />
+          <label>Size</label><input id="subtitleSize" type="number" value="26" />
           <label>Align</label>
           <select id="subtitleAlign">
             <option value="center">Center</option>
@@ -522,37 +524,25 @@
         </div>
 
         <div class="row">
-          <label>Text Color</label><input type="color" id="subtitleColor" value="#111111" />
-          <label>BG Color</label><input type="color" id="subtitleBg" value="#ffffff" />
+          <label>Color</label><input type="color" id="subtitleColor" value="#111111" />
+          <label>BG</label><input type="color" id="subtitleBg" value="#ffffff" />
         </div>
-        
       </div>
+    </div>
 
-      <!-- 💬 Message -->
+
+    <!-- ===== STEP 4 — MESSAGE & TOOLS ===== -->
+    <div class="step-box">
+      <h2>4 — Message</h2>
+
       <div class="group section-control">
-        <h3>💬 Message</h3>
-
         <textarea id="message" rows="3" placeholder="Type your message..."></textarea>
-          <div class="group">
-                <label>✍️ Font Family</label>
-                <select id="fontFamily" class="font-select-minimal"></select>
-      </div>
 
-              <!-- OCR Section Added -->
-     <div class="group ocr-section">
-  <h3>📸 OCR - Image to Text</h3>
+        <label>Font Family</label>
+        <select id="fontFamily"></select>
 
-  <label for="ocrImageInput">🖼️ Upload Image for OCR</label>
-  <input type="file" id="ocrImageInput" accept="image/*" />
-
-  <button id="startOcrBtn" class="btn primary" disabled>⚡ Start OCR</button>
-
-  <textarea id="ocrResult" rows="5" placeholder="OCR text will appear here..." readonly style="width: 100%; margin-top: 10px;"></textarea>
-
-  <button id="pasteOcrToMessageBtn" class="btn ghost" disabled>📋 Paste OCR Text to Message</button>
-</div>
         <div class="row">
-          <label>Font Size</label><input id="messageSize" type="number" value="20" min="10" max="60" />
+          <label>Size</label><input id="messageSize" type="number" value="20" />
           <label>Align</label>
           <select id="contentAlign">
             <option value="center">Center</option>
@@ -561,59 +551,95 @@
             <option value="justify">Justify</option>
           </select>
         </div>
+
         <div class="row">
-          <label>Text Color</label><input type="color" id="messageColor" value="#111111" />
-          <label>BG Color</label><input type="color" id="messageBg" value="#ffffff" />
+          <label>Color</label><input type="color" id="messageColor" value="#111111" />
+          <label>BG</label><input type="color" id="messageBg" value="#ffffff" />
         </div>
-        <!-- 🎙️ Voice Input Controls (NOW placed correctly) -->
+
         <div class="row voice-row">
           <button id="startVoice" class="btn ghost">🎤 Speak</button>
           <button id="stopVoice" class="btn ghost">⏹ Stop</button>
           <button id="readMessageBtn" class="btn primary">🔊 Read</button>
         </div>
       </div>
-      <!-- 🖼️ Image Upload -->
-      <div class="group">
-        <label>🖼️ Upload Main Image</label>
-        <input type="file" id="imageUpload" accept="image/*" />
-        <label>Position</label>
-        <select id="imagePosition">
-          <option value="center">Center</option>
-          <option value="left">Left</option>
-          <option value="right">Right</option>
-          <option value="top">Top</option>
-          <option value="bottom">Bottom</option>
-        </select>
+
+      <!-- OCR -->
+      <div class="group ocr-section">
+        <h3>📸 OCR - Image to Text</h3>
+
+        <label>Image</label>
+        <input type="file" id="ocrImageInput" accept="image/*" />
+
+        <button id="startOcrBtn" class="btn primary" disabled>⚡ Start OCR</button>
+
+        <textarea id="ocrResult" rows="5" readonly></textarea>
+
+        <button id="pasteOcrToMessageBtn" class="btn ghost" disabled>📋 Paste OCR Text</button>
       </div>
 
-      <!-- 🧾 QR -->
+    </div>
+
+
+    <!-- ===== STEP 5 — IMAGE ===== -->
+    <div class="step-box">
+      <h2>5 — Main Image</h2>
+
       <div class="group">
-        <label>🧾 QR Code (optional)</label>
+        <label>🖼 Upload Image</label>
+        <input type="file" id="imageUpload" accept="image/*" />
+      </div>
+
+      <label>Position</label>
+      <select id="imagePosition">
+        <option value="center">Center</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+      </select>
+    </div>
+
+
+    <!-- ===== STEP 6 — QR ===== -->
+    <div class="step-box">
+      <h2>6 — QR Code</h2>
+
+      <div class="group">
+        <label>🧾 QR Code</label>
         <input id="qrText" placeholder="Enter URL or text" />
       </div>
 
-      <div class="row">
+      <div class="group">
         <label>Align</label>
         <select id="qrAlign">
           <option value="left">Left</option>
           <option value="center">Center</option>
           <option value="right">Right</option>
-          <option value="justify">Justify</option>
         </select>
       </div>
+    </div>
 
-      <!-- 📅 Date -->
-      <div class="group">
-        <label>📅 Poster Date</label>
-        <select id="posterDateOption">
-          <option value="current">Current Date</option>
-          <option value="prevMonth">Previous Month</option>
-          <option value="custom">Custom Date</option>
-        </select>
-        <input type="date" id="customDate" class="hidden" />
-      </div>
 
-      <!-- ⚙️ Actions -->
+    <!-- ===== STEP 7 — DATE ===== -->
+    <div class="step-box">
+      <h2>7 — Date</h2>
+
+      <label>📅 Poster Date</label>
+      <select id="posterDateOption">
+        <option value="current">Current Date</option>
+        <option value="prevMonth">Previous Month</option>
+        <option value="custom">Custom Date</option>
+      </select>
+
+      <input type="date" id="customDate" class="hidden" />
+    </div>
+
+
+    <!-- ===== STEP 8 — GENERATE ===== -->
+    <div class="step-box">
+      <h2>8 — Generate</h2>
+
       <div class="actions">
         <button id="clearBtn" class="btn ghost">🧹 Clear</button>
         <button id="saveBtn" class="btn">💾 Save</button>
@@ -625,21 +651,29 @@
         <button id="shareBtn" class="btn ghost">📤 Share</button>
       </div>
     </div>
-    <!-- RIGHT PANEL -->
-    <div class="poster-info-container">
- <h3 class="preview-heading">🖼️ AksharaChitra Poster Preview</h3>
- <div class="group section-control">
-        <h3>🖼️ Poster Background</h3>
-        <label for="posterBgColor">Background Color</label>
-        <select id="posterBgColor">
-          <option value="#FFFFFF">White</option>
-          <option value="#F5F5F5">Light Gray</option>
-          <option value="#DCEFFB">Pale Blue</option>
-          <option value="#F6E7D7">Warm Beige</option>
-          <option value="#E0F7F1">Light Mint</option>
-        </select>
-      </div>
-    <!-- LIVE POSTER PREVIEW -->
+
+  </div>
+
+
+
+  <!-- ================= RIGHT PANEL (UNCHANGED) ================= -->
+  <div class="poster-info-container">
+
+    <h3 class="preview-heading">🖼️ AksharaChitra Poster Preview</h3>
+
+    <div class="group section-control">
+   
+      <label> PosterBackground Color</label>
+      <select id="posterBgColor">
+        <option value="#FFFFFF">White</option>
+        <option value="#F5F5F5">Light Gray</option>
+        <option value="#DCEFFB">Pale Blue</option>
+        <option value="#F6E7D7">Warm Beige</option>
+        <option value="#E0F7F1">Light Mint</option>
+      </select>
+    </div>
+
+    <!-- LIVE PREVIEW CARD -->
     <div id="previewCard" class="card">
       <div id="pSmallLogo" class="p-logo"></div>
       <div id="pTitle" class="p-title"></div>
@@ -649,8 +683,10 @@
       <div id="pQR" class="p-qr"></div>
     </div>
 
-    </div>
   </div>
+
+</div>
+
 </section>
     <!-- 💾 GALLERY -->
   <section id="gallery" class="tab-content">
