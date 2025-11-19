@@ -24,15 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
         "NTR",
         "Ramabhadra",
         "Gidugu",
-        //appaji fonts here
-        "RamaneeyaWin",
-        "Ramaraja",
-        "RaviPrakash",
-        "Sirivennela",
-        "TANA",
-        "TenaliRamakrishna",
-        "Timmana",
-        "Veturi"
+        "Chathura-Bold",
+  "Chathura-ExtraBold",
+  "Chathura-Light",
+  "Chathura-Regular",
+  "Chathura-Thin",
+  "RamaneeyaWin",
+  "Ramaraja-Regular",
+  "RaviPrakash",
+  "Sirivennela",
+  "TANA",
+  "TenaliRamakrishna-Regular",
+  "TimmanaRegular",
+  "Veturi"
       ],
 
     hin: ["Hind","Karma","Noto Serif Devanagari"],
