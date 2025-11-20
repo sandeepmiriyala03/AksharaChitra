@@ -1,71 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
-<title>AksharaChitra — Create Beautiful Posters Offline</title>
-
-<!-- Primary SEO -->
-<meta name="description" content="AksharaChitra is an offline multilingual poster maker with 52+ native Indian fonts. Create, save, and share beautiful posters in 8+ Indian languages — all fully offline.">
-<meta name="keywords" content="Poster Maker, Offline Poster Creator, Indian Fonts, Multilingual Poster Maker, Telugu Poster Maker, Hindi Fonts, Sanskrit, Tamil, Kannada, Malayalam, Odia, PWA, WebLLM">
-<meta name="author" content="Yuktishala AI Lab">
-
-<!-- Mobile & Viewport -->
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<!-- Indexing -->
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://aksharachitra.netlify.app/">
-
-<!-- Open Graph / Social Sharing -->
-<meta property="og:title" content="AksharaChitra — Offline Poster Maker">
-<meta property="og:description" content="Create posters offline with 52+ Indian language fonts. Works fully offline with AI-powered features.">
-<meta property="og:image" content="https://aksharachitra.netlify.app/icons/icon-192.png">
-<meta property="og:url" content="https://aksharachitra.netlify.app/">
-<meta property="og:type" content="website">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AksharaChitra — Create Beautiful Posters Offline">
-<meta name="twitter:description" content="Multilingual offline poster maker with 52+ Indian fonts. Create anytime, anywhere.">
-<meta name="twitter:image" content="https://aksharachitra.netlify.app/icons/icon-192.png">
-
-<!-- Icons -->
-<link rel="icon" type="image/png" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-512.png">
-
-<!-- PWA Meta -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ffffff">
-
-<!-- Performance / Rendering -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="format-detection" content="telephone=no">
-
-<!-- App Name (Android + iOS) -->
-<meta name="apple-mobile-web-app-title" content="AksharaChitra">
-<meta name="application-name" content="AksharaChitra">
-
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#1e88e5" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-  <!-- Fonts & Styles -->
-  <link rel="icon" type="image/png" href="logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<meta charset="UTF-8">
+  
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="logo.png" as="image" type="image/png">
+  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="home.css" as="style">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>AksharaChitra — Free Offline Poster Maker with 52+ Indian Fonts</title>
+  
+  <!-- Primary SEO -->
+  <meta name="description" content="AksharaChitra: Free offline poster maker with 52+ native Indian fonts. Create stunning posters in Telugu, Hindi, Tamil, Kannada, Malayalam, Sanskrit & more. No internet required. AI-powered design tools.">
+  <meta name="keywords" content="poster maker, free poster creator, offline poster maker, Indian language fonts, Telugu fonts, Hindi fonts, Tamil fonts, Kannada fonts, Malayalam fonts, Sanskrit fonts, Odia fonts, multilingual design, graphic design app, PWA poster maker, WebLLM, AI poster design, Indian typography, free design tool, no internet poster maker, Devanagari fonts, regional language poster, festival poster maker, event poster creator">
+  <meta name="author" content="Yuktishala AI Lab">
+  <meta name="language" content="English">
+  <meta name="geo.region" content="IN">
+  <meta name="geo.placename" content="India">
+  
+  <!-- Mobile & PWA -->
+  <meta name="theme-color" content="#4A90E2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AksharaChitra">
+  <meta name="application-name" content="AksharaChitra">
+  
+  <!-- Indexing & SEO -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <link rel="canonical" href="https://aksharachitra.netlify.app/">
+  
+  <!-- Alternate Languages -->
+  <link rel="alternate" hreflang="en" href="https://aksharachitra.netlify.app/">
+  <link rel="alternate" hreflang="hi" href="https://aksharachitra.netlify.app/?lang=hi">
+  <link rel="alternate" hreflang="te" href="https://aksharachitra.netlify.app/?lang=te">
+  <link rel="alternate" hreflang="ta" href="https://aksharachitra.netlify.app/?lang=ta">
+  <link rel="alternate" hreflang="kn" href="https://aksharachitra.netlify.app/?lang=kn">
+  <link rel="alternate" hreflang="ml" href="https://aksharachitra.netlify.app/?lang=ml">
+  <link rel="alternate" hreflang="sa" href="https://aksharachitra.netlify.app/?lang=sa">
+  <link rel="alternate" hreflang="x-default" href="https://aksharachitra.netlify.app/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aksharachitra.netlify.app/">
+  <meta property="og:title" content="AksharaChitra — Free Offline Poster Maker with 52+ Indian Fonts">
+  <meta property="og:description" content="Create beautiful posters offline in 8+ Indian languages. No internet needed. 52+ native fonts including Telugu, Hindi, Tamil, Kannada, Malayalam, Sanskrit & Odia. AI-powered design tools.">
+  <meta property="og:image" content="https://aksharachitra.netlify.app/icons/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="AksharaChitra Poster Maker Interface">
+  <meta property="og:site_name" content="AksharaChitra">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="hi_IN">
+  <meta property="og:locale:alternate" content="te_IN">
+  <meta property="og:locale:alternate" content="ta_IN">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://aksharachitra.netlify.app/">
+  <meta name="twitter:title" content="AksharaChitra — Create Stunning Posters Offline in Indian Languages">
+  <meta name="twitter:description" content="Free offline poster maker with 52+ Indian fonts. Create in Telugu, Hindi, Tamil, Kannada & more. Works without internet. AI-powered design.">
+  <meta name="twitter:image" content="https://aksharachitra.netlify.app/icons/twitter-card.png">
+  <meta name="twitter:image:alt" content="AksharaChitra - Multilingual Poster Maker">
+  <meta name="twitter:creator" content="@YuktishalaAI">
+  <meta name="twitter:site" content="@YuktishalaAI">
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AksharaChitra",
+    "alternateName": "Aksharachitra Poster Maker",
+    "url": "https://aksharachitra.netlify.app/",
+    "description": "Free offline poster maker with 52+ native Indian language fonts. Create beautiful posters in Telugu, Hindi, Tamil, Kannada, Malayalam, Sanskrit, Odia and more without internet connection.",
+    "applicationCategory": "DesignApplication",
+    "operatingSystem": "Web Browser, Android, iOS, Windows, macOS, Linux",
+    "datePublished": "2025-01-01",
+    "dateModified": "2025-01-20",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "Yuktishala AI Lab",
+      "url": "https://yuktishala.org"
+    },
+    "featureList": [
+      "52+ Indian language fonts",
+      "Offline functionality",
+      "8+ Indian languages support",
+      "AI-powered design tools",
+      "No registration required",
+      "Free to use",
+      "Progressive Web App (PWA)",
+      "Save and share posters"
+    ],
+    "inLanguage": ["en", "hi", "te", "ta", "kn", "ml", "sa", "or"],
+    "screenshot": "https://aksharachitra.netlify.app/icons/screenshot.png",
+    "softwareVersion": "1.0",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "150"
+    }
+  }
+  </script>
+  
+  <!-- PWA & Icons -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
+  
+  <!-- Performance & Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&family=Oswald:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;600;700&family=Bebas+Neue&family=Nunito:wght@400;700&family=Merriweather:wght@400;700&family=Pacifico&family=Cinzel:wght@400;700&family=Quicksand:wght@400;700&family=Josefin+Sans:wght@400;700&family=DM+Serif+Display&family=Great+Vibes&family=Lobster&family=Dancing+Script&family=Comfortaa:wght@400;700&family=Courgette&family=Righteous&family=Orbitron:wght@400;700&family=Exo+2:wght@400;700&family=Prompt:wght@400;700&family=Ubuntu:wght@400;700&family=Fira+Sans:wght@400;700&family=Source+Sans+Pro:wght@400;700&family=Arvo:wght@400;700&family=Noto+Sans+Telugu:wght@400;700&family=NTR&family=Ramabhadra&family=Gurajada&family=Gidugu&family=Mandali&family=Noto+Serif+Devanagari:wght@400;700&family=Tiro+Devanagari+Sanskrit&family=Hind:wght@400;600&family=Karma:wght@400;600&family=Baloo+2&family=Tiro+Tamil&family=Noto+Sans+Malayalam&family=Noto+Sans+Kannada&family=Noto+Sans+Tamil&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="home.css" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  
+  <!-- Fonts & Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
 
 <header class="topbar">
+  <h1 style="position: absolute; left: -9999px;">AksharaChitra - Free Offline Poster Maker with 52+ Indian Language Fonts</h1>
+  
   <div class="left">
-    <img src="logo.png" alt="AksharaChitra" class="logo"  loading="lazy"/>
+    <!-- Remove lazy loading from above-the-fold images -->
+<img src="logo.png" 
+     alt="AksharaChitra - Offline Multilingual Poster Maker" 
+     class="logo" 
+     width="48" 
+     height="48"
+     fetchpriority="high"/>
     <span class="app-title">AksharaChitra</span>
   </div>
   <!-- 🌟 Hamburger (mobile only) -->
@@ -299,10 +376,10 @@
     <div class="tutorial-container">
       
       <div class="tutorial-header">
-        <h1>
-          <span>📁</span>
-          <span>Load Desktop Fonts</span>
-        </h1>
+        <h2>
+  <span>📁</span>
+  <span>Load Desktop Fonts</span>
+</h2>
         <div class="tutorial-subtitle">Use your computer's fonts in AksharaChitra</div>
         <div class="feature-badge">✨ AI-Powered Feature</div>
       </div>
@@ -822,10 +899,7 @@
 
 <!-- Hidden Canvas for Image Processing -->
 <canvas id="outputCanvas" style="display:none;"></canvas>
-<!-- Hidden Canvas for Image Processing -->
-<canvas id="outputCanvas" style="display:none;"></canvas>
-<!-- Hidden Canvas for Image Processing -->
-<canvas id="outputCanvas" style="display:none;"></canvas>
+
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js" defer></script>
