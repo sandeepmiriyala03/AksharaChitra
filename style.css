@@ -196,18 +196,23 @@ body.dark .topbar {
   color: var(--text);
 }
 
-/* Hamburger - Mobile only */
 .hamburger {
-  display: none;
+  display: block;
   background: transparent;
   border: none;
   font-size: 28px;
   cursor: pointer;
   padding: 10px;
   border-radius: 12px;
-  color: var(--text);
+  color: var(--primary); /* Primary color */
   transition: all var(--transition);
 }
+
+.hamburger:hover {
+  color: var(--accent); /* Change color to accent on hover */
+  background: rgba(0, 0, 0, 0.1); /* Light background on hover */
+}
+
 
 /* Mobile menu */
 .mobile-menu {
