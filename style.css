@@ -215,8 +215,9 @@ body.dark .topbar {
 
 
 /* Mobile menu */
+/* Mobile Menu - Initially Hidden */
 .mobile-menu {
-  display: none;
+  display: none;  /* Initially hide the menu */
   position: absolute;
   top: 64px;
   left: 0;
@@ -225,45 +226,65 @@ body.dark .topbar {
   border-radius: 0 0 var(--radius) var(--radius);
   box-shadow: var(--shadow-lg);
   padding: 12px 0;
-  z-index: 999;
-  transform: translateY(-12px) scaleY(0.95);
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
+  z-index: 999;  /* Ensure it's above other content */
+  transform: translateY(-12px); /* Hide offscreen initially */
+  opacity: 0;  /* Hidden state */
+  pointer-events: none;  /* Disable interactions when hidden */
+  visibility: hidden;  /* Ensure it doesn't take up space when hidden */
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(20px);
 }
 
+/* Mobile Menu - Opened state */
 .mobile-menu.open {
-  display: block;
-  opacity: 1;
-  transform: translateY(0) scaleY(1);
-  pointer-events: auto;
-  visibility: visible;
+  display: block;  /* Show the menu */
+  opacity: 1;  /* Make the menu fully visible */
+  transform: translateY(0);  /* Slide the menu into place */
+  pointer-events: auto;  /* Enable interactions */
+  visibility: visible;  /* Ensure visibility */
 }
 
+/* Mobile Menu Item Styling */
 .mobile-menu .m-item {
   padding: 14px 20px;
   text-align: left;
   font-size: 16px;
   border: none;
   background: none;
-  width: calc(100% - 16px);
+  width: calc(100% - 16px);  /* Make items full width with padding */
   cursor: pointer;
   color: var(--text);
   font-weight: 700;
   border-radius: 12px;
   transition: all var(--transition);
-  margin: 4px 8px;
+  margin: 4px 8px;  /* Space between items */
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 10px;  /* Space between icon and text */
 }
 
+/* Active Menu Item - Highlight */
 .mobile-menu .m-item.active {
   background: linear-gradient(135deg, var(--primary), var(--primary-700));
   color: #fff;
   box-shadow: var(--shadow-md);
+}
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* ==================== NEW LANDING SECTION STYLES ==================== */
