@@ -59,6 +59,7 @@
 <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="home.css" />
 </head>
 <body>
 
@@ -75,7 +76,7 @@
     <button class="tab-btn" data-tab="create">🎨 Create</button>
     <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
   
-    <button class="tab-btn" data-tab="ai-features">🤖 AI Features</button>
+
       <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
   </nav>
   <div class="right-controls">
@@ -89,290 +90,335 @@
   <button class="m-item" data-tab="home">🏠 Home</button>
   <button class="m-item" data-tab="create">🎨 Create</button>
   <button class="m-item" data-tab="gallery">💾 My Creations</button>
-
-  <button class="m-item" data-tab="ai-features">🤖 AI Features</button>
     <button class="m-item" data-tab="feedback">💌 Feedback</button>
 </nav>
   <!-- 🌈 MAIN CONTENT -->
   <main id="mainContent" class="content">
-<section id="home" class="tab-content">
-<!-- INTRO (updated: right-aligned logo) -->
-<div class="about-intro fade-in">
-  <div class="about-intro-header">
-    <h2>Welcome to <span class="highlight">AksharaChitra</span></h2>
+<section id="home" class="tab-content active">
+  
+  <!-- ========== HERO INTRO ========== -->
+  <div class="about-intro fade-in">
+    <div class="about-intro-header">
+      <h2>Welcome to <span class="highlight">AksharaChitra</span></h2>
+      <img src="logo.png" alt="AksharaChitra logo" class="home-intro-logo" loading="lazy" aria-label="AksharaChitra logo">
+    </div>
 
-    <!-- right-side logo -->
-    <img src="logo.png" alt="AksharaChitra logo" class="home-intro-logo" loading="lazy" aria-label="AksharaChitra logo">
+    <h3 class="subtitle">India's First AI-Powered Multilingual Poster Maker — <strong>Offline & Beautiful</strong></h3>
+
+    <p>
+      <strong>AksharaChitra</strong> is a next-gen <strong>AI-Enhanced Multilingual Poster Maker</strong> that celebrates India's linguistic diversity. 
+      Create stunning posters in <strong>8+ Indian languages</strong> — works <strong>fully offline</strong> as a PWA with cutting-edge AI features.
+    </p>
+
+    <p>
+      🎨 AI Text-to-Speech • Voice Input • Smart OCR • QR Generator • Image Effects — all <strong>without internet!</strong>
+    </p>
   </div>
 
-  <h3 class="subtitle">Multilingual Art, Made Simple — <strong>Offline & Beautiful</strong></h3>
+  <hr class="divider" />
 
-  <p>
-    <strong>AksharaChitra</strong> is a next-gen <strong>Multilingual Poster Maker</strong> that celebrates India's linguistic beauty through design.
-    Built as a <strong>PWA</strong>, it works <strong>fully offline</strong> — creating posters in <strong>8+ Indian languages</strong>.
-  </p>
+  <!-- ========== WHY CHOOSE AKSHARACHITRA ========== -->
+  <div class="why-choose-section fade-in">
+    <h2>🌟 Why Choose AksharaChitra?</h2>
+    <p style="text-align: center; color: var(--muted); font-size: 1.1rem; margin-bottom: 30px;">
+      See how we compare to other poster makers
+    </p>
 
-  <p>
-    🎨 Personalize text, upload logos, crop images, use voice input, generate QR codes — all without internet.
-  </p>
-
-  <p>
-    Powered by <strong>IndexedDB</strong>, <strong>CropperJS</strong>, and <strong>QRCodeJS</strong>, AksharaChitra is <strong>offline-friendly, fast, and deeply Indian 🇮🇳</strong>.
-  </p>
-</div>
-
-<hr class="divider" />
-<!-- 🌍 FONT PREVIEW -->
-<div class="font-preview-section fade-in">
-
-  <h2>🌍 Multilingual Font Preview</h2>
-  <p class="muted small">Select your language and preview fonts 👇</p>
-
-  <!-- 1️⃣ Language Selector -->
-  <div class="tts-control">
-    <label class="input-label">Language</label>
-    <select id="previewLangSelect" class="lang-select compact">
-      <option value="en">🇬🇧 English</option>
-      <option value="te">🇮🇳 తెలుగు (Telugu)</option>
-      <option value="hi">🇮🇳 हिंदी (Hindi)</option>
-      <option value="sa">🇮🇳 संस्कृतम् (Sanskrit)</option>
-      <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
-      <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
-      <option value="ml">🇮🇳 മലയാളം (Malayalam)</option>
-      <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
-    </select>
+    <div class="comparison-grid">
+      <!-- AksharaChitra Card -->
+      <div class="comparison-card aksharachitra">
+        <h3>✨ AksharaChitra</h3>
+        <ul class="comparison-features">
+          <li><strong>100% Offline</strong> - Works without internet</li>
+          <li><strong>8+ Indian Languages</strong> - Native font support</li>
+          <li><strong>AI-Powered TTS</strong> - Text-to-speech in your language</li>
+          <li><strong>Smart Voice Input</strong> - Speak, we'll type</li>
+          <li><strong>OCR Text Extraction</strong> - Extract text from images</li>
+          <li><strong>52+ Premium Fonts</strong> - Professional typography</li>
+          <li><strong>Load Desktop Fonts</strong> - Use your system fonts</li>
+          <li><strong>35+ Templates</strong> - Ready-to-use designs</li>
+          <li><strong>QR Code Generator</strong> - Built-in QR maker</li>
+          <li><strong>Privacy First</strong> - All data stays on your device</li>
+          <li><strong>Free Forever</strong> - No hidden costs</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
-  <!-- 2️⃣ Font Family (JS will insert label + dropdown here) -->
-  <div class="font-family-wrapper"></div>
+  <hr class="divider" />
 
-  <!-- 3️⃣ Local System Font Loader -->
-  <div class="local-font-access">
-    <button id="loadLocalFontsBtn">📁 Load Local System Fonts</button>
+  <!-- ========== AI FEATURES SHOWCASE ========== -->
+  <div class="ai-features-showcase fade-in">
+    <h2>🤖 Powered by AI Technology</h2>
+    <p>Experience the future of poster making with our cutting-edge AI features</p>
 
-    <select id="localFontsDropdown" style="display:none;"></select>
+    <div class="ai-features-grid">
+      <!-- TTS Feature -->
+      <div class="ai-feature-card">
+        <span class="icon">🔊</span>
+        <h3>AI Text-to-Speech</h3>
+        <p>
+          Listen to your poster content in multiple Indian languages. Perfect for proofreading and accessibility.
+          Our AI reads your text naturally, helping you catch errors before printing.
+        </p>
+      </div>
 
-    <button id="saveLocalFontBtn" class="save-font-btn" style="display:none;">
-      💾 Save this Font to AksharaChitra
-    </button>
+      <!-- Voice Input -->
+      <div class="ai-feature-card">
+        <span class="icon">🎙️</span>
+        <h3>Smart Voice Input</h3>
+        <p>
+          Speak naturally in your language and watch your words appear on screen. Our AI accurately recognizes
+          Telugu, Hindi, Tamil, and more regional languages.
+        </p>
+      </div>
 
-    <p id="localFontInfo" style="display:none;"></p>
+      <!-- OCR -->
+      <div class="ai-feature-card">
+        <span class="icon">📸</span>
+        <h3>Intelligent OCR</h3>
+        <p>
+          Upload any image with text and our AI extracts it instantly. Works with photos, screenshots,
+          and scanned documents in multiple Indian scripts.
+        </p>
+      </div>
+
+      <!-- Smart Font Matching -->
+      <div class="ai-feature-card">
+        <span class="icon">🎨</span>
+        <h3>Smart Font Filtering</h3>
+        <p>
+          Our AI automatically filters and suggests fonts based on your selected language,
+          showing only compatible typefaces for perfect rendering.
+        </p>
+      </div>
+    </div>
   </div>
-  <!-- 4️⃣ Preview Card -->
-  <div id="previewCardContainer"></div>
-</div>
-<hr class="divider" />
 
-<div class="home_feature_container home_feature_fade">
-    <h2 class="home_feature_title">🚀 What You Can Do</h2>
+  <hr class="divider" />
+
+  <!-- ========== FONT PREVIEW ========== -->
+  <div class="font-preview-section fade-in">
+    <h2>🌍 Multilingual Font Preview</h2>
+    <p class="muted small">Select your language and preview fonts 👇</p>
+
+    <!-- Language Selector -->
+    <div class="tts-control" style="max-width: 300px; margin: 20px auto;">
+      <label class="input-label">Choose Language</label>
+      <select id="previewLangSelect" class="lang-select compact">
+        <option value="en">🇬🇧 English</option>
+        <option value="te">🇮🇳 తెలుగు (Telugu)</option>
+        <option value="hi">🇮🇳 हिंदी (Hindi)</option>
+        <option value="sa">🇮🇳 संस्कृतम् (Sanskrit)</option>
+        <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+        <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
+        <option value="ml">🇮🇳 മലയാളം (Malayalam)</option>
+        <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
+      </select>
+    </div>
+
+    <!-- Font Family Wrapper (populated by JS) -->
+    <div class="font-family-wrapper"></div>
+
+    <!-- Local System Font Loader -->
+    <div class="local-font-access">
+      <button id="loadLocalFontsBtn">📁 Load Desktop Fonts</button>
+      <select id="localFontsDropdown" style="display:none;"></select>
+      <button id="saveLocalFontBtn" class="save-font-btn" style="display:none;">
+        💾 Save Font to Library
+      </button>
+      <p id="localFontInfo" style="display:none;"></p>
+    </div>
+
+    <!-- Preview Card (populated by JS) -->
+    <div id="previewCardContainer"></div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ========== TTS & VOICE CONTROLS ========== -->
+  <div class="tts-voice-section fade-in">
+    <h3>🎙️ AI Voice Features</h3>
+    <p style="color: var(--muted); margin-bottom: 15px;">
+      Experience hands-free poster creation with our AI-powered voice features
+    </p>
+
+    <div class="tts-controls">
+      <button class="tts-btn" id="ttsButton">
+        🔊 Text-to-Speech
+      </button>
+      <button class="voice-btn" id="startVoice">
+        🎤 Start Voice Input
+      </button>
+      <button class="voice-btn" id="stopVoice" style="display: none;">
+        ⏸️ Stop Recording
+      </button>
+    </div>
+
+    <div style="margin-top: 15px; padding: 15px; background: var(--glass); border-radius: 10px;">
+      <p style="font-size: 0.9rem; color: var(--muted);">
+        💡 <strong>Pro Tip:</strong> Voice features work offline and support all Indian languages!
+        Perfect for creating posters while multitasking.
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ========== KEY FEATURES ========== -->
+  <div class="home_feature_container home_feature_fade">
+    <h2 class="home_feature_title">🚀 Powerful Features</h2>
     <ul class="home_feature_grid">
-      <li class="home_feature_item">🖋️ Customize <strong>Title, Subtitle & Message</strong></li>
-<li class="home_feature_item">🌐 Create posters in <strong>8+ Indian Languages</strong></li>
-<li class="home_feature_item">🎨 <strong>52+ Native Indian Fonts</strong> built-in</li>
-<li class="home_feature_item">📁 <strong>Load Desktop Fonts</strong> — Smart filtering by language, save offline</li>
-<li class="home_feature_item">🎙️ Use <strong>Voice Input</strong> & <strong>Text-to-Speech</strong></li>
-<li class="home_feature_item">🖼️ Upload, Crop & Add Logos</li>
-<li class="home_feature_item">📸 <strong>OCR (Image to Text):</strong> Extract text directly from photos</li>
-<li class="home_feature_item">💾 Save Offline (IndexedDB)</li>
-<li class="home_feature_item">⚡ <strong>PWA Ready</strong> — Works fully Offline</li>
-<li class="home_feature_item">🧩 Choose from <strong>Multiple Templates</strong></li>    
-</ul>
+      <li class="home_feature_item">🖋️ Customize Title, Subtitle & Message</li>
+      <li class="home_feature_item">🌐 8+ Indian Languages Supported</li>
+      <li class="home_feature_item">🎨 52+ Native Indian Fonts Built-in</li>
+      <li class="home_feature_item">📁 Load Desktop Fonts with Smart Filtering</li>
+      <li class="home_feature_item">🎙️ AI Voice Input & Text-to-Speech</li>
+      <li class="home_feature_item">🖼️ Upload & Crop with Image Effects</li>
+      <li class="home_feature_item">📸 Smart OCR: Extract Text from Images</li>
+      <li class="home_feature_item">💾 Works 100% Offline (PWA)</li>
+      <li class="home_feature_item">🧩 35+ Professional Templates</li>
+      <li class="home_feature_item">📱 QR Code Generator Built-in</li>
+      <li class="home_feature_item">🔒 Privacy-First: Data Never Leaves Device</li>
+      <li class="home_feature_item">⚡ Lightning Fast Performance</li>
+    </ul>
+
     <div class="home_feature_cta">
-      <button id="home_feature_create_btn">🎨 Start Creating</button>
+      <button id="home_feature_create_btn">🎨 Start Creating Now</button>
       <button id="home_feature_share_btn">
         <img src="/icons/icon-72x72.png" alt="AksharaChitra" class="home_feature_share_icon" />
-        <span>Share</span>
+        <span>Share App</span>
       </button>
     </div>
   </div>
 
-
-
-<!-- 🆕 ADD THIS NEW TUTORIAL SECTION HERE -->
-<hr class="home_feature_divider" />
-
-<div class="desktop-fonts-tutorial home_feature_fade">
-  <div class="tutorial-container">
-    
-    <!-- Header -->
-    <div class="tutorial-header">
-      <h1>
-        <span>📁</span>
-        <span>How to Load Desktop Fonts</span>
-      </h1>
-      <div class="tutorial-subtitle">
-        Learn how to use your computer's fonts in AksharaChitra
-      </div>
-      <div class="feature-badge">✨ New Feature</div>
-    </div>
-
-    <!-- Introduction -->
-    <div class="intro-box">
-      <h2>🎯 What is This Feature?</h2>
-      <p>
-        <strong>Load Desktop Fonts</strong> lets you access and use any font 
-        installed on your computer. AksharaChitra intelligently filters fonts 
-        based on your selected language and allows you to save your favorites for offline use.
-      </p>
-    </div>
-
-    <!-- Steps Container -->
-    <div class="steps-container">
-      
-      <!-- Step 1 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">1</div>
-          <div class="step-title">Go to Create Section</div>
-        </div>
-        <div class="step-description">
-          Navigate to the <strong>🎨 Create</strong> tab in AksharaChitra.
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">2</div>
-          <div class="step-title">Select Your Language</div>
-        </div>
-        <div class="step-description">
-          Choose your preferred language from the dropdown.
-        </div>
-        <div class="highlight-box">
-          <strong>💡 Tip:</strong> AksharaChitra supports 8+ Indian languages.
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">3</div>
-          <div class="step-title">Click "Load Local System Fonts"</div>
-        </div>
-        <div class="step-description">
-          Find and click the blue <strong>📁 Load Local System Fonts</strong> button.
-        </div>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">4</div>
-          <div class="step-title">Grant Permission</div>
-        </div>
-        <div class="step-description">
-          Your browser will ask for permission. Click <strong>"Allow"</strong>.
-        </div>
-        <div class="highlight-box">
-          <strong>🔒 Privacy:</strong> Your fonts stay on your device!
-        </div>
-      </div>
-
-      <!-- Step 5 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">5</div>
-          <div class="step-title">View Filtered Font List</div>
-        </div>
-        <div class="step-description">
-          AksharaChitra shows fonts matching your language.
-        </div>
-      </div>
-
-      <!-- Step 6 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">6</div>
-          <div class="step-title">Select Your Favorite Font</div>
-        </div>
-        <div class="step-description">
-          Browse and select any font. See a live preview instantly.
-        </div>
-      </div>
-
-      <!-- Step 7 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">7</div>
-          <div class="step-title">Save Font to AksharaChitra</div>
-        </div>
-        <div class="step-description">
-          Click <strong>💾 Save this Font to AksharaChitra</strong> to add it permanently.
-        </div>
-        <div class="success-box">
-          <strong>✨ Success!</strong> Font saved for offline use.
-        </div>
-      </div>
-
-      <!-- Step 8 -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-number">8</div>
-          <div class="step-title">Use Your Font in Posters!</div>
-        </div>
-        <div class="step-description">
-          Your saved font is now available in all font dropdowns.
-        </div>
-        <div class="success-box">
-          <strong>🎉 You're All Set!</strong>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Benefits Section -->
-    <div class="benefits-section">
-      <h2>✨ Why Use Desktop Fonts?</h2>
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <span class="emoji">🎨</span>
-          <h3>Unlimited Choices</h3>
-          <p>Access every font on your computer</p>
-        </div>
-        <div class="benefit-item">
-          <span class="emoji">🌐</span>
-          <h3>Language-Smart</h3>
-          <p>Auto-filters by language</p>
-        </div>
-        <div class="benefit-item">
-          <span class="emoji">💾</span>
-          <h3>Offline Ready</h3>
-          <p>Save and use without internet</p>
-        </div>
-        <div class="benefit-item">
-          <span class="emoji">🔒</span>
-          <h3>Privacy First</h3>
-          <p>Everything stays on your device</p>
-        </div>
-      </div>
-    </div>
-    <!-- CTA -->
-    <div class="cta-section">
-      <h2>🚀 Ready to Try It?</h2>
-      <button class="cta-button" id="tutorial_go_create">🎨 Go to Create Section</button>
-    </div>
-
-  </div>
-</div>
   <hr class="home_feature_divider" />
 
+  <!-- ========== DESKTOP FONTS TUTORIAL ========== -->
+  <div class="desktop-fonts-tutorial home_feature_fade">
+    <div class="tutorial-container">
+      
+      <div class="tutorial-header">
+        <h1>
+          <span>📁</span>
+          <span>Load Desktop Fonts</span>
+        </h1>
+        <div class="tutorial-subtitle">Use your computer's fonts in AksharaChitra</div>
+        <div class="feature-badge">✨ AI-Powered Feature</div>
+      </div>
+
+      <div class="intro-box">
+        <h2>🎯 What is This?</h2>
+        <p>
+          Access any font installed on your computer with <strong>AI-powered smart filtering</strong>. 
+          AksharaChitra intelligently filters fonts by language and saves your favorites for offline use.
+        </p>
+      </div>
+
+      <!-- Quick Steps -->
+      <div class="steps-container">
+        
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">1</div>
+            <div class="step-title">Navigate to Create</div>
+          </div>
+          <div class="step-description">Go to the <strong>🎨 Create</strong> section from the top menu.</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">2</div>
+            <div class="step-title">Select Your Language</div>
+          </div>
+          <div class="step-description">Choose your preferred language from the dropdown menu.</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-title">Load System Fonts</div>
+          </div>
+          <div class="step-description">
+            Click <strong>📁 Load Local System Fonts</strong> and grant permission. 
+            Our AI will automatically filter fonts compatible with your language.
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-number">4</div>
+            <div class="step-title">Select & Save</div>
+          </div>
+          <div class="step-description">
+            Choose a font from the filtered list, preview it, then click <strong>💾 Save</strong>.
+          </div>
+          <div class="success-box" style="margin-top: 10px;">
+            <strong>✨ Done!</strong> Your font is now available offline for all future posters.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Benefits -->
+      <div class="benefits-section">
+        <h2>✨ Why Use This Feature?</h2>
+        <div class="benefits-grid">
+          <div class="benefit-item">
+            <span class="emoji">🎨</span>
+            <h3>Unlimited Fonts</h3>
+            <p>Access all your system fonts</p>
+          </div>
+          <div class="benefit-item">
+            <span class="emoji">🤖</span>
+            <h3>AI Filtering</h3>
+            <p>Smart language-based filtering</p>
+          </div>
+          <div class="benefit-item">
+            <span class="emoji">💾</span>
+            <h3>Offline Ready</h3>
+            <p>Save and use anytime</p>
+          </div>
+          <div class="benefit-item">
+            <span class="emoji">🔒</span>
+            <h3>Privacy First</h3>
+            <p>All data stays local</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-section">
+        <h2>🚀 Ready to Try?</h2>
+        <button class="cta-button" id="tutorial_go_create">🎨 Start Creating</button>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="home_feature_divider" />
+
+  <!-- ========== QUICK HELP ========== -->
   <div class="home_help_container home_feature_fade">
-    <h2 class="home_help_title">📘 Quick Help Guide</h2>
+    <h2 class="home_help_title">📘 Quick Start Guide</h2>
     <ul class="home_help_grid">
-      <li class="home_help_item">🖋️ Edit Title, Subtitle, and Message easily.</li>
-      <li class="home_help_item">🌐 Type in any supported Indian language.</li>
-      <li class="home_help_item">🖼️ Upload & crop images or logos.</li>
-      <li class="home_help_item">🎨 Choose from templates like <em>Devotional</em>, <em>Business</em>, <em>Invitation</em>.</li>
-      <li class="home_help_item">💾 Save offline — access anytime in <em>My Creations</em>.</li>
+      <li class="home_help_item">🖋️ Customize title, subtitle, and message text</li>
+      <li class="home_help_item">🌐 Type in 8+ Indian languages with native fonts</li>
+      <li class="home_help_item">🎙️ Use voice input or text-to-speech features</li>
+      <li class="home_help_item">🖼️ Upload, crop, and add effects to images</li>
+      <li class="home_help_item">📸 Extract text from images using OCR</li>
+      <li class="home_help_item">🎨 Choose from 35+ professional templates</li>
+      <li class="home_help_item">📱 Generate QR codes for your posters</li>
+      <li class="home_help_item">💾 Everything auto-saves offline</li>
     </ul>
 
     <div class="home_help_tip">
-      💡 <strong>Tip:</strong> Works fully offline — your posters stay safe on your device!
+      💡 <strong>Pro Tip:</strong> All AI features work completely offline! Your posters and data 
+      are always private and accessible, even without internet connection.
     </div>
   </div>
 
-.</section>
+</section>
 
  <!-- 🎨 CREATE -->
 <section id="create" class="tab-content">
