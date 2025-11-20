@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>https://aksharachitra.netlify.app/</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-    
-    <xhtml:link rel="alternate" hreflang="en" href="https://aksharachitra.netlify.app/" />
-    <xhtml:link rel="alternate" hreflang="hi" href="https://aksharachitra.netlify.app/?lang=hi" />
-    <xhtml:link rel="alternate" hreflang="te" href="https://aksharachitra.netlify.app/?lang=te" />
-    <xhtml:link rel="alternate" hreflang="ta" href="https://aksharachitra.netlify.app/?lang=ta" />
-    <xhtml:link rel="alternate" hreflang="kn" href="https://aksharachitra.netlify.app/?lang=kn" />
-    <xhtml:link rel="alternate" hreflang="ml" href="https://aksharachitra.netlify.app/?lang=ml" />
-    <xhtml:link rel="alternate" hreflang="sa" href="https://aksharachitra.netlify.app/?lang=sa" />
-  </url>
-</urlset>
+User-agent: *
+Allow: /
+Sitemap: https://aksharachitra.netlify.app/sitemap.xml
+
+# Block common bot paths (optional)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+
+# Allow CSS and JS for proper rendering
+Allow: /*.css$
+Allow: /*.js$
+
+# Crawl-delay (optional, for overly aggressive bots)
+# Crawl-delay: 10
