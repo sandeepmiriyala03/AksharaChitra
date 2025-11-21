@@ -1,11 +1,11 @@
 [build]
-  functions = "netlify/functions"  # Serverless functions folder without leading dot
-  publish = "."                    # Change if your build output differs, e.g. "build" or "dist"
+  functions = "netlify/functions"
+  publish = "."
 
 [dev]
-  port = 8888                     # Local development port
+  port = 8888
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "/netlify/functions/:splat"
   status = 200
