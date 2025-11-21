@@ -1,13 +1,7 @@
 export const handler = async (event) => {
-  console.log("Received event:", JSON.stringify(event));  
   try {
-    // 1) Parse body safely
-    const body =
-      typeof event.body === "string"
-        ? JSON.parse(event.body || "{}")
-        : (event.body || {});
-
-    const message = body?.message;
+    const body = event.body ? JSON.parse(event.body) : {};
+    const message = body.message;
 
     if (!message) {
       return {
@@ -18,7 +12,7 @@ export const handler = async (event) => {
     }
 
     if (!process.env.GROQ_API_KEY) {
-      alert("GROQ_API_KEY is not set");
+      console.error("GROQ_API_KEY is not set");
       return {
         statusCode: 500,
         headers: { "Content-Type": "application/json" },
@@ -26,9 +20,7 @@ export const handler = async (event) => {
       };
     }
 
-    // 2) Call Groq OpenAI-compatible endpoint
     const response = await fetch(
-  
       "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
@@ -46,23 +38,18 @@ export const handler = async (event) => {
       }
     );
 
-    // 3) Handle non‑2xx from Groq
     if (!response.ok) {
       const errText = await response.text();
       console.error("Groq error:", response.status, errText);
       return {
         statusCode: 502,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          reply: `Groq error ${response.status}: ${errText}`,
-        }),
+        body: JSON.stringify({ reply: `Groq error ${response.status}: ${errText}` }),
       };
     }
 
     const data = await response.json();
-
-    const reply =
-      data?.choices?.[0]?.message?.content || "No reply from AI (empty choices).";
+    const reply = data?.choices?.[0]?.message?.content || "No reply from AI (empty choices).";
 
     return {
       statusCode: 200,

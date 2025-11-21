@@ -1,8 +1,8 @@
 [build]
-  functions = "netlify/functions"      # Make sure your functions folder is netlify/functions
-  publish = "."                        # Replace with your frontend output folder (like "build" or "dist") if needed
+  functions = "netlify/functions"      # Correct functions folder path
+  publish = "."                        # Correct if your static files (e.g., index.html) are in project root
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"    # Use leading dot here, as Netlify expects this for function paths
+  to = "/.netlify/functions/:splat"    # Correct use of the leading dot for function paths
   status = 200
