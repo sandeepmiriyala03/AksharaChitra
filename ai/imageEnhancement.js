@@ -1,74 +1,104 @@
-// imageEnhancement.js
+// imageEnhancement.js (SAFE VERSION)
 
-// Wait for OpenCV.js to be initialized
+// ----------------------------
+// 1. Detect when OpenCV is ready
+// ----------------------------
 let cvReady = false;
-cv.onRuntimeInitialized = () => {
-  cvReady = true;
-  console.log("OpenCV.js is ready!");
-};
 
-// Function to enhance image based on brightness and contrast
+function onCvReady() {
+  cvReady = true;
+  console.log("OpenCV.js is fully initialized!");
+}
+
+// If cv already exists:
+if (window.cv) {
+  cv['onRuntimeInitialized'] = onCvReady;
+} else {
+  console.warn("⚠ OpenCV not loaded yet. imageEnhancement.js loaded too early.");
+}
+
+
+// ----------------------------
+// 2. Safe enhancer function
+// ----------------------------
 function enhanceImage() {
   if (!cvReady) {
-    console.error("OpenCV.js is not initialized yet.");
+    console.error("❌ OpenCV.js is not initialized yet.");
     return;
   }
 
-  let imgElement = document.getElementById('cropImage');
+  const imgElement = document.getElementById('cropImage');
   if (!imgElement) {
-    console.error("Image element not found!");
+    console.error("❌ cropImage element not found!");
     return;
   }
 
-  // Create OpenCV Mat object from image
-  let mat = cv.imread(imgElement);
+  // Create OpenCV MAT
+  let src = cv.imread(imgElement);
   let dst = new cv.Mat();
 
-  // Get the slider values for brightness and contrast
+  // Slider values
   let brightness = parseInt(document.getElementById('brightness').value);
   let contrast = parseFloat(document.getElementById('contrast').value);
 
-  // Apply brightness and contrast adjustments
-  mat.convertTo(dst, -1, contrast, brightness);
+  // Apply enhancement
+  src.convertTo(dst, -1, contrast, brightness);
 
-  // Get the canvas element for output
-  let canvas = document.getElementById('outputCanvas');
+  // Output canvas
+  const canvas = document.getElementById('outputCanvas');
   if (!canvas) {
-    console.error("Canvas element not found!");
+    console.error("❌ outputCanvas not found!");
     return;
   }
 
-  // Set canvas size to match the image size
-  canvas.width = mat.cols;
-  canvas.height = mat.rows;
+  canvas.width = src.cols;
+  canvas.height = src.rows;
 
-  // Display the enhanced image in the canvas
   cv.imshow(canvas, dst);
 
-  // Cleanup memory
-  mat.delete();
+  // Cleanup
+  src.delete();
   dst.delete();
 }
 
-// Event listeners for the sliders
-document.getElementById('brightness').addEventListener('input', enhanceImage);
-document.getElementById('contrast').addEventListener('input', enhanceImage);
-
-// Expose this function globally so that main.js can access it
+// Expose globally
 window.enhanceImage = enhanceImage;
 
-// Function to get the enhanced image data URL
-window.getEnhancedImageDataURL = function() {
+
+// ----------------------------
+// 3. Wait for DOM before adding listeners
+// ----------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const b = document.getElementById('brightness');
+  const c = document.getElementById('contrast');
+
+  if (!b || !c) {
+    console.error("❌ Brightness/Contrast sliders not found in DOM.");
+    return;
+  }
+
+  b.addEventListener("input", enhanceImage);
+  c.addEventListener("input", enhanceImage);
+
+  console.log("✔ Brightness/Contrast listeners attached.");
+});
+
+
+// ----------------------------
+// 4. Helper: return edited image export
+// ----------------------------
+window.getEnhancedImageDataURL = () => {
   if (!cvReady) {
-    console.error("OpenCV.js is not initialized yet.");
+    console.error("❌ OpenCV not ready for exporting");
     return null;
   }
 
-  let canvas = document.getElementById('outputCanvas');
+  const canvas = document.getElementById("outputCanvas");
   if (!canvas) {
-    console.error("Canvas element not found!");
+    console.error("❌ outputCanvas not found");
     return null;
   }
 
-  return canvas.toDataURL('image/png');
+  return canvas.toDataURL("image/png");
 };
+// End of imageEnhancement.js
