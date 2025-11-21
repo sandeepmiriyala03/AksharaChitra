@@ -1171,8 +1171,8 @@ async function sendMessage() {
   log.innerHTML += `<b>You:</b> ${text}<br>`;
   input.value = "";
 
-  // Force API path for production
-  const API_BASE = "/api";
+  // Use direct Netlify function path for production
+  const API_BASE = "/.netlify/functions";
 
   try {
     const res = await fetch(`${API_BASE}/chatbot`, {
