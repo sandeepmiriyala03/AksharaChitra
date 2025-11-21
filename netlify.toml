@@ -1,14 +1,11 @@
 [build]
-  functions = "netlify/functions"
-  publish = "."
+  functions = "netlify/functions"  # Folder where your serverless functions (e.g., chatbot.js) reside
+  publish = "."                    # Change if your frontend build outputs to a different folder, e.g., "build" or "dist"
 
 [dev]
-  port = 8888
+  port = 8888                     # Local development port
 
 [[redirects]]
-  from = "/api/*"
-  to = "/netlify/functions/:splat"
-  status = 200
-
-
-
+  from = "/api/*"                 # Redirect all /api/* requests
+  to = "/.netlify/functions/:splat"  # to the matching function in .netlify/functions/
+  status = 200                   # HTTP 200 to enable proxying
