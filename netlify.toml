@@ -1,6 +1,6 @@
 [build]
-  functions = "netlify/functions"  # Use standard functions folder without leading dot
-  publish = "."                    # Change this if your build output folder is different
+  functions = "netlify/functions"  # Serverless functions folder without leading dot
+  publish = "."                    # Change if your build output differs, e.g. "build" or "dist"
 
 [dev]
   port = 8888                     # Local development port

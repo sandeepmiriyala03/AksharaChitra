@@ -1171,21 +1171,30 @@ async function sendMessage() {
   log.innerHTML += `<b>You:</b> ${text}<br>`;
   input.value = "";
 
-  try {
-    const res = await fetch("/api/chatbot", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
-    });
+try {
+  // Use direct function path locally, and /api/ prefix in production
+  const API_BASE = window.location.hostname === "localhost" 
+    ? "/.netlify/functions" 
+    : "/api";
 
-    const data = await res.json();
+  const res = await fetch(`${API_BASE}/chatbot`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: text })
+  });
 
-    log.innerHTML += `<b>AI:</b> ${data.reply}<br>`;
-    log.scrollTop = log.scrollHeight;
+  if (!res.ok) throw new Error(`Network error: ${res.status}`);
 
-  } catch (err) {
-    log.innerHTML += "<b>AI:</b> Network error.<br>";
-  }
+  const data = await res.json();
+
+  log.innerHTML += `<b>AI:</b> ${data.reply}<br>`;
+  log.scrollTop = log.scrollHeight;
+
+} catch (err) {
+  log.innerHTML += "<b>AI:</b> Network error.<br>";
+  console.error(err);
+}
+
 }
 const bubble = document.getElementById("chatBubble");
 const windowBox = document.getElementById("chatWindow");
