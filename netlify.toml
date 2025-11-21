@@ -1,15 +1,11 @@
 [build]
-  functions = ".netlify/functions"
-  publish = "."
+  functions = "netlify/functions"  # Use standard functions folder without leading dot
+  publish = "."                    # Change this if your build output folder is different
 
 [dev]
-  port = 8888          # Optional: specify port for local dev
-# Redirect API calls starting with /api/* to serverless functions for cleaner URLs
+  port = 8888                     # Local development port
+
 [[redirects]]
-  from = "/*"
+  from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
-
-
-
-

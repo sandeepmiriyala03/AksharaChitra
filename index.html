@@ -1172,7 +1172,7 @@ async function sendMessage() {
   input.value = "";
 
   try {
-    const res = await fetch("/.netlify/functions/chatbot", {
+    const res = await fetch("/api/chatbot", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: text })
