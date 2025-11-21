@@ -4,11 +4,12 @@
 
 [dev]
   port = 8888          # Optional: specify port for local dev
-
 # Redirect API calls starting with /api/* to serverless functions for cleaner URLs
 [[redirects]]
-  from = "/api/*"
+  from = "/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+
 
 
