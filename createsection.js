@@ -1,5 +1,5 @@
 /* ==========================================================
-   🌸 AksharaChitra — create-section.js (v18.0)
+   🌸 AksharaChitra — create-section.js (v18.1)
    ----------------------------------------------------------
    Upgrades:
    • Title / Subtitle / Message Font Family selectors
@@ -7,6 +7,7 @@
    • Poster Info Box shows all 3 fonts individually
    • Full language → font auto-loading for all selectors
    • Smooth reactive update for previewCard also
+   • ✨ Replaced alerts with styled message displays
    ---------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -47,6 +48,101 @@ document.addEventListener("DOMContentLoaded", () => {
     ori: ["Noto Sans Oriya"]
   };
   const q = (sel) => document.querySelector(sel);
+
+
+  // ---------------------- MESSAGE DISPLAY SYSTEM ----------------------
+  function showMessage(text, type = "info") {
+    // Remove existing message if any
+    const existing = q("#fontMessage");
+    if (existing) existing.remove();
+
+    // Create message element
+    const msg = document.createElement("div");
+    msg.id = "fontMessage";
+    
+    const colors = {
+      success: { bg: "#d4edda", border: "#c3e6cb", text: "#155724", icon: "✓" },
+      error: { bg: "#f8d7da", border: "#f5c6cb", text: "#721c24", icon: "✗" },
+      warning: { bg: "#fff3cd", border: "#ffeaa7", text: "#856404", icon: "⚠" },
+      info: { bg: "#d1ecf1", border: "#bee5eb", text: "#0c5460", icon: "ℹ" }
+    };
+
+    const style = colors[type] || colors.info;
+
+    msg.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      max-width: 400px;
+      padding: 16px 20px;
+      background: ${style.bg};
+      border: 2px solid ${style.border};
+      border-radius: 12px;
+      color: ${style.text};
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      animation: slideIn 0.3s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    `;
+
+    msg.innerHTML = `
+      <span style="font-size: 1.3rem;">${style.icon}</span>
+      <span style="flex: 1;">${text}</span>
+      <button onclick="this.parentElement.remove()" style="
+        background: transparent;
+        border: none;
+        color: ${style.text};
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0 4px;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">×</button>
+    `;
+
+    // Add animation
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+      }
+    `;
+    if (!q("#messageStyles")) {
+      styleSheet.id = "messageStyles";
+      document.head.appendChild(styleSheet);
+    }
+
+    document.body.appendChild(msg);
+
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      if (msg && msg.parentElement) {
+        msg.style.animation = "slideOut 0.3s ease-out";
+        setTimeout(() => msg.remove(), 300);
+      }
+    }, 4000);
+  }
 
 
   // ---------------------- Inputs ----------------------
@@ -226,7 +322,7 @@ let CUSTOM_FONTS = JSON.parse(localStorage.getItem("FontsConfig") || "{}");
   const langSelect = document.getElementById("language");
 async function loadLocalFonts() {
   if (!window.queryLocalFonts) {
-    alert("Local Font Access API not supported.");
+    showMessage("Local Font Access API is not supported in this browser.", "error");
     return;
   }
 
@@ -260,8 +356,8 @@ async function loadLocalFonts() {
         ? `${filteredFonts.length} fonts found for ${lang}`
         : `No exact font matches found for ${lang}, showing all (${fonts.length})`;
     }
-  } catch {
-    alert("Permission denied.");
+  } catch (error) {
+    showMessage("Permission denied to access local fonts.", "warning");
   }
 }
 
@@ -270,9 +366,14 @@ saveLocalFontBtn.onclick = () => {
   const lang = langSelect.value;
   const name = localFontsDropdown.value;
 
-  if (!name) return alert("Select a font first!");
+  if (!name) {
+    showMessage("Please select a font first!", "warning");
+    return;
+  }
+
   if (FONT_MAP[lang].includes(name)) {
-    return alert("Font already added!");
+    showMessage(`Font "${name}" is already added!`, "info");
+    return;
   }
 
   if (!CUSTOM_FONTS[lang]) {
@@ -288,9 +389,7 @@ saveLocalFontBtn.onclick = () => {
   fillFonts(titleFontFamily, FONT_MAP[lang]);
   fillFonts(subtitleFontFamily, FONT_MAP[lang]);
   fillFonts(messageFontFamily, FONT_MAP[lang]);
-  alert(`Font "${name}" saved!`);
+  
+  showMessage(`Font "${name}" successfully added! 🎉`, "success");
 };
 });
-
-
- 
