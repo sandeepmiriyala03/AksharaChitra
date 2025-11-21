@@ -11,10 +11,4 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
-# (Optional) Security and caching headers for better production performance
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Security-Policy = "default-src 'self'"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+
