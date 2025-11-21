@@ -913,7 +913,6 @@
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm/dist/index.min.js"></script>
 
-
  <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>
    <script src="/ai//imageEnhancement.js" defer></script>
@@ -1101,22 +1100,19 @@ const yearSpan = document.getElementById('year');
 
   startOcrBtn.addEventListener('click', async () => {
     if (!ocrImageInput.files.length) return;
-
     startOcrBtn.disabled = true;
     pasteBtn.disabled = true;
     ocrResult.value = '';
-    
+   
     const selectedLang = langSelect.value || 'eng';
-
     try {
       if (selectedLang !== currentOcrLang) {
         console.log(`Switching OCR language from ${currentOcrLang} to ${selectedLang}...`);
         await initLanguage(selectedLang);
       }
-      
+
       startOcrBtn.textContent = 'Recognizing...';
       const { data: { text } } = await ocrWorker.recognize(ocrImageInput.files[0]);
-
       ocrResult.value = text.trim();
       pasteBtn.disabled = false;
       startOcrBtn.textContent = '⚡ Start OCR';
@@ -1128,7 +1124,6 @@ const yearSpan = document.getElementById('year');
       startOcrBtn.disabled = !ocrImageInput.files.length;
     }
   });
-
   pasteBtn.addEventListener('click', () => {
     if (ocrResult.value.trim()) {
       const prefix = messageBox.value.trim() ? '\n' : '';
@@ -1136,11 +1131,8 @@ const yearSpan = document.getElementById('year');
       messageBox.dispatchEvent(new Event('input'));
     }
   });
-
   warmUpOcr();
-
 });
-
 // Tutorial CTA Button
 const tutorialGoCreateBtn = document.getElementById('tutorial_go_create');
 if (tutorialGoCreateBtn) {
@@ -1155,19 +1147,15 @@ if (tutorialGoCreateBtn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
-
 document.addEventListener("keydown", function (e) {
   const input = document.getElementById("chatInput");
-
   // Ensure focus is inside chatbot input
   if (document.activeElement === input && e.key === "Enter") {
     e.preventDefault();  // stop form submission, stop bubbling
     sendMessage();
   }
 });
-
 document.getElementById("sendBtn").addEventListener("click", sendMessage);
-
 document.addEventListener("keydown", function (e) {
   const input = document.getElementById("chatInput");
   if (document.activeElement === input && e.key === "Enter") {
@@ -1214,7 +1202,5 @@ closeBtn.onclick = () => {
   bubble.style.display = "flex";
 };
 </script>
-
 </body>
-
 </html>
