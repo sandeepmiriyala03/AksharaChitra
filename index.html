@@ -161,8 +161,7 @@
     <button id="themeToggle" title="Toggle Theme">🌙</button>
   </div>
 </header>
-<!-- Add this spinner inside your body, it will be initially hidden -->
-<div id="spinner" class="spinner" style="display: none;"></div>
+
 
 <!-- ⭐ MOBILE SLIDE-DOWN MENU -->
 <nav id="mobileMenu" class="mobile-menu">
@@ -326,14 +325,7 @@
       <button class="tts-btn" id="ttsButton">
         🔊 Text-to-Speech
       </button>
-      <button class="voice-btn" id="startVoice">
-        🎤 Start Voice Input
-      </button>
-      <button class="voice-btn" id="stopVoice" style="display: none;">
-        ⏸️ Stop Recording
-      </button>
-    </div>
-
+   
     <div style="margin-top: 15px; padding: 15px; background: var(--glass); border-radius: 10px;">
       <p style="font-size: 0.9rem; color: var(--muted);">
         💡 <strong>Pro Tip:</strong> Voice features work offline and support all Indian languages!
@@ -949,42 +941,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const mobileMenu = document.getElementById("mobileMenu");
-  const spinner = document.getElementById("spinner");
+ 
 
-  // Show spinner function
-  function showSpinner() {
-    spinner.style.display = "block";  // Show spinner
-  }
 
-  // Hide spinner function
-  function hideSpinner() {
-    spinner.style.display = "none";  // Hide spinner
-  }
 
   // Open / close menu
   if (hamburgerBtn && mobileMenu) {
     hamburgerBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      showSpinner();  // Show spinner when the menu is toggled
+      //showSpinner();  // Show spinner when the menu is toggled
       mobileMenu.classList.toggle("open");
 
       // Close spinner after menu toggled
-      setTimeout(hideSpinner, 1000); // Hide spinner after a delay (1 second)
+     // setTimeout(hideSpinner, 1000); // Hide spinner after a delay (1 second)
     });
 
     // Close on outside click
     document.addEventListener("click", (e) => {
       if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
         mobileMenu.classList.remove("open");
-        showSpinner();  // Show spinner when closing menu
-        setTimeout(hideSpinner, 1000); // Hide spinner after a delay (1 second)
+       // showSpinner();  // Show spinner when closing menu
+        //setTimeout(hideSpinner, 1000); // Hide spinner after a delay (1 second)
       }
     });
   }
 
   // Tab switching logic
   function activateTab(tab) {
-    showSpinner();  // Show spinner before activating tab
+    //showSpinner();  // Show spinner before activating tab
 
     document.querySelectorAll(".tab-content")
       .forEach(sec => sec.classList.remove("active"));
@@ -1005,7 +989,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileMenu) mobileMenu.classList.remove("open");
 
     // Hide spinner after tab switch completes
-    setTimeout(hideSpinner, 1000);  // Hide spinner after a delay (1 second)
+    //setTimeout(hideSpinner, 1000);  // Hide spinner after a delay (1 second)
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
