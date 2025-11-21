@@ -1171,31 +1171,28 @@ async function sendMessage() {
   log.innerHTML += `<b>You:</b> ${text}<br>`;
   input.value = "";
 
-try {
-  // Use direct function path locally, and /api/ prefix in production
-  const API_BASE = window.location.hostname === "localhost" 
-    ? "/.netlify/functions" 
-    : "/api";
+  // Force API path for production
+  const API_BASE = "/api";
 
-  const res = await fetch(`${API_BASE}/chatbot`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: text })
-  });
+  try {
+    const res = await fetch(`${API_BASE}/chatbot`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
 
-  if (!res.ok) throw new Error(`Network error: ${res.status}`);
+    if (!res.ok) throw new Error(`Network error: ${res.status}`);
 
-  const data = await res.json();
+    const data = await res.json();
 
-  log.innerHTML += `<b>AI:</b> ${data.reply}<br>`;
-  log.scrollTop = log.scrollHeight;
-
-} catch (err) {
-  log.innerHTML += "<b>AI:</b> Network error.<br>";
-  console.error(err);
+    log.innerHTML += `<b>AI:</b> ${data.reply}<br>`;
+    log.scrollTop = log.scrollHeight;
+  } catch (err) {
+    log.innerHTML += "<b>AI:</b> Network error.<br>";
+    console.error(err);
+  }
 }
 
-}
 const bubble = document.getElementById("chatBubble");
 const windowBox = document.getElementById("chatWindow");
 const closeBtn = document.getElementById("chatClose");
