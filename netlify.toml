@@ -2,8 +2,19 @@
   functions = ".netlify/functions"
   publish = "."
 
-# Optional example for API redirects:
-# [[redirects]]
-#   from = "/api/*"
-#   to = "/.netlify/functions/:splat"
-#   status = 200
+[dev]
+  port = 8888          # Optional: specify port for local dev
+
+# Redirect API calls starting with /api/* to serverless functions for cleaner URLs
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# (Optional) Security and caching headers for better production performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
