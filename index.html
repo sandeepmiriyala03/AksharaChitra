@@ -833,15 +833,23 @@
       <iframe  title="Feedback Form"  src="https://docs.google.com/forms/d/e/1FAIpQLSccI8Qw2LrZ1vytgsVZiFWCTTJOLMl1A0j2s-WSzERd3Qmhjg/viewform?usp=publish-editor"
         style="width:100%;height:520px;border:none;border-radius:10px;"></iframe>
     </section>
-<section class="tab-content" id="ai-features" aria-label="Browser AI Capabilities and Features">
-  <div class="ai-browser-section fade-in">
-    <h2>🤖 Browser AI Capabilities & Features</h2>
-    <p class="muted small">
-      The list below shows the browser AI/web APIs support and usage availability for AksharaChitra offline & online.
-    </p>
-    <div id="aiCapabilitiesList" class="ai-cap-list"></div>
+<div id="chatBox" style="
+  width: 300px; height: 400px; 
+  position: fixed; bottom: 20px; right: 20px;
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  display:flex; flex-direction:column;
+  font-family: Arial;">
+  
+  <div id="chatLog" style="flex:1; overflow-y:auto; padding:10px;"></div>
+
+  <div style="display:flex; padding:10px;">
+    <input id="chatInput" style="flex:1; padding:6px;">
+    <button id="sendBtn" style="margin-left:6px;">Send</button>
   </div>
-</section>
+</div>
+
+
   </main>
 
 <footer class="footer" role="contentinfo" aria-label="Site Footer">
@@ -908,7 +916,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 <script defer  src="https://docs.opencv.org/4.x/opencv.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
- 
+<script src="https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm/dist/index.min.js"></script>
+
+
  <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>
    <script src="/ai//imageEnhancement.js" defer></script>
@@ -1158,6 +1168,50 @@ if (tutorialGoCreateBtn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+
+let engine;
+
+async function loadAI() {
+  const log = document.getElementById("chatLog");
+  log.innerHTML += "⏳ Loading AI model…<br>";
+
+  try {
+    engine = await webllm.createWebWorkerEngine(
+      new Worker("https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm/dist/worker.js"),
+      "Qwen2.5-0.5B-Instruct-q4f32_1"
+    );
+
+    log.innerHTML += "✅ AI Ready! Say hi 👋<br>";
+  } catch (e) {
+    log.innerHTML += "❌ Failed to load AI.<br>";
+    console.error(e);
+  }
+}
+
+loadAI();
+
+async function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const text = input.value.trim();
+  const log = document.getElementById("chatLog");
+  if (!text || !engine) return;
+
+  log.innerHTML += `<b>You:</b> ${text}<br>`;
+  input.value = "";
+
+  const reply = await engine.chat.completions.create({
+    messages: [{ role: "user", content: text }]
+  });
+
+  log.innerHTML += `<b>AI:</b> ${reply.choices[0].message.content}<br>`;
+  log.scrollTop = log.scrollHeight;
+}
+
+document.getElementById("sendBtn").onclick = sendMessage;
+document.getElementById("chatInput").addEventListener("keypress", e => {
+  if (e.key === "Enter") sendMessage();
+});
+
 </script>
 
 </body>
