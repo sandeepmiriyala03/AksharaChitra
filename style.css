@@ -1896,6 +1896,61 @@ img[loading="lazy"] {
     right: 25px;
   }
 }
+#aiModeBox {
+  padding: 10px 12px;
+  background: #fff7ef;
+  border-bottom: 1px solid #f0d2b0;
+}
+
+#aiModeBox label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ff7a00;
+}
+
+#aiMode {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid #ffcc99;
+  outline: none;
+}
+
+/* Engine indicator */
+#engineIndicator {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #444;
+  padding: 5px;
+  background: #fff3e6;
+  border-radius: 6px;
+  border: 1px solid #ffdfb8;
+}
+
+/* Clear button area */
+#utilityButtons {
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+#clearChat {
+  width: 100%;
+  padding: 8px;
+  background: #ffe0c0;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #7a4a00;
+}
+
+#clearChat:hover {
+  background: #ffcf99;
+}
 
 
 /* Additional font faces truncated for brevity - include all from original */

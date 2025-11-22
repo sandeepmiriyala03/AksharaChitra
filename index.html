@@ -829,17 +829,41 @@
 
 <!-- Chat Window -->
 <div id="chatWindow">
+
+  <!-- Header -->
   <div id="chatHeader">
     🤖 Akshara AI
     <span id="chatClose">✖</span>
   </div>
 
+  <!-- AI Mode Selector + Label -->
+  <div id="aiModeBox">
+    <label for="aiMode">Choose AI Engine:</label>
+    <select id="aiMode">
+      <option value="cloud">🌐 Cloud AI (Grok)</option>
+      <option value="local">💻 Local AI (Web-LLM)</option>
+    </select>
+
+    <!-- User-Friendly Indicator -->
+    <div id="engineIndicator">
+      Using: <b>🌐 Cloud AI (Grok)</b>
+    </div>
+  </div>
+
+  <!-- Chat Log -->
   <div id="chatLog"></div>
 
+  <!-- Input Area -->
   <div id="chatInputArea">
     <input id="chatInput" placeholder="Type a message..." />
     <button id="sendBtn">➤</button>
   </div>
+
+  <!-- Utility Buttons -->
+  <div id="utilityButtons">
+    <button id="clearChat">🧹 Clear Chat</button>
+  </div>
+
 </div>
 
 
@@ -911,6 +935,7 @@
 <script defer  src="https://docs.opencv.org/4.x/opencv.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm/dist/index.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@xenova/transformers"></script>
 
  <script src="createsection.js" defer></script>
   <script src="main.js" defer></script>

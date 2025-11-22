@@ -1,9 +1,11 @@
 // =========================================
-// AksharaChitra Chatbot – Full Clean Version
-// FAQ → IndexedDB → API Fallback
+// AksharaChitra Chatbot – Dual Engine Version
+// FAQ → IndexedDB → CloudAI → Local Web-LLM
 // =========================================
 
-// -------- 1. FAQ Dictionary --------
+// -----------------------------------------
+// 1. FAQ Dictionary
+// -----------------------------------------
 const dictionary = {
   "what is aksharachitra": "AksharaChitra is India's first AI-powered multilingual poster maker, offline and free, supporting 8 Indian languages and 52 native fonts.",
   "how to use aksharachitra": "Enter your text, select language, choose template & font, add images/QR, and generate instantly.",
@@ -21,42 +23,35 @@ const dictionary = {
   "does it support dark mode": "Yes, beautiful dark mode included.",
   "is aksharachitra available on mobile": "Yes, works on mobile, desktop & tablet.",
   "how to ask for help": "Use the AI chat bubble anytime.",
-   // --- General Chatbot Responses ---
   "hi": "Hi! How can I help you today?",
   "hello": "Hello! 😊 What would you like to know?",
   "hey": "Hey there! How can I assist you?",
   "good morning": "Good morning! 🌸 How can I help?",
   "good afternoon": "Good afternoon! What would you like to do?",
   "good evening": "Good evening! Need any help?",
-
   "bye": "Bye! Have a great day 😊",
   "good night": "Good night! 🌙 Take care.",
-
   "thanks": "You're welcome! 😊",
   "thank you": "Happy to help!",
   "ok": "Okay!",
   "okk": "Okay!",
   "k": "Sure!",
-
   "who are you": "I'm Akshara AI — here to help you with poster-making questions!",
   "what is your name": "I'm Akshara AI, your assistant inside AksharaChitra.",
   "help": "Sure! Ask me anything about creating posters, templates, fonts, or features.",
-
   "how are you": "I'm doing great! Thanks for asking 😊",
   "what are you doing": "I'm here waiting to help you!",
-
   "nice": "Glad you liked it! 😊",
   "super": "Thank you!",
   "awesome": "Happy to hear that! ✨",
-
-  // --- Small Talk Processing ---
   "who made you": "I am part of the AksharaChitra project created by Sandeep Miriyala.",
   "what can you do": "I can answer questions about AksharaChitra features, help guides, templates, fonts, and more!"
-
 };
 
 
-// -------- 2. Find Local Answer --------
+// -----------------------------------------
+// 2. Find Local Answer (Dictionary)
+// -----------------------------------------
 function findAnswer(query) {
   const q = query.toLowerCase();
   if (dictionary[q]) return dictionary[q];
@@ -67,17 +62,15 @@ function findAnswer(query) {
   return null;
 }
 
-// -------- 3. IndexedDB Save/Fetch (FIXED) --------
 
-// Open database safely (ensures store exists)
+// -----------------------------------------
+// 3. IndexedDB (FAQ)
+// -----------------------------------------
 function openDB(callback) {
-  // bump version to force onupgradeneeded to run at least once
   const req = indexedDB.open("chatbotDB", 2);
 
   req.onupgradeneeded = e => {
     const db = e.target.result;
-
-    // Ensure the store exists
     if (!db.objectStoreNames.contains("faq")) {
       db.createObjectStore("faq", { keyPath: "question" });
     }
@@ -87,7 +80,6 @@ function openDB(callback) {
   req.onerror = err => console.error("IndexedDB error:", err);
 }
 
-// Save answer to DB
 function saveToDB(question, answer) {
   openDB(db => {
     const tx = db.transaction("faq", "readwrite");
@@ -95,12 +87,10 @@ function saveToDB(question, answer) {
   });
 }
 
-// Get answer from DB
 function getFromDB(query, callback) {
   openDB(db => {
     const tx = db.transaction("faq", "readonly");
-    const store = tx.objectStore("faq");
-    const req = store.get(query);
+    const req = tx.objectStore("faq").get(query);
 
     req.onsuccess = () => {
       callback(req.result ? req.result.answer : null);
@@ -109,11 +99,67 @@ function getFromDB(query, callback) {
   });
 }
 
-// -------- 4. Main Chat Logic (FAQ → DB → API) --------
+
+// -----------------------------------------
+// 4. Web-LLM (Local LLM)
+// -----------------------------------------
+let localModel = null;
+let localReady = false;
+
+// Load local model
+async function loadLocalLLM() {
+  engineLabel.innerHTML = "Loading Local AI... ⏳";
+
+  const { pipeline } = await import("https://cdn.jsdelivr.net/npm/@xenova/transformers");
+
+  localModel = await pipeline("text-generation", "Xenova/gpt2");
+  
+  localReady = true;
+  engineLabel.innerHTML = "Using: <b>💻 Local AI (Web-LLM)</b> ✔ Ready";
+}
+
+loadLocalLLM();
+
+// Local LLM reply
+async function localLLMReply(msg) {
+  if (!localReady) return "⏳ Local AI still loading...";
+  
+  const output = await localModel(msg, { max_new_tokens: 40 });
+  return output[0].generated_text;
+}
+
+
+// -----------------------------------------
+// 5. Cloud API (Grok)
+// -----------------------------------------
+async function cloudAI(text) {
+  try {
+    const res = await fetch("/.netlify/functions/chatbot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+
+    if (!res.ok) throw new Error("Network error");
+
+    const data = await res.json();
+    return data.reply;
+
+  } catch (err) {
+    return "Network error. Please try again.";
+  }
+}
+
+
+// -----------------------------------------
+// 6. Master Send Function (Dual Engine)
+// -----------------------------------------
 async function sendMessage() {
   const input = document.getElementById("chatInput");
   const text = input.value.trim();
   const log = document.getElementById("chatLog");
+  const engine = document.getElementById("aiMode").value;
+
   if (!text) return;
 
   log.innerHTML += `<b>You:</b> ${text}<br>`;
@@ -121,73 +167,83 @@ async function sendMessage() {
 
   const lowerText = text.toLowerCase();
 
-  // Step 1 — FAQ
+
+  // Step 1: FAQ
   const faq = findAnswer(lowerText);
   if (faq) {
     log.innerHTML += `<b>AI:</b> ${faq}<br>`;
     saveToDB(lowerText, faq);
-    log.scrollTop = log.scrollHeight;
     return;
   }
 
-  // Step 2 — IndexedDB
+
+  // Step 2: IndexedDB
   getFromDB(lowerText, async (dbAnswer) => {
     if (dbAnswer) {
       log.innerHTML += `<b>AI:</b> ${dbAnswer}<br>`;
-      log.scrollTop = log.scrollHeight;
       return;
     }
 
-    try {
-      // Step 3 — API Fallback
-      const res = await fetch("/.netlify/functions/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      });
+    // Step 3: Engine selection
+    let reply = "";
 
-      if (!res.ok) throw new Error("Network error");
-
-      const data = await res.json();
-      log.innerHTML += `<b>AI:</b> ${data.reply}<br>`;
-      saveToDB(lowerText, data.reply);
-
-    } catch (err) {
-      log.innerHTML += `<b>AI:</b> Network error. Please try again.<br>`;
-      console.error(err);
+    if (engine === "local") {
+      reply = await localLLMReply(text);
+    } else {
+      reply = await cloudAI(text);
     }
 
+    log.innerHTML += `<b>AI:</b> ${reply}<br>`;
+    saveToDB(lowerText, reply);
     log.scrollTop = log.scrollHeight;
   });
 }
 
 
-// -------- 5. Global Key / Button Events --------
-
-// Send on Enter
+// -----------------------------------------
+// 7. Event Listeners
+// -----------------------------------------
 document.addEventListener("keydown", (e) => {
-  const input = document.getElementById("chatInput");
-  if (document.activeElement === input && e.key === "Enter") {
+  if (document.activeElement === chatInput && e.key === "Enter") {
     e.preventDefault();
     sendMessage();
   }
 });
 
-// Send on button click
-document.getElementById("sendBtn").addEventListener("click", sendMessage);
+sendBtn.addEventListener("click", sendMessage);
 
 
-// -------- 6. Chat Bubble Controls --------
-const bubble = document.getElementById("chatBubble");
-const windowBox = document.getElementById("chatWindow");
-const closeBtn = document.getElementById("chatClose");
-
-bubble.onclick = () => {
-  windowBox.style.display = "flex";
-  bubble.style.display = "none";
+// -----------------------------------------
+// 8. Chat Window Controls
+// -----------------------------------------
+chatBubble.onclick = () => {
+  chatWindow.style.display = "flex";
+  chatBubble.style.display = "none";
 };
 
-closeBtn.onclick = () => {
-  windowBox.style.display = "none";
-  bubble.style.display = "flex";
+chatClose.onclick = () => {
+  chatWindow.style.display = "none";
+  chatBubble.style.display = "flex";
+};
+
+
+// -----------------------------------------
+// 9. Engine Indicator Updater
+// -----------------------------------------
+const engineLabel = document.getElementById("engineIndicator");
+
+document.getElementById("aiMode").addEventListener("change", function () {
+  if (this.value === "cloud") {
+    engineLabel.innerHTML = "Using: <b>🌐 Cloud AI (Grok)</b>";
+  } else {
+    engineLabel.innerHTML = "Using: <b>💻 Local AI (Web-LLM)</b>";
+  }
+});
+
+
+// -----------------------------------------
+// 10. Clear Chat Button
+// -----------------------------------------
+document.getElementById("clearChat").onclick = () => {
+  document.getElementById("chatLog").innerHTML = "";
 };
