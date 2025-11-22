@@ -152,7 +152,7 @@
     <button class="tab-btn" data-tab="create">🎨 Create</button>
     <button class="tab-btn" data-tab="gallery">💾 My Creations</button>
   
-
+   <button class="tab-btn" data-tab="notebooklm">📒 LM Videos</button>
       <button class="tab-btn" data-tab="feedback">💌 Feedback</button>
   </nav>
   <div class="right-controls">
@@ -167,6 +167,7 @@
   <button class="m-item" data-tab="home">🏠 Home</button>
   <button class="m-item" data-tab="create">🎨 Create</button>
   <button class="m-item" data-tab="gallery">💾 My Creations</button>
+  <button class="m-item" data-tab="notebooklm">📒 LM Videos</button>
     <button class="m-item" data-tab="feedback">💌 Feedback</button>
 </nav>
   <!-- 🌈 MAIN CONTENT -->
@@ -761,17 +762,12 @@
         <button id="saveBtn" class="btn">💾 Save</button>
         <button id="generateBtn" class="btn primary">⚡ Generate</button>
       </div>
-
       <div class="row">
         <button id="downloadBtn" class="btn">⬇ Download</button>
         <button id="shareBtn" class="btn ghost">📤 Share</button>
       </div>
     </div>
-
   </div>
-
-
-
   <!-- ================= RIGHT PANEL (UNCHANGED) ================= -->
   <div class="poster-info-container">
 
@@ -818,6 +814,14 @@
     <div class="gallery-grid" id="galleryContainer"></div>
 </div>
 </section>
+    <!-- 📒 NOTEBOOKLM VIDEOS -->
+<section id="notebooklm" class="tab-content">
+  <h2>📒 NotebookLM – Local Videos</h2>
+
+  <div id="lmVideoList" class="video-list"></div>
+</section>
+
+
     <!-- 💌 FEEDBACK -->
     <section id="feedback" class="tab-content">
       <h2> Feedback</h2>
@@ -835,7 +839,6 @@
     🤖 Akshara AI
     <span id="chatClose">✖</span>
   </div>
-
   <!-- AI Mode Selector + Label -->
   <div id="aiModeBox">
     <label for="aiMode">Choose AI Engine:</label>
@@ -843,31 +846,23 @@
       <option value="cloud">🌐 Cloud AI (Grok)</option>
       <option value="local">💻 Local AI (Web-LLM)</option>
     </select>
-
     <!-- User-Friendly Indicator -->
     <div id="engineIndicator">
       Using: <b>🌐 Cloud AI (Grok)</b>
     </div>
   </div>
-
   <!-- Chat Log -->
   <div id="chatLog"></div>
-
   <!-- Input Area -->
   <div id="chatInputArea">
     <input id="chatInput" placeholder="Type a message..." />
     <button id="sendBtn">➤</button>
   </div>
-
   <!-- Utility Buttons -->
   <div id="utilityButtons">
     <button id="clearChat">🧹 Clear Chat</button>
   </div>
-
 </div>
-
-
-
   </main>
 
 <footer class="footer" role="contentinfo" aria-label="Site Footer">
@@ -968,6 +963,7 @@ document.addEventListener('DOMContentLoaded', () => {
  
 
 
+        loadNotebookLMVideos();
 
   // Open / close menu
   if (hamburgerBtn && mobileMenu) {
@@ -1008,7 +1004,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tab === "gallery") {
       setTimeout(initGallerySafe, 120);
     }
-
     // Close mobile menu
     if (mobileMenu) mobileMenu.classList.remove("open");
 
@@ -1172,6 +1167,28 @@ if (tutorialGoCreateBtn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+function loadNotebookLMVideos() {
+  const lmVideos = [
+    { title: "English Video", file: "videos/english.mp4" },
+    { title: "Telugu Video", file: "videos/telugu.mp4" }
+  ];
+
+  const container = document.getElementById("lmVideoList");
+  container.innerHTML = "";
+
+  lmVideos.forEach(v => {
+    container.innerHTML += `
+      <div class="video-card">
+        <h3>${v.title}</h3>
+        <video width="100%" controls>
+          <source src="${v.file}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    `;
+  });
+}
+
 
 </script>
 </body>
