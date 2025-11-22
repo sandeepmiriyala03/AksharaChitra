@@ -1146,66 +1146,7 @@ if (tutorialGoCreateBtn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
-document.addEventListener("keydown", function (e) {
-  const input = document.getElementById("chatInput");
-  // Ensure focus is inside chatbot input
-  if (document.activeElement === input && e.key === "Enter") {
-    e.preventDefault();  // stop form submission, stop bubbling
-    sendMessage();
-  }
-});
-document.getElementById("sendBtn").addEventListener("click", sendMessage);
-document.addEventListener("keydown", function (e) {
-  const input = document.getElementById("chatInput");
-  if (document.activeElement === input && e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-async function sendMessage() {
-  const input = document.getElementById("chatInput");
-  const text = input.value.trim();
-  const log = document.getElementById("chatLog");
-  if (!text) return;
 
-  log.innerHTML += `<b>You:</b> ${text}<br>`;
-  input.value = "";
-
-  // Use direct Netlify function path for production
-  const API_BASE = "/.netlify/functions";
-
-  try {
-    const res = await fetch(`${API_BASE}/chatbot`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
-    });
-
-    if (!res.ok) throw new Error(`Network error: ${res.status}`);
-
-    const data = await res.json();
-
-    log.innerHTML += `<b>AI:</b> ${data.reply}<br>`;
-    log.scrollTop = log.scrollHeight;
-  } catch (err) {
-    log.innerHTML += "<b>AI:</b> Network error.<br>";
-    console.error(err);
-  }
-}
-
-const bubble = document.getElementById("chatBubble");
-const windowBox = document.getElementById("chatWindow");
-const closeBtn = document.getElementById("chatClose");
-
-bubble.onclick = () => {
-  windowBox.style.display = "flex";
-  bubble.style.display = "none";
-};
-
-closeBtn.onclick = () => {
-  windowBox.style.display = "none";
-  bubble.style.display = "flex";
-};
 </script>
 </body>
 </html>
