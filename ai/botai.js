@@ -20,7 +20,39 @@ const dictionary = {
   "is aksharachitra free": "Completely free — always.",
   "does it support dark mode": "Yes, beautiful dark mode included.",
   "is aksharachitra available on mobile": "Yes, works on mobile, desktop & tablet.",
-  "how to ask for help": "Use the AI chat bubble anytime."
+  "how to ask for help": "Use the AI chat bubble anytime.",
+   // --- General Chatbot Responses ---
+  "hi": "Hi! How can I help you today?",
+  "hello": "Hello! 😊 What would you like to know?",
+  "hey": "Hey there! How can I assist you?",
+  "good morning": "Good morning! 🌸 How can I help?",
+  "good afternoon": "Good afternoon! What would you like to do?",
+  "good evening": "Good evening! Need any help?",
+
+  "bye": "Bye! Have a great day 😊",
+  "good night": "Good night! 🌙 Take care.",
+
+  "thanks": "You're welcome! 😊",
+  "thank you": "Happy to help!",
+  "ok": "Okay!",
+  "okk": "Okay!",
+  "k": "Sure!",
+
+  "who are you": "I'm Akshara AI — here to help you with poster-making questions!",
+  "what is your name": "I'm Akshara AI, your assistant inside AksharaChitra.",
+  "help": "Sure! Ask me anything about creating posters, templates, fonts, or features.",
+
+  "how are you": "I'm doing great! Thanks for asking 😊",
+  "what are you doing": "I'm here waiting to help you!",
+
+  "nice": "Glad you liked it! 😊",
+  "super": "Thank you!",
+  "awesome": "Happy to hear that! ✨",
+
+  // --- Small Talk Processing ---
+  "who made you": "I am part of the AksharaChitra project created by Sandeep Miriyala.",
+  "what can you do": "I can answer questions about AksharaChitra features, help guides, templates, fonts, and more!"
+
 };
 
 
