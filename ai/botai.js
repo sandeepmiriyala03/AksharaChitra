@@ -67,40 +67,47 @@ function findAnswer(query) {
   return null;
 }
 
+// -------- 3. IndexedDB Save/Fetch (FIXED) --------
 
-// -------- 3. IndexedDB Save/Fetch --------
-function saveToDB(question, answer) {
-  const req = indexedDB.open("chatbotDB", 1);
+// Open database safely (ensures store exists)
+function openDB(callback) {
+  // bump version to force onupgradeneeded to run at least once
+  const req = indexedDB.open("chatbotDB", 2);
 
   req.onupgradeneeded = e => {
     const db = e.target.result;
+
+    // Ensure the store exists
     if (!db.objectStoreNames.contains("faq")) {
       db.createObjectStore("faq", { keyPath: "question" });
     }
   };
 
-  req.onsuccess = e => {
-    const db = e.target.result;
+  req.onsuccess = e => callback(e.target.result);
+  req.onerror = err => console.error("IndexedDB error:", err);
+}
+
+// Save answer to DB
+function saveToDB(question, answer) {
+  openDB(db => {
     const tx = db.transaction("faq", "readwrite");
     tx.objectStore("faq").put({ question, answer });
-  };
+  });
 }
 
+// Get answer from DB
 function getFromDB(query, callback) {
-  const req = indexedDB.open("chatbotDB", 1);
-
-  req.onsuccess = e => {
-    const db = e.target.result;
+  openDB(db => {
     const tx = db.transaction("faq", "readonly");
     const store = tx.objectStore("faq");
-    const request = store.get(query);
+    const req = store.get(query);
 
-    request.onsuccess = () => {
-      callback(request.result ? request.result.answer : null);
+    req.onsuccess = () => {
+      callback(req.result ? req.result.answer : null);
     };
-  };
+    req.onerror = () => callback(null);
+  });
 }
-
 
 // -------- 4. Main Chat Logic (FAQ → DB → API) --------
 async function sendMessage() {
