@@ -3,12 +3,15 @@ const OFFLINE_FALLBACK = "/index.html";
 
 // -----------------------------------------------------------
 // 📌 STATIC FILES — MUST WORK OFFLINE
+// index.html, CSS, JS, IMAGES, FONTS 
+// gallery image files are cached runtime when visited
+// via fetch event
 // -----------------------------------------------------------
 const FILES = [
   "/",
   "/index.html",
   "/style.css",
-    "/home.css",
+  "/home.css",
   "/main.js",
   "/createsection.js",
   "/pwa.js",
@@ -40,7 +43,7 @@ const FILES = [
   "/fonts/TimmanaRegular.ttf",
   
   "/videos/english.mp4",
-  "/videos/telugu.mp4",
+  "/videos/telugu.mp4"
 
 ];
 
