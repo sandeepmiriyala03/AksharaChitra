@@ -6,7 +6,8 @@
    ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-  updateVisitCounter();
+        updateVisitCounter();
+        autoEnhanceAccessibility();
   // ---------------------------------------------
   // 🔹 Helper functions
   // ---------------------------------------------
@@ -1806,7 +1807,55 @@ async function updateVisitCounter() {
   }
 }
 
+function autoEnhanceAccessibility() {
+  console.log("🔍 Auto ARIA: scanning page…");
+  // 1️⃣ Add aria-label to icon-only buttons
+  document.querySelectorAll("button").forEach(btn => {
+    const text = btn.textContent.trim();
+    const hasLabel = btn.getAttribute("aria-label");
 
+    // If button contains only emoji or icon (no readable text)
+    if (!hasLabel && (text.length <= 3 || /^[^\w]+$/.test(text))) {
+      btn.setAttribute("aria-label", "Button: " + (btn.title || "Action"));
+    }
+  });
+
+  // 2️⃣ Add aria-label to inputs missing labels
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    if (!el.id) return; // must have id
+
+    const label = document.querySelector(`label[for="${el.id}"]`);
+    const hasAria = el.getAttribute("aria-label");
+
+    if (!label && !hasAria) {
+      el.setAttribute("aria-label", el.placeholder || el.name || "Input field");
+    }
+  });
+
+  // 3️⃣ Add alt text to images with missing/empty alt
+  document.querySelectorAll("img").forEach(img => {
+    if (!img.getAttribute("alt") || img.alt.trim() === "") {
+      img.setAttribute("alt", "Image: " + (img.dataset.desc || "AksharaChitra image"));
+    }
+  });
+
+  // 4️⃣ Add aria-label to links with missing labels
+  document.querySelectorAll("a").forEach(a => {
+    if (!a.textContent.trim() && !a.getAttribute("aria-label")) {
+      a.setAttribute("aria-label", a.href ? "Link to " + a.href : "Navigation link");
+    }
+  });
+
+  const main = document.querySelector("main");
+  if (main) main.setAttribute("role", "main");
+  const navs = document.querySelectorAll("nav");
+  navs.forEach((nav, i) => {
+    if (!nav.getAttribute("aria-label")) {
+      nav.setAttribute("aria-label", "Navigation Menu " + (i + 1));
+    }
+  });
+  console.log("✅ Auto ARIA applied");
+}
 
 
 });
