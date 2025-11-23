@@ -6,6 +6,7 @@
    ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  updateVisitCounter();
   // ---------------------------------------------
   // 🔹 Helper functions
   // ---------------------------------------------
@@ -1778,4 +1779,34 @@ function trackShare(method) {
   // Add your analytics here if needed
   // Example: gtag('event', 'share', { method: method });
 }
+
+async function updateVisitCounter() {
+  const API_URL = "https://api.npoint.io/a1014d7e31a932f0573b";
+
+  try {
+    let res = await fetch(API_URL);
+    let data = await res.json();
+
+    let current = data.visits ?? 0;
+    let newCount = current + 1;
+
+    // Update API
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ visits: newCount })
+    });
+
+    // Display on screen
+    document.getElementById("visitorNumber").textContent = newCount;
+
+  } catch (error) {
+    console.error("Visit Counter Error:", error);
+    document.getElementById("visitorNumber").textContent = "—";
+  }
+}
+
+
+
+
 });

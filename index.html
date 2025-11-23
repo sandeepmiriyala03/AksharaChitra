@@ -870,12 +870,25 @@
 
 <footer class="footer" role="contentinfo" aria-label="Site Footer">
   <p>
-    &copy; <time id="year" datetime="2025">2025</time> AksharaChitra &mdash; Powered by <strong>Yuktishala AI Lab</strong>
+    &copy; <time id="year" datetime="2025">2025</time> 
+    <strong>AksharaChitra</strong> — Powered by 
+    <strong>Yuktishala AI Lab</strong>
   </p>
-    <p style="font-style: italic; color: #666; margin-top: 0.5rem;">
+
+  <p class="visitor-count" style="
+      margin-top: 8px;
+      font-size: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+    ">
+    👥 Total Visitors: <span id="visitorNumber">—</span>
+  </p>
+
+  <p style="font-style: italic; color: #666; margin-top: 0.5rem;">
     Made for <strong>Bharat</strong> 🇮🇳 | Offline-First | Privacy-Focused | Open Source
   </p>
 </footer>
+
 
   <!-- Floating Buttons -->
   <button id="installBtn" class="install-fab">📲</button>
@@ -963,8 +976,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const hamburgerBtn = document.getElementById("hamburgerBtn");
   const mobileMenu = document.getElementById("mobileMenu");
- 
-
 
         loadNotebookLMVideos();
 
